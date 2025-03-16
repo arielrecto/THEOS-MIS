@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer components {
+
+    .main {
+        @apply h-auto  w-full flex flex-col gap-2
+    }
+    .panel {
+        @apply h-auto w-full bg-white rounded-lg p-5 shadow-md shadow-secondary
+    }
+    .panel-title{
+        @apply text-lg font-bold text-accent
+    }
+    .form-title {
+        @apply text-2xl font-bold text-center text-accent
+    }
+    .input-generic-label{
+        @apply font-bold text-accent
+    }
+    .input-generic {
+        @apply input input-accent input-sm w-full
+    }
+    .card-generic {
+        @apply shadow-secondary shadow-md rounded-lg h-full w-full p-5
+    }
+}
