@@ -41,6 +41,9 @@
                         <p>End Time: {{ date('h:i A', strtotime($attendance->end_time)) }}</p>
                     </div>
                 @else
+                    <div class="flex justify-end">
+                        <a href="{{ route('teacher.classrooms.attendances', ['classroom' => $classroom->id]) }}" class="btn btn-accent">Generate QR Code</a>
+                    </div>
                     <div class="flex justify-center items-center p-4 h-full text-gray-500 bg-gray-100 rounded-lg">
                         No Attendance QR Code Available
                     </div>
