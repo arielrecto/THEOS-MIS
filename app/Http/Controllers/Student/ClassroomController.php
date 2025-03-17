@@ -15,25 +15,27 @@ class ClassroomController extends Controller
 
 
         $user = Auth::user();
-        $classrooms = Classroom::where(function ($q) use ($user) {
+        $myClassrooms = Classroom::where(function ($q) use ($user) {
             $q->whereHas('classroomStudents', function ($q) use ($user) {
                 $q->where('student_id', $user->id);
             });
-        })->with([
-            'strand', 'subject', 'teacher', 'announcements'
-        ])->get();
+        })->paginate(10);
+
+        $classrooms = Classroom::whereDoesntHave('classroomStudents', function ($q) use ($user) {
+            $q->where('student_id', $user->id);
+        })->paginate(10);
 
 
-        return response([
-            'classrooms' => $classrooms
-        ], 200);
+        return view('users.student.classroom.index', compact('myClassrooms', 'classrooms'));
     }
 
     public function join(Request $request)
     {
 
-        $classroom = Classroom::where('class_code', $request->classCode)->with([
-            'strand', 'subject', 'teacher'
+        $classroom = Classroom::where('class_code', $request->class_code)->with([
+            'strand',
+            'subject',
+            'teacher'
         ])->first();
 
 
@@ -42,11 +44,7 @@ class ClassroomController extends Controller
 
 
         if (!$classroom) {
-            return response([
-                'error' => [
-                    'class_code' => 'Class Code Doesn\'t Exist'
-                ]
-            ], 404);
+            return back()->with('error', 'Classroom doesn\'t exist');
         }
 
 
@@ -56,21 +54,33 @@ class ClassroomController extends Controller
         ]);
 
 
-        return response([
-            'classroom' => $classroom
-        ], 200);
+        return back()->with('success', 'Classroom joined successfully');
     }
 
-    public function show (string $id){
+    public function show(string $id)
+    {
+
+
 
         $user = Auth::user();
+
         $classroom = Classroom::where('id', $id)->with([
-            'strand', 'subject', 'teacher', 'announcements'
-        ])->withCount(['announcements', 'tasks' => function($q) use($user){
-            $q->whereHas('assignStudents', function($q) use($user){
+            'strand',
+            'subject',
+            'teacher',
+            'announcements'
+        ])->withCount(['announcements', 'tasks' => function ($q) use ($user) {
+            $q->whereHas('assignStudents', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             });
-        }])->first();
+        }])
+        ->whereHas('classroomStudents', function ($q) use ($user) {
+            $q->where('student_id', $user->id);
+        })->first();
+
+        if (!$classroom) {
+            return back()->with('error', 'can\'t view this classroom you are not enrolled in this classroom');
+        }
 
 
 
@@ -79,14 +89,15 @@ class ClassroomController extends Controller
         ], 200);
     }
 
-    public function attendances(string $id){
+    public function attendances(string $id)
+    {
 
 
         $user = Auth::user();
 
         $classroom = Classroom::whereId($id)->first();
 
-        $attendances = $classroom->first()->attendanceStudents()->where(function($q) use($user){
+        $attendances = $classroom->first()->attendanceStudents()->where(function ($q) use ($user) {
             $q->where('user_id', $user->id);
         })->latest()->get();
 

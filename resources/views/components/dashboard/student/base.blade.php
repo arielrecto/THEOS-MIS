@@ -11,14 +11,14 @@
             'icon' => '<i class="fi fi-rr-bell"></i>',
         ],
         [
-            'url' => '#',
-            'name' => 'tasks',
-            'icon' => '<i class="fi fi-rr-list"></i>',
+            'url' => 'student.classrooms.index',
+            'name' => 'classrooms',
+            'icon' => '<i class="fi fi-rr-users-alt"></i>',
         ],
         [
             'url' => '#',
-            'name' => 'classrooms',
-            'icon' => '<i class="fi fi-rr-users-alt"></i>',
+            'name' => 'tasks',
+            'icon' => '<i class="fi fi-rr-list"></i>',
         ],
         [
             'url' => '#',

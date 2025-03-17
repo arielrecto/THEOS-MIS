@@ -5,10 +5,14 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\User;
-use App\Enums\UserRoles;
 use App\Models\Strand;
 use App\Models\Subject;
+use App\Enums\UserRoles;
+use App\Models\Enrollment;
+use App\Models\AcademicYear;
+use App\Enums\EnrollmentStatus;
 use Illuminate\Database\Seeder;
+use App\Enums\AcademicYearStatus;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
@@ -95,6 +99,23 @@ class DatabaseSeeder extends Seeder
                 'description' => $subject['description']
             ]);
         });
+
+
+        $academicYear = AcademicYear::create([
+            'name' => '2025-2026',
+            'start_date' => now(),
+            'end_date' => now()->addYear(),
+            'status' => AcademicYearStatus::Active->value
+        ]);
+
+
+        $enrollment = Enrollment::create([
+            'academic_year_id' => $academicYear->id,
+            'name' => '2025-2026',
+            'start_date' => now(),
+            'end_date' => now()->addYear(),
+            'status' => EnrollmentStatus::ONGOING->value
+        ]);
 
 
         $admin->assignRole($adminRole);

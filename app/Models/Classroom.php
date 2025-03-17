@@ -16,6 +16,7 @@ class Classroom extends Model
         'description',
         'subject_id',
         'strand_id',
+        'academic_year_id',
         'teacher_id'
     ];
 
@@ -45,5 +46,8 @@ class Classroom extends Model
     }
     public function tasks(){
         return $this->hasMany(Task::class);
+    }
+    public function academicYear(){
+        return $this->belongsTo(AcademicYear::class);
     }
 }

@@ -16,7 +16,7 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
 
-        $classroom_id = $request->classroom_id;
+        $classroom_id = $request->classroom;
 
         $announcements = Announcement::where('classroom_id', $classroom_id)->latest()->paginate(10);
 
@@ -28,11 +28,10 @@ class AnnouncementController extends Controller
      */
     public function create(Request $request)
     {
-        $classroom_id = $request->classroom_id;
+        $classroom_id = $request->classroom;
 
 
-
-        return view('users.teacher.classroom.announcement.create', compact('classroom_id'));
+        return view('users.teacher.classroom.announcement.create', compact(['classroom_id']));
     }
 
     /**
@@ -44,20 +43,20 @@ class AnnouncementController extends Controller
 
         $classroomId = $request->classroom_id;
 
-       $announcement = Announcement::create([
+        $announcement = Announcement::create([
             'title' => $request->title,
             'description' => $request->description,
             'classroom_id' => $classroomId
         ]);
 
-        $students = User::where(function($q) use($classroomId){
-            $q->whereHas('asStudentClassrooms', function($q) use ($classroomId){
+        $students = User::where(function ($q) use ($classroomId) {
+            $q->whereHas('asStudentClassrooms', function ($q) use ($classroomId) {
                 $q->whereId($classroomId);
             });
         })->get();
 
 
-        if($request->hasFile('attachment')){
+        if ($request->hasFile('attachment')) {
 
             $imageName = 'IMG-' . uniqid() . '.' . $request->attachment->extension();
             $dir = $request->attachment->storeAs('/event', $imageName, 'public');
@@ -70,13 +69,13 @@ class AnnouncementController extends Controller
 
 
 
-        if(count($students) !== 0){
+        if (count($students) !== 0) {
             $message = [
                 'header' => "Announcement - {$request->title}",
                 'message' => $request->description
             ];
 
-            collect($students)->map(function($student) use($message) {
+            collect($students)->map(function ($student) use ($message) {
                 $student->notify(new AnnouncementNotification($message));
             });
         }
@@ -90,8 +89,10 @@ class AnnouncementController extends Controller
     {
         $announcement = Announcement::find($id);
 
-        $classroom_id = $request->classroom_id;
+        $classroom_id = $request->classroom;
 
+
+        dd($classroom_id);
 
         return view('users.teacher.classroom.announcement.show', compact(['announcement', 'classroom_id']));
     }

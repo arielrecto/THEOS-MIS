@@ -4,26 +4,29 @@
     <x-notification-message />
     <div class="panel min-h-96">
 
-        <div class="grid grid-cols-4 grid-flow-row gap-5 h-52 w-full">
+        <div class="grid grid-cols-4 grid-flow-row gap-5 w-full h-52">
             @forelse ($classrooms as $classroom)
-            <div class="h-full w-full rounded-lg border border-accent flex flex-col">
-                <a href="{{route('teacher.classrooms.show', ['classroom' => $classroom->id])}}" class="bg-accent h-1/2 rounded-t-lg relative p-2 flex flex-col justify-between">
-                    <h1 class="text-lg font-bold text-primary capitalize tracking-wider">
+            <div class="flex flex-col w-full h-full rounded-lg border border-accent">
+                <a href="{{route('teacher.classrooms.show', ['classroom' => $classroom->id])}}" class="flex relative flex-col justify-between p-2 h-1/2 rounded-t-lg bg-accent">
+                    <h1 class="text-lg font-bold tracking-wider capitalize text-primary">
                        {{$classroom->subject->name}}
                     </h1>
 
-                    <p class="text-sm text-primary tracking-wide capitalize">
+                    <p class="text-sm tracking-wide capitalize text-primary">
                         {{$classroom->teacher->name}}
                     </p>
                     <img src="{{$classroom->teacher->profile->image}}" alt="" srcset=""
-                     class="absolute z-10 -bottom-5 right-5 h-16 w-16 object-cover rounded-full">
+                     class="object-cover absolute right-5 -bottom-5 z-10 w-16 h-16 rounded-full">
                 </a>
-                <div class="h-1/2 w-full p-2">
+                <div class="p-2 w-full h-1/2">
                     <h1 class="text-sm uppercase">{{$classroom->name}} - {{$classroom->strand->acronym}}</h1>
                 </div>
+                <p class="p-2 text-sm tracking-wide capitalize text-accent">
+                    {{$classroom->academicYear->name}}
+                </p>
              </div>
             @empty
-                <div class="h-full w-full rounded-lg border border-accent flex justify-center items-center">
+                <div class="flex justify-center items-center w-full h-full rounded-lg border border-accent">
                    <p class="text-lg font-bold text-accent">
                     No Classrooms
                    </p>

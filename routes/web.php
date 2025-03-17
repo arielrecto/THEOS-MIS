@@ -28,6 +28,7 @@ use App\Http\Controllers\Student\DashboardController as StudentDashboardControll
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
+use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +129,12 @@ Route::middleware([
         Route::prefix('announcements')->as('announcements.')->group(function () {
             Route::get('', [StudentAnnouncementController::class, 'index'])->name('index');
             Route::get('{id}', [StudentAnnouncementController::class, 'show'])->name('show');
+        });
+        Route::prefix('classrooms')->as('classrooms.')->group(function () {
+            Route::get('', [StudentClassroomController::class, 'index'])->name('index');
+            Route::get('{classroom}', [StudentClassroomController::class, 'show'])->name('show');
+            Route::get('{classroom}/attendances', [StudentClassroomController::class, 'attendances'])->name('attendances');
+            Route::post('{classroom}/join', [StudentClassroomController::class, 'join'])->name('join');
         });
     });
 

@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Teacher;
 
-use App\Http\Controllers\Controller;
-use App\Models\Classroom;
-use App\Models\ClassroomStudent;
 use App\Models\Strand;
 use App\Models\Subject;
+use App\Models\Classroom;
+use App\Models\AcademicYear;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Class_;
+use App\Models\ClassroomStudent;
+use App\Enums\AcademicYearStatus;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ClassroomController extends Controller
 {
@@ -36,7 +38,10 @@ class ClassroomController extends Controller
 
         $strands = Strand::get();
 
-        return view('users.teacher.classroom.create', compact(['subjects', 'strands']));
+
+        $academicYear = AcademicYear::where('status', AcademicYearStatus::Active->value)->latest()->first();
+
+        return view('users.teacher.classroom.create', compact(['subjects', 'strands', 'academicYear']));
     }
 
     /**
@@ -48,7 +53,8 @@ class ClassroomController extends Controller
             'name' => 'required',
             'description' => 'required',
             'subject' => 'required',
-            'strand' => 'required'
+            'strand' => 'required',
+            'academic_year' => 'required'
         ]);
 
 
@@ -66,6 +72,7 @@ class ClassroomController extends Controller
         'description' => $request->description,
         'subject_id' => $request->subject,
         'strand_id' => $request->strand,
+        'academic_year_id' => $request->academic_year,
         'teacher_id' => Auth::user()->id
        ]);
 

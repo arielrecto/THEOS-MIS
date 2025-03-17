@@ -9,21 +9,20 @@
 
             @csrf
             <h1 class="form-title">Classroom Form</h1>
-            <div class="w-full flex justify-center" x-data="imageHandler">
+            <div class="flex justify-center w-full" x-data="imageHandler">
 
                 <template x-if="imageSrc !== null">
 
                     <div class="w-1/2 h-auto">
-                        <img :src="imageSrc" alt="" srcset="" class="object-cover h-full w-full">
+                        <img :src="imageSrc" alt="" srcset="" class="object-cover w-full h-full">
                     </div>
 
                 </template>
-                <div class="flex items-center justify-center w-full" x-show="imageSrc === null">
+                <div class="flex justify-center items-center w-full" x-show="imageSrc === null">
                     <label for="dropzone-file"
-                        class="flex flex-col items-center justify-center w-full h-64 border-2
-                        border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 " aria-hidden="true"
+                        class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-100">
+                        <div class="flex flex-col justify-center items-center pt-5 pb-6">
+                            <svg class="mb-4 w-8 h-8 text-gray-500" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2"
@@ -31,7 +30,7 @@
                             </svg>
                             <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click
                                     to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 ">JPG
+                            <p class="text-xs text-gray-500">JPG
                             </p>
                         </div>
                         <input id="dropzone-file" type="file" @change="uploadHandler($event)" class="hidden"
@@ -56,7 +55,7 @@
             </div>
             <div class="flex flex-col gap-2">
                 <label for="" class="input-generic-label">Subject</label>
-                <select name="subject" class="select select-accent select-sm text-sm w-full">
+                <select name="subject" class="w-full text-sm select select-accent select-sm">
                     <option disabled selected>Select Subject</option>
 
                     @foreach ($subjects as $subject)
@@ -69,7 +68,7 @@
             </div>
             <div class="flex flex-col gap-2">
                 <label for="" class="input-generic-label">Strand</label>
-                <select name="strand" class="select select-accent select-sm text-sm w-full">
+                <select name="strand" class="w-full text-sm select select-accent select-sm">
                     <option disabled selected>Select Subject</option>
 
                     @foreach ($strands as $strand)
@@ -78,6 +77,17 @@
                 </select>
                 @if ($errors->has('strand'))
                     <p class="text-xs text-error">{{ $errors->first('strand') }}</p>
+                @endif
+            </div>
+
+
+            <div class="flex flex-col gap-2">
+                <label for="" class="input-generic-label">Academic Year</label>
+                <select name="academic_year" class="w-full text-sm select select-accent select-sm">
+                    <option selected value="{{ $academicYear->id }}">{{ $academicYear->name }}</option>
+                </select>
+                @if ($errors->has('academic_year'))
+                    <p class="text-xs text-error">{{ $errors->first('academic_year') }}</p>
                 @endif
             </div>
 
