@@ -16,7 +16,7 @@
             'icon' => '<i class="fi fi-rr-users-alt"></i>',
         ],
         [
-            'url' => '#',
+            'url' => 'student.tasks.index',
             'name' => 'tasks',
             'icon' => '<i class="fi fi-rr-list"></i>',
         ],
@@ -43,6 +43,7 @@
                 <div class="p-6 bg-white rounded-lg shadow-md main">
                     {{$slot}}
                 </div>
+
             </div>
         </div>
     </div>

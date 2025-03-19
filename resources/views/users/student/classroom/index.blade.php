@@ -9,7 +9,7 @@
 
                 @forelse ($myClassrooms as $myClassroom)
                     <div class="flex flex-col w-full h-full rounded-lg border border-accent">
-                        <a href="{{ route('teacher.classrooms.show', ['classroom' => $myClassroom->id]) }}"
+                        <a href="{{ route('student.classrooms.show', ['classroom' => $myClassroom->id]) }}"
                             class="flex relative flex-col justify-between p-2 h-1/2 rounded-t-lg bg-accent">
                             <h1 class="text-lg font-bold tracking-wider capitalize text-primary">
                                 {{ $myClassroom->subject->name }}

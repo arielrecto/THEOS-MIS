@@ -29,6 +29,7 @@ use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardControll
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
 use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
+use App\Http\Controllers\Student\TaskController as StudentTasksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,8 +137,13 @@ Route::middleware([
             Route::get('{classroom}/attendances', [StudentClassroomController::class, 'attendances'])->name('attendances');
             Route::post('{classroom}/join', [StudentClassroomController::class, 'join'])->name('join');
         });
-    });
 
+        Route::prefix('tasks')->as('tasks.')->group(function () {
+            Route::get('', action: [StudentTasksController::class, 'index'])->name('index');
+            Route::get('{id}', action: [StudentTasksController::class, 'show'])->name('show');
+            Route::post('{id}/submit', action: [StudentTasksController::class, 'submit'])->name('submit');
+        });
+    });
 });
 
 require __DIR__ . '/auth.php';

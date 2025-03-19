@@ -74,9 +74,9 @@ class ClassroomController extends Controller
                 $q->where('user_id', $user->id);
             });
         }])
-        ->whereHas('classroomStudents', function ($q) use ($user) {
-            $q->where('student_id', $user->id);
-        })->first();
+            ->whereHas('classroomStudents', function ($q) use ($user) {
+                $q->where('student_id', $user->id);
+            })->first();
 
         if (!$classroom) {
             return back()->with('error', 'can\'t view this classroom you are not enrolled in this classroom');
@@ -84,9 +84,7 @@ class ClassroomController extends Controller
 
 
 
-        return response([
-            'classroom' => $classroom
-        ], 200);
+        return view('users.student.classroom.show', compact('classroom'));
     }
 
     public function attendances(string $id)

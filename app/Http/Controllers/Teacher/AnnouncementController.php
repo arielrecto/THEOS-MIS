@@ -79,7 +79,7 @@ class AnnouncementController extends Controller
                 $student->notify(new AnnouncementNotification($message));
             });
         }
-        return back()->with(['message' => 'announcement posted', 'classroom_id' => $classroomId]);
+        return back()->with(['success' => 'announcement posted', 'classroom_id' => $classroomId]);
     }
 
     /**

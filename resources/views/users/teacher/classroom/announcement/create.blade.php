@@ -1,6 +1,6 @@
 <x-dashboard.teacher.base>
     <x-notification-message />
-    <x-dashboard.page-title :title="_('Classrooms Create')"  />
+    <x-dashboard.page-title :title="_('Classrooms Create')" />
 
     <div class="panel min-h-96">
 
@@ -59,7 +59,7 @@
                 <input type="file" name="attachment" class="file-input file-input-accent">
             </div>
 
-            <input type="hidden" name="classroom_id" value="{{$classroom_id}}">
+            <input type="hidden" name="classroom_id" value="{{ request('classroom_id') }}">
 
 
 

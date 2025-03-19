@@ -119,7 +119,7 @@ class TaskController extends Controller
         }
 
 
-        return back()->with(['message' => 'Task Created Success']);
+        return back()->with(['success' => 'Task Created Success']);
     }
 
     /**
@@ -167,26 +167,19 @@ class TaskController extends Controller
 
     private function handleFileObject($fileObject, string $path, string $name)
     {
-
-
         if (!isset($fileObject->data, $fileObject->extension)) {
             throw new \Exception('Invalid file object');
         }
 
-
-
         // Retrieve base64-encoded data and extension
         $base64 = $fileObject->data;
-
         list($type) = explode(';', $base64);
-
         $extension = strtolower($fileObject->extension);
 
         // Replace any spaces with plus signs (if necessary)
         $base64 = str_replace("{$type};base64,", '', $base64);
         $base64 = str_replace(' ', '+', $base64);
 
-        // Validate the file object
         // Generate a unique name for the file
         $fileName = "{$name}-" . uniqid() . '.' . $extension;
         $filename = preg_replace('~[\\\\\s+/:*?"<>|+-]~', '-', $fileName);
@@ -199,9 +192,15 @@ class TaskController extends Controller
             throw new \Exception('Base64 decode failed');
         }
 
+        // Create storage directory if it doesn't exist
+        $storagePath = storage_path('app/public/' . $path);
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0755, true);
+        }
+
         // Save the file to the specified path
-        $storagePath = storage_path('app/public/' . $path . $filename);
-        if (!file_put_contents($storagePath, $fileDecoded)) {
+        $fullPath = $storagePath . $filename;
+        if (!file_put_contents($fullPath, $fileDecoded)) {
             throw new \Exception('Failed to save the file');
         }
 
