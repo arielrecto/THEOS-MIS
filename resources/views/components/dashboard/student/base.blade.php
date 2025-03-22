@@ -25,6 +25,11 @@
             'name' => 'attendance',
             'icon' => '<i class="fi fi-rr-calendar"></i>',
         ],
+        [
+            'url' => 'student.settings.index',
+            'name' => 'settings',
+            'icon' => '<i class="fi fi-rr-settings"></i>',
+        ],
     ];
 
     $user = Auth::user();

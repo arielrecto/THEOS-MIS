@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\AnnouncementNotification;
+use App\Models\Comment;
 
 class AnnouncementController extends Controller
 {
@@ -42,7 +43,6 @@ class AnnouncementController extends Controller
     {
         $classroom_id = $request->classroom;
 
-
         return view('users.teacher.classroom.announcement.create', compact(['classroom_id']));
     }
 
@@ -54,6 +54,7 @@ class AnnouncementController extends Controller
         $request->validate(['title' => 'required', 'description' => 'required']);
 
         $classroomId = $request->classroom_id;
+
 
         $announcement = Announcement::create([
             'title' => $request->title,
@@ -102,15 +103,19 @@ class AnnouncementController extends Controller
         $type = $request->query('type', 'general');
 
         if ($type === 'general') {
-            $announcement = GeneralAnnouncement::with(['postedBy.profile', 'attachments'])
-                ->where('posted_by', Auth::id())
+            $announcement = GeneralAnnouncement::with(['postedBy.profile', 'attachments', 'comments.user'])
+                ->where('posted_by', auth()->id())
                 ->findOrFail($id);
         } else {
-            $announcement = Announcement::with(['classroom.teacher.profile', 'classroom.subject'])
-                ->whereHas('classroom', function($query) {
-                    $query->where('teacher_id', Auth::id());
-                })
-                ->findOrFail($id);
+            $announcement = Announcement::with([
+                'classroom.teacher.profile',
+                'classroom.subject',
+                'comments.user'
+            ])
+            ->whereHas('classroom', function($query) {
+                $query->where('teacher_id', auth()->id());
+            })
+            ->findOrFail($id);
         }
 
         return view('users.teacher.announcement.show', compact('announcement'));
@@ -191,5 +196,35 @@ class AnnouncementController extends Controller
         $announcement->update(['file_dir' => null]);
 
         return response()->json(['message' => 'File removed successfully']);
+    }
+
+    public function storeComment(Request $request, string $id)
+    {
+        $request->validate([
+            'content' => ['required', 'string', 'max:1000']
+        ]);
+
+        $type = $request->query('type', 'general');
+        $model = $type === 'general' ? GeneralAnnouncement::class : Announcement::class;
+
+        $announcement = $model::findOrFail($id);
+
+        $announcement->comments()->create([
+            'content' => $request->content,
+            'user_id' => auth()->id()
+        ]);
+
+        return back()->with('success', 'Comment posted successfully');
+    }
+
+    public function destroyComment(Comment $comment)
+    {
+        if ($comment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $comment->delete();
+
+        return back()->with('success', 'Comment deleted successfully');
     }
 }

@@ -31,6 +31,7 @@ use App\Http\Controllers\Registrar\StudentController as RegistrarStudentControll
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
 use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
+use App\Http\Controllers\Student\SettingsController as StudentSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,6 +135,8 @@ Route::middleware(['auth'])->group(function () {
                     ->as('announcements.')
                     ->group(function () {
                         Route::get('remove-file', [AnnouncementController::class, 'removeFile'])->name('remove-file');
+                        Route::post('{announcement}/comments', [AnnouncementController::class, 'storeComment'])->name('comments.store');
+                        Route::delete('comments/{comment}', [AnnouncementController::class, 'destroyComment'])->name('comments.destroy');
                     });
 
                 Route::resource('classrooms', ClassroomController::class);
@@ -156,19 +159,22 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/form/{id}', [EnrollmentController::class, 'enrolled'])->name('enrolled');
                 });
 
+            Route::prefix('students')
+                ->as('students.')
+                ->group(function () {
+                    Route::get('', [RegistrarStudentController::class, 'index'])->name('index');
+                    Route::get('{student}', [RegistrarStudentController::class, 'show'])->name('show');
+                    Route::get('{student}/records/{record}/print', [RegistrarStudentController::class, 'print'])->name('print');
+                    Route::get('{student}/good-moral', [RegistrarStudentController::class, 'printGoodMoral'])->name('good-moral');
+                    Route::get('{student}/form-137', [RegistrarStudentController::class, 'printForm137'])->name('form-137');
+                });
 
-            Route::prefix('students')->as('students.')->group(function () {
-                Route::get('', [RegistrarStudentController::class, 'index'])->name('index');
-                Route::get('{student}', [RegistrarStudentController::class, 'show'])->name('show');
-                Route::get('{student}/records/{record}/print', [RegistrarStudentController::class, 'print'])->name('print');
-                Route::get('{student}/good-moral', [RegistrarStudentController::class, 'printGoodMoral'])->name('good-moral');
-                Route::get('{student}/form-137', [RegistrarStudentController::class, 'printForm137'])->name('form-137');
-            });
-
-            Route::prefix('grades')->as('grades.')->group(function () {
-                Route::get('', [RegistrarGradeController::class, 'index'])->name('index');
-                Route::get('{student}', [RegistrarGradeController::class, 'show'])->name('show');
-            });
+            Route::prefix('grades')
+                ->as('grades.')
+                ->group(function () {
+                    Route::get('', [RegistrarGradeController::class, 'index'])->name('index');
+                    Route::get('{student}', [RegistrarGradeController::class, 'show'])->name('show');
+                });
             Route::resource('enrollments', EnrollmentController::class);
         });
 
@@ -198,6 +204,22 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('', action: [StudentTasksController::class, 'index'])->name('index');
                     Route::get('{id}', action: [StudentTasksController::class, 'show'])->name('show');
                     Route::post('{id}/submit', action: [StudentTasksController::class, 'submitTask'])->name('submit');
+                });
+
+            Route::prefix('settings')
+                ->as('settings.')
+                ->group(function () {
+                    Route::get('', [StudentSettingsController::class, 'index'])->name('index');
+                    Route::patch('/profile', [StudentSettingsController::class, 'updateProfile'])->name('profile.update');
+                    Route::patch('/email', [StudentSettingsController::class, 'updateEmail'])->name(name: 'email.update');
+                    Route::patch('/password', [StudentSettingsController::class, 'updatePassword'])->name('password.update');
+                });
+
+            Route::prefix('announcements')
+                ->as('announcements.')
+                ->group(function () {
+                    Route::post('{announcement}/comments', [StudentAnnouncementController::class, 'storeComment'])->name('comments.store');
+                    Route::delete('comments/{comment}', [StudentAnnouncementController::class, 'destroyComment'])->name('comments.destroy');
                 });
         });
 });

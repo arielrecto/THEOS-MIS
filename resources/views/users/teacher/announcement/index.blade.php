@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center mb-6">
             <x-dashboard.page-title :title="_('Announcements')" />
             <div class="flex gap-2">
-                <a href="{{ route('teacher.announcements.create', ['type' => request()->type ?? 'general']) }}"
+                <a href="{{ route('teacher.announcements.create', ['type' => request()->type ?? 'general', 'classroom' => request('classroom')]) }}"
                    class="btn btn-accent">
                     <i class="fi fi-rr-plus mr-2"></i>
                     {{ __('Create Announcement') }}
@@ -13,11 +13,11 @@
 
         <!-- Announcement Type Tabs -->
         <div class="flex space-x-2 mb-6">
-            <a href="{{ route('teacher.announcements.index', ['type' => 'general']) }}"
+            <a href="{{ route('teacher.announcements.index', ['type' => 'general', 'classroom_id' => request('classroom')]) }}"
                 class="px-3 py-2 font-semibold rounded-lg {{ request()->type === 'general' || !request()->type ? 'bg-accent text-white' : 'bg-gray-200 text-gray-700' }}">
                 {{ __('General') }}
             </a>
-            <a href="{{ route('teacher.announcements.index', ['type' => 'classroom']) }}"
+            <a href="{{ route('teacher.announcements.index', ['type' => 'classroom', 'classroom_id' =>  request('classroom')]) }}"
                 class="px-3 py-2 font-semibold rounded-lg {{ request()->type === 'classroom' ? 'bg-accent text-white' : 'bg-gray-200 text-gray-700' }}">
                 {{ __('Classroom') }}
             </a>

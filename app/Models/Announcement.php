@@ -22,4 +22,9 @@ class Announcement extends Model
         return $this->belongsTo(Classroom::class);
     }
 
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
 }

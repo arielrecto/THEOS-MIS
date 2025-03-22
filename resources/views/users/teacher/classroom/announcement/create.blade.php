@@ -1,70 +1,88 @@
 <x-dashboard.teacher.base>
     <x-notification-message />
-    <x-dashboard.page-title :title="_('Classrooms Create')" />
+    <x-dashboard.page-title :title="_('Create Announcement')" :back_url="route('teacher.classrooms.show', ['classroom' => $classroom_id])" />
 
-    <div class="panel min-h-96">
+    <div class="w-full">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <form action="{{ route('teacher.announcements.store') }}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="space-y-6">
+                @csrf
 
-        <form action="{{ route('teacher.announcements.store') }}" method="post" class="flex flex-col gap-5"
-            enctype="multipart/form-data">
-
-            @csrf
-            <h1 class="form-title">Announcement</h1>
-            {{-- <div class="w-full flex justify-center" x-data="imageHandler">
-
-                <template x-if="imageSrc !== null">
-
-                    <div class="w-1/2 h-auto">
-                        <img :src="imageSrc" alt="" srcset="" class="object-cover h-full w-full">
-                    </div>
-
-                </template>
-                <div class="flex items-center justify-center w-full" x-show="imageSrc === null">
-                    <label for="dropzone-file"
-                        class="flex flex-col items-center justify-center w-full h-64 border-2
-                        border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 " aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click
-                                    to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 ">JPG
-                            </p>
-                        </div>
-                        <input id="dropzone-file" type="file" @change="uploadHandler($event)" class="hidden"
-                            name="image" />
+                <!-- Title Input -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-medium">Announcement Title</span>
                     </label>
+                    <input type="text"
+                           name="title"
+                           value="{{ old('title') }}"
+                           class="input input-bordered w-full @error('title') input-error @enderror"
+                           placeholder="Enter announcement title">
+                    @error('title')
+                        <label class="label">
+                            <span class="label-text-alt text-error">{{ $message }}</span>
+                        </label>
+                    @enderror
                 </div>
 
-            </div> --}}
-            <div class="flex flex-col gap-2">
-                <label for="" class="input-generic-label">title</label>
-                <input type="text" name="title" class="input-generic">
-                @if ($errors->has('title'))
-                    <p class="text-xs text-error">{{ $errors->first('title') }}</p>
-                @endif
-            </div>
-            <div class="flex flex-col gap-2">
-                <label for="" class="input-generic-label">Description</label>
-                <textarea class="textarea textarea-accent min-h-32" name="description" placeholder="description"></textarea>
-                @if ($errors->has('description'))
-                    <p class="text-xs text-error">{{ $errors->first('description') }}</p>
-                @endif
-            </div>
-            <div class="flex flex-col gap-2">
-                <label for="" class="input-generic-label">Description</label>
-                <input type="file" name="attachment" class="file-input file-input-accent">
-            </div>
+                <input type="text" name="classroom_id" value="{{$classroom_id}}" hidden>
 
-            <input type="hidden" name="classroom_id" value="{{ request('classroom_id') }}">
+                <!-- Description Input -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-medium">Description</span>
+                    </label>
+                    <textarea name="description"
+                              class="textarea textarea-bordered min-h-[200px] @error('description') textarea-error @enderror"
+                              placeholder="Enter announcement details">{{ old('description') }}</textarea>
+                    @error('description')
+                        <label class="label">
+                            <span class="label-text-alt text-error">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+
+                <!-- Attachment Input -->
+                <div class="form-control" x-data="{ fileName: '' }">
+                    <label class="label">
+                        <span class="label-text font-medium">Attachment (Optional)</span>
+                    </label>
+                    <div class="border-2 border-dashed border-base-300 rounded-lg p-6">
+                        <input type="file"
+                               name="attachment"
+                               id="attachment"
+                               class="hidden"
+                               @change="fileName = $event.target.files[0]?.name">
+                        <label for="attachment"
+                               class="flex flex-col items-center justify-center cursor-pointer">
+                            <i class="fi fi-rr-file-upload text-3xl mb-2 text-accent"></i>
+                            <span class="text-sm font-medium" x-text="fileName || 'Click to upload file'"></span>
+                            <span class="text-xs text-gray-500 mt-1">PDF, DOC, DOCX up to 10MB</span>
+                        </label>
+                    </div>
+                    @error('attachment')
+                        <label class="label">
+                            <span class="label-text-alt text-error">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
 
 
 
-            <button class="btn btn-sm btn-accent">Submit</button>
-        </form>
-
+                <!-- Submit Button -->
+                <div class="flex justify-end gap-2">
+                    <a href="{{route('teacher.classrooms.show', ['classroom' => $classroom_id]) }}"
+                       class="btn btn-ghost">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-accent">
+                        <i class="fi fi-rr-paper-plane mr-2"></i>
+                        Post Announcement
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </x-dashboard.teacher.base>
