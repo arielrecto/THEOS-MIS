@@ -11,12 +11,12 @@
             'icon' => '<i class="fi fi-rr-users"></i>',
         ],
         [
-            'url' => '#',
+            'url' => 'registrar.students.index',
             'name' => 'students',
             'icon' => '<i class="fi fi-rr-users"></i>',
         ],
         [
-            'url' => '#',
+            'url' => 'registrar.grades.index',
             'name' => 'grades',
             'icon' => '<i class="fi fi-rr-users"></i>',
         ]

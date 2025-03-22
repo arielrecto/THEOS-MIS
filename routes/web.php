@@ -26,6 +26,8 @@ use App\Http\Controllers\EnrollmentController as ControllersEnrollmentController
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
+use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
+use App\Http\Controllers\Registrar\StudentController as RegistrarStudentController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
 use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
@@ -153,6 +155,20 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('/form/{id}', [EnrollmentController::class, 'showEnrollee'])->name('showEnrollee');
                     Route::put('/form/{id}', [EnrollmentController::class, 'enrolled'])->name('enrolled');
                 });
+
+
+            Route::prefix('students')->as('students.')->group(function () {
+                Route::get('', [RegistrarStudentController::class, 'index'])->name('index');
+                Route::get('{student}', [RegistrarStudentController::class, 'show'])->name('show');
+                Route::get('{student}/records/{record}/print', [RegistrarStudentController::class, 'print'])->name('print');
+                Route::get('{student}/good-moral', [RegistrarStudentController::class, 'printGoodMoral'])->name('good-moral');
+                Route::get('{student}/form-137', [RegistrarStudentController::class, 'printForm137'])->name('form-137');
+            });
+
+            Route::prefix('grades')->as('grades.')->group(function () {
+                Route::get('', [RegistrarGradeController::class, 'index'])->name('index');
+                Route::get('{student}', [RegistrarGradeController::class, 'show'])->name('show');
+            });
             Route::resource('enrollments', EnrollmentController::class);
         });
 
