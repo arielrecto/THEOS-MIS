@@ -18,22 +18,10 @@
 
 
         <div class="grid grid-cols-4 gap-4">
-            <x-card-v1 :link="route('teacher.classrooms.students', ['classroom' => $classroom->id])"
-                icon="fi fi-rr-student"
-                label="Students"
-                :count="count($classroom->classroomStudents)"/>
-            <x-card-v1 :link="route('teacher.classrooms.attendances', ['classroom' => $classroom->id])"
-                icon="fi fi-rr-calendar"
-                label="Attendance"
-                :count="count($classroom->attendances)"/>
-            <x-card-v1 :link="route('teacher.announcements.index', ['classroom' => $classroom->id])"
-                icon="fi fi-rr-bell"
-                label="Announcements"
-                :count="count($classroom->announcements)"/>
-            <x-card-v1 :link="route('teacher.tasks.index', ['classroom_id' => $classroom->id])"
-                icon="fi fi-rr-list-check"
-                label="Tasks"
-                :count="count($classroom->tasks)"/>
+            <x-card-v1 :link="route('teacher.classrooms.students', ['classroom' => $classroom->id])" icon="fi fi-rr-student" label="Students" :count="count($classroom->classroomStudents)" />
+            <x-card-v1 :link="route('teacher.classrooms.attendances', ['classroom' => $classroom->id])" icon="fi fi-rr-calendar" label="Attendance" :count="count($classroom->attendances)" />
+            <x-card-v1 :link="route('teacher.announcements.index', ['classroom' => $classroom->id])" icon="fi fi-rr-bell" label="Announcements" :count="count($classroom->announcements)" />
+            <x-card-v1 :link="route('teacher.tasks.index', ['classroom_id' => $classroom->id])" icon="fi fi-rr-list-check" label="Tasks" :count="count($classroom->tasks)" />
         </div>
 
         <x-tab.tab :tabs="['Attendance', 'Calendar', 'Student']" :active="0" />
@@ -55,7 +43,8 @@
                     </div>
                 @else
                     <div class="flex justify-end">
-                        <a href="{{ route('teacher.classrooms.attendances', ['classroom' => $classroom->id]) }}" class="btn btn-accent">Generate QR Code</a>
+                        <a href="{{ route('teacher.classrooms.attendances', ['classroom' => $classroom->id]) }}"
+                            class="btn btn-accent">Generate QR Code</a>
                     </div>
                     <div class="flex justify-center items-center p-4 h-full text-gray-500 bg-gray-100 rounded-lg">
                         No Attendance QR Code Available

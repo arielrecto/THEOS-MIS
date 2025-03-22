@@ -14,6 +14,7 @@ class StudentTask extends Model
         'user_id',
         'score',
         'status',
+        'grade_id',
     ];
 
 
@@ -27,5 +28,17 @@ class StudentTask extends Model
     }
     public function attachments(){
         return $this->hasMany(AttachmentStudent::class);
+    }
+
+    public function getScorePercentageAttribute()
+    {
+        if (!$this->score || !$this->task || !$this->task->max_score) {
+            return 0;
+        }
+
+        return ($this->score / $this->task->max_score) * 100;
+    }
+    public function grade(){
+        return $this->belongsTo(Grade::class);
     }
 }

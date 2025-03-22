@@ -28,7 +28,7 @@
                             <td>{{ $classroomStudent->student->name }}</td>
                             <td>{{ date('F d, Y H:s A', strtotime($classroomStudent->created_at))}}</td>
                             <td class="flex items-center gap-2">
-                                <a href="#" class="btn btn-xs btn-accent">
+                                <a href="{{route('teacher.student.show', ['student' => $classroomStudent->student->id])}}" class="btn btn-xs btn-accent">
                                     <i class="fi fi-rr-eye"></i>
                                 </a>
 

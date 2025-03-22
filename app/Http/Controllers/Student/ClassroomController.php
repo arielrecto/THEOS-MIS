@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\Student;
 
 use App\Models\Classroom;
+use App\Models\AcademicYear;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\ClassroomStudent;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class ClassroomController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
 
+        $academicYears = AcademicYear::latest()->get();
+
+        $filterAcademicYear = $request->academic_year;
+
+        $filterGradeLevel = $request->grade_level;
 
         $user = Auth::user();
         $myClassrooms = Classroom::where(function ($q) use ($user) {
@@ -26,7 +32,22 @@ class ClassroomController extends Controller
         })->paginate(10);
 
 
-        return view('users.student.classroom.index', compact('myClassrooms', 'classrooms'));
+        if($filterAcademicYear || $filterGradeLevel){
+            $myClassrooms = Classroom::where(function ($q) use ($user) {
+                $q->whereHas('classroomStudents', function ($q) use ($user) {
+                    $q->where('student_id', $user->id);
+                });
+            })->where('academic_year_id', $filterAcademicYear)
+            ->orWhere('grade_level', $filterGradeLevel)->paginate(10);
+
+            $classrooms = Classroom::whereDoesntHave('classroomStudents', function ($q) use ($user) {
+                $q->where('student_id', $user->id);
+            })->where('academic_year_id', $filterAcademicYear)
+            ->orWhere('grade_level', $filterGradeLevel)->paginate(10);
+        }
+
+
+        return view('users.student.classroom.index', compact('myClassrooms', 'classrooms', 'academicYears'));
     }
 
     public function join(Request $request)

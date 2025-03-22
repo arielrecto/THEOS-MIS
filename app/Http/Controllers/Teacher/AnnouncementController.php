@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Teacher;
 use App\Models\User;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
+use App\Models\GeneralAnnouncement;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Notifications\AnnouncementNotification;
 
 class AnnouncementController extends Controller
@@ -15,12 +18,21 @@ class AnnouncementController extends Controller
      */
     public function index(Request $request)
     {
+        $announcements = GeneralAnnouncement::with(['postedBy', 'attachments'])
+            ->where('posted_by', Auth::id())
+            ->latest()
+            ->paginate(10);
 
-        $classroom_id = $request->classroom;
+        if ($request->type === 'classroom') {
+            $announcements = Announcement::with(['classroom.subject', 'classroom.teacher'])
+                ->whereHas('classroom', function($query) {
+                    $query->where('teacher_id', Auth::id());
+                })
+                ->latest()
+                ->paginate(10);
+        }
 
-        $announcements = Announcement::where('classroom_id', $classroom_id)->latest()->paginate(10);
-
-        return view('users.teacher.classroom.announcement.index', compact(['announcements', 'classroom_id']));
+        return view('users.teacher.announcement.index', compact('announcements'));
     }
 
     /**
@@ -85,16 +97,23 @@ class AnnouncementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id, Request $request)
+    public function show(Request $request, string $id)
     {
-        $announcement = Announcement::find($id);
+        $type = $request->query('type', 'general');
 
-        $classroom_id = $request->classroom;
+        if ($type === 'general') {
+            $announcement = GeneralAnnouncement::with(['postedBy.profile', 'attachments'])
+                ->where('posted_by', Auth::id())
+                ->findOrFail($id);
+        } else {
+            $announcement = Announcement::with(['classroom.teacher.profile', 'classroom.subject'])
+                ->whereHas('classroom', function($query) {
+                    $query->where('teacher_id', Auth::id());
+                })
+                ->findOrFail($id);
+        }
 
-
-        dd($classroom_id);
-
-        return view('users.teacher.classroom.announcement.show', compact(['announcement', 'classroom_id']));
+        return view('users.teacher.announcement.show', compact('announcement'));
     }
 
     /**
@@ -102,7 +121,12 @@ class AnnouncementController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $announcement = Announcement::whereHas('classroom', function($query) {
+                $query->where('teacher_id', Auth::id());
+            })
+            ->findOrFail($id);
+
+        return view('users.teacher.announcement.edit', compact('announcement'));
     }
 
     /**
@@ -110,7 +134,39 @@ class AnnouncementController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'attachment' => 'nullable|file|max:10240',
+        ]);
+
+        $announcement = Announcement::whereHas('classroom', function($query) {
+                $query->where('teacher_id', Auth::id());
+            })
+            ->findOrFail($id);
+
+        $announcement->update([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+
+        if ($request->hasFile('attachment')) {
+            // Delete old file if exists
+            if ($announcement->file_dir && Storage::exists('public/' . $announcement->file_dir)) {
+                Storage::delete('public/' . $announcement->file_dir);
+            }
+
+            $fileName = 'FILE-' . uniqid() . '.' . $request->attachment->extension();
+            $path = $request->attachment->storeAs('announcements', $fileName, 'public');
+
+            $announcement->update([
+                'file_dir' => $path,
+            ]);
+        }
+
+        return redirect()
+            ->route('teacher.announcements.show', ['id' => $announcement->id, 'type' => 'classroom'])
+            ->with('success', 'Announcement updated successfully');
     }
 
     /**
@@ -119,5 +175,21 @@ class AnnouncementController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function removeFile(string $id)
+    {
+        $announcement = Announcement::whereHas('classroom', function($query) {
+                $query->where('teacher_id', Auth::id());
+            })
+            ->findOrFail($id);
+
+        if ($announcement->file_dir && Storage::exists('public/' . $announcement->file_dir)) {
+            Storage::delete('public/' . $announcement->file_dir);
+        }
+
+        $announcement->update(['file_dir' => null]);
+
+        return response()->json(['message' => 'File removed successfully']);
     }
 }

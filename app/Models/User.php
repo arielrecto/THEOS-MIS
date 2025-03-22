@@ -90,4 +90,35 @@ class User extends Authenticatable
     {
         return $this->hasMany(GeneralAnnouncement::class);
     }
+
+    public function graded()
+    {
+        return $this->hasMany(Grade::class, 'created_by');
+    }
+
+    public function overAllAverageTaskByClassroom( $classroom_id) : float|int
+    {
+
+        $studentTask = StudentTask::whereHas('task', function ($query) use ($classroom_id) {
+            $query->where('classroom_id', $classroom_id);
+        })->where('user_id', $this->id)->get();
+
+
+        $average  = 0;
+
+        $totalCount = count($studentTask);
+
+
+        foreach ($studentTask as $task) {
+            $average += $task->getScorePercentageAttribute();
+        }
+
+
+        return round($average / $totalCount, 2);
+    }
+
+    public function studentProfile()
+    {
+        return $this->hasOne(StudentProfile::class);
+    }
 }

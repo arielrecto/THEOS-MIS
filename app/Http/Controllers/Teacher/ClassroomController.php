@@ -18,14 +18,21 @@ class ClassroomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $academicYears = AcademicYear::orderBy('created_at', 'desc')->get();
 
-        $user = Auth::user();
+        $query = Classroom::query()
+            ->where('teacher_id', Auth::id())
+            ->with(['subject', 'strand', 'teacher.profile', 'academicYear', 'classroomStudents']);
 
-        $classrooms = Classroom::where('teacher_id', $user->id)->latest()->paginate(10);
+        if ($request->has('academic_year')) {
+            $query->where('academic_year_id', $request->academic_year);
+        }
 
-        return view('users.teacher.classroom.index', compact(['classrooms']));
+        $classrooms = $query->latest()->paginate(10);
+
+        return view('users.teacher.classroom.index', compact('classrooms', 'academicYears'));
     }
 
     /**
@@ -100,7 +107,19 @@ class ClassroomController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $classroom = Classroom::where('teacher_id', Auth::id())
+            ->findOrFail($id);
+
+        $academicYears = AcademicYear::orderBy('created_at', 'desc')->get();
+        $subjects = Subject::orderBy('name')->get();
+        $strands = Strand::orderBy('name')->get();
+
+        return view('users.teacher.classroom.edit', compact(
+            'classroom',
+            'academicYears',
+            'subjects',
+            'strands'
+        ));
     }
 
     /**
@@ -108,7 +127,21 @@ class ClassroomController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $classroom = Classroom::where('teacher_id', Auth::id())
+            ->findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'academic_year_id' => 'required|exists:academic_years,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'strand_id' => 'required|exists:strands,id',
+        ]);
+
+        $classroom->update($validated);
+
+        return redirect()
+            ->route('teacher.classrooms.index')
+            ->with('success', 'Classroom updated successfully');
     }
 
     /**

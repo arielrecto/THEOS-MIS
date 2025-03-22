@@ -32,4 +32,13 @@ class AcademicRecord extends Model
     {
         return $this->belongsTo(StudentProfile::class);
     }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
+    public function getAverageAttribute()
+    {
+        return $this->grades->avg('grade');
+    }
 }

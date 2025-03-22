@@ -54,7 +54,7 @@
                         @endif
 
                         <div class="card-actions justify-end mt-4">
-                            <button class="btn btn-primary">Submit Work</button>
+                            <a href="{{route('student.tasks.show', ['id' => $task->id])}}" class="btn btn-primary">Submit Work</a>
                         </div>
                     </div>
                 </div>

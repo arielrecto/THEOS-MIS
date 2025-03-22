@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Grade;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->string('score')->nullable();
             $table->string('status')->default('assign');
+            $table->foreignIdFor(Grade::class)->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

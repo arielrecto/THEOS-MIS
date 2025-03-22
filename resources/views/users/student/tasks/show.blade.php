@@ -1,5 +1,5 @@
 <x-dashboard.student.base>
-    <div class="max-w-4xl mx-auto">
+    <div class="w-full">
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
                 <div class="flex justify-between items-start">

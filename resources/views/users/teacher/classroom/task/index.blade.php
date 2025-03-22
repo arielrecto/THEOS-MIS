@@ -17,6 +17,7 @@
                         <th>End Date</th>
                         <th>Max Score</th>
                         <th>Total Assign Student</th>
+                        <th>Total Submit</th>
                         <th>Action</th>
                         {{-- <th>Job</th>
                             <th>Favorite Color</th> --}}
@@ -33,6 +34,8 @@
                             <th>{{ $task->end_date }}</th>
                             <th>{{ $task->max_score }}</th>
                             <th>{{ count($task->assignStudents) }}</th>
+                            <th>{{  $task->assignStudents()
+                            ->where('status', 'submitted')->count() }}</th>
 
                             <td class="flex items-center gap-2">
                                 <a href="{{ route('teacher.tasks.show', ['task' => $task->id]) }}"

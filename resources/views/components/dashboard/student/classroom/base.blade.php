@@ -20,15 +20,18 @@
         <div class="flex items-center w-full rounded-lg border">
             <a href="{{ $url ?? '#' }}?tab=stream"
                 class="flex gap-2 items-center px-4 py-3 rounded-lg duration-700 hover:bg-primary hover:text-neutral">
-                <span class="text-lg font-bold tracking-wider capitalize text-accent {{ request()->get('tab')  == 'stream' || request()->get('tab') == null ? 'border-b-2 border-accent text-accent' : '' }}">Stream</span>
+                <span
+                    class="text-lg font-bold tracking-wider capitalize text-accent {{ request()->get('tab') == 'stream' || request()->get('tab') == null ? 'border-b-2 border-accent text-accent' : '' }}">Stream</span>
             </a>
             <a href="{{ $url ?? '#' }}?tab=tasks"
                 class="flex gap-2 items-center px-4 py-3 rounded-lg duration-700 hover:bg-primary hover:text-neutral">
-                <span class="text-lg font-bold tracking-wider capitalize text-accent {{ request()->get('tab')  == 'tasks' ? 'border-b-2 border-accent text-accent' : '' }}">Tasks</span>
+                <span
+                    class="text-lg font-bold tracking-wider capitalize text-accent {{ request()->get('tab') == 'tasks' ? 'border-b-2 border-accent text-accent' : '' }}">Tasks</span>
             </a>
             <a href="{{ $url ?? '#' }}?tab=people"
                 class="flex gap-2 items-center px-4 py-3 rounded-lg duration-700 hover:bg-primary hover:text-neutral">
-                <span class="text-lg font-bold tracking-wider capitalize text-accent {{ request()->get('tab')  == 'people' ? 'border-b-2 border-accent text-accent' : '' }}">People</span>
+                <span
+                    class="text-lg font-bold tracking-wider capitalize text-accent {{ request()->get('tab') == 'people' ? 'border-b-2 border-accent text-accent' : '' }}">People</span>
             </a>
         </div>
 
