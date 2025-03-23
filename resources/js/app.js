@@ -1,10 +1,11 @@
-// import { data } from "dom7";
-//  import "./bootstrap";
-
 import Alpine from "alpinejs";
 import axios from "axios";
+import gallery from './components/gallery';
 
 window.Alpine = Alpine;
+
+// Register gallery component
+Alpine.data('gallery', gallery);
 
 Alpine.data("imageHandler", () => ({
     imageSrc: null,
@@ -203,7 +204,7 @@ Alpine.data("generateThumbnail", () => ({
         html: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-code", // HTML
         css: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-code", // CSS
         js: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-code", // JavaScript
-        php: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-code", // PHP
+        php: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-code", // PHP
         url: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=link",
     },
     getThumbnail(extension) {

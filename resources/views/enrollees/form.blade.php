@@ -36,6 +36,7 @@
                                 </label>
                                 <input type="text"
                                        class="input input-bordered bg-gray-50"
+                                       name="school_year"
                                        value="{{ date('Y', strtotime($academicYear->start_date)) }} - {{ date('Y', strtotime($academicYear->end_date)) }}"
                                        readonly>
                             </div>

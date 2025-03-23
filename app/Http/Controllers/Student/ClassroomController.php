@@ -81,8 +81,6 @@ class ClassroomController extends Controller
     public function show(string $id)
     {
 
-
-
         $user = Auth::user();
 
         $classroom = Classroom::where('id', $id)->with([
@@ -104,8 +102,13 @@ class ClassroomController extends Controller
         }
 
 
+        $tasks = $classroom->tasks()->whereHas('assignStudents', function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        })->latest()->get();
 
-        return view('users.student.classroom.show', compact('classroom'));
+
+
+        return view('users.student.classroom.show', compact('classroom', 'tasks'));
     }
 
     public function attendances(string $id)

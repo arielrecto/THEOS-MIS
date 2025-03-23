@@ -20,9 +20,9 @@ class AnnouncementController extends Controller
     public function index(Request $request)
     {
         $announcements = GeneralAnnouncement::with(['postedBy', 'attachments'])
-            ->where('posted_by', Auth::id())
             ->latest()
             ->paginate(10);
+
 
         if ($request->type === 'classroom') {
             $announcements = Announcement::with(['classroom.subject', 'classroom.teacher'])

@@ -10,7 +10,7 @@ class LandingPageController extends Controller
     public function index()
     {
 
-        $announcements = GeneralAnnouncement::latest()->paginate(6);
+        $announcements = GeneralAnnouncement::where('is_posted', true)->latest()->paginate(6);
 
         return view('welcome', compact('announcements'));
     }

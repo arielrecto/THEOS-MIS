@@ -33,7 +33,7 @@ class EnrollmentController extends Controller
             'last_name' => 'required',
             'first_name' => 'required',
             'middle_name' => 'required',
-            'extension_name' => 'required',
+            'extension_name' => 'nullable',
             'birthdate' => 'required',
             'birthplace' => 'required',
             'house_no' => 'required',
@@ -54,7 +54,7 @@ class EnrollmentController extends Controller
             'occupation' => 'required',
             'preferred_track' => 'required',
             'preferred_strand' => 'required',
-            'modality' => 'required',
+            'modality' => 'nullable',
             'email' => 'required',
         ]);
 
