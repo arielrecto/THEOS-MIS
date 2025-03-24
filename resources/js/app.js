@@ -222,7 +222,11 @@ Alpine.data("QrScanner", () => ({
     scanner: null,
     height: 250,
     width: 250,
+    type: null,
     students: [],
+    errors : {
+
+    },
     init() {
         const reader = this.$refs.reader;
 
@@ -251,6 +255,13 @@ Alpine.data("QrScanner", () => ({
             formData.append("attendanceCode", data[0]);
             formData.append("classroom", data[2]);
 
+
+
+            if(this.type) {
+                this.submitAttendanceStudent(formData);
+                return;
+            };
+
             this.submitAttendance(formData);
         });
     },
@@ -278,6 +289,29 @@ Alpine.data("QrScanner", () => ({
             alert("attendance successs");
         } catch (error) {
             console.log(error);
+        }
+    },
+
+    async submitAttendanceStudent(payload) {
+        try {
+
+            console.log(payload);
+            console.log(payload, "hile");
+            const response = await axios.post(
+                "/student/attendances/log",
+                payload
+            );
+
+            console.log("hi");
+
+            this.students = [...this.students, response.student];
+
+            alert("attendance successs");
+        } catch (error) {
+            console.log(error);
+            this.errors = {
+                ...error.response.data
+            }
         }
     },
 }));

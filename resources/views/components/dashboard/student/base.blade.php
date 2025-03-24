@@ -21,7 +21,7 @@
             'icon' => '<i class="fi fi-rr-list"></i>',
         ],
         [
-            'url' => '#',
+            'url' => 'student.attendances.index',
             'name' => 'attendance',
             'icon' => '<i class="fi fi-rr-calendar"></i>',
         ],

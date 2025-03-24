@@ -19,9 +19,8 @@
                                     <p class="text-xs opacity-50">Posted {{ $task->created_at->diffForHumans() }}</p>
                                 </div>
                             </div>
-                            <div class="badge badge-accent">Score: {{ $task->score ?? 0 }}/{{ $task->max_score }}</div>
+                            <div class="badge badge-accent">Score: {{ $task->max_score }}</div>
                         </div>
-
                         <h2 class="card-title">{{ $task->name }}</h2>
                         <p>{{ $task->description }}</p>
 
@@ -34,21 +33,26 @@
                             </div>
                         </div>
 
+
                         @if ($task->attachments->count() > 0)
                             <div class="mt-4 p-3 bg-base-200 rounded-lg">
                                 <div class="flex flex-col gap-2">
                                     <h4 class="font-medium">Attachments</h4>
-                                    @foreach($task->attachments as $attachment)
-                                        <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        @foreach($task->attachments as $attachment)
+
+
+                                        <div class="flex items-center p-2 bg-white hover:bg-gray-50 hover:scale-95 duration-500 rounded-lg " x-data="generateThumbnail">
                                             <div class="flex items-center space-x-2">
-                                                <svg class="w-5 h-5 opacity-50" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
-                                                </svg>
                                                 <span class="text-sm">{{ $attachment->name }}</span>
                                             </div>
-                                            <a href="{{ asset($attachment->file_dir) }}" class="btn btn-ghost btn-sm">Download</a>
+                                            <a href="{{ $attachment->file }}"  target="_blank">
+                                                <img :src="getThumbnail(`{{$attachment->extension}}`)" alt="" srcset="" class="w-5 h-5" />
+                                            </a>
                                         </div>
                                     @endforeach
+                                    </div>
+
                                 </div>
                             </div>
                         @endif

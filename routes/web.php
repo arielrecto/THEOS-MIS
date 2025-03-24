@@ -29,6 +29,7 @@ use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardCont
 use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
 use App\Http\Controllers\Registrar\StudentController as RegistrarStudentController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
+use App\Http\Controllers\Student\AttendanceController as StudentAttendanceController;
 use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
 use App\Http\Controllers\Student\SettingsController as StudentSettingsController;
@@ -221,6 +222,12 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('{announcement}/comments', [StudentAnnouncementController::class, 'storeComment'])->name('comments.store');
                     Route::delete('comments/{comment}', [StudentAnnouncementController::class, 'destroyComment'])->name('comments.destroy');
                 });
+
+            Route::prefix('attendances')->as('attendances.')->group(function () {
+                Route::post('/log', [StudentAttendanceController::class, 'log'])->name('log');
+                Route::get('', [StudentAttendanceController::class, 'index'])->name('index');
+                Route::get('/scanner', [StudentAttendanceController::class, 'scanner'])->name('scanner');
+            });
         });
 });
 

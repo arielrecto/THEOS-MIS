@@ -12,7 +12,8 @@ class AttendanceStudent extends Model
     protected $fillable = [
         'attendance_id',
         'user_id',
-        'classroom_id'
+        'classroom_id',
+        'status'
     ];
 
     public function attendance (){

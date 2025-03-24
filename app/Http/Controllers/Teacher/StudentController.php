@@ -33,16 +33,16 @@ class StudentController extends Controller
         $student = User::with(['profile', 'tasks'])->findOrFail($id);
 
         // Get attendance data
-        $student_attendances = AttendanceStudent::where('classroom_id', $classroom_id)
-            ->where('user_id', $student->id)
+        $student_attendances = AttendanceStudent::where('user_id', $student->id)
             ->with(['attendance.classroom.subject'])
             ->latest()
             ->paginate(10);
 
         // Calculate attendance metrics
         $totalAttendances = $student_attendances->total();
-        $presentCount = $student_attendances->where('status', 'present')->count();
-        $absentCount = $totalAttendances - $presentCount;
+        $presentCount = AttendanceStudent::where('status', 'present')
+        ->where('user_id', $student->id)->count();
+        $absentCount = 0;
         $attendanceRate = $totalAttendances > 0 ? ($presentCount / $totalAttendances) * 100 : 0;
 
         // Get task metrics

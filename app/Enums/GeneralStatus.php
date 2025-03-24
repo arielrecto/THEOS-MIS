@@ -19,4 +19,6 @@ enum GeneralStatus: string
     case COMPLETED = 'completed';
     case PENDING = 'pending';
     case ENROLLED = 'enrolled';
+    case PRESENT = 'present';
+    case ABSENT = 'absent';
 }
