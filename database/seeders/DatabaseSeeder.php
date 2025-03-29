@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Strand;
 use App\Models\Subject;
 use App\Enums\UserRoles;
+use App\Models\Department;
 use App\Models\Enrollment;
 use App\Models\AcademicYear;
 use App\Enums\EnrollmentStatus;
@@ -46,6 +47,9 @@ class DatabaseSeeder extends Seeder
         $teacherRole = Role::where('name', UserRoles::TEACHER->value)->first();
 
         $registrarRole = Role::where('name', UserRoles::REGISTRAR->value)->first();
+
+        $hrRole = Role::where('name', UserRoles::HUMAN_RESOURCE->value)->first();
+
         $admin = User::create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
@@ -63,6 +67,13 @@ class DatabaseSeeder extends Seeder
             'name' => 'registrar',
             'email' => 'registrar@registrar.com',
             'password' => Hash::make('registrar123')
+        ]);
+
+
+        $hr = User::create([
+            'name' => 'HR',
+            'email' => 'hr@hr.com',
+            'password' => Hash::make('hr123')
         ]);
 
 
@@ -122,5 +133,25 @@ class DatabaseSeeder extends Seeder
 
         $teacher->assignRole($teacherRole);
         $registrar->assignRole($registrarRole);
+
+
+        $hr->assignRole($hrRole);
+
+
+
+        $departments = [
+            'HR',
+            'Education',
+            'Maintenance',
+            'Admissions',
+        ];
+
+
+        collect($departments)->map(function ($department) {
+            Department::create([
+                'name' => $department,
+                'description' => 'sample description'
+            ]);
+        });
     }
 }

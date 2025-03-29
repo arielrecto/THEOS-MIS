@@ -197,13 +197,13 @@ Alpine.data("generateThumbnail", () => ({
         xls: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-excel", // XLS
         ppt: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-powerpoint", // PPT
         txt: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-alt", // TXT
-        jpg: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-image", // JPG
+        jpg: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-image", // JPG
         png: "https://s2.svgbox.net/files.svg?ic=image", // PNG
         gif: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-image", // GIF
-        zip: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-archive", // ZIP
-        html: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-code", // HTML
-        css: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-code", // CSS
-        js: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-code", // JavaScript
+        zip: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-archive", // ZIP
+        html: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-code", // HTML
+        css: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-code", // CSS
+        js: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-code", // JavaScript
         php: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-code", // PHP
         url: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=link",
     },
@@ -314,6 +314,31 @@ Alpine.data("QrScanner", () => ({
             }
         }
     },
+}));
+
+Alpine.data("applicantKanban", () => ({
+    async moveApplicant(id, status) {
+        try {
+            await fetch(`/hr/applicants/${id}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ status })
+            });
+
+            window.location.reload();
+        } catch (error) {
+            console.error('Error moving applicant:', error);
+        }
+    },
+
+    async rejectApplicant(id) {
+        if (confirm('Are you sure you want to reject this application?')) {
+            await this.moveApplicant(id, 'rejected');
+        }
+    }
 }));
 
 Alpine.start();

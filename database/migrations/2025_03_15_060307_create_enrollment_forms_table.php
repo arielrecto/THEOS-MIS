@@ -62,7 +62,7 @@ return new class extends Migration
 
             $table->string('email')->nullable();
 
-            $table->string('status')->default(GeneralStatus::PENDING->value);
+            $table->string('status')->default('pending');
             // Foreign key constraint
             $table->foreignIdFor(AcademicYear::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Enrollment::class)->constrained()->cascadeOnDelete();

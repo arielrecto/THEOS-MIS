@@ -28,6 +28,7 @@
                         class="font-medium text-blue-900 transition hover:text-blue-600">Enrollment</a>
                 </div>
             @endif
+            <a href="{{ route('job-opportunities') }}" class="font-medium text-blue-900 transition hover:text-blue-600">Job Opportunities</a>
         </nav>
 
 

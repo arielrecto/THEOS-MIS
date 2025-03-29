@@ -5,13 +5,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\HR\EmployeeController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Admin\StrandController;
 use App\Http\Controllers\Teacher\TaskController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\HR\DepartmentController;
 use App\Http\Controllers\Teacher\GradeController;
+use App\Http\Controllers\HR\JobPositionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Teacher\ClassroomController;
 use App\Http\Controllers\Admin\AcademicYearController;
@@ -20,19 +23,20 @@ use App\Http\Controllers\Teacher\StudentTaskController;
 use App\Http\Controllers\Registrar\EnrollmentController;
 use App\Http\Controllers\Teacher\AnnouncementController;
 use App\Http\Controllers\Admin\GeneralAnnouncementController;
+use App\Http\Controllers\HR\DashboardController as HRDashboardController;
+use App\Http\Controllers\Student\TaskController as StudentTasksController;
+use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
 use App\Http\Controllers\Teacher\ProfileController as TeacherProfileController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 use App\Http\Controllers\EnrollmentController as ControllersEnrollmentController;
+use App\Http\Controllers\Student\SettingsController as StudentSettingsController;
+use App\Http\Controllers\Registrar\StudentController as RegistrarStudentController;
+use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
-use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
-use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
-use App\Http\Controllers\Registrar\StudentController as RegistrarStudentController;
-use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
 use App\Http\Controllers\Student\AttendanceController as StudentAttendanceController;
-use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
-use App\Http\Controllers\Student\TaskController as StudentTasksController;
-use App\Http\Controllers\Student\SettingsController as StudentSettingsController;
+use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
+use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +53,9 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/contact-us', [LandingPageController::class, 'contact'])->name('contact');
 Route::get('/gallery', [LandingPageController::class, 'gallery'])->name('gallery');
 Route::get('/about-us', [LandingPageController::class, 'about'])->name('about');
+Route::get('job-opportunities', [LandingPageController::class, 'jobOpportunities'])->name('job-opportunities');
+Route::get('/job-opportunities/{position}', [LandingPageController::class, 'showJob'])->name('job-opportunities.show');
+Route::post('/job-opportunities/{position}/apply', [LandingPageController::class, 'applyJob'])->name('job-opportunities.apply');
 Route::get('/home', [HomeController::class, 'index'])
     ->name('home')
     ->middleware(['auth']);
@@ -227,6 +234,31 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/log', [StudentAttendanceController::class, 'log'])->name('log');
                 Route::get('', [StudentAttendanceController::class, 'index'])->name('index');
                 Route::get('/scanner', [StudentAttendanceController::class, 'scanner'])->name('scanner');
+            });
+        });
+
+    Route::middleware('role:human-resource|admin')
+        ->prefix('hr')
+        ->as('hr.')
+        ->group(function () {
+            Route::get('/dashboard', action: [HRDashboardController::class, 'dashboard'])->name('dashboard');
+            Route::resource('departments', DepartmentController::class);
+            Route::prefix('positions')->as('positions.')->group(function(){
+                Route::post('{positions}/toggle-hiring', [JobPositionController::class, 'toggleHiring'])->name('toggle-hiring');
+            });
+            Route::resource('positions', JobPositionController::class);
+            Route::get('applicants', [JobPositionController::class, 'applicants'])->name('applicants.index');
+            Route::get('applicants/{applicant}', [JobPositionController::class, 'showApplicant'])->name('applicants.show');
+            Route::put('applicants/{applicant}/status', [JobPositionController::class, 'updateApplicantStatus'])->name('applicants.update-status');
+
+            Route::prefix('employees')->as('employees.')->group(function () {
+                Route::get('', [EmployeeController::class, 'index'])->name('index');
+                Route::get('create', [EmployeeController::class, 'create'])->name('create');
+                Route::post('', [EmployeeController::class, 'store'])->name('store');
+                Route::get('{employee}', [EmployeeController::class, 'show'])->name('show');
+                Route::get('{employee}/edit', [EmployeeController::class, 'edit'])->name('edit');
+                Route::put('{employee}', [EmployeeController::class, 'update'])->name('update');
+                Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
             });
         });
 });
