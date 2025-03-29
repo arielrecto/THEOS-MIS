@@ -1,37 +1,22 @@
 @php
     $links = [
         [
-            'url' => 'hr.dashboard',
+            'url' => 'employee.dashboard',
             'name' => 'dashboard',
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
         ],
         [
-            'url' => 'hr.employees.index',
-            'name' => 'employees',
-            'icon' => '<i class="fi fi-rr-users"></i>',
-        ],
-        [
-            'url' => 'hr.departments.index',
-            'name' => 'departments',
-            'icon' => '<i class="fi fi-rr-users"></i>',
-        ],
-        [
-            'url' => 'hr.positions.index',
-            'name' => 'positions',
-            'icon' => '<i class="fi fi-rr-briefcase"></i>',
-        ],
-        [
-            'url' => 'hr.leaves.index',
-            'name' => 'leaves',
-            'icon' => '<i class="fi fi-rr-calendar"></i>',
-        ],
-        [
-            'url' => 'hr.attendance.index',
+            'url' => 'employee.attendance.index',
             'name' => 'attendance',
             'icon' => '<i class="fi fi-rr-time-check"></i>',
         ],
         [
-            'url' => 'hr.reports.index',
+            'url' => 'employee.leaves.index',
+            'name' => 'leaves',
+            'icon' => '<i class="fi fi-rr-calendar"></i>',
+        ],
+        [
+            'url' => '#',
             'name' => 'reports',
             'icon' => '<i class="fi fi-rr-chart-histogram"></i>',
         ],
@@ -39,7 +24,7 @@
 
     $user = Auth::user();
 
-    $profile = $user->profile !== null ? '#' : null;
+    $profile = $user->profile !== null ? route('teacher.profile.show', ['profile' => $user->profile->id]) : null;
 @endphp
 
 

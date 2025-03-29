@@ -77,7 +77,6 @@ class EmployeeController extends Controller
             'photo' => 'nullable|image|max:2048',
             'salary' => 'required|numeric|min:0'
         ]);
-
         // Create user account
         $user = User::create([
             'name' => $validated['first_name'] . ' ' . $validated['last_name'],
@@ -110,6 +109,9 @@ class EmployeeController extends Controller
                 $applicant->update(['status' => 'hired']);
             }
         }
+
+
+
 
         return redirect()
             ->route('hr.employees.index')

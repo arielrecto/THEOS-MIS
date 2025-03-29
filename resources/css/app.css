@@ -1,8 +1,9 @@
+/* @import '@fullcalendar/common/main.css';
+@import '@fullcalendar/daygrid/main.css'; */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
 
 @layer components {
 
@@ -26,5 +27,43 @@
     }
     .card-generic {
         @apply shadow-secondary shadow-md rounded-lg h-full w-full p-5
+    }
+
+    /* Add Calendar specific styles */
+    .calendar-container {
+        @apply bg-white rounded-lg shadow-sm p-6;
+    }
+
+    .calendar-header {
+        @apply flex items-center justify-between mb-4;
+    }
+
+    .calendar-legend {
+        @apply flex items-center gap-4;
+    }
+
+    .legend-item {
+        @apply flex items-center gap-2;
+    }
+
+    .legend-dot {
+        @apply w-3 h-3 rounded-full;
+    }
+
+    .legend-text {
+        @apply text-sm text-gray-600;
+    }
+
+    /* Calendar Status Colors */
+    .status-pending {
+        @apply bg-warning;
+    }
+
+    .status-approved {
+        @apply bg-success;
+    }
+
+    .status-rejected {
+        @apply bg-error;
     }
 }

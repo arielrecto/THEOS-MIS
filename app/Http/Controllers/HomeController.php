@@ -28,6 +28,9 @@ class HomeController extends Controller
             case UserRoles::HUMAN_RESOURCE->value:
                 return to_route('hr.dashboard');
                 break;
+            case UserRoles::EMPLOYEE->value:
+                return to_route('employee.dashboard');
+                break;
             default:
                 return to_route('landing');
                 break;

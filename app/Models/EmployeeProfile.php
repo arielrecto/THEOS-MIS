@@ -45,4 +45,14 @@ class EmployeeProfile extends Model
     {
         return $this->hasOneThrough(Department::class, JobPosition::class, 'id', 'id', 'job_position_id', 'department_id');
     }
+
+    public function attendanceLogs()
+    {
+        return $this->hasMany(AttendanceLog::class);
+    }
+
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
 }

@@ -122,6 +122,11 @@ class User extends Authenticatable
         return $this->hasOne(StudentProfile::class);
     }
 
+    public function employee()
+    {
+        return $this->hasOne(EmployeeProfile::class);
+    }
+
     public function comments()
     {
         return $this->hasManyMorph(Comment::class, 'commentable');

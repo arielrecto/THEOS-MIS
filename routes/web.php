@@ -4,6 +4,7 @@ use App\Models\StudentTask;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HR\LeaveController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HR\EmployeeController;
 use App\Http\Controllers\LandingPageController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Teacher\AnnouncementController;
 use App\Http\Controllers\Admin\GeneralAnnouncementController;
 use App\Http\Controllers\HR\DashboardController as HRDashboardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
+use App\Http\Controllers\HR\AttendanceController as HRAttendanceController;
 use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
 use App\Http\Controllers\Teacher\ProfileController as TeacherProfileController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
@@ -34,9 +36,13 @@ use App\Http\Controllers\Registrar\StudentController as RegistrarStudentControll
 use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Employee\DashboardController as EmployeeDashboardController;
 use App\Http\Controllers\Student\AttendanceController as StudentAttendanceController;
+use App\Http\Controllers\Employee\AttendanceController as EmployeeAttendanceController;
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
+use App\Http\Controllers\Employee\LeaveController as EmployeeLeaveController;
+use App\Http\Controllers\HR\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -243,7 +249,7 @@ Route::middleware(['auth'])->group(function () {
         ->group(function () {
             Route::get('/dashboard', action: [HRDashboardController::class, 'dashboard'])->name('dashboard');
             Route::resource('departments', DepartmentController::class);
-            Route::prefix('positions')->as('positions.')->group(function(){
+            Route::prefix('positions')->as('positions.')->group(function () {
                 Route::post('{positions}/toggle-hiring', [JobPositionController::class, 'toggleHiring'])->name('toggle-hiring');
             });
             Route::resource('positions', JobPositionController::class);
@@ -260,7 +266,41 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('{employee}', [EmployeeController::class, 'update'])->name('update');
                 Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
             });
+
+            Route::prefix('attendance')->as('attendance.')->group(function () {
+                Route::get('', [HRAttendanceController::class, 'index'])->name('index');
+                Route::get('{employee}', [HRAttendanceController::class, 'show'])->name('show');
+                Route::post('{employee}/log', [HRAttendanceController::class, 'log'])->name('log');
+            });
+
+            Route::prefix('leaves')->as('leaves.')->group(function () {
+                Route::get('', [LeaveController::class, 'index'])->name('index');
+                Route::put('{leave}/approve', [LeaveController::class, 'approve'])->name('approve');
+                Route::put('{leave}/reject', [LeaveController::class, 'reject'])->name('reject');
+            });
+
+            Route::prefix('reports')->as('reports.')->group(function () {
+                Route::get('', [ReportController::class, 'index'])->name('index');
+                Route::get('attendance', [ReportController::class, 'attendance'])->name('attendance');
+                Route::get('leave', [ReportController::class, 'leave'])->name('leave');
+                Route::get('recruitment', [ReportController::class, 'recruitment'])->name('recruitment');
+            });
         });
+
+    Route::middleware('role:employee')->as('employee.')->group(function () {
+        Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('dashboard');
+
+        Route::prefix('attendance')->as('attendance.')->group(function () {
+            Route::get('', [EmployeeAttendanceController::class, 'index'])->name('index');
+            Route::post('check-in', [EmployeeAttendanceController::class, 'checkIn'])->name('check-in');
+            Route::post('check-out', [EmployeeAttendanceController::class, 'checkOut'])->name('check-out');
+        });
+
+        Route::prefix('leaves')->as('leaves.')->group(function () {
+            Route::get('', [EmployeeLeaveController::class, 'index'])->name('index');
+            Route::post('', [EmployeeLeaveController::class, 'store'])->name('store');
+        });
+    });
 });
 
 require __DIR__ . '/auth.php';

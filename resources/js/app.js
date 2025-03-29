@@ -1,6 +1,12 @@
 import Alpine from "alpinejs";
 import axios from "axios";
 import gallery from './components/gallery';
+// import '@fullcalendar/core/main.css';
+// import '@fullcalendar/daygrid/main.css';
+import './bootstrap';
+import { Calendar } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 window.Alpine = Alpine;
 
@@ -196,10 +202,10 @@ Alpine.data("generateThumbnail", () => ({
         docx: "https://s2.svgbox.net/files.svg?ic=word2", // DOC
         xls: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-excel", // XLS
         ppt: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-powerpoint", // PPT
-        txt: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-alt", // TXT
+        txt: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-alt", // TXT
         jpg: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-image", // JPG
         png: "https://s2.svgbox.net/files.svg?ic=image", // PNG
-        gif: "https://s2.svgbox.net/hero-solid.svg?color=000&ic=file-image", // GIF
+        gif: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-image", // GIF
         zip: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-archive", // ZIP
         html: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-code", // HTML
         css: "https://s2.svgbox.net/hero-solid.svg?color=000&ic/file-code", // CSS
@@ -337,6 +343,88 @@ Alpine.data("applicantKanban", () => ({
     async rejectApplicant(id) {
         if (confirm('Are you sure you want to reject this application?')) {
             await this.moveApplicant(id, 'rejected');
+        }
+    }
+}));
+
+Alpine.data("attendanceTimer", () => ({
+    hours: '00',
+    minutes: '00',
+    seconds: '00',
+    timerInterval: null,
+    startTime: null,
+    checkInTime: null,
+
+    init() {
+        if (this.checkInTime) {
+            this.startTime = new Date(this.checkInTime).getTime();
+            this.startTimer();
+        }
+    },
+
+    initCheckInTime(checkInTime) {
+        this.checkInTime = checkInTime;
+        this.startTime = new Date(checkInTime).getTime();
+        this.startTimer();
+    },
+
+    startTimer() {
+        this.timerInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const timeDiff = now - this.startTime;
+
+            // Calculate hours, minutes, seconds
+            const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+            // Format with leading zeros
+            this.hours = hours.toString().padStart(2, '0');
+            this.minutes = minutes.toString().padStart(2, '0');
+            this.seconds = seconds.toString().padStart(2, '0');
+        }, 1000);
+    },
+
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
+    }
+}));
+
+Alpine.data("leaveCalendar", () => ({
+    calendar: null,
+
+    init() {
+        const calendarEl = this.$refs.calendar;
+        this.calendar = new Calendar(calendarEl, {
+            plugins: [dayGridPlugin, interactionPlugin],
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek'
+            },
+            events: this.$el.dataset.events ? JSON.parse(this.$el.dataset.events) : [],
+            eventClick: (info) => {
+                this.handleEventClick(info);
+            }
+        });
+
+        this.calendar.render();
+    },
+
+    handleEventClick(info) {
+        const event = info.event;
+        const modal = document.getElementById('leave-details-modal');
+
+        if (modal) {
+            modal.querySelector('.employee-name').textContent = event.title;
+            modal.querySelector('.leave-type').textContent = event.extendedProps.type;
+            modal.querySelector('.leave-duration').textContent = event.extendedProps.duration;
+            modal.querySelector('.leave-reason').textContent = event.extendedProps.reason;
+            modal.querySelector('.leave-status').textContent = event.extendedProps.status;
+            modal.showModal();
         }
     }
 }));
