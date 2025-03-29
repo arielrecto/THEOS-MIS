@@ -67,6 +67,15 @@
                                 </a>
                             </li>
                         @endif
+
+                        @if (Auth::user()->hasRole('admin'))
+                            <li>
+                                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
+                                    <i class="fi fi-rr-shield"></i>
+                                    Admin Dashboard
+                                </a>
+                            </li>
+                        @endif
                         <li>
                             <a href="#" class="flex items-center gap-2">
                                 <i class="fi fi-rr-settings"></i>

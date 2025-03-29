@@ -110,15 +110,15 @@
                                         <div class="flex items-center gap-4">
                                             <div class="avatar">
                                                 <div class="w-10 h-10 rounded-full">
-                                                    <img src="{{ $employee->avatar_url }}" alt="Avatar">
+                                                    <img src="{{  asset('/storage/' . $employee->photo)}}" alt="Avatar">
                                                 </div>
                                             </div>
                                             <div>
-                                                <h3 class="font-medium">{{ $employee->name }}</h3>
-                                                <p class="text-sm text-gray-600">Since {{ date('M Y', strtotime($employee->hired_at))  }}</p>
+                                                <h3 class="font-medium capitalize">{{ $employee->last_name . ', ' . $employee->first_name }}</h3>
+                                                <p class="text-sm text-gray-600">Since {{ date('M Y', strtotime($employee->created_at))  }}</p>
                                             </div>
                                         </div>
-                                        <a href="#"
+                                        <a href="{{ route('hr.employees.show', $employee) }}"
                                            class="btn btn-ghost btn-sm">
                                             View Profile
                                         </a>

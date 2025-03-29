@@ -59,7 +59,8 @@ class AcademicYearController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $academicYear = AcademicYear::findOrFail($id);
+        return view('users.admin.academic-year.edit', compact('academicYear'));
     }
 
     /**
@@ -67,7 +68,29 @@ class AcademicYearController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $academicYear = AcademicYear::findOrFail($id);
+
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+        ]);
+
+        // If this is being set as active, deactivate all others
+        if ($request->has('status') && $request->status === 'active') {
+            AcademicYear::where('id', '!=', $academicYear->id)
+                ->update(['status' => 'inactive']);
+        }
+
+        $academicYear->update([
+            'name' => "Academic Year " . date('Y', strtotime($request->start_date)) . " - " . date('Y', strtotime($request->end_date)),
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'status' => $request->has('status') ? 'active' : 'inactive',
+        ]);
+
+        return redirect()
+            ->route('admin.academic-year.index')
+            ->with('success', 'Academic Year updated successfully');
     }
 
     /**
@@ -75,6 +98,11 @@ class AcademicYearController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $academicYear = AcademicYear::findOrFail($id);
+        $academicYear->delete();
+
+        return redirect()
+            ->route('admin.academic-year.index')
+            ->with('success', 'Academic Year deleted successfully');
     }
 }

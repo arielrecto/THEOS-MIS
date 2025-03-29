@@ -38,13 +38,37 @@
                             <i class="fi fi-rr-edit"></i>
                         </a>
 
-                        <form action="{{route('admin.academic-year.destroy', ['academic_year' => $academicYear->id])}}" method="post">
+                        <form action="{{route('admin.academic-year.destroy', ['academic_year' => $academicYear->id])}}"
+                              method="post"
+                              id="deleteForm{{$academicYear->id}}">
                             @csrf
                             @method('delete')
-                            <button class="btn btn-xs btn-error">
+                            <button type="button"
+                                    class="btn btn-xs btn-error"
+                                    onclick="document.getElementById('delete_modal_{{$academicYear->id}}').showModal()">
                                 <i class="fi fi-rr-trash"></i>
                             </button>
                         </form>
+
+                        <!-- Delete Confirmation Modal -->
+                        <dialog id="delete_modal_{{$academicYear->id}}" class="modal modal-bottom sm:modal-middle">
+                            <div class="modal-box">
+                                <h3 class="font-bold text-lg">Confirm Deletion</h3>
+                                <p class="py-4">
+                                    Are you sure you want to delete academic year "{{$academicYear->name}}"?
+                                    This action cannot be undone.
+                                </p>
+                                <div class="modal-action">
+                                    <form method="dialog">
+                                        <button class="btn btn-ghost">Cancel</button>
+                                    </form>
+                                    <button class="btn btn-error"
+                                            onclick="document.getElementById('deleteForm{{$academicYear->id}}').submit()">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </dialog>
                     </td>
                   </tr>
                 @empty
