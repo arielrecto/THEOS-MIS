@@ -76,6 +76,16 @@
                                 </a>
                             </li>
                         @endif
+
+                        @if (Auth::user()->hasRole('teacher'))
+                            <li>
+                                <a href="{{ route('teacher.dashboard') }}" class="flex items-center gap-2">
+                                    <i class="fi fi-rr-workshop"></i>
+                                    Teacher Dashboard
+                                </a>
+                            </li>
+                        @endif
+
                         <li>
                             <a href="#" class="flex items-center gap-2">
                                 <i class="fi fi-rr-settings"></i>

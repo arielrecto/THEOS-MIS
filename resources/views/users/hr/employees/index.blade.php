@@ -125,6 +125,16 @@
                                            class="btn btn-ghost btn-sm">
                                             Edit
                                         </a>
+                                        <!-- Add the teacher role toggle -->
+                                        <form action="{{ route('hr.employees.toggle-teacher', $employee) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                    class="btn btn-sm {{ $employee->user->hasRole('teacher') ? 'btn-primary' : 'btn-ghost' }}"
+                                                    title="{{ $employee->user->hasRole('teacher') ? 'Remove Teacher Role' : 'Add Teacher Role' }}">
+                                                <i class="fi fi-rr-graduation-cap"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

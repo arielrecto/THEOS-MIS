@@ -265,6 +265,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('{employee}/edit', [EmployeeController::class, 'edit'])->name('edit');
                 Route::put('{employee}', [EmployeeController::class, 'update'])->name('update');
                 Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
+                Route::patch('{employee}/toggle-teacher', [EmployeeController::class, 'toggleTeacher'])->name('toggle-teacher');
             });
 
             Route::prefix('attendance')->as('attendance.')->group(function () {

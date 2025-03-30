@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\HR;
 
-use App\Http\Controllers\Controller;
-use App\Models\EmployeeProfile;
-use App\Models\JobPosition;
 use App\Models\User;
+use App\Models\Profile;
 use App\Models\Department;
+use App\Models\JobPosition;
 use App\Models\JobApplicant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Mail;
+use App\Models\EmployeeProfile;
 use App\Mail\EmployeeCredentials;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -199,5 +200,46 @@ class EmployeeController extends Controller
         return redirect()
             ->route('hr.employees.index')
             ->with('success', 'Employee deleted successfully');
+    }
+
+    public function toggleTeacher(EmployeeProfile $employee)
+    {
+        try {
+            $user = $employee->user;
+
+            if ($user->hasRole('teacher')) {
+                // Remove teacher role
+                $user->removeRole('teacher');
+
+
+                $message = 'Teacher role removed successfully';
+            } else {
+                // Assign teacher role
+                $user->assignRole('teacher');
+
+                // Create teacher profile if doesn't exist
+                if (!$user->profile) {
+                    Profile::create([
+                        'user_id' => $user->id,
+                        'first_name' => $employee->first_name,
+                        'last_name' => $employee->last_name,
+                        'address' => $employee->address,
+                        'contact_no' => $employee->phone,
+                        'image' => $employee->photo // Use employee photo if available
+                    ]);
+                }
+
+                $message = 'Teacher role and profile created successfully';
+            }
+
+            return redirect()
+                ->back()
+                ->with('message', $message);
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update teacher role: ' . $e->getMessage());
+        }
     }
 }
