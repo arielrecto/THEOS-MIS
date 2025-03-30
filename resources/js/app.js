@@ -323,8 +323,13 @@ Alpine.data("QrScanner", () => ({
 }));
 
 Alpine.data("applicantKanban", () => ({
+    loading: {}, // Store loading state per applicant and action
+
     async moveApplicant(id, status) {
         try {
+            // Set loading state for this specific action and applicant
+            this.loading[`${id}-${status}`] = true;
+
             await fetch(`/hr/applicants/${id}/status`, {
                 method: 'PUT',
                 headers: {
@@ -337,6 +342,8 @@ Alpine.data("applicantKanban", () => ({
             window.location.reload();
         } catch (error) {
             console.error('Error moving applicant:', error);
+        } finally {
+            this.loading[`${id}-${status}`] = false;
         }
     },
 
@@ -344,6 +351,10 @@ Alpine.data("applicantKanban", () => ({
         if (confirm('Are you sure you want to reject this application?')) {
             await this.moveApplicant(id, 'rejected');
         }
+    },
+
+    isLoadingAction(id, action) {
+        return this.loading[`${id}-${action}`] === true;
     }
 }));
 

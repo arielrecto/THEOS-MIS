@@ -85,12 +85,27 @@
                                         </button>
                                         <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                             <li><a href="#">View Details</a></li>
-                                            <li><a href="#" @click.prevent="moveApplicant({{ $applicant->id }}, 'screening')">
-                                                Move to Screening
-                                            </a></li>
-                                            <li><a href="#" class="text-error" @click.prevent="rejectApplicant({{ $applicant->id }})">
-                                                Reject
-                                            </a></li>
+                                            <li>
+                                                <a href="#"
+                                                   :class="isLoadingAction({{ $applicant->id }}, 'screening') ? 'disabled' : ''"
+                                                   @click.prevent="moveApplicant({{ $applicant->id }}, 'screening')">
+                                                    Move to Screening
+                                                    <template x-if="isLoadingAction({{ $applicant->id }}, 'screening')">
+                                                        <span class="loading loading-spinner loading-xs"></span>
+                                                    </template>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                   class="text-error"
+                                                   :class="isLoadingAction({{ $applicant->id }}, 'rejected') ? 'disabled' : ''"
+                                                   @click.prevent="rejectApplicant({{ $applicant->id }})">
+                                                    Reject
+                                                    <template x-if="isLoadingAction({{ $applicant->id }}, 'rejected')">
+                                                        <span class="loading loading-spinner loading-xs"></span>
+                                                    </template>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -127,12 +142,27 @@
                                         </button>
                                         <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                             <li><a href="{{ route('hr.applicants.show', $applicant) }}">View Details</a></li>
-                                            <li><a href="#" @click.prevent="moveApplicant({{ $applicant->id }}, 'interview')">
-                                                Move to Interview
-                                            </a></li>
-                                            <li><a href="#" class="text-error" @click.prevent="rejectApplicant({{ $applicant->id }})">
-                                                Reject
-                                            </a></li>
+                                            <li>
+                                                <a href="#"
+                                                   :class="isLoadingAction({{ $applicant->id }}, 'interview') ? 'disabled' : ''"
+                                                   @click.prevent="moveApplicant({{ $applicant->id }}, 'interview')">
+                                                    Move to Interview
+                                                    <template x-if="isLoadingAction({{ $applicant->id }}, 'interview')">
+                                                        <span class="loading loading-spinner loading-xs"></span>
+                                                    </template>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                   class="text-error"
+                                                   :class="isLoadingAction({{ $applicant->id }}, 'rejected') ? 'disabled' : ''"
+                                                   @click.prevent="rejectApplicant({{ $applicant->id }})">
+                                                    Reject
+                                                    <template x-if="isLoadingAction({{ $applicant->id }}, 'rejected')">
+                                                        <span class="loading loading-spinner loading-xs"></span>
+                                                    </template>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -173,12 +203,27 @@
                                         </button>
                                         <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                             <li><a href="{{ route('hr.applicants.show', $applicant) }}">View Details</a></li>
-                                            <li><a href="#" @click.prevent="moveApplicant({{ $applicant->id }}, 'hired')">
-                                                Move to Hired
-                                            </a></li>
-                                            <li><a href="#" class="text-error" @click.prevent="rejectApplicant({{ $applicant->id }})">
-                                                Reject
-                                            </a></li>
+                                            <li>
+                                                <a href="#"
+                                                   :class="isLoadingAction({{ $applicant->id }}, 'hired') ? 'disabled' : ''"
+                                                   @click.prevent="moveApplicant({{ $applicant->id }}, 'hired')">
+                                                    Move to Hired
+                                                    <template x-if="isLoadingAction({{ $applicant->id }}, 'hired')">
+                                                        <span class="loading loading-spinner loading-xs"></span>
+                                                    </template>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#"
+                                                   class="text-error"
+                                                   :class="isLoadingAction({{ $applicant->id }}, 'rejected') ? 'disabled' : ''"
+                                                   @click.prevent="rejectApplicant({{ $applicant->id }})">
+                                                    Reject
+                                                    <template x-if="isLoadingAction({{ $applicant->id }}, 'rejected')">
+                                                        <span class="loading loading-spinner loading-xs"></span>
+                                                    </template>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>

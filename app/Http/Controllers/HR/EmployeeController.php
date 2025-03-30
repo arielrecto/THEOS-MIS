@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmployeeCredentials;
 
 class EmployeeController extends Controller
 {
@@ -77,11 +79,14 @@ class EmployeeController extends Controller
             'photo' => 'nullable|image|max:2048',
             'salary' => 'required|numeric|min:0'
         ]);
+
+        $password = 'password123'; // You might want to generate a random password
+
         // Create user account
         $user = User::create([
             'name' => $validated['first_name'] . ' ' . $validated['last_name'],
             'email' => $validated['email'],
-            'password' => Hash::make('password123')
+            'password' => Hash::make($password)
         ]);
 
         $user->assignRole('employee');
@@ -110,8 +115,13 @@ class EmployeeController extends Controller
             }
         }
 
-
-
+        // Send credentials email
+        try {
+            Mail::to($user->email)
+                ->send(new EmployeeCredentials($user, $password));
+        } catch (\Exception $e) {
+            report($e); // Log the error but don't fail the request
+        }
 
         return redirect()
             ->route('hr.employees.index')

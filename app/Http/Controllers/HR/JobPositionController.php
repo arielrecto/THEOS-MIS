@@ -7,6 +7,8 @@ use App\Models\Department;
 use App\Models\JobApplicant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ApplicationStatusChanged;
 
 class JobPositionController extends Controller
 {
@@ -20,7 +22,7 @@ class JobPositionController extends Controller
         // Apply filters
         if ($request->filled('search')) {
             $query->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('description', 'like', "%{$request->search}%");
+                ->orWhere('description', 'like', "%{$request->search}%");
         }
 
         if ($request->filled('department')) {
@@ -63,8 +65,8 @@ class JobPositionController extends Controller
 
         JobPosition::create([
             ...$request->all(),
-        'is_hiring' => $request->is_hiring == 'on' ? true : false,
-    ]);
+            'is_hiring' => $request->is_hiring == 'on' ? true : false,
+        ]);
 
 
         return back()->with('success', 'Job Position created successfully.');
@@ -77,17 +79,17 @@ class JobPositionController extends Controller
     {
         $position = JobPosition::with([
             'department',
-            'employees' => function($query) {
+            'employees' => function ($query) {
                 $query->with(['user', 'position'])
-                      ->latest();
+                    ->latest();
             },
-            'applicants' => function($query) {
+            'applicants' => function ($query) {
                 $query->with(['resume'])
-                      ->latest();
+                    ->latest();
             }
         ])
-        ->withCount(['employees', 'applicants'])
-        ->findOrFail($id);
+            ->withCount(['employees', 'applicants'])
+            ->findOrFail($id);
 
         // Get application statistics
         $applicationStats = [
@@ -100,10 +102,10 @@ class JobPositionController extends Controller
         $monthlyApplications = $position->applicants()
             ->whereYear('created_at', now()->year)
             ->get()
-            ->groupBy(function($application) {
+            ->groupBy(function ($application) {
                 return $application->created_at->format('Y-m');
             })
-            ->map(function($applications) {
+            ->map(function ($applications) {
                 return $applications->count();
             })
             ->toArray();
@@ -173,9 +175,9 @@ class JobPositionController extends Controller
             ->latest();
 
         if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%");
+                    ->orWhere('email', 'like', "%{$request->search}%");
             });
         }
 
@@ -196,17 +198,28 @@ class JobPositionController extends Controller
             'status' => 'required|in:new,screening,interview,hired,rejected'
         ]);
 
+
+
+        $oldStatus = $applicant->status;
+
         $applicant->update($validated);
 
-        return response()->json(['success' => true]);
+
+        Mail::to($applicant->email)->send(
+            new ApplicationStatusChanged(
+                $applicant,
+                $oldStatus,
+                $validated['status'],
+            )
+        );
+
+        return redirect()->back()->with('success', 'Applicant status updated successfully');
     }
 
-    public function showApplicant($id){
+    public function showApplicant($id)
+    {
 
         $applicant = JobApplicant::findOrFail($id);
-
-
-
 
         return view('users.hr.positions.applicant.show', compact('applicant'));
     }
@@ -217,7 +230,8 @@ class JobPositionController extends Controller
             'is_hiring' => !$position->is_hiring
         ]);
 
-        return redirect()->back()->with('success',
+        return redirect()->back()->with(
+            'success',
             $position->is_hiring
                 ? 'Position is now accepting applications'
                 : 'Position is no longer accepting applications'
