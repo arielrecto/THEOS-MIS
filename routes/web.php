@@ -2,14 +2,20 @@
 
 use App\Models\StudentTask;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CMSController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HR\LeaveController;
+use App\Http\Controllers\HR\ReportController;
+use App\Http\Controllers\Admin\LogoController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HR\EmployeeController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Admin\StrandController;
 use App\Http\Controllers\Teacher\TaskController;
+use App\Http\Controllers\Admin\AboutUsController;
+use App\Http\Controllers\Admin\AcademicProgramController;
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TeacherController;
@@ -27,6 +33,7 @@ use App\Http\Controllers\Admin\GeneralAnnouncementController;
 use App\Http\Controllers\HR\DashboardController as HRDashboardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
 use App\Http\Controllers\HR\AttendanceController as HRAttendanceController;
+use App\Http\Controllers\Employee\LeaveController as EmployeeLeaveController;
 use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
 use App\Http\Controllers\Teacher\ProfileController as TeacherProfileController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
@@ -41,8 +48,6 @@ use App\Http\Controllers\Student\AttendanceController as StudentAttendanceContro
 use App\Http\Controllers\Employee\AttendanceController as EmployeeAttendanceController;
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
-use App\Http\Controllers\Employee\LeaveController as EmployeeLeaveController;
-use App\Http\Controllers\HR\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +108,34 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/{id}/toggle', [GeneralAnnouncementController::class, 'toggle'])->name('toggle');
                 });
             Route::resource('general-announcements', GeneralAnnouncementController::class);
+
+            Route::prefix('CMS')->as('CMS.')->group(function () {
+                Route::get('', [CMSController::class, 'index'])->name('index');
+                Route::prefix('logos')->as('logos.')->group(function () {
+                    Route::get('', [LogoController::class, 'index'])->name('index');
+                    Route::post('', [LogoController::class, 'store'])->name('store');
+                    Route::put('{logo}/toggle', [LogoController::class, 'toggleActive'])->name('toggle');
+                    Route::delete('{logo}', [LogoController::class, 'destroy'])->name('destroy');
+                });
+
+
+                Route::prefix('gallery')->as('gallery.')->group(function(){
+                    Route::put('{gallery}/toggle', [GalleryController::class, 'toggleActive'])->name('toggle');
+                });
+
+                Route::prefix('about-us')->as('about-us.')->group(function(){
+                    Route::get('', [AboutUsController::class, 'index'])->name('index');
+                    Route::put('about-us', [AboutUsController::class, 'update'])->name('update');
+                });
+
+
+                Route::prefix('programs')->as('programs.')->group(function(){
+                    Route::put('{program}/toggle', [AcademicProgramController::class, 'toggleActive'])->name('toggle');
+                });
+                Route::resource('programs', AcademicProgramController::class);
+
+                Route::resource('gallery', GalleryController::class);
+            });
         });
 
     Route::middleware(['role:teacher'])
@@ -157,6 +190,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('announcements', AnnouncementController::class);
                 Route::resource('tasks', TaskController::class);
             });
+
+
 
             Route::resource('profile', TeacherProfileController::class)->except('index');
         });

@@ -1,14 +1,28 @@
 @php
     use App\Models\Enrollment;
+    use App\Models\Logo;
     use App\Enums\EnrollmentStatus;
+    use Illuminate\Support\Facades\Storage;
 
     $enrollment = Enrollment::where('status', EnrollmentStatus::ONGOING)->latest()->first();
+
+    // Get active main logo or default to logo-modified.png
+    $mainLogo = Logo::where('type', 'main')
+        ->where('is_active', true)
+        ->latest()
+        ->first();
+
+    $logoPath = $mainLogo ? Storage::url($mainLogo->path) : asset('logo-modified.png');
 @endphp
 
 <header class="sticky top-0 z-50 w-full bg-white shadow-md">
     <div class="container flex justify-between items-center px-6 py-4 mx-auto">
         <a href="/" class="flex gap-4 items-center">
-            <img src="{{ asset('logo-modified.png') }}" alt="School Logo" class="w-14 h-14">
+            <img src="{{ $logoPath }}"
+                 alt="School Logo"
+                 class="w-14 h-14 object-contain"
+                 onerror="this.src='{{ asset('logo-modified.png') }}'"
+            >
             <h1 class="text-2xl font-bold text-blue-900">Theos Higher Ground Academe</h1>
         </a>
 

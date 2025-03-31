@@ -29,14 +29,13 @@
                 <p class="mt-4 text-gray-600">Feel free to reach out to us through the following channels:</p>
                 <ul class="mt-4 space-y-2">
                     <li class="flex gap-2 items-center text-gray-700">
-                        <i class="text-blue-600 fi fi-rr-marker"></i> 123 School Street, City, Country
+                        <i class="text-blue-600 fi fi-rr-marker"></i> Gold Street, Citihomes Subd, Molino IV, Bacoor City; Fairgrounds Subd, Imus City
                     </li>
                     <li class="flex gap-2 items-center text-gray-700">
-                        <i class="text-blue-600 fi fi-rr-phone-call"></i> +1 234 567 890
+                        <i class="text-blue-600 fi fi-rr-phone-call"></i> 09175475374
                     </li>
                     <li class="flex gap-2 items-center text-gray-700">
-                        <i class="text-blue-600 fi fi-rr-envelope"></i> contact@school.edu
-                    </li>
+                        <i class="text-blue-600 fi fi-rr-envelope"></i> thgaofficial@gmail.com
                 </ul>
                 <h3 class="mt-6 text-2xl font-semibold text-blue-900">Follow Us</h3>
                 <div class="flex gap-4 mt-4">

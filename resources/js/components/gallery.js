@@ -1,19 +1,18 @@
 export default () => ({
-    categories: ['Academic Events', 'Campus Life', 'Sports', 'Arts & Culture'],
+    categories: ['School Events', 'Academic Events', 'Campus Life', 'Activities'],
     selectedCategory: 'all',
     isModalOpen: false,
     selectedImage: null,
     loading: false,
     page: 1,
-    hasMore: true,
-    images: Array.from({ length: 8 }, (_, i) => ({
-        id: i + 1,
-        url: `https://source.unsplash.com/800x600/?school,education&sig=${i}`,
-        title: `School Event ${i + 1}`,
-        description: 'Capturing memorable moments from our school events and activities',
-        date: 'March 2024',
-        category: this.categories[Math.floor(Math.random() * this.categories.length)]
-    })),
+    hasMore: false,
+    images: [],
+
+    init() {
+        // Get images from server-side data
+        this.images = window.galleries || [];
+        this.hasMore = this.images.length >= 12; // Show load more if more than 12 images
+    },
 
     get filteredImages() {
         return this.selectedCategory === 'all'
@@ -33,25 +32,27 @@ export default () => ({
 
     closeModal() {
         this.isModalOpen = false;
+        this.selectedImage = null;
         document.body.style.overflow = 'auto';
     },
 
     async loadMore() {
         this.loading = true;
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+        try {
+            const response = await fetch(`/gallery/load-more?page=${this.page + 1}`);
+            const data = await response.json();
 
-        const newImages = Array.from({ length: 4 }, (_, i) => ({
-            id: this.images.length + i + 1,
-            url: `https://source.unsplash.com/800x600/?school,education&sig=${this.images.length + i}`,
-            title: `School Event ${this.images.length + i + 1}`,
-            description: 'Capturing memorable moments from our school events and activities',
-            date: 'March 2024',
-            category: this.categories[Math.floor(Math.random() * this.categories.length)]
-        }));
-
-        this.images.push(...newImages);
-        this.page++;
-        this.hasMore = this.page < 3; // Limit to 3 pages for demo
-        this.loading = false;
+            if (data.images.length) {
+                this.images.push(...data.images);
+                this.page++;
+                this.hasMore = data.hasMore;
+            } else {
+                this.hasMore = false;
+            }
+        } catch (error) {
+            console.error('Error loading more images:', error);
+        } finally {
+            this.loading = false;
+        }
     }
 });

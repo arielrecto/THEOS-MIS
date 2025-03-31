@@ -14,6 +14,11 @@
     <section class="container px-6 mx-auto py-16"
              x-data="gallery()"
              @keydown.escape="closeModal()">
+        <!-- Pass server-side data to Alpine -->
+        <script>
+            window.galleries = @json($galleries);
+        </script>
+
         <!-- Filter Tabs -->
         <div class="flex flex-wrap justify-center gap-3 mb-12">
             <button class="btn btn-sm"
@@ -32,7 +37,7 @@
 
         <!-- Gallery Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <template x-for="(item, index) in filteredImages" :key="index">
+            <template x-for="(item, index) in filteredImages" :key="item.id">
                 <div class="group relative overflow-hidden rounded-xl bg-white shadow-lg">
                     <!-- Image Container -->
                     <div class="relative pt-[75%]">

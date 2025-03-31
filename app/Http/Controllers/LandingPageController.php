@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\GeneralAnnouncement;
-use App\Models\JobPosition;
+use App\Models\AboutUs;
+use App\Models\Gallery;
 use App\Models\Department;
+use App\Models\JobPosition;
+use Illuminate\Http\Request;
+use App\Models\AcademicProgram;
+use App\Models\GeneralAnnouncement;
 
 class LandingPageController extends Controller
 {
     public function index()
     {
         $announcements = GeneralAnnouncement::where('is_posted', true)->latest()->paginate(6);
+        $programs = AcademicProgram::where('is_active', true)->latest()->get();
 
-        return view('welcome', compact('announcements'));
+        return view('welcome', [
+            'announcements' => $announcements,
+            'programs' => $programs
+        ]);
     }
 
     public function contact()
@@ -23,13 +30,31 @@ class LandingPageController extends Controller
 
     public function gallery()
     {
-        return view('components.landing-page.gallery');
+        $galleries = Gallery::where('is_active', true)
+            ->latest()
+            ->get()
+            ->map(function($gallery) {
+                return [
+                    'id' => $gallery->id,
+                    'url' => asset('storage/' . $gallery->path),
+                    'title' => $gallery->name,
+                    'description' => $gallery->description,
+                    'date' => $gallery->created_at->format('F Y'),
+                    'category' => 'School Events' // You can add category field to Gallery model if needed
+                ];
+            });
+
+        return view('components.landing-page.gallery', [
+            'galleries' => $galleries
+        ]);
     }
 
     public function about()
     {
-        return view('components.landing-page.about-us');
+        $aboutUs = AboutUs::first();
+        return view('components.landing-page.about-us', compact('aboutUs'));
     }
+
     public function enrolleesForm()
     {
         return view('enrollees.form');

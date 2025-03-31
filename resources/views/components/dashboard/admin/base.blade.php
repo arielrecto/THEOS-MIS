@@ -35,6 +35,11 @@
             'name' => 'subjects',
             'icon' => '<i class="fi fi-rr-books"></i>',
         ],
+        [
+            'url' => 'admin.CMS.index',
+            'name' => 'CMS',
+            'icon' => '<i class="fi fi-rr-browser"></i>',
+        ]
     ];
 @endphp
 
