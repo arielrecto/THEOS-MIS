@@ -7,9 +7,23 @@
             <input type="email" name="email" class="input input-accent bg-base-200 text-accent" required>
         </div>
 
-        <div class="flex flex-col">
+        <div class="flex flex-col" x-data="{ showPassword: false }">
             <label class="text-sm font-semibold text-secondary">Password</label>
-            <input type="password" name="password" class="input input-accent bg-base-200 text-accent" required>
+            <div class="relative">
+                <input
+                    :type="showPassword ? 'text' : 'password'"
+                    name="password"
+                    class="input input-accent bg-base-200 text-accent w-full pr-10"
+                    required
+                >
+                <button
+                    type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    @click="showPassword = !showPassword"
+                >
+                    <i class="fi" :class="showPassword ? 'fi-rr-eye-crossed' : 'fi-rr-eye'"></i>
+                </button>
+            </div>
         </div>
 
         <div class="flex justify-between items-center mt-2 text-sm">

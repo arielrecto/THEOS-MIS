@@ -232,7 +232,7 @@
                     </div>
 
                     <!-- Senior High School Preferences -->
-                    <div class="bg-white rounded-lg shadow-lg p-6">
+                    {{-- <div class="bg-white rounded-lg shadow-lg p-6">
                         <div class="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-6">
                             <i class="fi fi-rr-graduation-cap"></i>
                             <span>For Learning in Senior High School</span>
@@ -265,7 +265,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Contact Information -->
                     <div class="bg-white rounded-lg shadow-lg p-6">
