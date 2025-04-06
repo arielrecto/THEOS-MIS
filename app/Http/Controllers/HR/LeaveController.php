@@ -95,9 +95,8 @@ class LeaveController extends Controller
         // Send notification to employee
         $notificationData = [
             'header' => 'Leave Request Approved',
-            'message' => "Your leave request from {$leave->start_date->format('M d, Y')} to {$leave->end_date->format('M d, Y')} has been approved.",
-            'type' => 'success',
-            'url' => route('employee.leaves.show', $leave->id)
+            'message' => "Your leave request from " .  date('M d, Y', strtotime($leave->start_date)) .  'to' .  date('M d, Y',  strtotime($leave->end_date)) . 'has been approved.',
+            'type' => 'success'
         ];
 
         $this->notificationActions->create(
@@ -116,9 +115,8 @@ class LeaveController extends Controller
         // Send notification to employee
         $notificationData = [
             'header' => 'Leave Request Rejected',
-            'message' => "Your leave request from {$leave->start_date->format('M d, Y')} to {$leave->end_date->format('M d, Y')} has been rejected.",
-            'type' => 'error',
-            'url' => route('employee.leaves.show', $leave->id)
+            'message' => 'Your leave request from' .  date('M d, Y', strtotime($leave->start_date)) .  ' to ' .  date('M d, Y',  strtotime($leave->end_date)) . 'has been rejected.',
+            'type' => 'error'
         ];
 
         $this->notificationActions->create(

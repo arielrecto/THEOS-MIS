@@ -207,6 +207,7 @@
                                     @if ($request->status === 'pending')
                                         <div class="flex items-center gap-2">
                                             <form action="{{ route('hr.leaves.approve', $request) }}" method="POST">
+                                                @method('PUT')
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-sm"
                                                     onclick="return confirm('Approve this leave request?')">
@@ -215,6 +216,7 @@
                                             </form>
                                             <form action="{{ route('hr.leaves.reject', $request) }}" method="POST">
                                                 @csrf
+                                                @method('PUT')
                                                 <button type="submit" class="btn btn-error btn-sm"
                                                     onclick="return confirm('Reject this leave request?')">
                                                     Reject
@@ -222,7 +224,7 @@
                                             </form>
                                         </div>
                                     @else
-                                        <a href="{{ route('hr.leave.show', $request) }}" class="btn btn-ghost btn-sm">
+                                        <a href="#" class="btn btn-ghost btn-sm">
                                             View Details
                                         </a>
                                     @endif

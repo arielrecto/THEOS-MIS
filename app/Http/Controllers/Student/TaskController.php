@@ -83,7 +83,7 @@ class TaskController extends Controller
 
         // Update the student task status to submitted
         $studentTask->update([
-            'status' => GeneralStatus::SUBMITTED->value,
+            'status' => 'submitted'
         ]);
 
         return redirect()

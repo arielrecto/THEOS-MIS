@@ -44,7 +44,6 @@ class GradeController extends Controller
         $student = User::with('studentProfile.academicRecords')->findOrFail($request->student_id);
         $classroom = Classroom::with(['subject', 'academicYear'])->findOrFail($request->classroom_id);
 
-
         $academicRecord = $student->studentProfile->academicRecords()
             ->where('academic_year_id', $classroom->academic_year_id)->latest()->first();
 
@@ -64,7 +63,7 @@ class GradeController extends Controller
             [
                 'grade' => $request->grade,
                 'remarks' => $this->getRemarks($request->grade),
-                'status' => GeneralStatus::GRADED->value,
+                'status' => 'graded',
                 'created_by' => Auth::id(),
                 'subject' => $classroom->subject->name
             ]
@@ -73,7 +72,7 @@ class GradeController extends Controller
 
         collect($tasks)->each(function ($task) use ($student, $classroom, $request) {
             $task->update([
-                'status' => GeneralStatus::SUBMITTED->value,
+                'status' => 'submitted',
             ]);
         });
 
