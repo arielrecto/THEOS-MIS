@@ -12,9 +12,9 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HR\EmployeeController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Admin\StrandController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Teacher\TaskController;
 use App\Http\Controllers\Admin\AboutUsController;
-use App\Http\Controllers\Admin\AcademicProgramController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -29,6 +29,7 @@ use App\Http\Controllers\Teacher\AttendanceController;
 use App\Http\Controllers\Teacher\StudentTaskController;
 use App\Http\Controllers\Registrar\EnrollmentController;
 use App\Http\Controllers\Teacher\AnnouncementController;
+use App\Http\Controllers\Admin\AcademicProgramController;
 use App\Http\Controllers\Admin\GeneralAnnouncementController;
 use App\Http\Controllers\HR\DashboardController as HRDashboardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
@@ -86,6 +87,16 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::prefix('notifications')->as('notifications.')->group(function(){
+        Route::post('{notification}', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
+        Route::post('mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-read');
+        Route::get('', [NotificationController::class, 'index'])->name('index');
+        Route::post('clear-all', [NotificationController::class, 'clearAll'])->name('clear-all');
+        Route::delete('{notification}', [NotificationController::class, 'destroy'])->name('destroy');
+        Route::get('{notification}', [NotificationController::class, 'show'])->name('show');
+    });
+
     Route::middleware(['role:admin'])
         ->prefix('admin')
         ->as('admin.')
@@ -206,6 +217,7 @@ Route::middleware(['auth'])->group(function () {
                 ->group(function () {
                     Route::get('/form/{id}', [EnrollmentController::class, 'showEnrollee'])->name('showEnrollee');
                     Route::put('/form/{id}', [EnrollmentController::class, 'enrolled'])->name('enrolled');
+                    Route::patch('{enrollment}/close', [EnrollmentController::class, 'close'])->name('close');
                 });
 
             Route::prefix('students')

@@ -131,4 +131,12 @@ class User extends Authenticatable
     {
         return $this->hasManyMorph(Comment::class, 'commentable');
     }
+    public function notificationLogs()
+    {
+        return $this->hasMany(NotificationLog::class);
+    }
+    public function getUnreadNotificationsCountAttribute()
+    {
+        return $this->notificationLogs()->where('is_read', false)->count();
+    }
 }

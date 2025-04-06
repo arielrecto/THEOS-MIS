@@ -102,9 +102,9 @@ class AnnouncementController extends Controller
     {
         $type = $request->query('type', 'general');
 
-        if ($type === 'general') {
+
+        if ($type == 'general') {
             $announcement = GeneralAnnouncement::with(['postedBy.profile', 'attachments', 'comments.user'])
-                ->where('posted_by', auth()->id())
                 ->findOrFail($id);
         } else {
             $announcement = Announcement::with([

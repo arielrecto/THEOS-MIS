@@ -14,9 +14,17 @@ use App\Enums\AcademicYearStatus;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Actions\NotificationActions;
 
 class EnrollmentController extends Controller
 {
+    protected $notificationActions;
+
+    public function __construct(NotificationActions $notificationActions)
+    {
+        $this->notificationActions = $notificationActions;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -49,9 +57,24 @@ class EnrollmentController extends Controller
             'description' => 'nullable',
         ]);
 
-        Enrollment::create($request->all());
+        $enrollment = Enrollment::create($request->all());
 
-        return redirect()->route('registrar.enrollments.index')->with('success', 'Enrollment created successfully');
+        // Prepare notification data
+        $notificationData = [
+            'header' => 'New Enrollment Period',
+            'message' => "New enrollment period '{$enrollment->name}' is now open from " .
+                date('M d, Y', strtotime($enrollment->start_date)) .
+                " to " . date('M d, Y', strtotime($enrollment->end_date)),
+            'type' => 'enrollment',
+            // 'url' => route('enrollees.form')
+        ];
+
+        // Notify all students
+        $this->notificationActions->notifyRole('student', $notificationData, $enrollment);
+
+        return redirect()
+            ->route('registrar.enrollments.index')
+            ->with('success', 'Enrollment created successfully');
     }
 
     /**
@@ -91,9 +114,25 @@ class EnrollmentController extends Controller
         ]);
 
         $enrollment = Enrollment::findOrFail($id);
+        $oldStatus = $enrollment->status;
+
         $enrollment->update($request->all());
 
-        return redirect()->route('registrar.enrollments.index')->with('success', 'Enrollment updated successfully');
+        // Notify if enrollment status changes
+        if ($oldStatus !== $enrollment->status) {
+            $notificationData = [
+                'header' => 'Enrollment Period Update',
+                'message' => "Enrollment period '{$enrollment->name}' is now {$enrollment->status}",
+                'type' => 'enrollment',
+                'url' => route('enrollees.form')
+            ];
+
+            $this->notificationActions->notifyRole('student', $notificationData, $enrollment);
+        }
+
+        return redirect()
+            ->route('registrar.enrollments.index')
+            ->with('success', 'Enrollment updated successfully');
     }
 
     /**
@@ -175,5 +214,43 @@ class EnrollmentController extends Controller
         Mail::to($enrollee->email)->send(new ApproveEnrollment($enrollee, $user));
 
         return back()->with('success', 'Enrollee enrolled successfully');
+    }
+
+    /**
+     * Close the enrollment period
+     */
+    public function close(Enrollment $enrollment)
+    {
+        // Update enrollment status
+        $enrollment->update([
+            'status' => 'closed',
+            'end_date' => now()
+        ]);
+
+        // Prepare notification data
+        $notificationData = [
+            'header' => 'Enrollment Period Closed',
+            'message' => "The enrollment period '{$enrollment->name}' has been closed.",
+            'type' => 'enrollment',
+            // 'url' => route('enrollees.form')
+        ];
+
+        // Notify students and teachers
+        $this->notificationActions->notifyRoles(
+            ['student', 'teacher'],
+            $notificationData,
+            $enrollment
+        );
+
+        // Update all pending enrollments to rejected
+        $enrollment->enrollees()
+            ->where('status', 'pending')
+            ->update([
+                'status' => 'rejected',
+            ]);
+
+        return redirect()
+            ->route('registrar.enrollments.show', $enrollment)
+            ->with('success', 'Enrollment period has been closed successfully');
     }
 }

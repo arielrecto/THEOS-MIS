@@ -1,3 +1,11 @@
+@php
+    use App\Models\User;
+    use App\Actions\NotificationActions;
+    $user = User::find(Auth::user()->id);
+    $notifications = $user->notificationLogs()->latest()->take(5)->get();
+    $unread_count = $user->getUnreadNotificationsCountAttribute();
+@endphp
+
 @props([
     'profile_url' => null,
 ])
@@ -30,21 +38,59 @@
                     <button class="btn btn-ghost btn-sm">
                         <div class="indicator">
                             <i class="fi fi-rr-bell text-lg"></i>
-                            <span class="badge badge-xs badge-accent indicator-item">2</span>
+                            @if($unread_count > 0)
+                                <span class="badge badge-xs badge-accent indicator-item">{{ $unread_count }}</span>
+                            @endif
                         </div>
                     </button>
                     <div class="dropdown-content z-[1] card card-compact w-80 shadow bg-base-100">
                         <div class="card-body">
                             <div class="flex items-center justify-between mb-2">
                                 <h3 class="font-semibold">Notifications</h3>
-                                <a href="#" class="text-sm text-accent hover:underline">Mark all as read</a>
+                                @if($unread_count > 0)
+                                    <form action="{{ route('notifications.mark-all-read') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="text-sm text-accent hover:underline">
+                                            Mark all as read
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
-                            <div class="divide-y">
-                                <!-- Notification Items Here -->
+                            <div class="divide-y max-h-64 overflow-y-auto">
+                                @forelse($notifications as $notification)
+                                    <div class="py-2 {{ $notification->is_read ? 'opacity-50' : '' }}">
+                                        <div class="flex items-start gap-3">
+                                            <div class="flex-1">
+                                                <p class="text-sm font-medium">{{ $notification->header }}</p>
+                                                <p class="text-xs text-gray-500">{{ $notification->message }}</p>
+                                                <span class="text-xs text-gray-400">
+                                                    {{ $notification->created_at->diffForHumans() }}
+                                                </span>
+                                            </div>
+                                            @if(!$notification->is_read)
+                                                <form action="{{ route('notifications.mark-as-read', $notification) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-ghost btn-xs">
+                                                        <i class="fi fi-rr-check text-xs"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="py-8 text-center">
+                                        <i class="fi fi-rr-bell-ring text-2xl text-gray-400 mb-2"></i>
+                                        <p class="text-sm text-gray-500">No notifications yet</p>
+                                    </div>
+                                @endforelse
                             </div>
-                            <div class="card-actions mt-2">
-                                <a href="#" class="btn btn-ghost btn-sm btn-block">View All</a>
-                            </div>
+                            @if($notifications->count() > 0)
+                                <div class="card-actions mt-2">
+                                    <a href="{{ route('notifications.index') }}" class="btn btn-ghost btn-sm btn-block">
+                                        View All Notifications
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

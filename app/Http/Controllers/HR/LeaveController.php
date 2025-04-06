@@ -5,10 +5,18 @@ namespace App\Http\Controllers\HR;
 use Carbon\Carbon;
 use App\Models\Leave;
 use Illuminate\Http\Request;
+use App\Actions\NotificationActions;
 use App\Http\Controllers\Controller;
 
 class LeaveController extends Controller
 {
+    protected $notificationActions;
+
+    public function __construct(NotificationActions $notificationActions)
+    {
+        $this->notificationActions = $notificationActions;
+    }
+
     public function index(Request $request)
     {
         $query = Leave::with(['employee.position', 'employee.user']);
@@ -80,15 +88,45 @@ class LeaveController extends Controller
         ));
     }
 
-    public function approve(Leave $Leave)
+    public function approve(Leave $leave)
     {
-        $Leave->update(['status' => 'approved']);
+        $leave->update(['status' => 'approved']);
+
+        // Send notification to employee
+        $notificationData = [
+            'header' => 'Leave Request Approved',
+            'message' => "Your leave request from {$leave->start_date->format('M d, Y')} to {$leave->end_date->format('M d, Y')} has been approved.",
+            'type' => 'success',
+            'url' => route('employee.leaves.show', $leave->id)
+        ];
+
+        $this->notificationActions->create(
+            $leave->employee->user,
+            $notificationData,
+            $leave
+        );
+
         return back()->with('success', 'Leave request approved successfully');
     }
 
-    public function reject(Leave $Leave)
+    public function reject(Leave $leave)
     {
-        $Leave->update(['status' => 'rejected']);
+        $leave->update(['status' => 'rejected']);
+
+        // Send notification to employee
+        $notificationData = [
+            'header' => 'Leave Request Rejected',
+            'message' => "Your leave request from {$leave->start_date->format('M d, Y')} to {$leave->end_date->format('M d, Y')} has been rejected.",
+            'type' => 'error',
+            'url' => route('employee.leaves.show', $leave->id)
+        ];
+
+        $this->notificationActions->create(
+            $leave->employee->user,
+            $notificationData,
+            $leave
+        );
+
         return back()->with('success', 'Leave request rejected successfully');
     }
 }

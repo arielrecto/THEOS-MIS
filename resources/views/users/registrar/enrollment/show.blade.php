@@ -1,16 +1,34 @@
 <x-dashboard.registrar.base>
-    <x-dashboard.page-title
-        :title="__('Enrollment Details')"
-        :back_url="route('registrar.enrollments.index')"
-    />
+    <x-dashboard.page-title :title="__('Enrollment Details')" :back_url="route('registrar.enrollments.index')" />
     <x-notification-message />
 
     <div class="flex flex-col gap-6 p-6 bg-white rounded-lg shadow-lg panel">
         <!-- Enrollment Header -->
-        <div class="flex justify-center items-center w-full h-40 rounded-lg shadow-md bg-accent">
-            <h1 class="text-3xl font-semibold text-white capitalize">
-                {{ $enrollment->name }}
-            </h1>
+        <div class="flex justify-between items-center">
+            <div class="flex justify-center items-center w-full h-40 rounded-lg shadow-md bg-accent">
+                <h1 class="text-3xl font-semibold text-white capitalize">
+                    {{ $enrollment->name }}
+                </h1>
+            </div>
+
+            <!-- Close Enrollment Button -->
+
+        </div>
+
+        <div class="flex justify-end">
+            @if ($enrollment->status !== 'closed')
+                <form action="{{ route('registrar.enrollments.close', ['enrollment' =>  $enrollment->id ]) }}" method="POST" class="ml-4"
+                    onsubmit="return confirm('Are you sure you want to close this enrollment period?')">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="btn btn-error gap-2">
+                        <i class="fi fi-rr-lock"></i>
+                        Close Enrollment
+                    </button>
+                </form>
+            @else
+                <span class="badge badge-error">Enrollment Closed</span>
+            @endif
         </div>
 
         <!-- Enrollment Details -->
@@ -22,7 +40,8 @@
             </div>
             <div>
                 <h1 class="text-lg font-semibold">Status:
-                    <span class="px-2 py-1 rounded text-white
+                    <span
+                        class="px-2 py-1 rounded text-white
                         {{ $enrollment->status === 'active' ? 'bg-green-500' : 'bg-gray-400' }}">
                         {{ ucfirst($enrollment->status) }}
                     </span>
@@ -44,18 +63,15 @@
         <div x-data="{ activeTab: 'overview', description: 'description', enrollees: 'enrollees' }">
             <div class="flex pb-2 space-x-4 border-b">
                 <button @click="activeTab = 'overview'"
-                    :class="{'text-accent border-b-2 border-accent': activeTab === 'overview'}"
-                    class="px-4 py-2">
+                    :class="{ 'text-accent border-b-2 border-accent': activeTab === 'overview' }" class="px-4 py-2">
                     Overview
                 </button>
                 <button @click="activeTab = 'description'"
-                    :class="{'text-accent border-b-2 border-accent': activeTab === 'description'}"
-                    class="px-4 py-2">
+                    :class="{ 'text-accent border-b-2 border-accent': activeTab === 'description' }" class="px-4 py-2">
                     Description
                 </button>
                 <button @click="activeTab = 'enrollees'"
-                    :class="{'text-accent border-b-2 border-accent': activeTab === 'enrollees'}"
-                    class="px-4 py-2">
+                    :class="{ 'text-accent border-b-2 border-accent': activeTab === 'enrollees' }" class="px-4 py-2">
                     Enrollees
                 </button>
             </div>
@@ -103,10 +119,11 @@
                                 <tr>
                                     <th></th>
                                     <td>{{ $enrollee->email ?? 'N/A' }}</td>
-                                    <td>{{ $enrollee->last_name . ', ' . $enrollee->first_name . ' ' . $enrollee->middle_name }}</td>
+                                    <td>{{ $enrollee->last_name . ', ' . $enrollee->first_name . ' ' . $enrollee->middle_name }}
+                                    </td>
                                     <td>{{ $enrollee->grade_level }}</td>
                                     <td class="flex gap-5 items-center">
-                                        <a href="{{route('registrar.enrollments.showEnrollee', ['id' => $enrollee->id])}}"
+                                        <a href="{{ route('registrar.enrollments.showEnrollee', ['id' => $enrollee->id]) }}"
                                             class="btn btn-xs btn-accent">
                                             <i class="fi fi-rr-eye"></i>
                                         </a>
@@ -127,4 +144,4 @@
             </div>
         </div>
     </div>
-</x-dashboard.teacher.base>
+</x-dashboard.registrar.base>

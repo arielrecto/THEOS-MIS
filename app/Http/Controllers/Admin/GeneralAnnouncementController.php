@@ -4,11 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Attachment;
 use Illuminate\Http\Request;
+use App\Actions\NotificationActions;
 use App\Models\GeneralAnnouncement;
 use App\Http\Controllers\Controller;
 
 class GeneralAnnouncementController extends Controller
 {
+    protected $notificationActions;
+
+    public function __construct(NotificationActions $notificationActions)
+    {
+        $this->notificationActions = $notificationActions;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -31,7 +39,6 @@ class GeneralAnnouncementController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -42,28 +49,25 @@ class GeneralAnnouncementController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imagePath = $image->storeAs('public/announcements',  $image->getClientOriginalName());
+            $imagePath = $image->storeAs('public/announcements', $image->getClientOriginalName());
         }
-
 
         $announcement = GeneralAnnouncement::create([
             'title' => $request->title,
             'description' => $request->description,
             'posted_by' => auth()->user()->id,
             'is_posted' => $request->is_posted ?? false,
-            'image' => asset('storage/' .  str_replace('public/', '', $imagePath)) ?? null,
+            'image' => $imagePath ? asset('storage/' . str_replace('public/', '', $imagePath)) : null,
         ]);
-
-
 
         if ($request->hasFile('attachments')) {
             $files = $request->file('attachments');
             foreach ($files as $file) {
-                $path = $file->storeAs('public/announcements',  $file->getClientOriginalName());
+                $path = $file->storeAs('public/announcements', $file->getClientOriginalName());
                 Attachment::create([
                     'attachable_id' => $announcement->id,
                     'attachable_type' => get_class($announcement),
-                    'file_dir' => asset('storage/' .  str_replace('public/', '', $path)),
+                    'file_dir' => asset('storage/' . str_replace('public/', '', $path)),
                     'file_name' => $file->getClientOriginalName(),
                     'file_type' => $file->getClientOriginalExtension(),
                     'file_size' => $file->getSize(),
@@ -71,7 +75,26 @@ class GeneralAnnouncementController extends Controller
             }
         }
 
-        return redirect()->route('admin.general-announcements.index')->with('success', 'Announcement created successfully');
+        // Send notification if announcement is posted
+        if ($announcement->is_posted) {
+            $notificationData = [
+                'header' => 'New Announcement',
+                'message' => "New announcement: {$announcement->title}",
+                'type' => 'announcement',
+                'url' => route('student.announcements.show', ['id' => $announcement->id, 'type' => 'general'])
+            ];
+
+            // Notify all users except admins
+            $users = \App\Models\User::whereDoesntHave('roles', function($query) {
+                $query->where('name', 'admin');
+            })->get();
+
+            $this->notificationActions->notifyUsers($users, $notificationData, $announcement);
+        }
+
+        return redirect()
+            ->route('admin.general-announcements.index')
+            ->with('success', 'Announcement created successfully');
     }
 
     /**
@@ -100,13 +123,38 @@ class GeneralAnnouncementController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'posted_by' => 'required',
             'is_posted' => 'nullable',
         ]);
 
         $announcement = GeneralAnnouncement::findOrFail($id);
-        $announcement->update($request->all());
-        return redirect()->route('admin.general-announcements.index')->with('success', 'Announcement updated successfully');
+        $wasPosted = $announcement->is_posted;
+
+        $announcement->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'is_posted' => $request->is_posted ?? false,
+        ]);
+
+        // Send notification if announcement is newly posted
+        if (!$wasPosted && $announcement->is_posted) {
+            $notificationData = [
+                'header' => 'New Announcement',
+                'message' => "New announcement: {$announcement->title}",
+                'type' => 'announcement',
+                'url' => route('student.announcements.show', ['id' => $announcement->id, 'type' => 'general'])
+            ];
+
+            // Notify all users except admins
+            $users = \App\Models\User::whereDoesntHave('roles', function($query) {
+                $query->where('name', 'admin');
+            })->get();
+
+            $this->notificationActions->notifyUsers($users, $notificationData, $announcement);
+        }
+
+        return redirect()
+            ->route('admin.general-announcements.index')
+            ->with('success', 'Announcement updated successfully');
     }
 
     /**
@@ -122,8 +170,28 @@ class GeneralAnnouncementController extends Controller
     public function toggle(string $id)
     {
         $announcement = GeneralAnnouncement::findOrFail($id);
+        $wasPosted = $announcement->is_posted;
+
         $announcement->is_posted = !$announcement->is_posted;
         $announcement->save();
+
+        // Send notification if announcement is newly posted
+        if (!$wasPosted && $announcement->is_posted) {
+            $notificationData = [
+                'header' => 'New Announcement',
+                'message' => "New announcement: {$announcement->title}",
+                'type' => 'announcement',
+                'url' => route('student.announcements.show', ['id' => $announcement->id, 'type' => 'general'])
+            ];
+
+            // Notify all users except admins
+            $users = \App\Models\User::whereDoesntHave('roles', function($query) {
+                $query->where('name', 'admin');
+            })->get();
+
+            $this->notificationActions->notifyUsers($users, $notificationData, $announcement);
+        }
+
         return back()->with('success', 'Announcement toggled successfully');
     }
 }

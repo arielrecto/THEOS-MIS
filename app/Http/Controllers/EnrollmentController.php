@@ -7,25 +7,34 @@ use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 use App\Models\EnrollmentForm;
 use App\Enums\AcademicYearStatus;
+use App\Models\User;
+use App\Actions\NotificationActions;
+use Spatie\Permission\Models\Role;
 
 class EnrollmentController extends Controller
 {
-   public function show(string $id) {
+    protected $notificationActions;
+
+    public function __construct(NotificationActions $notificationActions)
+    {
+        $this->notificationActions = $notificationActions;
+    }
+
+    public function show(string $id) {
         $enrollment = Enrollment::findOrFail($id);
         return view('enrollees.enrollment', compact('enrollment'));
-   }
+    }
 
-   public function form(Request $request){
+    public function form(Request $request){
 
-    $enrollmentID  = $request->enrollment;
+        $enrollmentID  = $request->enrollment;
 
+        $academicYear = AcademicYear::where('status', AcademicYearStatus::Active->value)->first();
 
-    $academicYear = AcademicYear::where('status', AcademicYearStatus::Active->value)->first();
+        return view('enrollees.form', compact(['academicYear', 'enrollmentID']));
+    }
 
-    return view('enrollees.form', compact(['academicYear', 'enrollmentID']));
-   }
-
-   public function store(Request $request) {
+    public function store(Request $request) {
         $request->validate([
             'school_year' => 'required',
             'grade_level' => 'required',
@@ -92,6 +101,20 @@ class EnrollmentController extends Controller
             'email' => $request->email,
         ]);
 
+        // Prepare notification data
+        $notificationData = [
+            'header' => 'New Enrollment Application',
+            'message' => "New enrollment application from {$enrollment->first_name} {$enrollment->last_name} for Grade {$enrollment->grade_level}",
+            'type' => 'enrollment',
+            'url' => route('registrar.enrollments.showEnrollee', $enrollment->id)
+        ];
+
+        // Get all users with registrar role
+        $registrars = User::role('registrar')->get();
+
+        // Send notification to all registrars
+        $this->notificationActions->notifyUsers($registrars, $notificationData, $enrollment);
+
         return back()->with('success', 'Enrollment successfully created.');
-   }
+    }
 }
