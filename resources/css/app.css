@@ -67,3 +67,5 @@
         @apply bg-error;
     }
 }
+
+[x-cloak] { display: none !important; }

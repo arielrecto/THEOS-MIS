@@ -11,7 +11,7 @@
         ->latest()
         ->first();
 
-    $logoPath = $mainLogo ? Storage::url($mainLogo->path) : asset('logo-modified.png');
+    $logoPath = $mainLogo ? Storage::url($mainLogo->path) : asset('logo.jpg');
 @endphp
 
 <div class="flex flex-col gap-4 px-5 py-6 w-1/6 h-full shadow-lg 4xl:rounded-lg bg-neutral">
@@ -19,8 +19,8 @@
         <div class="flex flex-col gap-3 items-center w-auto h-auto">
             <img src="{{ $logoPath }}"
                  alt="School Logo"
-                 class="object-contain w-24 h-24 rounded-full border-4 border-primary"
-                 onerror="this.src='{{ asset('logo-modified.png') }}'" {{-- Fallback if image fails to load --}}
+                 class="object-contain w-24 h-24 rounded-full"
+                 {{-- Fallback if image fails to load --}}
             >
             <h1 class="text-lg font-semibold leading-tight text-center text-primary">
                 Theos Higher Ground Academe

@@ -53,31 +53,48 @@
                         </div>
 
                         <!-- Requirements Section -->
-                        <div class="mb-8">
-                            <h3 class="text-sm font-medium text-gray-500 mb-3">Requirements</h3>
-                            <ul class="space-y-2">
-                                <li class="flex items-start">
-                                    <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
-                                    <span class="text-gray-600">Birth Certificate (PSA/NSO)</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
-                                    <span class="text-gray-600">Report Card from previous school</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
-                                    <span class="text-gray-600">2x2 ID Picture (4 pieces)</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
-                                    <span class="text-gray-600">Good Moral Certificate</span>
-                                </li>
-                            </ul>
+                        <div class="flex justify-between">
+                            <div class="mb-8">
+                                <h3 class="text-sm font-medium text-gray-500 mb-3">New/Transferee</h3>
+
+                                <h3 class="text-sm font-medium text-gray-500 mb-3">Requirements</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <span class="text-gray-600">Birth Certificate (PSA/NSO)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <span class="text-gray-600">Report Card from previous school</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <span class="text-gray-600">2x2 ID Picture (4 pieces)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <span class="text-gray-600">Good Moral Certificate</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mb-8">
+
+                                <h3 class="text-sm font-medium text-gray-500 mb-3">Old Student Requirements:</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <span class="text-gray-600">Grade Report Card</span>
+                                    </li>
+
+                                </ul>
+                            </div>
+
                         </div>
+
 
                         <!-- Action Section -->
                         <div class="text-center">
-                            <p class="text-gray-600 mb-4">Ready to begin your journey with Saint Therese Academy?</p>
+                            <p class="text-gray-600 mb-4">Ready to begin your journey with Theos Higher Ground Academe?</p>
                             <a href="{{ route('enrollment.form', ['enrollment' => $enrollment->id]) }}"
                                class="btn btn-accent btn-lg gap-2">
                                 <i class="fi fi-rr-edit"></i>

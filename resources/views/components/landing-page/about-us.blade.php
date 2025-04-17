@@ -19,7 +19,7 @@
             <div class="w-full md:w-1/2">
                 <div class="prose prose-lg max-w-none">
                     {!! nl2br(e($aboutUs->description ?? '
-                        Welcome to <span class="font-bold text-accent">Theos Higher Ground Academe</span>, where we nurture
+                        Welcome to Theos Higher Ground Academe, where we nurture
                         young minds and foster a passion for learning. Our institution is committed to providing quality
                         education through innovative teaching methods and a supportive environment.
 
@@ -31,15 +31,18 @@
             </div>
         </div>
 
-        <div class="mt-10 text-center">
-            <h2 class="text-3xl font-bold text-accent">Our Vision & Mission</h2>
-            <div class="prose prose-lg max-w-3xl mx-auto mt-4">
-                {!! nl2br(e($aboutUs->mission_and_vision ?? '
-                    Our vision is to be a leading educational institution that inspires and empowers students to achieve
-                    excellence. Our mission is to cultivate a dynamic learning environment that fosters intellectual growth,
-                    creativity, and social responsibility.
-                ')) !!}
+        <div class="w-full flex justify-end">
+            <div class="mt-10 text-center">
+                <h2 class="text-3xl font-bold text-accent">Our Vision & Mission</h2>
+                <div class="prose prose-lg max-w-3xl mx-auto mt-4">
+                    {!! nl2br(e($aboutUs->mission_and_vision ?? '
+                        Our vision is to be a leading educational institution that inspires and empowers students to achieve
+                        excellence. Our mission is to cultivate a dynamic learning environment that fosters intellectual growth,
+                        creativity, and social responsibility.
+                    ')) !!}
+                </div>
             </div>
         </div>
+
     </section>
 </x-landing-page.base>

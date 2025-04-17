@@ -3,14 +3,29 @@
     'programs' => []
 ])
 
+@php
+    use App\Models\Logo;
+    use Illuminate\Support\Facades\Storage;
+
+    $mainLogo = Logo::where('type', 'main')
+        ->where('is_active', true)
+        ->latest()
+        ->first();
+
+    $logoPath = $mainLogo ? Storage::url($mainLogo->path) : asset('logo.jpg');
+@endphp
+
 <!-- Hero Section -->
 <section
     class="flex justify-center items-center py-20 min-h-screen text-center text-white bg-gradient-to-br from-accent to-accent-focus">
     <div class="container mx-auto px-4">
-        <img src="{{ asset('logo-modified.png') }}" alt="Saint Therese Academy Logo" class="w-32 h-32 mx-auto mb-8">
+        <img src="{{ $logoPath }}"
+             alt="School Logo"
+             class="w-32 h-32 mx-auto mb-8 rounded-full object-contain"
+             onerror="this.src='{{ asset('logo.jpg') }}'">
         {{-- <h1 class="text-5xl font-bold mb-4">Saint Therese Academy</h1> --}}
-        <p class="text-xl mb-6">Excellence in Education, Guided by Faith</p>
-        <p class="max-w-2xl mx-auto text-lg mb-8">
+        <p class="text-4xl mb-6">Excellence in Education, Guided by Faith</p>
+        <p class="max-w-2xl font-bold mx-auto text-xl mb-8">
             Nurturing young minds through quality Christian education since 1997.
         </p>
         <a href="#admission" class="btn btn-lg btn-primary bg-white text-accent hover:bg-gray-100">
