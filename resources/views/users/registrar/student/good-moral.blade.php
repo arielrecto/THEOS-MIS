@@ -47,7 +47,7 @@
 
     <div class="certificate">
         <img src="{{ asset('logo-modified.png') }}" alt="School Logo" class="school-logo">
-        <h1 class="text-xl font-bold">SAINT THERESE ACADEMY</h1>
+        <h1 class="text-xl font-bold">Theos Higher Ground Academe</h1>
         <p>Daang Amaya III, Tanza, Cavite</p>
 
         <h2 class="text-2xl font-bold mt-12 mb-8">CERTIFICATE OF GOOD MORAL CHARACTER</h2>
@@ -61,7 +61,7 @@
 
             <p>This certification is issued upon the request of the above-named student for whatever legal purpose it may serve.</p>
 
-            <p>Issued this {{ $currentDate }} at Saint Therese Academy, Tanza, Cavite.</p>
+            <p>Issued this {{ $currentDate }} at Theos Higher Ground Academe, Tanza, Cavite.</p>
         </div>
 
         <div class="signature-line">

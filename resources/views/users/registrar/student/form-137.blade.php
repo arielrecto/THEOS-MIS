@@ -53,7 +53,8 @@
     <div class="form-137">
         <div class="school-header">
             <img src="{{ asset('logo-modified.png') }}" alt="School Logo" class="school-logo">
-            <h1 class="text-xl font-bold">SAINT THERESE ACADEMY</h1>
+            <h1 class="text-xl font-bold">Theos Higher Ground
+                Academe</h1>
             <p>Daang Amaya III, Tanza, Cavite</p>
             <h2 class="text-lg font-bold mt-4">PERMANENT ACADEMIC RECORD</h2>
             <p class="text-sm">(Form 137)</p>

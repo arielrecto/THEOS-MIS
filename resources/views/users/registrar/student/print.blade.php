@@ -80,9 +80,9 @@
         <!-- School Header -->
         <div class="school-header">
             <img src="{{ asset('logo-modified.png') }}"
-                 alt="Saint Therese Academy Logo"
+                 alt="Theos Higher Ground Academe Logo"
                  class="school-logo">
-            <h1 class="text-xl font-bold">SAINT THERESE ACADEMY</h1>
+            <h1 class="text-xl font-bold">Theos Higher Ground Academe</h1>
             <p>Daang Amaya III, Tanza, Cavite</p>
             <h2 class="text-lg font-bold mt-4">STUDENT REPORT CARD</h2>
             <p class="text-sm">Academic Year {{ $academicRecord->academicYear->name }}</p>

@@ -6,11 +6,6 @@
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
         ],
         [
-            'url' => 'hr.dashboard',
-            'name' => 'HR Dashboard',
-            'icon' => '<i class="fi fi-rr-user"></i>',
-        ],
-        [
             'url' => 'admin.academic-year.index',
             'name' => 'Academic Year',
             'icon' => '<i class="fi fi-rr-calendar"></i>',

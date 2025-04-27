@@ -5,7 +5,7 @@
                 <!-- Header Section -->
                 <div class="text-center mb-8">
                     <h1 class="text-4xl font-bold text-gray-900 mb-4">Enrollment Now Open</h1>
-                    <p class="text-lg text-gray-600">Saint Therese Academy welcomes new students for the upcoming academic year</p>
+                    <p class="text-lg text-gray-600">Theos Higher Ground Academe. welcomes new students for the upcoming academic year</p>
                 </div>
 
                 <!-- Main Content -->

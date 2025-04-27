@@ -23,7 +23,6 @@
              alt="School Logo"
              class="w-32 h-32 mx-auto mb-8 rounded-full object-contain"
              onerror="this.src='{{ asset('logo.jpg') }}'">
-        {{-- <h1 class="text-5xl font-bold mb-4">Saint Therese Academy</h1> --}}
         <p class="text-4xl mb-6">Excellence in Education, Guided by Faith</p>
         <p class="max-w-2xl font-bold mx-auto text-xl mb-8">
             Nurturing young minds through quality Christian education since 1997.
@@ -169,7 +168,8 @@
                 <div class="p-6 bg-white rounded-lg shadow-lg">
                     <i class="fi fi-rr-marker text-3xl text-accent mb-4"></i>
                     <h3 class="text-lg font-bold mb-2">Address</h3>
-                    <p class="text-gray-600">Daang Amaya III, Tanza, Cavite</p>
+                    <p class="text-gray-600">Fairgrounds, Imus City,
+                        Cavite.</p>
                 </div>
                 <div class="p-6 bg-white rounded-lg shadow-lg">
                     <i class="fi fi-rr-phone-call text-3xl text-accent mb-4"></i>

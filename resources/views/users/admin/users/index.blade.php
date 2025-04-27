@@ -1,27 +1,54 @@
 <x-dashboard.admin.base>
     <x-dashboard.page-title :title="_('users')"/>
-    <div class="panel">
-        <div class="grid grid-cols-2 grid-flow-row h-64 gap-5">
-            <a href="{{route('admin.users.students.index')}}" class="w-full h-full gap-2 rounded-lg border border-accent flex">
-                <img src="{{asset('sticker/go-to-school.png')}}" class="object-cover w-1/2 h-auto" />
-                <div class="flex flex-col gap-5 w-full">
-                    <h1 class="text-2xl font-bold py-5">
-                        Student
-                    </h1>
-                    <p class="text-6xl font-bold text-accent text-center ">
-                        {{count($students)}}
-                    </p>
+    <div class="panel p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{-- Students Card --}}
+            <a href="{{route('admin.users.students.index')}}"
+               class="group transition-all duration-300 hover:shadow-lg rounded-xl border border-gray-200 bg-white p-6 hover:border-accent">
+                <div class="flex items-center justify-between">
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            Students
+                        </h2>
+                        <p class="text-4xl font-bold text-accent">
+                            {{count($students)}}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Total enrolled students
+                        </p>
+                    </div>
+                    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 group-hover:bg-accent/20">
+                        <i class="fi fi-rr-graduation-cap text-3xl text-accent"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-sm text-accent">
+                    <span>View details</span>
+                    <i class="fi fi-rr-arrow-right ml-2"></i>
                 </div>
             </a>
-            <a href="{{route('admin.users.teacher.index')}}" class="w-full h-full gap-2 rounded-lg border border-accent flex">
-                <img src="{{asset('sticker/teacher.png')}}" class="object-cover w-1/2 h-auto" />
-                <div class="flex flex-col gap-5 w-full">
-                    <h1 class="text-2xl font-bold py-5">
-                        teacher
-                    </h1>
-                    <p class="text-6xl font-bold text-accent text-center ">
-                        {{count($teachers)}}
-                    </p>
+
+            {{-- Teachers Card --}}
+            <a href="{{route('admin.users.teacher.index')}}"
+               class="group transition-all duration-300 hover:shadow-lg rounded-xl border border-gray-200 bg-white p-6 hover:border-accent">
+                <div class="flex items-center justify-between">
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            Teachers
+                        </h2>
+                        <p class="text-4xl font-bold text-accent">
+                            {{count($teachers)}}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Total active teachers
+                        </p>
+                    </div>
+                    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-accent/10 group-hover:bg-accent/20">
+                        <i class="fi fi-rr-chalkboard-user text-3xl text-accent"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-sm text-accent">
+                    <span>View details</span>
+                    <i class="fi fi-rr-arrow-right ml-2"></i>
                 </div>
             </a>
         </div>

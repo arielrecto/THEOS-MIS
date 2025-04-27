@@ -5,7 +5,7 @@
         <div class="relative container px-6 mx-auto py-16">
             <div class="max-w-2xl mx-auto text-center text-white">
                 <h1 class="text-4xl font-bold mb-4">School Gallery</h1>
-                <p class="text-lg opacity-90">Discover the vibrant life and memorable moments at Saint Therese Academy</p>
+                <p class="text-lg opacity-90">Discover the vibrant life and memorable moments at Theos Higher Ground Academe.</p>
             </div>
         </div>
     </div>
