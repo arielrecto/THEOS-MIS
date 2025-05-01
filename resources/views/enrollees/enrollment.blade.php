@@ -17,7 +17,7 @@
                                 <h2 class="text-xl font-semibold text-gray-800">
                                     Academic Year {{ date('Y', strtotime($enrollment->academicYear->start_date)) }} - {{ date('Y', strtotime($enrollment->academicYear->end_date)) }}
                                 </h2>
-                                <p class="text-gray-600 mt-1">Secure your child's future with quality Catholic education</p>
+                                <p class="text-gray-600 mt-1">Secure your child's future with quality Christian education</p>
                             </div>
                             <span class="px-4 py-2 bg-green-500 text-white rounded-full text-sm font-medium">
                                 Enrollment Active

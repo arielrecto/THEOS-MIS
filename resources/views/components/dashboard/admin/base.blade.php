@@ -22,7 +22,7 @@
         ],
         [
             'url' => 'admin.strands.index',
-            'name' => 'strands',
+            'name' => 'Grade Level',
             'icon' => '<i class="fi fi-rr-e-learning"></i>',
         ],
         [

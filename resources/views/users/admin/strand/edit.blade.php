@@ -1,6 +1,6 @@
 <x-dashboard.admin.base>
     <x-notification-message />
-    <x-dashboard.page-title :back_url="route('admin.strands.index')" :title="_('Strand Edit')" />
+    <x-dashboard.page-title :back_url="route('admin.strands.index')" :title="_('Grade Level Edit')" />
     <div class="panel flex flex-col gap-2">
         <form action="{{route('admin.strands.update', ['strand' => $strand->id])}}" method="post" class="w-full flex flex-col gap-2 capitalize">
             @csrf

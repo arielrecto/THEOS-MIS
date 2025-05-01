@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <x-dashboard.page-title :title="_('strands')" :create_url="route('admin.strands.create')" />
+    <x-dashboard.page-title :title="_('Grade Levels')" :create_url="route('admin.strands.create')" />
     <div class="panel flex flex-col gap-2 min-h-96">
         <div class="overflow-x-auto">
             <table class="table">

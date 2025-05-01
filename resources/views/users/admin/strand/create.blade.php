@@ -1,6 +1,6 @@
 <x-dashboard.admin.base>
     <x-notification-message />
-    <x-dashboard.page-title :back_url="route('admin.strands.index')" :title="_('Strand Create')" />
+    <x-dashboard.page-title :back_url="route('admin.strands.index')" :title="_('Grade Level Create')" />
     <div class="panel flex flex-col gap-2">
         <form action="{{route('admin.strands.store')}}" method="post" class="w-full flex flex-col gap-2 capitalize">
             @csrf

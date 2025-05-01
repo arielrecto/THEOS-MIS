@@ -5,6 +5,8 @@
 
 @php
     use App\Models\Logo;
+    use App\Models\Enrollment;
+    use App\Enums\EnrollmentStatus;
     use Illuminate\Support\Facades\Storage;
 
     $mainLogo = Logo::where('type', 'main')
@@ -13,6 +15,10 @@
         ->first();
 
     $logoPath = $mainLogo ? Storage::url($mainLogo->path) : asset('logo.jpg');
+
+    $activeEnrollment = Enrollment::where('status', EnrollmentStatus::ONGOING)
+        ->latest()
+        ->first();
 @endphp
 
 <!-- Hero Section -->
@@ -27,10 +33,21 @@
         <p class="max-w-2xl font-bold mx-auto text-xl mb-8">
             Nurturing young minds through quality Christian education since 1997.
         </p>
-        <a href="#admission" class="btn btn-lg btn-primary bg-white text-accent hover:bg-gray-100">
-            <i class="fi fi-rr-graduation-cap mr-2"></i>
-            Enroll Now
-        </a>
+
+        @if($activeEnrollment)
+            <a href="{{ route('enrollment.show', ['id' => $activeEnrollment->id]) }}"
+               class="btn btn-lg btn-primary bg-white text-accent hover:bg-gray-100 gap-2">
+                <i class="fi fi-rr-graduation-cap"></i>
+                Enroll Now
+                <span class="badge badge-accent badge-sm">Open</span>
+            </a>
+        @else
+            <button disabled
+                    class="btn btn-lg btn-primary bg-gray-200 text-gray-500 cursor-not-allowed">
+                <i class="fi fi-rr-graduation-cap mr-2"></i>
+                Enrollment Closed
+            </button>
+        @endif
     </div>
 </section>
 
