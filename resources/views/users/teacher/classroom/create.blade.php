@@ -67,9 +67,9 @@
                 @endif
             </div>
             <div class="flex flex-col gap-2">
-                <label for="" class="input-generic-label">Strand</label>
+                <label for="" class="input-generic-label">Grade Level</label>
                 <select name="strand" class="w-full text-sm select select-accent select-sm">
-                    <option disabled selected>Select Subject</option>
+                    <option disabled selected>Grade Level</option>
 
                     @foreach ($strands as $strand)
                         <option value="{{ $strand->id }}">{{ $strand->name }}</option>

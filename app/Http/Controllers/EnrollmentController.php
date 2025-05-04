@@ -9,6 +9,7 @@ use App\Models\EnrollmentForm;
 use App\Enums\AcademicYearStatus;
 use App\Models\User;
 use App\Actions\NotificationActions;
+use App\Models\Strand;
 use Spatie\Permission\Models\Role;
 
 class EnrollmentController extends Controller
@@ -29,9 +30,12 @@ class EnrollmentController extends Controller
 
         $enrollmentID  = $request->enrollment;
 
+
+        $gradeLevels = Strand::get();
+
         $academicYear = AcademicYear::where('status', AcademicYearStatus::Active->value)->first();
 
-        return view('enrollees.form', compact(['academicYear', 'enrollmentID']));
+        return view('enrollees.form', compact(['academicYear', 'enrollmentID', 'gradeLevels']));
     }
 
     public function store(Request $request) {

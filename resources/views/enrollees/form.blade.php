@@ -47,9 +47,9 @@
                                 </label>
                                 <select name="grade_level" class="select select-bordered @error('grade_level') select-error @enderror">
                                     <option value="" disabled selected>Select Grade Level</option>
-                                    @foreach(range(1, 10) as $grade)
-                                        <option value="{{ $grade }}" {{ old('grade_level') == $grade ? 'selected' : '' }}>
-                                            Grade {{ $grade }}
+                                    @foreach($gradeLevels as $grade)
+                                        <option value="{{ $grade->name }}" {{ old('grade_level') == $grade ? 'selected' : '' }}>
+                                            {{ $grade->name }}
                                         </option>
                                     @endforeach
                                 </select>

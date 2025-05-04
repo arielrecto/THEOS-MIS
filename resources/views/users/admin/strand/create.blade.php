@@ -9,7 +9,7 @@
             </h1>
             <div class="flex flex-col gap-2">
                 <label for="" class="input-generic-label">name</label>
-                <input type="text" name="name" class="input-generic" placeholder="Information and Communication Technology">
+                <input type="text" name="name" class="input-generic" placeholder="Grade 1">
                 @if ($errors->has('name'))
                     <p class="text-xs text-error">
                         {{ $errors->first('name') }}
@@ -18,7 +18,7 @@
             </div>
             <div class="flex flex-col gap-2">
                 <label for="" class="input-generic-label">Acronym</label>
-                <input type="text" name="acronym" class="input-generic" placeholder="ICT">
+                <input type="text" name="acronym" class="input-generic" placeholder="G1">
                 @if ($errors->has('acronym'))
                     <p class="text-xs text-error">
                         {{ $errors->first('acronym') }}

@@ -7,6 +7,33 @@ import './bootstrap';
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import {
+    Chart,
+    LinearScale,
+    CategoryScale,
+    BarController,
+    PointElement,
+    LineElement,
+    BarElement,
+    DoughnutController,
+    ArcElement,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+
+// Register Chart.js components
+Chart.register(
+    LinearScale,
+    CategoryScale,
+    BarController,
+    PointElement,
+    LineElement,
+    BarElement,
+    DoughnutController,
+    ArcElement,
+    Tooltip,
+    Legend
+);
 
 window.Alpine = Alpine;
 
@@ -436,6 +463,66 @@ Alpine.data("leaveCalendar", () => ({
             modal.querySelector('.leave-reason').textContent = event.extendedProps.reason;
             modal.querySelector('.leave-status').textContent = event.extendedProps.status;
             modal.showModal();
+        }
+    }
+}));
+
+
+
+Alpine.data('chartData', ({chartId, labels, datasets, options, type}) => ({
+    chart: null,
+
+    initChart() {
+        const ctx = this.$refs.canvas.getContext('2d');
+
+        const defaultOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: options.title || ''
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    type: 'linear'
+                },
+                x: {
+                    type: 'category'
+                }
+            }
+        };
+
+        // Don't include scales for pie/doughnut charts
+        if (type === 'pie' || type === 'doughnut') {
+            delete defaultOptions.scales;
+        }
+
+        this.chart = new Chart(ctx, {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {...defaultOptions, ...options}
+        });
+    },
+
+    updateChart(newData) {
+        if (this.chart) {
+            this.chart.data = newData;
+            this.chart.update();
+        }
+    },
+
+    destroyChart() {
+        if (this.chart) {
+            this.chart.destroy();
         }
     }
 }));
