@@ -121,7 +121,7 @@
                                     Admin Dashboard
                                 </a>
                             </li>
-                            <li></li>
+                            <li>
                                 <a href="{{ route('hr.dashboard') }}" class="flex items-center gap-2">
                                     <i class="fi fi-rr-briefcase"></i>
                                     HR Dashboard

@@ -23,6 +23,8 @@ class GeneralAnnouncementController extends Controller
     public function index()
     {
         $announcements = GeneralAnnouncement::latest()->paginate(10);
+
+
         return view('users.admin.announcement.index', compact('announcements'));
     }
 
@@ -67,7 +69,7 @@ class GeneralAnnouncementController extends Controller
                 Attachment::create([
                     'attachable_id' => $announcement->id,
                     'attachable_type' => get_class($announcement),
-                    'file_dir' => asset('storage/' . str_replace('public/', '', $path)),
+                    'file_dir' => asset( str_replace('public/', '', $path)),
                     'file_name' => $file->getClientOriginalName(),
                     'file_type' => $file->getClientOriginalExtension(),
                     'file_size' => $file->getSize(),

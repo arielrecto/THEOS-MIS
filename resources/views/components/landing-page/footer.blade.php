@@ -9,8 +9,8 @@
             <a href="/" class="text-sm hover:text-secondary">Home</a>
             <a href="/#announcement" class="text-sm hover:text-secondary">Announcements</a>
             <a href="/gallery" class="text-sm hover:text-secondary">Gallery</a>
-            <a href="/about" class="text-sm hover:text-secondary">About Us</a>
-            <a href="/contact" class="text-sm hover:text-secondary">Contact Us</a>
+            <a href="/about-us" class="text-sm hover:text-secondary">About Us</a>
+            <a href="/contact-us" class="text-sm hover:text-secondary">Contact Us</a>
         </div>
 
         <div class="mt-4 text-center md:text-right md:mt-0">

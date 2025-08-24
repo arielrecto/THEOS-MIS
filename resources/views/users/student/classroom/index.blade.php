@@ -50,13 +50,13 @@
                                 </option>
                             @endfor
                         </optgroup>
-                        <optgroup label="Senior High School">
+                        {{-- <optgroup label="Senior High School">
                             @for ($i = 11; $i <= 12; $i++)
                                 <option value="{{ $i }}" {{ request('grade_level') == $i ? 'selected' : '' }}>
                                     Grade {{ $i }}
                                 </option>
                             @endfor
-                        </optgroup>
+                        </optgroup> --}}
                     </select>
                 </div>
 
