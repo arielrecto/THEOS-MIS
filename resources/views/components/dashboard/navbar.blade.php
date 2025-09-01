@@ -139,7 +139,7 @@
                         @endif
 
                         <li>
-                            <a href="#" class="flex items-center gap-2">
+                            <a href="{{route('profile.edit')}}" class="flex items-center gap-2">
                                 <i class="fi fi-rr-settings"></i>
                                 Settings
                             </a>

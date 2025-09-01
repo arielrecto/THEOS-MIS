@@ -9,6 +9,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">
+                    <a href="/home" class="flex items-center gap-2 mb-4 text-blue-600 hover:underline">
+                        <i class="fi fi-rr-home"></i>
+                        <span>Home</span>
+                    </a>
                     @include('profile.partials.update-profile-information-form')
                 </div>
             </div>
