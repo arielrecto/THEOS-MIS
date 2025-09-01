@@ -90,4 +90,18 @@ class DepartmentController extends Controller
         return back()
             ->with('success', 'Department deleted successfully.');
     }
+
+    public function toggleStatus(string $id)
+    {
+        $department = Department::findOrFail($id);
+        $department->update([
+            'is_active' => !$department->is_active
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $department->is_active,
+            'message' => 'Department status updated successfully'
+        ]);
+    }
 }

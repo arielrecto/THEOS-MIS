@@ -15,12 +15,12 @@
                     <h1 class="text-2xl font-bold text-gray-800">{{ $applicant->name }}</h1>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="btn btn-ghost btn-sm gap-2" onclick="window.print()">
+                    {{-- <button class="btn btn-ghost btn-sm gap-2" onclick="window.print()">
                         <i class="fi fi-rr-print"></i>
                         Print
-                    </button>
+                    </button> --}}
                     @if($applicant->resume)
-                        <a href="#"
+                        <a href="{{ $applicant->resume->file_dir }}" target="_blank" rel="noopener"
                            class="btn btn-ghost btn-sm gap-2">
                             <i class="fi fi-rr-download"></i>
                             Download Resume
@@ -158,7 +158,7 @@
                 </div>
 
 
-                @dd( $applicant->position)
+
                 <!-- Position Details -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">Position Details</h2>

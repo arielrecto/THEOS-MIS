@@ -58,7 +58,7 @@ class GeneralAnnouncementController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'posted_by' => auth()->user()->id,
-            'is_posted' => $request->is_posted ?? false,
+            'is_posted' => $request->is_posted == 'on' ? true : false,
             'image' => $imagePath ? asset('storage/' . str_replace('public/', '', $imagePath)) : null,
         ]);
 

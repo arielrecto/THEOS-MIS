@@ -97,10 +97,16 @@
                                     <div class="badge badge-ghost">{{ $department->employees_count }} members</div>
                                 </td>
                                 <td>
-                                    <div class="badge {{ $department->is_active ? 'badge-success' : 'badge-error' }} gap-1">
+                                    <button
+                                        onclick="toggleDepartmentStatus({{ $department->id }})"
+                                        class="badge {{ $department->is_active ? 'badge-success' : 'badge-error' }} gap-1 cursor-pointer hover:opacity-80"
+                                        id="status-badge-{{ $department->id }}"
+                                    >
                                         <div class="w-2 h-2 rounded-full bg-current"></div>
-                                        {{ $department->is_active ? 'Active' : 'Inactive' }}
-                                    </div>
+                                        <span id="status-text-{{ $department->id }}">
+                                            {{ $department->is_active ? 'Active' : 'Inactive' }}
+                                        </span>
+                                    </button>
                                 </td>
                                 <td>
                                     <div class="flex items-center gap-2">
@@ -144,4 +150,66 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        async function toggleDepartmentStatus(id) {
+            try {
+                const response = await fetch(`/hr/departments/${id}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const badge = document.getElementById(`status-badge-${id}`);
+                    const text = document.getElementById(`status-text-${id}`);
+
+                    if (data.is_active) {
+                        badge.classList.remove('badge-error');
+                        badge.classList.add('badge-success');
+                        text.textContent = 'Active';
+                    } else {
+                        badge.classList.remove('badge-success');
+                        badge.classList.add('badge-error');
+                        text.textContent = 'Inactive';
+                    }
+
+                    // Show toast notification
+                    const toast = document.createElement('div');
+                    toast.className = 'toast toast-end';
+                    toast.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fi fi-rr-check"></i>
+                            <span>${data.message}</span>
+                        </div>
+                    `;
+
+
+                    window.location.reload();
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 3000);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // Show error toast
+                const toast = document.createElement('div');
+                toast.className = 'toast toast-end';
+                toast.innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fi fi-rr-cross"></i>
+                        <span>Failed to update department status</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+        }
+    </script>
+    @endpush
 </x-dashboard.hr.base>

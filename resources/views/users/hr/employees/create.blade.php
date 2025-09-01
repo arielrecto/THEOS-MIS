@@ -14,9 +14,10 @@
 
         <!-- Form Card -->
         <div class="max-w-4xl bg-white rounded-lg shadow-sm">
-            <form action="{{ route('hr.employees.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('hr.employees.store') }}" method="POST" enctype="multipart/form-data"
+                class="p-6">
                 @csrf
-                @if($applicant)
+                @if ($applicant)
                     <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
                 @endif
 
@@ -32,11 +33,9 @@
                             <span class="label-text font-medium">First Name</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
-                        <input type="text"
-                               name="first_name"
-                               class="input input-bordered @error('first_name') input-error @enderror"
-                               value="{{ old('first_name', $applicant?->name) }}"
-                               required>
+                        <input type="text" name="first_name"
+                            class="input input-bordered @error('first_name') input-error @enderror"
+                            value="{{ old('first_name', $applicant?->name) }}" required>
                         @error('first_name')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -50,11 +49,9 @@
                             <span class="label-text font-medium">Last Name</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
-                        <input type="text"
-                               name="last_name"
-                               class="input input-bordered @error('last_name') input-error @enderror"
-                               value="{{ old('last_name') }}"
-                               required>
+                        <input type="text" name="last_name"
+                            class="input input-bordered @error('last_name') input-error @enderror"
+                            value="{{ old('last_name') }}" required>
                         @error('last_name')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -68,11 +65,9 @@
                             <span class="label-text font-medium">Email Address</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
-                        <input type="email"
-                               name="email"
-                               class="input input-bordered @error('email') input-error @enderror"
-                               value="{{ old('email', $applicant?->email) }}"
-                               required>
+                        <input type="email" name="email"
+                            class="input input-bordered @error('email') input-error @enderror"
+                            value="{{ old('email', $applicant?->email) }}" required>
                         @error('email')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -86,11 +81,9 @@
                             <span class="label-text font-medium">Phone Number</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
-                        <input type="tel"
-                               name="phone"
-                               class="input input-bordered @error('phone') input-error @enderror"
-                               value="{{ old('phone', $applicant?->phone) }}"
-                               required>
+                        <input type="tel" name="phone"
+                            class="input input-bordered @error('phone') input-error @enderror"
+                            value="{{ old('phone', $applicant?->phone) }}" required>
                         @error('phone')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -110,14 +103,14 @@
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <select name="job_position_id"
-                                class="select select-bordered @error('job_position_id') select-error @enderror"
-                                required>
+                            class="select select-bordered @error('job_position_id') select-error @enderror" required>
                             <option value="">Select Position</option>
-                            @if($applicant)
-                                <option value="{{ $applicant->position->id }}" selected>
-                                    {{ $applicant->position->name }}
+                            @foreach ($positions as $position)
+                                <option value="{{ $position->id }}"
+                                    {{ old('job_position_id') == $position->id ? 'selected' : '' }}>
+                                    {{ $position->name }}
                                 </option>
-                            @endif
+                            @endforeach
                         </select>
                         @error('job_position_id')
                             <label class="label">
@@ -132,11 +125,9 @@
                             <span class="label-text font-medium">Salary</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
-                        <input type="number"
-                               name="salary"
-                               class="input input-bordered @error('salary') input-error @enderror"
-                               value="{{ old('salary') }}"
-                               required>
+                        <input type="number" name="salary"
+                            class="input input-bordered @error('salary') input-error @enderror"
+                            value="{{ old('salary') }}" required>
                         @error('salary')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -155,11 +146,9 @@
                             <span class="label-text font-medium">Date of Birth</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
-                        <input type="date"
-                               name="date_of_birth"
-                               class="input input-bordered @error('date_of_birth') input-error @enderror"
-                               value="{{ old('date_of_birth') }}"
-                               required>
+                        <input type="date" name="date_of_birth"
+                            class="input input-bordered @error('date_of_birth') input-error @enderror"
+                            value="{{ old('date_of_birth') }}" required>
                         @error('date_of_birth')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -172,10 +161,9 @@
                         <label class="label">
                             <span class="label-text font-medium">Photo</span>
                         </label>
-                        <input type="file"
-                               name="photo"
-                               class="file-input file-input-bordered @error('photo') file-input-error @enderror"
-                               accept="image/*">
+                        <input type="file" name="photo"
+                            class="file-input file-input-bordered @error('photo') file-input-error @enderror"
+                            accept="image/*">
                         @error('photo')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -190,9 +178,7 @@
                                 <span class="label-text font-medium">Address</span>
                                 <span class="label-text-alt text-error">*</span>
                             </label>
-                            <textarea name="address"
-                                      class="textarea textarea-bordered h-20 @error('address') textarea-error @enderror"
-                                      required>{{ old('address') }}</textarea>
+                            <textarea name="address" class="textarea textarea-bordered h-20 @error('address') textarea-error @enderror" required>{{ old('address') }}</textarea>
                             @error('address')
                                 <label class="label">
                                     <span class="label-text-alt text-error">{{ $message }}</span>

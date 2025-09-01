@@ -9,6 +9,7 @@ use App\Http\Controllers\HR\LeaveController;
 use App\Http\Controllers\HR\ReportController;
 use App\Http\Controllers\Admin\LogoController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\HR\EmployeeController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Admin\StrandController;
@@ -63,6 +64,7 @@ use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementCo
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/contact-us', [LandingPageController::class, 'contact'])->name('contact');
+Route::post('/contact-us', [InboxController::class, 'store'])->name('contact.submit');
 Route::get('/gallery', [LandingPageController::class, 'gallery'])->name('gallery');
 Route::get('/about-us', [LandingPageController::class, 'about'])->name('about');
 Route::get('job-opportunities', [LandingPageController::class, 'jobOpportunities'])->name('job-opportunities');
@@ -76,7 +78,9 @@ Route::prefix('enrollment')
     ->as('enrollment.')
     ->group(function () {
         Route::get('/form', [ControllersEnrollmentController::class, 'form'])->name('form');
+        Route::get('/{enrollemntForm}/application-message', [ControllersEnrollmentController::class, 'applicationMessage'])->name('applicationMessage');
         Route::get('/{id}', [ControllersEnrollmentController::class, 'show'])->name('show');
+        Route::get('/{id}/print', [ControllersEnrollmentController::class, 'print'])->name('print');
         Route::post('/', [ControllersEnrollmentController::class, 'store'])->name('store');
     });
 
@@ -88,7 +92,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::prefix('notifications')->as('notifications.')->group(function(){
+    Route::prefix('notifications')->as('notifications.')->group(function () {
         Route::post('{notification}', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
         Route::post('mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-read');
         Route::get('', [NotificationController::class, 'index'])->name('index');
@@ -130,23 +134,30 @@ Route::middleware(['auth'])->group(function () {
                 });
 
 
-                Route::prefix('gallery')->as('gallery.')->group(function(){
+                Route::prefix('gallery')->as('gallery.')->group(function () {
                     Route::put('{gallery}/toggle', [GalleryController::class, 'toggleActive'])->name('toggle');
                 });
 
-                Route::prefix('about-us')->as('about-us.')->group(function(){
+                Route::prefix('about-us')->as('about-us.')->group(function () {
                     Route::get('', [AboutUsController::class, 'index'])->name('index');
                     Route::put('about-us', [AboutUsController::class, 'update'])->name('update');
                 });
 
 
-                Route::prefix('programs')->as('programs.')->group(function(){
+                Route::prefix('programs')->as('programs.')->group(function () {
                     Route::put('{program}/toggle', [AcademicProgramController::class, 'toggleActive'])->name('toggle');
                 });
                 Route::resource('programs', AcademicProgramController::class);
 
                 Route::resource('gallery', GalleryController::class);
             });
+
+
+            Route::prefix('inbox')->group(function(){
+                Route::post('{inbox}/read', [InboxController::class, 'markAsRead'])->name('admin.inbox.read');
+            });
+
+            Route::resource('inbox', InboxController::class)->except('store');
         });
 
     Route::middleware(['role:teacher'])
@@ -295,6 +306,9 @@ Route::middleware(['auth'])->group(function () {
         ->as('hr.')
         ->group(function () {
             Route::get('/dashboard', action: [HRDashboardController::class, 'dashboard'])->name('dashboard');
+            Route::prefix('departments')->as('departments.')->group(function(){
+                Route::post('{department}/toggle-status', [DepartmentController::class, 'toggleStatus'])->name('toggle-status');
+            });
             Route::resource('departments', DepartmentController::class);
             Route::prefix('positions')->as('positions.')->group(function () {
                 Route::post('{positions}/toggle-hiring', [JobPositionController::class, 'toggleHiring'])->name('toggle-hiring');
@@ -310,6 +324,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('', [EmployeeController::class, 'store'])->name('store');
                 Route::get('{employee}', [EmployeeController::class, 'show'])->name('show');
                 Route::get('{employee}/edit', [EmployeeController::class, 'edit'])->name('edit');
+                Route::get('{id}/print', [EmployeeController::class, 'print'])->name('print');
                 Route::put('{employee}', [EmployeeController::class, 'update'])->name('update');
                 Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
                 Route::patch('{employee}/toggle-teacher', [EmployeeController::class, 'toggleTeacher'])->name('toggle-teacher');

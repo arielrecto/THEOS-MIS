@@ -16,10 +16,10 @@
                     <p class="text-gray-600 mt-1">{{ $position->department->name }}</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="btn btn-ghost btn-sm gap-2" onclick="window.print()">
+                    {{-- <button class="btn btn-ghost btn-sm gap-2" onclick="window.print()">
                         <i class="fi fi-rr-print"></i>
                         Print
-                    </button>
+                    </button> --}}
                     <a href="{{ route('hr.positions.edit', $position) }}"
                        class="btn btn-accent btn-sm gap-2">
                         <i class="fi fi-rr-edit"></i>

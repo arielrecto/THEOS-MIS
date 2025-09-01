@@ -21,12 +21,14 @@ class EnrollmentController extends Controller
         $this->notificationActions = $notificationActions;
     }
 
-    public function show(string $id) {
+    public function show(string $id)
+    {
         $enrollment = Enrollment::findOrFail($id);
         return view('enrollees.enrollment', compact('enrollment'));
     }
 
-    public function form(Request $request){
+    public function form(Request $request)
+    {
 
         $enrollmentID  = $request->enrollment;
 
@@ -38,7 +40,8 @@ class EnrollmentController extends Controller
         return view('enrollees.form', compact(['academicYear', 'enrollmentID', 'gradeLevels']));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'school_year' => 'required',
             'grade_level' => 'required',
@@ -119,6 +122,18 @@ class EnrollmentController extends Controller
         // Send notification to all registrars
         $this->notificationActions->notifyUsers($registrars, $notificationData, $enrollment);
 
-        return back()->with('success', 'Enrollment successfully created.');
+        return to_route('enrollment.applicationMessage', $enrollment->id)->with('success', 'Enrollment successfully created.');
+    }
+
+    public function applicationMessage($enrollmentForm)
+    {
+        $student = EnrollmentForm::find($enrollmentForm);
+        return view('enrollees.enrollment-message', compact('student'));
+    }
+
+    public function print($enrollmentForm)
+    {
+        $student = EnrollmentForm::find($enrollmentForm);
+        return view('enrollees.print', compact('student'));
     }
 }

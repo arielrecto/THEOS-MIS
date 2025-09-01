@@ -13,10 +13,10 @@
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl font-bold text-gray-800">Employee Profile</h1>
                 <div class="flex items-center gap-2">
-                    <button class="btn btn-ghost btn-sm gap-2" onclick="window.print()">
+                    <a href="{{route('hr.employees.print', $employee)}}" class="btn btn-ghost btn-sm gap-2">
                         <i class="fi fi-rr-print"></i>
                         Print
-                    </button>
+                    </a>
                     <a href="{{ route('hr.employees.edit', $employee) }}"
                        class="btn btn-accent btn-sm gap-2">
                         <i class="fi fi-rr-edit"></i>

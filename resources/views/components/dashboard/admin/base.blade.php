@@ -34,7 +34,12 @@
             'url' => 'admin.CMS.index',
             'name' => 'CMS',
             'icon' => '<i class="fi fi-rr-browser"></i>',
-        ]
+        ],
+        [
+            'url' => 'admin.inbox.index',
+            'name' => 'Inbox',
+            'icon' => '<i class="fi fi-rr-inbox"></i>',
+        ],
     ];
 @endphp
 

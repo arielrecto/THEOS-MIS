@@ -47,6 +47,8 @@
 
             <script src="https://unpkg.com/html5-qrcode" defer type="text/javascript"></script>
 
+
+            @stack('scripts')
         </div>
     </body>
 </html>

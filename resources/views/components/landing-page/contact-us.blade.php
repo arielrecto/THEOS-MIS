@@ -1,5 +1,5 @@
 <x-landing-page.base>
-
+    <x-notification-message />
         <section class="py-16 bg-gray-100">
             <div class="container px-6 mx-auto md:px-12 lg:px-24">
                 <h2 class="text-3xl font-bold text-center text-blue-900">Contact Us</h2>
@@ -8,18 +8,19 @@
         <div class="grid grid-cols-1 gap-8 mt-12 md:grid-cols-2">
             <div class="p-8 bg-white rounded-lg shadow-md">
                 <h3 class="text-2xl font-semibold text-blue-900">Send us a Message</h3>
-                <form action="#" method="POST" class="mt-6 space-y-4">
+                <form action="{{ route('contact.submit') }}" method="POST" class="mt-6 space-y-4">
+                    @csrf
                     <div>
                         <label class="block text-gray-700">Full Name</label>
-                        <input type="text" class="px-4 py-2 w-full rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your Name">
+                        <input type="text" name="full_name" class="px-4 py-2 w-full rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your Name">
                     </div>
                     <div>
                         <label class="block text-gray-700">Email Address</label>
-                        <input type="email" class="px-4 py-2 w-full rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your Email">
+                        <input type="email" name="email" class="px-4 py-2 w-full rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your Email">
                     </div>
                     <div>
                         <label class="block text-gray-700">Message</label>
-                        <textarea class="px-4 py-2 w-full rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4" placeholder="Your Message"></textarea>
+                        <textarea name="message" class="px-4 py-2 w-full rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-600" rows="4" placeholder="Your Message"></textarea>
                     </div>
                     <button class="py-2 w-full text-white bg-blue-600 rounded-md transition hover:bg-blue-700">Send Message</button>
                 </form>

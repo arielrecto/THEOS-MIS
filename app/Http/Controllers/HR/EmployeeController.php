@@ -62,6 +62,7 @@ class EmployeeController extends Controller
         }
 
         $positions = JobPosition::with('department')->get();
+
         $departments = Department::all();
 
         return view('users.hr.employees.create', compact('applicant', 'positions', 'departments'));
@@ -241,5 +242,10 @@ class EmployeeController extends Controller
                 ->back()
                 ->with('error', 'Failed to update teacher role: ' . $e->getMessage());
         }
+    }
+
+    public function print($id){
+        $employee = EmployeeProfile::findOrFail($id);
+        return view('users.hr.employees.print', compact('employee'));
     }
 }

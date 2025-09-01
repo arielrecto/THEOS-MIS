@@ -15,6 +15,7 @@ class LandingPageController extends Controller
     public function index()
     {
         $announcements = GeneralAnnouncement::where('is_posted', true)->latest()->paginate(6);
+
         $programs = AcademicProgram::where('is_active', true)->latest()->get();
 
         return view('welcome', [
