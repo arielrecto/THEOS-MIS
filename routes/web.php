@@ -70,6 +70,7 @@ Route::get('/about-us', [LandingPageController::class, 'about'])->name('about');
 Route::get('job-opportunities', [LandingPageController::class, 'jobOpportunities'])->name('job-opportunities');
 Route::get('/job-opportunities/{position}', [LandingPageController::class, 'showJob'])->name('job-opportunities.show');
 Route::post('/job-opportunities/{position}/apply', [LandingPageController::class, 'applyJob'])->name('job-opportunities.apply');
+Route::get('general-announcements/{id}', [LandingPageController::class, 'generalAnnouncementShow'])->name('general-announcements.show');
 Route::get('/home', [HomeController::class, 'index'])
     ->name('home')
     ->middleware(['auth']);

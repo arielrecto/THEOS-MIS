@@ -26,7 +26,6 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->float('salary')->nullable();
-            $table->string('department')->nullable();
             $table->foreignIdFor(JobPosition::class)->nullable()->constrained()->onDelete('set null');
             $table->string('photo')->nullable();
             $table->timestamps();

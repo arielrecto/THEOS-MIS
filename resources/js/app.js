@@ -245,7 +245,7 @@ Alpine.data("generateThumbnail", () => ({
         console.log(extension);
         console.log("====================================");
         return (
-            this.thumbnails[extension] || "https://example.com/default_icon.svg"
+            this.thumbnails[extension] || "https://cdn-icons-png.flaticon.com/512/535/535761.png"
         );
     },
 }));
@@ -527,4 +527,23 @@ Alpine.data('chartData', ({chartId, labels, datasets, options, type}) => ({
     }
 }));
 
+
+
+Alpine.data('formFileSize', () => ({
+    format(size){
+
+        console.log("====================================");
+        console.log(size);
+        console.log("====================================");
+        if (size < 1024) {
+            return size + ' B';
+        } else if (size < 1048576) {
+            return (size / 1024).toFixed(2) + ' KB';
+        } else if (size < 1073741824) {
+            return (size / 1048576).toFixed(2) + ' MB';
+        } else {
+            return (size / 1073741824).toFixed(2) + ' GB';
+        }
+    }
+}));
 Alpine.start();

@@ -24,7 +24,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Position</p>
-                        <p class="font-semibold">Software Developer</p>
+                        <p class="font-semibold">{{ $user->employee?->position->name ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Department</p>
-                        <p class="font-semibold">IT Department</p>
+                        <p class="font-semibold">{{ $user->employee?->department->name ?? 'N/A' }}</p>
                     </div>
                 </div>
             </div>
@@ -79,21 +79,21 @@
                             <i class="fi fi-rr-user text-accent text-3xl"></i>
                         </div>
                     </div>
-                    <h2 class="text-xl font-bold">John Doe</h2>
-                    <p class="text-sm text-gray-600 mb-4">Software Developer</p>
+                    <h2 class="text-xl font-bold">{{ $user->name }}</h2>
+                    <p class="text-sm text-gray-600 mb-4">{{ $user->employee?->position->name ?? 'N/A' }}</p>
 
                     <div class="w-full space-y-3">
                         <div class="flex items-center gap-2 text-sm">
                             <i class="fi fi-rr-envelope text-gray-400"></i>
-                            <span>john.doe@example.com</span>
+                            <span>{{ $user->email }}</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm">
                             <i class="fi fi-rr-phone-call text-gray-400"></i>
-                            <span>+63 912 345 6789</span>
+                            <span>{{ $user->employee?->phone ?? 'N/A' }}</span>
                         </div>
                         <div class="flex items-center gap-2 text-sm">
                             <i class="fi fi-rr-marker text-gray-400"></i>
-                            <span>123 Main Street, City</span>
+                            <span>{{ $user->employee?->address ?? 'N/A' }}</span>
                         </div>
                     </div>
                 </div>
@@ -106,20 +106,22 @@
                     <div class="grid grid-cols-2 gap-6">
                         <div>
                             <p class="text-sm text-gray-600">Department</p>
-                            <p class="font-medium">IT Department</p>
+
+
+                            <p class="font-medium">{{ $user->employee?->department->name ?? 'N/A' }}</p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Position</p>
-                            <p class="font-medium">Software Developer</p>
+                            <p class="font-medium">{{ $user->employee?->position->name ?? 'N/A' }}</p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Date Hired</p>
-                            <p class="font-medium">January 15, 2024</p>
+                            <p class="font-medium">{{ $user->employee?->created_at ? $user->employee->created_at->format('F j, Y') : 'N/A' }}</p>
                         </div>
-                        <div>
+                        {{-- <div>
                             <p class="text-sm text-gray-600">Employment Type</p>
-                            <p class="font-medium">Full Time</p>
-                        </div>
+                            <p class="font-medium">{{ $user->employee?->employment_type ?? 'RE' }}</p>
+                        </div> --}}
                     </div>
                 </div>
             </div>

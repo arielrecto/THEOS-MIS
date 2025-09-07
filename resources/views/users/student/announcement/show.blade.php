@@ -58,16 +58,16 @@
                                 @foreach($announcement->attachments as $attachment)
                                     <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                                         <div class="flex items-center space-x-3">
-                                            <div class="flex-shrink-0">
-                                                <img src="{{ generateThumbnail($attachment->file_extension) }}"
+                                            <div class="flex-shrink-0" x-data="generateThumbnail">
+                                                <img :src="getThumbnail('{{ $attachment->file_extension }}')"
                                                      class="w-8 h-8" alt="File">
                                             </div>
                                             <div class="min-w-0">
                                                 <p class="text-sm font-medium text-gray-900 truncate">
                                                     {{ $attachment->name }}
                                                 </p>
-                                                <p class="text-xs text-gray-500">
-                                                    {{ formatFileSize($attachment->file_size) }}
+                                                <p class="text-xs text-gray-500" x-data="formFileSize">
+                                                    <span x-text="format({{ $attachment->file_size }})"></span>
                                                 </p>
                                             </div>
                                         </div>

@@ -133,4 +133,11 @@ class LandingPageController extends Controller
 
         return back()->with('success', 'Your application has been submitted successfully!');
     }
+
+
+    public function generalAnnouncementShow(string $id){
+        $announcement = GeneralAnnouncement::findOrFail($id);
+
+        return view('general-announcement.show', compact('announcement'));
+    }
 }

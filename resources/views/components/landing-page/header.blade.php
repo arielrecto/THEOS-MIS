@@ -151,7 +151,7 @@
                         {{ $announcement->description }}
                     </p>
                     <div class="text-right">
-                        <a href="#"
+                        <a href="{{ route('general-announcements.show', ['id' => $announcement->id]) }}"
                             class="inline-flex items-center text-accent hover:text-accent-focus font-medium">
                             Read More
                             <i class="fi fi-rr-arrow-right ml-1"></i>
