@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <x-dashboard.page-title :title="_('Grade Level')"  />
+    <x-dashboard.page-title :title="_('Grade Level')"  :back_url="route('admin.strands.index')" />
     <div class="panel flex flex-col gap-2 min-h-96">
 
         <h1 class="text-xl font-bold text-accent capitalize">{{$strand->acronym}} -  {{ $strand->name }}</h1>

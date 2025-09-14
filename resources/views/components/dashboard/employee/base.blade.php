@@ -15,11 +15,11 @@
             'name' => 'leaves',
             'icon' => '<i class="fi fi-rr-calendar"></i>',
         ],
-        [
-            'url' => '#',
-            'name' => 'reports',
-            'icon' => '<i class="fi fi-rr-chart-histogram"></i>',
-        ],
+        // [
+        //     'url' => '#',
+        //     'name' => 'reports',
+        //     'icon' => '<i class="fi fi-rr-chart-histogram"></i>',
+        // ],
     ];
 
     $user = Auth::user();

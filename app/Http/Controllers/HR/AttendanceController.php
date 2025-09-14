@@ -74,4 +74,30 @@ class AttendanceController extends Controller
             'lateCount'
         ));
     }
+
+
+    public function print($employeeId)
+    {
+        $employee = EmployeeProfile::with(['user', 'position.department'])->findOrFail($employeeId);
+
+        $startDate = request('start_date', now()->startOfMonth());
+        $endDate = request('end_date', now()->endOfMonth());
+
+        $attendances = $employee->attendanceLogs()
+            ->whereBetween('time_in', [$startDate, $endDate])
+            ->latest('time_in')
+            ->get();
+
+        // Calculate summary statistics
+        $summary = [
+            'present' => $attendances->where('status', 'present')->count(),
+            'absent' => $attendances->where('status', 'absent')->count(),
+            'late' => $attendances->where('status', 'late')->count(),
+            'total_hours' => $attendances->whereNotNull('time_out')->sum(function($log) {
+                return $log->time_out->diffInHours($log->time_in);
+            })
+        ];
+
+        return view('users.hr.attendance.print', compact('employee', 'attendances', 'summary'));
+    }
 }

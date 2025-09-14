@@ -47,6 +47,9 @@
                             <option value="Elementary" {{ old('category') === 'Elementary' ? 'selected' : '' }}>Elementary</option>
                             <option value="Junior High School" {{ old('category') === 'Junior High School' ? 'selected' : '' }}>Junior High School</option>
                             <option value="Senior High School" {{ old('category') === 'Senior High School' ? 'selected' : '' }}>Senior High School</option>
+                            @for($i = 1; $i <= 10; $i++)
+                                <option value="Grade {{ $i }}" {{ old('category') === "Grade $i" ? 'selected' : '' }}>Grade {{ $i }}</option>
+                            @endfor
                         </select>
                         @error('category')
                             <label class="label">

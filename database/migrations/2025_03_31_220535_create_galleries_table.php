@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('path')->nullable();
             $table->longText('description')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->string('category')->nullable();
             $table->timestamps();
         });
     }

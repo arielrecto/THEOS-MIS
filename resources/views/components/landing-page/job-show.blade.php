@@ -108,7 +108,7 @@
                             </div>
 
                             <!-- LinkedIn -->
-                            <div class="form-control">
+                            {{-- <div class="form-control">
                                 <label class="label">
                                     <span class="label-text">LinkedIn Profile</span>
                                 </label>
@@ -121,10 +121,10 @@
                                         <span class="label-text-alt text-error">{{ $message }}</span>
                                     </label>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                             <!-- Portfolio -->
-                            <div class="form-control">
+                            {{-- <div class="form-control">
                                 <label class="label">
                                     <span class="label-text">Portfolio URL</span>
                                 </label>
@@ -137,7 +137,7 @@
                                         <span class="label-text-alt text-error">{{ $message }}</span>
                                     </label>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                             <!-- Resume -->
                             <div class="form-control">

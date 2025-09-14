@@ -29,7 +29,7 @@ class LandingPageController extends Controller
         return view('components.landing-page.contact-us');
     }
 
-    public function gallery()
+    public function gallery(Request $request)
     {
         $galleries = Gallery::where('is_active', true)
             ->latest()
@@ -44,6 +44,27 @@ class LandingPageController extends Controller
                     'category' => 'School Events' // You can add category field to Gallery model if needed
                 ];
             });
+
+
+
+
+        if($request->category){
+            $galleries = Gallery::where('is_active', true)
+            ->where('category', strtolower($request->category)  )
+            ->latest()
+            ->get()
+            ->map(function($gallery) {
+                return [
+                    'id' => $gallery->id,
+                    'url' => asset('storage/' . $gallery->path),
+                    'title' => $gallery->name,
+                    'description' => $gallery->description,
+                    'date' => $gallery->created_at->format('F Y'),
+                    'category' => 'School Events' // You can add category field to Gallery model if needed
+                ];
+            });
+        }
+
 
         return view('components.landing-page.gallery', [
             'galleries' => $galleries
@@ -114,8 +135,8 @@ class LandingPageController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'linkedin' => $validated['linkedin'],
-            'portfolio' => $validated['portfolio'],
+            // 'linkedin' => $validated['linkedin'],
+            // 'portfolio' => $validated['portfolio'],
             'cover_letter' => $validated['cover_letter'],
         ]);
 

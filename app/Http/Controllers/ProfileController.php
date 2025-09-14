@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Profile;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -26,12 +29,38 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
+
+
+        if ($request->hasFile('image')) {
+
+
+            $request->hasProfile() ? $request->user()->profile()->profilePicture()->updateOrCreate([
+                'file_dir' => asset('storage/profile_picture/' . $request->file('image')->getClientOriginalName()),
+                'file_name' => $request->file('image')->getClientOriginalName(),
+                'file_type' => $request->file('image')->getClientMimeType(),
+                'attachable_id' => $request->user()->profile()->id,
+                'attachable_type' => Profile::class,
+                'file_size' => $request->file('image')->getSize(),
+            ]) : $request->user()->profilePicture()->create([
+                'file_dir' => asset('storage/profile_picture/' . $request->file('image')->getClientOriginalName()),
+                'file_name' => $request->file('image')->getClientOriginalName(),
+                'file_type' => $request->file('image')->getClientMimeType(),
+                'attachable_id' => $request->user()->id,
+                'attachable_type' => User::class,
+                'file_size' => $request->file('image')->getSize(),
+            ]);
+
+
+            $request->image->storeAs('profile_picture', $request->file('image')->getClientOriginalName(), 'public');
+        }
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
@@ -56,5 +85,18 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function twoFactor(Request $request): RedirectResponse
+    {
+
+        $user = $request->user();
+        $user->is_two_factor_enabled = $request->has('is_two_factor_enabled') == 'on'? true : false;
+        $user->two_factor_pin = Hash::make($request->input('two_factor_pin')); // Use the provided PIN
+        $user->save();
+
+        // Here you would typically send the PIN to the user's email or phone number
+
+        return Redirect::route('profile.edit')->with('status', 'two-factor-enabled');
     }
 }

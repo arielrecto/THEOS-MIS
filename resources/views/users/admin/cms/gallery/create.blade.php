@@ -70,6 +70,28 @@
                         @enderror
                     </div>
 
+
+
+                    <div class="form-control">
+                        <label class="label cursor-pointer">
+                            <span class="label-text">Category</span>
+
+                        </label>
+
+                        <select name="category" id="category" class="select select-bordered">
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="school events">School Events</option>
+                            <option value="academic events">Academic Events</option>
+                            <option value="campus life">Campus Life</option>
+                            <option value="activities">Activities</option>
+                        </select>
+                        @error('category')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+
                     <div class="flex justify-end">
                         <button type="submit" class="btn btn-accent">Upload Image</button>
                     </div>

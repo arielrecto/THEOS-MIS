@@ -19,19 +19,22 @@
             window.galleries = @json($galleries);
         </script>
 
+
+
         <!-- Filter Tabs -->
         <div class="flex flex-wrap justify-center gap-3 mb-12">
-            <button class="btn btn-sm"
-                    :class="selectedCategory === 'all' ? 'btn-accent' : 'btn-ghost hover:bg-accent/10'"
-                    @click="filterGallery('all')">
+            <a class="btn btn-sm"  href="/gallery"
+                    :class="request()->query('category') === 'all' || !request()->query('category') ? 'btn-accent' : 'btn-ghost hover:bg-accent/10'"
+                    {{-- @click="filterGallery('all')" --}}
+                    >
                 All
-            </button>
+            </a>
             <template x-for="category in categories" :key="category">
-                <button class="btn btn-sm"
-                        :class="selectedCategory === category ? 'btn-accent' : 'btn-ghost hover:bg-accent/10'"
-                        @click="filterGallery(category)"
+                <a class="btn btn-sm" :href="`/gallery?category=${category}`"
+                        :class="'{{request()->query('category')}}' === category ? 'btn-accent' : 'btn-ghost hover:bg-accent/10'"
+                        {{-- @click="filterGallery(category)" --}}
                         x-text="category">
-                </button>
+                </a>
             </template>
         </div>
 

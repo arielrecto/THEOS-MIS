@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_two_factor_enabled',
+        'two_factor_pin',
     ];
 
     /**
@@ -138,5 +140,9 @@ class User extends Authenticatable
     public function getUnreadNotificationsCountAttribute()
     {
         return $this->notificationLogs()->where('is_read', false)->count();
+    }
+
+    public function profilePicture(){
+        return $this->morphOne(Attachment::class, 'attachable')->latest();
     }
 }

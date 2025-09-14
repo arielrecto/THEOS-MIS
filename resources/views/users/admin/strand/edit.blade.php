@@ -6,7 +6,7 @@
             @csrf
             @method('put')
             <h1 class="form-title">
-                Strand Edit Form
+                Grade Level Edit Form
             </h1>
             <div class="flex flex-col gap-2">
                 <label for="" class="input-generic-label">name</label>

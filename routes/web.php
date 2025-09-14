@@ -32,6 +32,7 @@ use App\Http\Controllers\Registrar\EnrollmentController;
 use App\Http\Controllers\Teacher\AnnouncementController;
 use App\Http\Controllers\Admin\AcademicProgramController;
 use App\Http\Controllers\Admin\GeneralAnnouncementController;
+use App\Http\Controllers\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\HR\DashboardController as HRDashboardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
 use App\Http\Controllers\HR\AttendanceController as HRAttendanceController;
@@ -89,20 +90,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/two-factor', [ProfileController::class, 'twoFactor'])->name('profile.two-factor');
 });
 
 Route::middleware(['auth'])->group(function () {
 
     Route::prefix('notifications')->as('notifications.')->group(function () {
-        Route::post('{notification}', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
+
         Route::post('mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('mark-all-read');
         Route::get('', [NotificationController::class, 'index'])->name('index');
         Route::post('clear-all', [NotificationController::class, 'clearAll'])->name('clear-all');
         Route::delete('{notification}', [NotificationController::class, 'destroy'])->name('destroy');
         Route::get('{notification}', [NotificationController::class, 'show'])->name('show');
+        Route::post('{notification}', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
     });
 
-    Route::middleware(['role:admin'])
+
+    Route::prefix('two-factor-authentication')->as('two-factor-authentication.')->group(function () {
+        Route::get('show', [TwoFactorAuthenticationController::class, 'show'])->name('show');
+        Route::post('verify', [TwoFactorAuthenticationController::class, 'verify'])->name('verify');
+    });
+
+    Route::middleware(['role:admin', 'two_factor_authentication'])
         ->prefix('admin')
         ->as('admin.')
         ->group(function () {
@@ -154,14 +163,14 @@ Route::middleware(['auth'])->group(function () {
             });
 
 
-            Route::prefix('inbox')->group(function(){
+            Route::prefix('inbox')->group(function () {
                 Route::post('{inbox}/read', [InboxController::class, 'markAsRead'])->name('admin.inbox.read');
             });
 
             Route::resource('inbox', InboxController::class)->except('store');
         });
 
-    Route::middleware(['role:teacher'])
+    Route::middleware(['role:teacher', 'two_factor_authentication'])
         ->prefix('teacher')
         ->as('teacher.')
         ->group(function () {
@@ -219,7 +228,7 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('profile', TeacherProfileController::class)->except('index');
         });
 
-    Route::middleware(['role:registrar'])
+    Route::middleware(['role:registrar', 'two_factor_authentication'])
         ->prefix('registrar')
         ->as('registrar.')
         ->group(function () {
@@ -251,7 +260,7 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('enrollments', EnrollmentController::class);
         });
 
-    Route::middleware(['role:student'])
+    Route::middleware(['role:student', 'two_factor_authentication'])
         ->prefix('student')
         ->as('student.')
         ->group(function () {
@@ -301,13 +310,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/scanner', [StudentAttendanceController::class, 'scanner'])->name('scanner');
             });
         });
-
-    Route::middleware('role:human-resource|admin')
+    Route::middleware(['role:human-resource|admin', 'two_factor_authentication'])
         ->prefix('hr')
         ->as('hr.')
         ->group(function () {
             Route::get('/dashboard', action: [HRDashboardController::class, 'dashboard'])->name('dashboard');
-            Route::prefix('departments')->as('departments.')->group(function(){
+            Route::prefix('departments')->as('departments.')->group(function () {
                 Route::post('{department}/toggle-status', [DepartmentController::class, 'toggleStatus'])->name('toggle-status');
             });
             Route::resource('departments', DepartmentController::class);
@@ -335,6 +343,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('', [HRAttendanceController::class, 'index'])->name('index');
                 Route::get('{employee}', [HRAttendanceController::class, 'show'])->name('show');
                 Route::post('{employee}/log', [HRAttendanceController::class, 'log'])->name('log');
+                Route::get('{employee}/print', [HRAttendanceController::class, 'print'])->name('print');
             });
 
             Route::prefix('leaves')->as('leaves.')->group(function () {
@@ -351,7 +360,7 @@ Route::middleware(['auth'])->group(function () {
             });
         });
 
-    Route::middleware('role:employee')->as('employee.')->group(function () {
+    Route::middleware(['role:employee', 'two_factor_authentication'])->as('employee.')->group(function () {
         Route::get('/dashboard', [EmployeeDashboardController::class, 'dashboard'])->name('dashboard');
 
         Route::prefix('attendance')->as('attendance.')->group(function () {

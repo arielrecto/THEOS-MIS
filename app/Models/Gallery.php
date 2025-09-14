@@ -14,7 +14,8 @@ class Gallery extends Model
         'name',
         'path',
         'description',
-        'is_active'
+        'is_active',
+        'category'
     ];
 
 }

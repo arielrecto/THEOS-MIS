@@ -5,7 +5,7 @@
         <form action="{{route('admin.strands.store')}}" method="post" class="w-full flex flex-col gap-2 capitalize">
             @csrf
             <h1 class="form-title">
-                Strand Create Form
+                Grade Level Create Form
             </h1>
             <div class="flex flex-col gap-2">
                 <label for="" class="input-generic-label">name</label>

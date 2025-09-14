@@ -32,10 +32,10 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button class="btn btn-ghost btn-sm gap-2" onclick="window.print()">
+                        <a href="{{route('hr.attendance.print', $employee)}}" class="btn btn-ghost btn-sm gap-2" >
                             <i class="fi fi-rr-print"></i>
                             Print Report
-                        </button>
+                        </a>
                         <button class="btn btn-accent btn-sm gap-2">
                             <i class="fi fi-rr-download"></i>
                             Export Data

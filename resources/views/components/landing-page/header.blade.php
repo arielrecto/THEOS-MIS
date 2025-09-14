@@ -54,7 +54,7 @@
 <!-- About Section -->
 <section class="container px-6 mx-auto my-16">
     <div class="text-center max-w-4xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-800 mb-6">Our Mission</h2>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Core Values</h2>
         <p class="text-lg text-gray-700 mb-8">
             The Theos Higher Ground Academe is dedicated to produce a vibrant student who are
             Spiritually, Physically, Intellectually, Emotionally and Social committed to the fulfillment of

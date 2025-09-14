@@ -32,6 +32,7 @@ class NotificationController extends Controller
 
     public function markAsRead(NotificationLog $notification)
     {
+
         $this->notificationActions->markAsRead($notification);
         return back()->with('success', 'Notification marked as read');
     }

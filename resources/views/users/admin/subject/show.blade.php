@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <x-dashboard.page-title :title="_('Subject')"  />
+    <x-dashboard.page-title :title="_('Subject')"  :back_url="route('admin.subjects.index')" />
     <div class="panel flex flex-col gap-2 min-h-96">
 
         <h1 class="text-xl font-bold text-accent capitalize">{{ $subject->name }}</h1>

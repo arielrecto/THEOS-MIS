@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Models\User;
+use App\Models\Comment;
+use App\Models\Classroom;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use App\Models\GeneralAnnouncement;
@@ -10,7 +12,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\AnnouncementNotification;
-use App\Models\Comment;
 
 class AnnouncementController extends Controller
 {
@@ -24,16 +25,20 @@ class AnnouncementController extends Controller
             ->paginate(10);
 
 
+
+        $classrooms = Classroom::where('teacher_id', Auth::id())->get();
+
+
         if ($request->type === 'classroom') {
             $announcements = Announcement::with(['classroom.subject', 'classroom.teacher'])
-                ->whereHas('classroom', function($query) {
+                ->whereHas('classroom', function ($query) {
                     $query->where('teacher_id', Auth::id());
                 })
                 ->latest()
                 ->paginate(10);
         }
 
-        return view('users.teacher.announcement.index', compact('announcements'));
+        return view('users.teacher.announcement.index', compact('announcements', 'classrooms'));
     }
 
     /**
@@ -112,10 +117,10 @@ class AnnouncementController extends Controller
                 'classroom.subject',
                 'comments.user'
             ])
-            ->whereHas('classroom', function($query) {
-                $query->where('teacher_id', auth()->id());
-            })
-            ->findOrFail($id);
+                ->whereHas('classroom', function ($query) {
+                    $query->where('teacher_id', auth()->id());
+                })
+                ->findOrFail($id);
         }
 
         return view('users.teacher.announcement.show', compact('announcement'));
@@ -126,9 +131,9 @@ class AnnouncementController extends Controller
      */
     public function edit(string $id)
     {
-        $announcement = Announcement::whereHas('classroom', function($query) {
-                $query->where('teacher_id', Auth::id());
-            })
+        $announcement = Announcement::whereHas('classroom', function ($query) {
+            $query->where('teacher_id', Auth::id());
+        })
             ->findOrFail($id);
 
         return view('users.teacher.announcement.edit', compact('announcement'));
@@ -145,9 +150,9 @@ class AnnouncementController extends Controller
             'attachment' => 'nullable|file|max:10240',
         ]);
 
-        $announcement = Announcement::whereHas('classroom', function($query) {
-                $query->where('teacher_id', Auth::id());
-            })
+        $announcement = Announcement::whereHas('classroom', function ($query) {
+            $query->where('teacher_id', Auth::id());
+        })
             ->findOrFail($id);
 
         $announcement->update([
@@ -184,9 +189,9 @@ class AnnouncementController extends Controller
 
     public function removeFile(string $id)
     {
-        $announcement = Announcement::whereHas('classroom', function($query) {
-                $query->where('teacher_id', Auth::id());
-            })
+        $announcement = Announcement::whereHas('classroom', function ($query) {
+            $query->where('teacher_id', Auth::id());
+        })
             ->findOrFail($id);
 
         if ($announcement->file_dir && Storage::exists('public/' . $announcement->file_dir)) {

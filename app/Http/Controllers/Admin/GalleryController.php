@@ -25,7 +25,7 @@ class GalleryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $path = $request->file('image')->store('galleries', 'public');
@@ -34,7 +34,8 @@ class GalleryController extends Controller
             'name' => $validated['name'],
             'description' => $validated['description'],
             'path' => $path,
-            'is_active' => false
+            'is_active' => false,
+            'category' => $request->category
         ]);
 
         return redirect()->route('admin.CMS.gallery.index')
