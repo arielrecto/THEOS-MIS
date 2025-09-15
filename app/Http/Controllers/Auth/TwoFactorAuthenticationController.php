@@ -2,14 +2,28 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\TwoFactorNotification;
 
 class TwoFactorAuthenticationController extends Controller
 {
     public function show()
     {
+
+        $user = User::find(auth()->id());
+
+        $pin = random_int(100000, 999999);
+
+        $user->update([
+            'two_factor_pin' => Hash::make($pin)
+        ]);
+
+
+        $user->notify(new TwoFactorNotification($pin));
+
         return view('twoFactorAuthentication');
     }
 
@@ -30,12 +44,20 @@ class TwoFactorAuthenticationController extends Controller
         return back()->withErrors(['pin' => 'The provided PIN is incorrect.']);
     }
 
-    // public function resend()
-    // {
-    //     $user = auth()->user();
-        // Here you would typically regenerate the PIN and send it via email
+    public function resend()
+    {
+        $user = User::find(auth()->id());
+        //` Here you would typically regenerate the PIN and send it via email
         // For now, we'll just use the existing PIN
 
-    //     return back()->with('status', 'PIN has been resent to your email.');
-    // }
+        $pin = random_int(100000, 999999);
+
+        $user->update([
+            'two_factor_pin' => Hash::make($pin)
+        ]);
+
+        $user->notify(new TwoFactorNotification($pin));
+
+        return back()->with('status', 'PIN has been resent to your email.');
+    }
 }

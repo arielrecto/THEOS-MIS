@@ -100,8 +100,11 @@
                     <button class="btn btn-ghost btn-circle avatar">
                         <div class="w-10 rounded-full">
 
-                            @if ($user->profile && $user->profile->profilePicture)
-                                <img src="{{ $user->profile->profilePicture->file_dir }}" alt="Profile Picture" class="object-cover" />
+
+
+
+                            @if ($user?->profile?->image)
+                                <img src="{{ $user->profile->image }}" alt="Profile Picture" class="object-cover" />
                             @elseif ($user->profilePicture)
                                 <img src="{{ $user->profilePicture->file_dir }}" alt="Profile Picture" class="object-cover" />
                             @else

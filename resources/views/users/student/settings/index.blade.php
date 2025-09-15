@@ -13,7 +13,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">LRN</label>
-                            <input type="text" name="lrn" value="{{ old('lrn', $student->studentProfile->lrn) }}"
+                            <input type="text" disabled name="lrn" value="{{ old('lrn', $student->studentProfile->lrn) }}"
                                    class="mt-1 input input-bordered w-full" required>
                             @error('lrn')
                                 <p class="mt-1 text-sm text-error">{{ $message }}</p>

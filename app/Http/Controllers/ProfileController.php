@@ -91,8 +91,16 @@ class ProfileController extends Controller
     {
 
         $user = $request->user();
-        $user->is_two_factor_enabled = $request->has('is_two_factor_enabled') == 'on'? true : false;
-        $user->two_factor_pin = Hash::make($request->input('two_factor_pin')); // Use the provided PIN
+        $user->is_two_factor_enabled = $request->has('is_two_factor_enabled') == 'on' ? true : false;
+
+        if ($user->is_two_factor_enabled && !$user->two_factor_pin) {
+            $pin = random_int(100000, 999999);
+            $user->two_factor_pin = Hash::make($pin);
+            // Here you would typically send the PIN to the user's email or phone number
+            $user->notify(new \App\Notifications\TwoFactorNotification($pin));
+        } elseif (!$user->is_two_factor_enabled) {
+            $user->two_factor_pin = null; // Clear the PIN if 2FA is disabled
+        }
         $user->save();
 
         // Here you would typically send the PIN to the user's email or phone number

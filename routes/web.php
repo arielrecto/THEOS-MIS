@@ -109,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('two-factor-authentication')->as('two-factor-authentication.')->group(function () {
         Route::get('show', [TwoFactorAuthenticationController::class, 'show'])->name('show');
         Route::post('verify', [TwoFactorAuthenticationController::class, 'verify'])->name('verify');
+        Route::post('resend', [TwoFactorAuthenticationController::class, 'resend'])->name('resend');
     });
 
     Route::middleware(['role:admin', 'two_factor_authentication'])

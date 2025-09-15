@@ -19,14 +19,14 @@
 
         <div class="grid grid-cols-4 gap-4">
             <x-card-v1 :link="route('teacher.classrooms.students', ['classroom' => $classroom->id])" icon="fi fi-rr-student" label="Students" :count="count($classroom->classroomStudents)" />
-            <x-card-v1 :link="route('teacher.classrooms.attendances', ['classroom' => $classroom->id])" icon="fi fi-rr-calendar" label="Attendance" :count="count($classroom->attendances)" />
+            {{-- <x-card-v1 :link="route('teacher.classrooms.attendances', ['classroom' => $classroom->id])" icon="fi fi-rr-calendar" label="Attendance" :count="count($classroom->attendances)" /> --}}
             <x-card-v1 :link="route('teacher.announcements.index', ['classroom' => $classroom->id, 'type' => 'classroom'])" icon="fi fi-rr-bell" label="Announcements" :count="count($classroom->announcements)" />
             <x-card-v1 :link="route('teacher.tasks.index', ['classroom_id' => $classroom->id])" icon="fi fi-rr-list-check" label="Tasks" :count="count($classroom->tasks)" />
         </div>
 
-        <x-tab.tab :tabs="['Attendance', 'Calendar', 'Student']" :active="0" />
+        <x-tab.tab :tabs="[ 'Calendar', 'Student']" :active="0" />
 
-        @if (request()->get('activeTab') == 0)
+        {{-- @if (request()->get('activeTab') == 0)
             <div class="flex flex-col gap-4 p-4 bg-gray-50 rounded-lg shadow">
                 <h2 class="text-lg font-semibold text-accent">Attendance</h2>
                 @if ($attendance)
@@ -51,9 +51,9 @@
                     </div>
                 @endif
             </div>
-        @endif
+        @endif --}}
 
-        @if (request()->get('activeTab') == 1)
+        @if (request()->get('activeTab') == 0)
             <div class="p-4 bg-gray-50 rounded-lg shadow min-h-96" x-data="calendarInit">
                 <h2 class="text-lg font-semibold text-accent">Calendar</h2>
                 <div x-ref="calendar"></div>
@@ -61,7 +61,7 @@
         @endif
 
 
-        @if (request()->get('activeTab') == 2)
+        @if (request()->get('activeTab') == 1)
             <div class="overflow-x-auto">
                 <h1 class="py-4 text-lg font-bold text-accent">Students</h1>
                 <table class="table w-full bg-white rounded-lg shadow-md">

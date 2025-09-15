@@ -43,6 +43,14 @@
                             Verify PIN
                         </button>
                     </div>
+
+                    <div class="text-sm text-center">
+                        Didn't receive the PIN?
+                        <form method="POST" action="{{ route('two-factor-authentication.resend') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-blue-600 hover:underline">Resend PIN</button>
+                        </form>
+                    </div>
                 </div>
             </form>
         </div>
