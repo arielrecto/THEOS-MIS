@@ -1,21 +1,21 @@
 <x-landing-page.base>
     <!-- Job Details Section -->
     <x-notification-message/>
-    <div class="bg-accent/5 py-16">
-        <div class="container mx-auto px-6">
+    <div class="py-16 bg-accent/5">
+        <div class="container px-6 mx-auto">
             <div class="max-w-3xl">
-                <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                <div class="flex gap-2 items-center mb-4 text-sm text-gray-600">
                     <a href="{{ route('job-opportunities') }}" class="hover:text-accent">Careers</a>
                     <i class="fi fi-rr-angle-right"></i>
                     <span>{{ $position->name }}</span>
                 </div>
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $position->name }}</h1>
-                <div class="flex items-center gap-4 text-gray-600">
-                    <div class="flex items-center gap-2">
+                <h1 class="mb-4 text-4xl font-bold text-gray-900">{{ $position->name }}</h1>
+                <div class="flex gap-4 items-center text-gray-600">
+                    <div class="flex gap-2 items-center">
                         <i class="fi fi-rr-building"></i>
                         <span>{{ $position->department->name }}</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex gap-2 items-center">
                         <i class="fi fi-rr-briefcase"></i>
                         <span>{{ ucfirst($position->type) }}</span>
                     </div>
@@ -24,31 +24,31 @@
         </div>
     </div>
 
-    <div class="container mx-auto px-6 py-12 bg-gray-100 rounded-lg">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="container px-6 py-12 mx-auto bg-gray-100 rounded-lg">
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <!-- Job Description -->
-            <div class="lg:col-span-2 space-y-8">
-                <div class="prose max-w-none">
+            <div class="space-y-8 lg:col-span-2">
+                <div class="max-w-none prose">
                     <h2 class="text-2xl font-semibold text-gray-800">Job Description</h2>
                     <div class="mt-4 whitespace-pre-line">{{ $position->description }}</div>
                 </div>
 
                 <!-- Salary Range -->
                 <div>
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Salary Range</h2>
-                    <div class="bg-accent/5 rounded-lg p-6">
+                    <h2 class="mb-4 text-2xl font-semibold text-gray-800">Salary Range</h2>
+                    <div class="p-6 rounded-lg bg-accent/5">
                         <p class="text-2xl font-bold text-accent">
                             ₱{{ number_format($position->min_salary) }} - ₱{{ number_format($position->max_salary) }}
                         </p>
-                        <p class="text-gray-600 mt-1">Per month</p>
+                        <p class="mt-1 text-gray-600">Per month</p>
                     </div>
                 </div>
             </div>
 
             <!-- Application Form -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Apply for this Position</h2>
+                <div class="sticky top-6 p-6 bg-white rounded-lg shadow-sm">
+                    <h2 class="mb-6 text-xl font-semibold text-gray-800">Apply for this Position</h2>
 
                     <form action="{{ route('job-opportunities.apply', $position) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -99,6 +99,9 @@
                                        name="phone"
                                        class="input input-bordered @error('phone') input-error @enderror"
                                        value="{{ old('phone') }}"
+                                       pattern="[0-9]{11}"
+                                       title="Please enter exactly 11 digits (e.g., 09123456789)"
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11);"
                                        required>
                                 @error('phone')
                                     <label class="label">
@@ -172,7 +175,7 @@
                                 @enderror
                             </div>
 
-                            <button type="submit" class="btn btn-accent w-full">
+                            <button type="submit" class="w-full btn btn-accent">
                                 Submit Application
                             </button>
                         </div>

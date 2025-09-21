@@ -23,6 +23,7 @@ class EmployeeProfile extends Model
         'salary',
         'job_position_id', // Keep this
         'photo',
+        'leave_credit',
     ];
 
     // Remove 'position' and 'department' from fillable as they are relationship names

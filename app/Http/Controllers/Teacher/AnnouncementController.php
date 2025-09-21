@@ -232,4 +232,19 @@ class AnnouncementController extends Controller
 
         return back()->with('success', 'Comment deleted successfully');
     }
+
+
+    public function replyComment(Request $request, Comment $comment)
+    {
+        $request->validate([
+            'content' => ['required', 'string', 'max:1000']
+        ]);
+
+        $comment->replies()->create([
+            'content' => $request->content,
+            'user_id' => auth()->id()
+        ]);
+
+        return back()->with('success', 'Comment replied successfully');
+    }
 }

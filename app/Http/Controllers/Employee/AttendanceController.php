@@ -3,10 +3,12 @@
 
 namespace App\Http\Controllers\Employee;
 
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\AttendanceLog;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
@@ -98,5 +100,48 @@ class AttendanceController extends Controller
         }
 
         return $attendance->status; // Keep original status (present/late)
+    }
+
+    public function printAttendance(Request $request)
+    {
+        $startDate = $request->get('start_date', now()->startOfMonth());
+        $endDate = $request->get('end_date', now());
+
+
+
+        $user = User::where('id', Auth::user()->id)->first();
+
+        
+
+
+
+
+        $attendanceLogs = AttendanceLog::where('employee_profile_id', $user->employee->id)
+           ->whereBetween('time_in', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])
+            ->latest('time_in')
+            ->get();
+
+
+
+
+        $totalHours = $user->employee->attendanceLogs()
+            ->whereNotNull('time_out')
+            ->whereBetween('time_in', [$startDate, $endDate])
+            ->get()
+            ->sum(function($log) {
+                return $log->time_out->diffInHours($log->time_in);
+            });
+
+        $averageHours = $attendanceLogs->count() > 0
+            ? $totalHours / $attendanceLogs->count()
+            : 0;
+
+
+
+        return view('users.employee.attendance.print', compact(
+            'attendanceLogs',
+            'totalHours',
+            'averageHours'
+        ));
     }
 }

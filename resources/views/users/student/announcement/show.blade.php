@@ -3,11 +3,11 @@
         <x-dashboard.page-title :title="_('Announcement Details')" :back_url="route('student.announcements.index')" />
         <x-notification-message />
 
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="overflow-hidden bg-white rounded-lg shadow-lg">
             <!-- Announcement Header -->
             <div class="border-b border-gray-200">
                 <div class="px-6 py-4">
-                    <div class="flex items-center justify-between">
+                    <div class="flex justify-between items-center">
                         <div class="flex items-center space-x-4">
                             <div class="avatar">
                                 <div class="w-12 h-12 rounded-full">
@@ -21,7 +21,7 @@
                                 </div>
                             </div>
                             <div>
-                                <h3 class="font-medium text-lg">
+                                <h3 class="text-lg font-medium">
                                     @if($announcement instanceof \App\Models\GeneralAnnouncement)
                                         {{ $announcement->postedBy->name }}
                                     @else
@@ -45,8 +45,8 @@
 
             <!-- Announcement Content -->
             <div class="p-6">
-                <h2 class="text-2xl font-bold mb-4">{{ $announcement->title }}</h2>
-                <div class="prose max-w-none">
+                <h2 class="mb-4 text-2xl font-bold">{{ $announcement->title }}</h2>
+                <div class="max-w-none prose">
                     <p>{{ $announcement->description }}</p>
                 </div>
 
@@ -54,9 +54,9 @@
                     @if($announcement->attachments->count() > 0)
                         <div class="mt-6 space-y-4">
                             <h4 class="font-medium text-gray-900">Attachments</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 @foreach($announcement->attachments as $attachment)
-                                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                                         <div class="flex items-center space-x-3">
                                             <div class="flex-shrink-0" x-data="generateThumbnail">
                                                 <img :src="getThumbnail('{{ $attachment->file_extension }}')"
@@ -84,11 +84,11 @@
                 @else
                     @if($announcement->file_dir)
                         <div class="mt-6">
-                            <h4 class="font-medium text-gray-900 mb-4">Attachment</h4>
-                            <div class="p-4 bg-gray-50 rounded-lg flex items-center justify-between">
+                            <h4 class="mb-4 font-medium text-gray-900">Attachment</h4>
+                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                                 <div class="flex items-center space-x-3">
                                     <div class="flex-shrink-0">
-                                        <i class="fi fi-rr-document text-2xl text-accent"></i>
+                                        <i class="text-2xl fi fi-rr-document text-accent"></i>
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-900">
@@ -109,8 +109,8 @@
         </div>
 
         <!-- Comments Section -->
-        <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 class="text-lg font-bold mb-6">Comments</h3>
+        <div class="p-6 mt-8 bg-white rounded-lg shadow-lg">
+            <h3 class="mb-6 text-lg font-bold">Comments</h3>
 
             <!-- New Comment Form -->
             <form action="{{ route('student.announcements.comments.store', [
@@ -128,9 +128,9 @@
                         </label>
                     @enderror
                 </div>
-                <div class="mt-4 flex justify-end">
+                <div class="flex justify-end mt-4">
                     <button type="submit" class="btn btn-accent">
-                        <i class="fi fi-rr-comment mr-2"></i>
+                        <i class="mr-2 fi fi-rr-comment"></i>
                         Post Comment
                     </button>
                 </div>
@@ -139,7 +139,9 @@
             <!-- Comments List -->
             <div class="space-y-6">
                 @forelse($announcement->comments->sortByDesc('created_at') as $comment)
-                    <div class="flex space-x-4">
+
+                <x-commentThread :comment="$comment" :url="route('student.announcements.comments.reply', $comment->id)" :deleteUrl="route('student.announcements.comments.destroy', $comment->id)"/>
+                    {{-- <div class="flex space-x-4">
                         <div class="flex-shrink-0">
                             <div class="avatar">
                                 <div class="w-10 h-10 rounded-full">
@@ -149,7 +151,7 @@
                             </div>
                         </div>
                         <div class="flex-grow">
-                            <div class="flex items-center justify-between">
+                            <div class="flex justify-between items-center">
                                 <div>
                                     <h4 class="font-medium">{{ $comment->user->name }}</h4>
                                     <p class="text-xs text-gray-500">
@@ -172,10 +174,10 @@
                                 {{ $comment->content }}
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 @empty
-                    <div class="text-center py-8 text-gray-500">
-                        <i class="fi fi-rr-comment-alt text-3xl mb-2"></i>
+                    <div class="py-8 text-center text-gray-500">
+                        <i class="mb-2 text-3xl fi fi-rr-comment-alt"></i>
                         <p>No comments yet</p>
                     </div>
                 @endforelse

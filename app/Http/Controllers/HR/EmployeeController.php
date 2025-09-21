@@ -79,7 +79,8 @@ class EmployeeController extends Controller
             'date_of_birth' => 'required|date',
             'job_position_id' => 'required|exists:job_positions,id',
             'photo' => 'nullable|image|max:2048',
-            'salary' => 'required|numeric|min:0'
+            'salary' => 'required|numeric|min:0',
+            'leave_credit' => 'required|numeric|min:0'
         ]);
 
         $password = 'password123'; // You might want to generate a random password
@@ -102,7 +103,8 @@ class EmployeeController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'date_of_birth' => $validated['date_of_birth'],
-            'salary' => $validated['salary']
+            'salary' => $validated['salary'],
+            'leave_credit' => $validated['leave_credit']
         ]);
 
         if ($request->hasFile('photo')) {
@@ -156,7 +158,8 @@ class EmployeeController extends Controller
             'date_of_birth' => 'required|date',
             'job_position_id' => 'required|exists:job_positions,id',
             'photo' => 'nullable|image|max:2048',
-            'salary' => 'required|numeric|min:0'
+            'salary' => 'required|numeric|min:0',
+            'leave_credit' => 'required|numeric|min:0'
         ]);
 
         // Update user
@@ -173,7 +176,8 @@ class EmployeeController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'date_of_birth' => $validated['date_of_birth'],
-            'salary' => $validated['salary']
+            'salary' => $validated['salary'],
+            'leave_credit' => $validated['leave_credit']
         ]);
 
         if ($request->hasFile('photo')) {

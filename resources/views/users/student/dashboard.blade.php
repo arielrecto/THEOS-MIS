@@ -43,9 +43,10 @@
             <div class="p-4 bg-white rounded-lg shadow-md">
                 <h2 class="text-lg font-bold text-gray-700">Student Profile</h2>
                 <p class="mt-2 text-sm text-gray-600">
-                    <strong>Name:</strong> Juan Dela Cruz<br>
-                    <strong>Student ID:</strong> 2025001234<br>
-                    <strong>Grade Level:</strong> Grade 11
+                    <strong>Name:</strong> {{ $student->name }}<br>
+                    <strong>Student ID:</strong> {{ $student->studentProfile->lrn }}<br>
+                    <strong>Grade Level:</strong>
+                    {{ $student->studentProfile?->academicRecords()?->latest()->first()?->grade_level }}
                 </p>
             </div>
 
@@ -53,10 +54,11 @@
             <div class="p-4 bg-white rounded-lg shadow-md">
                 <h2 class="text-lg font-bold text-gray-700">Account Settings</h2>
                 <p class="mt-2 text-sm text-gray-600">
-                    <a href="#" class="text-blue-600 hover:underline">Edit Profile</a>
+                    <a href="{{ route('student.settings.index') }}" class="text-blue-600 hover:underline">Edit Profile</a>
                 </p>
             </div>
 
         </div>
-    </div>    </div>
+    </div>
+
 </x-dashboard.student.base>

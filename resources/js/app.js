@@ -125,7 +125,16 @@ Alpine.data("calendarInit", () => ({
 Alpine.data("studentSelection", () => ({
     students: [],
     selectedStudents: [],
+    search: "",
+    searchResults : [],
+    init(){
+        this.$watch('search', (value) => {
+
+            this.searchStudent()
+        })
+    },
     initStudentData(data) {
+        console.log(data, "student data")
         this.students = [...data];
     },
     selectStudent(data) {
@@ -145,6 +154,12 @@ Alpine.data("studentSelection", () => ({
         }
 
         this.selectedStudents = [...this.students];
+    },
+
+    searchStudent() {
+        this.searchResults = this.students.filter((student) => {
+            return student.student.name.toLowerCase().includes(this.search.toLowerCase());
+        });
     },
 }));
 

@@ -90,6 +90,11 @@ class LeaveController extends Controller
 
     public function approve(Leave $leave)
     {
+
+
+        $leave->employee->update([
+            'leave_credit' => $leave->employee->leave_credit - $leave->days
+        ]);
         $leave->update(['status' => 'approved']);
 
         // Send notification to employee

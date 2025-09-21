@@ -90,4 +90,17 @@ class TaskController extends Controller
             ->route('student.tasks.show', $id)
             ->with('success', 'Task submitted successfully');
     }
+
+    public function unsubmitTask(string $id)
+    {
+        $studentTask = StudentTask::find($id);
+
+        $studentTask->update([
+            'status' => 'unsubmitted'
+        ]);
+
+        return redirect()
+            ->route('student.tasks.show', $id)
+            ->with('success', 'Task unsubmitted successfully');
+    }
 }

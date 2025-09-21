@@ -1,29 +1,29 @@
 <x-dashboard.admin.base>
 
-    <x-dashboard.page-title :title="_('Student')" />
+    <x-dashboard.page-title :title="_('Student')"  :back_url="route('admin.users.students.index')"/>
     <x-notification-message />
     <div class="panel min-h-96">
 
         <div class="flex gap-2 h-full">
-            <div class="w-1/3 h-full border-r-2 border-gray-100 flex flex-col gap-2">
+            <div class="flex flex-col gap-2 w-1/3 h-full border-r-2 border-gray-100">
                 <div class="flex justify-center">
                     <div class="flex flex-col gap-2 items-center">
-                        <img src="https://ui-avatars.com/api/?name=ariel+recto" class="h-32 w-32 rounded-full" />
-                        <h1 class="font-bold text-lg tracking-widest capitalize">{{ $student->name }}</h1>
-                        <a href="#" class="underline text-sm text-blue-700">Edit</a>
+                        <img src="https://ui-avatars.com/api/?name=ariel+recto" class="w-32 h-32 rounded-full" />
+                        <h1 class="text-lg font-bold tracking-widest capitalize">{{ $student->name }}</h1>
+                        <a href="#" class="text-sm text-blue-700 underline">Edit</a>
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col grow space-y-5">
+            <div class="flex flex-col space-y-5 grow">
                 <div class="grid grid-cols-2 grid-flow-row gap-2 h-32">
-                    <div class="flex flex-col gap-2 bg-accent rounded-lg text-primary p-2 justify-between">
+                    <div class="flex flex-col gap-2 justify-between p-2 rounded-lg bg-accent text-primary">
                         <h1 class="text-lg font-bold">Classrooms</h1>
                         <span
                             class="text-3xl font-bold text-center">{{ $student->asStudentClassrooms()->count() }}</span>
                     </div>
 
 
-                    {{-- <div class="flex flex-col gap-2 bg-accent rounded-lg text-primary p-2 justify-between">
+                    {{-- <div class="flex flex-col gap-2 justify-between p-2 rounded-lg bg-accent text-primary">
                         <h1 class="text-lg font-bold">Attendance</h1>
                         <span class="text-3xl font-bold text-center">1</span>
                     </div> --}}
@@ -32,7 +32,7 @@
                 <div class="overflow-x-auto">
                     <table class="table">
                         <!-- head -->
-                        <thead class="bg-accent text-white">
+                        <thead class="text-white bg-accent">
                             <tr>
                                 <th></th>
                                 <th>Name</th>
@@ -52,7 +52,7 @@
                                     <td>{{ $classroom->class_code }}</td>
                                     <td>{{ $classroom->subject->name ?? "N\A"}}</td>
                                     <td>{{ $classroom->teacher->name ?? "N\A"}}</td>
-                                    <td class="flex items-center gap-5">
+                                    <td class="flex gap-5 items-center">
                                         {{-- <a href="{{route('admin.subjects.show', ['subject' => $subject->id])}}" class="btn btn-xs btn-accent">
                                     <i class="fi fi-rr-eye"></i>
                                 </a>
@@ -64,7 +64,7 @@
                                 <form action="{{route('admin.subjects.destroy', ['subject' => $subject->id])}}" method="post">
                                     @csrf
                                     @method('delete')
-                                    <button class="btn btn-xs btn-error ">
+                                    <button class="btn btn-xs btn-error">
                                         <i class="fi fi-rr-trash"></i>
                                     </button>
                                 </form> --}}
@@ -89,11 +89,11 @@
                 </div> --}}
 
                 {{-- <div class="overflow-x-auto">
-                    <h1 class="text-lg py-5 text-accent font-bold">Attendances</h1>
+                    <h1 class="py-5 text-lg font-bold text-accent">Attendances</h1>
                     <table class="table">
 
                         <thead>
-                            <tr class="bg-accent text-white">
+                            <tr class="text-white bg-accent">
                                 <th></th>
                                 <th>Attendance Code</th>
                                 <th>Time</th>

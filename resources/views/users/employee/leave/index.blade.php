@@ -3,25 +3,26 @@
 @endphp
 
 <x-dashboard.employee.base>
-    <div class="container mx-auto p-6">
+    <x-notification-message/>
+    <div class="container p-6 mx-auto">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div class="flex justify-between items-center mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">Leave Management</h1>
                 <p class="text-gray-600">File and track your leave requests</p>
             </div>
-            <button class="btn btn-accent gap-2" onclick="document.getElementById('file-leave-modal').showModal()">
+            <button class="gap-2 btn btn-accent" onclick="document.getElementById('file-leave-modal').showModal()">
                 <i class="fi fi-rr-plus"></i>
                 File Leave
             </button>
         </div>
 
         <!-- Leave Statistics -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-accent/10 rounded-lg">
-                        <i class="fi fi-rr-calendar-check text-accent text-xl"></i>
+        <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
+            <div class="p-6 bg-white rounded-lg shadow-sm">
+                <div class="flex gap-4 items-center">
+                    <div class="p-3 rounded-lg bg-accent/10">
+                        <i class="text-xl fi fi-rr-calendar-check text-accent"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Available Leave Credits</p>
@@ -30,10 +31,10 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-primary/10 rounded-lg">
-                        <i class="fi fi-rr-calendar-clock text-primary text-xl"></i>
+            <div class="p-6 bg-white rounded-lg shadow-sm">
+                <div class="flex gap-4 items-center">
+                    <div class="p-3 rounded-lg bg-primary/10">
+                        <i class="text-xl fi fi-rr-calendar-clock text-primary"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Pending Requests</p>
@@ -42,10 +43,10 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-success/10 rounded-lg">
-                        <i class="fi fi-rr-checkbox text-success text-xl"></i>
+            <div class="p-6 bg-white rounded-lg shadow-sm">
+                <div class="flex gap-4 items-center">
+                    <div class="p-3 rounded-lg bg-success/10">
+                        <i class="text-xl fi fi-rr-checkbox text-success"></i>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Approved Leaves</p>
@@ -56,19 +57,19 @@
         </div>
 
         <!-- Calendar -->
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <div class="flex items-center justify-between mb-4">
+        <div class="p-6 mb-6 bg-white rounded-lg shadow-sm">
+            <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold">Leave Calendar</h2>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2">
+                <div class="flex gap-4 items-center">
+                    <div class="flex gap-2 items-center">
                         <span class="w-3 h-3 rounded-full bg-warning"></span>
                         <span class="text-sm">Pending</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex gap-2 items-center">
                         <span class="w-3 h-3 rounded-full bg-success"></span>
                         <span class="text-sm">Approved</span>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex gap-2 items-center">
                         <span class="w-3 h-3 rounded-full bg-error"></span>
                         <span class="text-sm">Rejected</span>
                     </div>
@@ -110,7 +111,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="truncate max-w-xs">{{ $leave->reason }}</p>
+                                    <p class="max-w-xs truncate">{{ $leave->reason }}</p>
                                 </td>
                                 <td>
                                     @if($leave->status === 'pending')
@@ -125,7 +126,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center py-4">
+                                <td colspan="5" class="py-4 text-center">
                                     No leave history found
                                 </td>
                             </tr>
@@ -142,7 +143,7 @@
     <!-- File Leave Modal -->
     <dialog id="file-leave-modal" class="modal">
         <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">File Leave Request</h3>
+            <h3 class="mb-4 text-lg font-bold">File Leave Request</h3>
             <form action="{{ route('employee.leaves.store') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
@@ -186,7 +187,7 @@
                             <span class="label-text">Reason</span>
                         </label>
                         <textarea name="reason"
-                                  class="textarea textarea-bordered h-24"
+                                  class="h-24 textarea textarea-bordered"
                                   required
                                   placeholder="Please provide your reason for leave"></textarea>
                     </div>

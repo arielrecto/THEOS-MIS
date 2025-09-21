@@ -17,7 +17,7 @@ class LeaveController extends Controller
 
         $pendingCount = $leaves->where('status', 'pending')->count();
         $approvedCount = $leaves->where('status', 'approved')->count();
-        $availableCredits = 15; // You should calculate this based on your leave policy
+        $availableCredits = auth()->user()->employee->leave_credit; // You should calculate this based on your leave policy
 
         $calendarEvents = $leaves->map(function($leave) {
             $statusColors = [
@@ -66,12 +66,22 @@ class LeaveController extends Controller
             'reason' => 'required'
         ]);
 
+
+        $totalDays = Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1;
+
+
+        if($totalDays > auth()->user()->employee->leave_credit) {
+            return redirect()
+                ->back()
+                ->with('error', 'You do not have enough leave credits');
+        }
+
         $leave = auth()->user()->employee->leaves()->create([
             'leave_type' => $validated['type'],
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'reason' => $validated['reason'],
-            'days' =>  Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1,
+            'days' =>  $totalDays,
             'status' => 'pending',
         ]);
 

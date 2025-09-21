@@ -82,7 +82,7 @@ class StudentController extends Controller
         ]);
 
 
-        return back()->with(['message' => 'student Data Update']);
+        return back()->with(['success' => 'student Data Update']);
     }
 
     /**

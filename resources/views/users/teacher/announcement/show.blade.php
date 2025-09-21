@@ -3,11 +3,11 @@
         <x-dashboard.page-title :title="_('Announcement Details')" :back_url="route('teacher.announcements.index', ['type' => request()->type ?? 'general'])" />
         <x-notification-message />
 
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="overflow-hidden bg-white rounded-lg shadow-lg">
             <!-- Header Section -->
             <div class="border-b border-gray-200">
                 <div class="px-6 py-4">
-                    <div class="flex items-center justify-between">
+                    <div class="flex justify-between items-center">
                         <div class="flex items-center space-x-4">
                             <div class="avatar">
                                 <div class="w-12 h-12 rounded-full">
@@ -24,11 +24,11 @@
                                 <h3 class="font-medium">
                                     @if ($announcement instanceof \App\Models\GeneralAnnouncement)
                                         {{ $announcement->postedBy->name }}
-                                        <span class="badge badge-accent ml-2">General</span>
+                                        <span class="ml-2 badge badge-accent">General</span>
                                     @else
                                         {{ $announcement->classroom->teacher->name }}
                                         <span
-                                            class="badge badge-accent ml-2">{{ $announcement->classroom->subject->name }}</span>
+                                            class="ml-2 badge badge-accent">{{ $announcement->classroom->subject->name }}</span>
                                     @endif
                                 </h3>
                                 <p class="text-sm text-gray-500">
@@ -39,12 +39,12 @@
                         <div class="flex gap-2">
                             {{-- <a href="{{ route('teacher.announcements.edit', ['id' => $announcement->id, 'type' => request()->type]) }}"
                                class="btn btn-sm btn-outline btn-warning">
-                                <i class="fi fi-rr-edit mr-2"></i>
+                                <i class="mr-2 fi fi-rr-edit"></i>
                                 {{ __('Edit') }}
                             </a>
                             <button onclick="confirmDelete('{{ $announcement->id }}', '{{ request()->type }}')"
                                     class="btn btn-sm btn-outline btn-error">
-                                <i class="fi fi-rr-trash mr-2"></i>
+                                <i class="mr-2 fi fi-rr-trash"></i>
                                 {{ __('Delete') }}
                             </button> --}}
                         </div>
@@ -54,8 +54,8 @@
 
             <!-- Content Section -->
             <div class="p-6">
-                <h2 class="text-2xl font-bold mb-4">{{ $announcement->title }}</h2>
-                <div class="prose max-w-none mb-6">
+                <h2 class="mb-4 text-2xl font-bold">{{ $announcement->title }}</h2>
+                <div class="mb-6 max-w-none prose">
                     {{ $announcement->description }}
                 </div>
 
@@ -63,13 +63,13 @@
                 @if ($announcement instanceof \App\Models\GeneralAnnouncement)
                     @if ($announcement->attachments->count() > 0)
                         <div class="mt-6">
-                            <h4 class="font-medium text-gray-900 mb-4">Attachments</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <h4 class="mb-4 font-medium text-gray-900">Attachments</h4>
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 @foreach ($announcement->attachments as $attachment)
-                                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                                         <div class="flex items-center space-x-3">
                                             <div class="flex-shrink-0">
-                                                <i class="fi fi-rr-document text-2xl text-accent"></i>
+                                                <i class="text-2xl fi fi-rr-document text-accent"></i>
                                             </div>
                                             <div class="min-w-0">
                                                 <p class="text-sm font-medium text-gray-900 truncate">
@@ -79,7 +79,7 @@
                                         </div>
                                         <a href="{{ asset($attachment->file_dir) }}" class="btn btn-sm btn-accent"
                                             download>
-                                            <i class="fi fi-rr-download mr-2"></i>
+                                            <i class="mr-2 fi fi-rr-download"></i>
                                             Download
                                         </a>
                                     </div>
@@ -90,11 +90,11 @@
                 @else
                     @if ($announcement->file_dir)
                         <div class="mt-6">
-                            <h4 class="font-medium text-gray-900 mb-4">Attachment</h4>
-                            <div class="p-4 bg-gray-50 rounded-lg flex items-center justify-between">
+                            <h4 class="mb-4 font-medium text-gray-900">Attachment</h4>
+                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                                 <div class="flex items-center space-x-3">
                                     <div class="flex-shrink-0">
-                                        <i class="fi fi-rr-document text-2xl text-accent"></i>
+                                        <i class="text-2xl fi fi-rr-document text-accent"></i>
                                     </div>
                                     <div>
                                         <p class="text-sm font-medium text-gray-900">
@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
                                 <a href="{{ asset($announcement->file_dir) }}" class="btn btn-sm btn-accent" download>
-                                    <i class="fi fi-rr-download mr-2"></i>
+                                    <i class="mr-2 fi fi-rr-download"></i>
                                     Download
                                 </a>
                             </div>
@@ -114,13 +114,15 @@
         </div>
 
         <!-- Comments Section -->
-        <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 class="text-lg font-bold mb-6">Comments</h3>
+        <div class="p-6 mt-8 bg-white rounded-lg shadow-lg">
+            <h3 class="mb-6 text-lg font-bold">Comments</h3>
 
             <!-- Comments List -->
             <div class="space-y-6">
                 @forelse($announcement->comments->sortByDesc('created_at') as $comment)
-                    <div class="flex space-x-4">
+
+                    <x-commentThread :comment="$comment" :url="route('teacher.announcements.comments.reply', ['comment' => $comment->id])" :deleteUrl="route('teacher.announcements.comments.destroy', ['comment' => $comment->id])" />
+                    {{-- <div class="flex space-x-4">
                         <div class="flex-shrink-0">
                             <div class="avatar">
                                 <div class="w-10 h-10 rounded-full">
@@ -130,7 +132,7 @@
                             </div>
                         </div>
                         <div class="flex-grow">
-                            <div class="flex items-center justify-between">
+                            <div class="flex justify-between items-center">
                                 <div>
                                     <h4 class="font-medium">{{ $comment->user->name }}</h4>
                                     <p class="text-xs text-gray-500">
@@ -153,10 +155,10 @@
                                 {{ $comment->content }}
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 @empty
-                    <div class="text-center py-8 text-gray-500">
-                        <i class="fi fi-rr-comment-alt text-3xl mb-2"></i>
+                    <div class="py-8 text-center text-gray-500">
+                        <i class="mb-2 text-3xl fi fi-rr-comment-alt"></i>
                         <p>No comments yet</p>
                     </div>
                 @endforelse
@@ -170,7 +172,7 @@
                 @csrf
                 <div class="form-control">
                     <label class="label">
-                        <span class="label-text font-medium">Add a comment</span>
+                        <span class="font-medium label-text">Add a comment</span>
                     </label>
                     <textarea name="content"
                              class="textarea textarea-bordered min-h-[100px] w-full @error('content') textarea-error @enderror"
@@ -181,9 +183,9 @@
                         </label>
                     @enderror
                 </div>
-                <div class="mt-4 flex justify-end">
+                <div class="flex justify-end mt-4">
                     <button type="submit" class="btn btn-accent">
-                        <i class="fi fi-rr-comment mr-2"></i>
+                        <i class="mr-2 fi fi-rr-comment"></i>
                         Post Comment
                     </button>
                 </div>

@@ -1,8 +1,8 @@
 <x-dashboard.hr.base>
-    <div class="container mx-auto p-6">
+    <div class="container p-6 mx-auto">
         <!-- Header -->
         <div class="mb-6">
-            <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
+            <div class="flex gap-2 items-center mb-2 text-sm text-gray-600">
                 <a href="{{ route('hr.dashboard') }}" class="hover:text-accent">Dashboard</a>
                 <i class="fi fi-rr-angle-right"></i>
                 <a href="{{ route('hr.employees.index') }}" class="hover:text-accent">Employees</a>
@@ -21,16 +21,16 @@
                     <input type="hidden" name="applicant_id" value="{{ $applicant->id }}">
                 @endif
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <!-- Basic Information -->
                     <div class="md:col-span-2">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Basic Information</h2>
+                        <h2 class="mb-4 text-lg font-semibold text-gray-800">Basic Information</h2>
                     </div>
 
                     <!-- First Name -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">First Name</span>
+                            <span class="font-medium label-text">First Name</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <input type="text" name="first_name"
@@ -46,7 +46,7 @@
                     <!-- Last Name -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Last Name</span>
+                            <span class="font-medium label-text">Last Name</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <input type="text" name="last_name"
@@ -62,7 +62,7 @@
                     <!-- Email -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Email Address</span>
+                            <span class="font-medium label-text">Email Address</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <input type="email" name="email"
@@ -78,7 +78,7 @@
                     <!-- Phone -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Phone Number</span>
+                            <span class="font-medium label-text">Phone Number</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <input type="tel" name="phone"
@@ -92,14 +92,14 @@
                     </div>
 
                     <!-- Employment Details -->
-                    <div class="md:col-span-2 border-t pt-6 mt-2">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Employment Details</h2>
+                    <div class="pt-6 mt-2 border-t md:col-span-2">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-800">Employment Details</h2>
                     </div>
 
                     <!-- Position -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Position</span>
+                            <span class="font-medium label-text">Position</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <select name="job_position_id"
@@ -122,7 +122,7 @@
                     <!-- Salary -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Salary</span>
+                            <span class="font-medium label-text">Salary</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <input type="number" name="salary"
@@ -135,15 +135,32 @@
                         @enderror
                     </div>
 
+
+                    <!-- Leave Credit -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="font-medium label-text">Leave Credit</span>
+                            <span class="label-text-alt text-error">*</span>
+                        </label>
+                        <input type="number" name="leave_credit"
+                            class="input input-bordered @error('leave_credit') input-error @enderror"
+                            value="{{ old('leave_credit') }}" required>
+                        @error('leave_credit')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+
                     <!-- Personal Details -->
-                    <div class="md:col-span-2 border-t pt-6 mt-2">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Personal Details</h2>
+                    <div class="pt-6 mt-2 border-t md:col-span-2">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-800">Personal Details</h2>
                     </div>
 
                     <!-- Date of Birth -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Date of Birth</span>
+                            <span class="font-medium label-text">Date of Birth</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <input type="date" name="date_of_birth"
@@ -159,7 +176,7 @@
                     <!-- Photo -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium">Photo</span>
+                            <span class="font-medium label-text">Photo</span>
                         </label>
                         <input type="file" name="photo"
                             class="file-input file-input-bordered @error('photo') file-input-error @enderror"
@@ -175,7 +192,7 @@
                     <div class="md:col-span-2">
                         <div class="form-control">
                             <label class="label">
-                                <span class="label-text font-medium">Address</span>
+                                <span class="font-medium label-text">Address</span>
                                 <span class="label-text-alt text-error">*</span>
                             </label>
                             <textarea name="address" class="textarea textarea-bordered h-20 @error('address') textarea-error @enderror" required>{{ old('address') }}</textarea>
@@ -188,7 +205,7 @@
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="md:col-span-2 flex items-center justify-end gap-3 mt-6 pt-6 border-t">
+                    <div class="flex gap-3 justify-end items-center pt-6 mt-6 border-t md:col-span-2">
                         <a href="{{ url()->previous() }}" class="btn btn-ghost">Cancel</a>
                         <button type="submit" class="btn btn-accent">Create Employee</button>
                     </div>

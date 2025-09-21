@@ -217,6 +217,7 @@ Route::middleware(['auth'])->group(function () {
                         Route::get('remove-file', [AnnouncementController::class, 'removeFile'])->name('remove-file');
                         Route::post('{announcement}/comments', [AnnouncementController::class, 'storeComment'])->name('comments.store');
                         Route::delete('comments/{comment}', [AnnouncementController::class, 'destroyComment'])->name('comments.destroy');
+                        Route::post('comments/{comment}/replies', [AnnouncementController::class, 'replyComment'])->name('comments.reply');
                     });
 
                 Route::resource('classrooms', ClassroomController::class);
@@ -287,6 +288,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('', action: [StudentTasksController::class, 'index'])->name('index');
                     Route::get('{id}', action: [StudentTasksController::class, 'show'])->name('show');
                     Route::post('{id}/submit', action: [StudentTasksController::class, 'submitTask'])->name('submit');
+                    Route::post('{id}/unsubmit', action: [StudentTasksController::class, 'unsubmitTask'])->name('unsubmit');
                 });
 
             Route::prefix('settings')
@@ -303,6 +305,7 @@ Route::middleware(['auth'])->group(function () {
                 ->group(function () {
                     Route::post('{announcement}/comments', [StudentAnnouncementController::class, 'storeComment'])->name('comments.store');
                     Route::delete('comments/{comment}', [StudentAnnouncementController::class, 'destroyComment'])->name('comments.destroy');
+                    Route::post('comments/{comment}/replies', [StudentAnnouncementController::class, 'replyComment'])->name('comments.reply');
                 });
 
             Route::prefix('attendances')->as('attendances.')->group(function () {
@@ -368,6 +371,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('', [EmployeeAttendanceController::class, 'index'])->name('index');
             Route::post('check-in', [EmployeeAttendanceController::class, 'checkIn'])->name('check-in');
             Route::post('check-out', [EmployeeAttendanceController::class, 'checkOut'])->name('check-out');
+            Route::get('print', [EmployeeAttendanceController::class, 'printAttendance'])->name('print');
         });
 
         Route::prefix('leaves')->as('leaves.')->group(function () {
