@@ -31,10 +31,7 @@ Follow these steps to set up the project after cloning the repository.
 
 ### 1. Clone the Repository
 
-```sh
-git clone https://github.com/arielrecto/THEOS-MIS.git
-cd THEOS-MIS
-```
+
 
 ### 2. Install Composer Dependencies
 

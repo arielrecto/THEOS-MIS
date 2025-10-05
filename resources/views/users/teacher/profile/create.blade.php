@@ -1,35 +1,35 @@
 <x-dashboard.teacher.base>
-    <div class="panel flex flex-col gap-2">
-        <form action="{{route('teacher.profile.store')}}" method="post" class="w-full h-full min-h-96 flex flex-col gap-5" enctype="multipart/form-data">
+    <div class="flex flex-col gap-2 panel">
+        <form action="{{ route('teacher.profile.store') }}" method="post"
+            class="flex flex-col gap-5 w-full h-full min-h-96" enctype="multipart/form-data">
             <h1 class="form-title">Profile</h1>
             <p class="text-xs text-gray-500 whitespace-pre-line">
                 <span class="font-bold"> Note:</span> you must setup your profile before accessing the system this is
                 required for profiling of the users used in the system,
                 the system prevent you to access all features unless you finish setting up your profile.
             </p>
-            <h1 class="w-full bg-gray-100 p-2 font-semibold border-y border-gray-500">
+            <h1 class="p-2 w-full font-semibold bg-gray-100 border-gray-500 border-y">
                 Profile
             </h1>
             <p class="text-xs text-gray-500">Instructions: the field contain ("<span class="text-error">*</span>") is
                 required</p>
 
-                @csrf
+            @csrf
 
-            <div class="w-full flex justify-center" x-data="imageHandler">
+            <div class="flex justify-center w-full" x-data="imageHandler">
 
-                <template x-if="imageSrc !== null" >
+                <template x-if="imageSrc !== null">
 
                     <div class="w-1/2 h-auto">
-                        <img :src="imageSrc" alt="" srcset="" class="object-cover h-full w-full">
+                        <img :src="imageSrc" alt="" srcset="" class="object-cover w-full h-full">
                     </div>
 
                 </template>
-                <div class="flex items-center justify-center w-full" x-show="imageSrc === null">
+                <div class="flex justify-center items-center w-full" x-show="imageSrc === null">
                     <label for="dropzone-file"
-                        class="flex flex-col items-center justify-center w-full h-64 border-2
-                        border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500 " aria-hidden="true"
+                        class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-100">
+                        <div class="flex flex-col justify-center items-center pt-5 pb-6">
+                            <svg class="mb-4 w-8 h-8 text-gray-500" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2"
@@ -37,10 +37,11 @@
                             </svg>
                             <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click
                                     to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 ">JPG
+                            <p class="text-xs text-gray-500">JPG
                             </p>
                         </div>
-                        <input id="dropzone-file" type="file" @change="uploadHandler($event)" class="hidden" name="image" />
+                        <input id="dropzone-file" type="file" @change="uploadHandler($event)" class="hidden"
+                            name="image" />
                     </label>
                 </div>
 
@@ -72,7 +73,7 @@
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="" class="input-generic-label">sex <span class="text-error">*</span></label>
-                    <select name="sex" class="select select-accent w-full select-sm text-sm">
+                    <select name="sex" class="w-full text-sm select select-accent select-sm">
                         <option disabled selected>select sex</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -97,7 +98,8 @@
 
             <div class="flex flex-col gap-2">
                 <label for="" class="input-generic-label">Contact Number(optional)</label>
-                <input type="text" name="contact_no" class="input-generic max-w-lg">
+                <input type="text" name="contact_no" class="max-w-lg input-generic" maxlength="11"
+                    inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
             <button class="btn btn-sm btn-accent">Submit</button>
         </form>

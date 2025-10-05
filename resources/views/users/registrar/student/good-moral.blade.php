@@ -48,7 +48,8 @@
     <div class="certificate">
         <img src="{{ asset('logo-modified.png') }}" alt="School Logo" class="school-logo">
         <h1 class="text-xl font-bold">Theos Higher Ground Academe</h1>
-        <p>Daang Amaya III, Tanza, Cavite</p>
+        <p>Fairgrounds, Imus City,
+Cavite.</p>
 
         <h2 class="text-2xl font-bold mt-12 mb-8">CERTIFICATE OF GOOD MORAL CHARACTER</h2>
 

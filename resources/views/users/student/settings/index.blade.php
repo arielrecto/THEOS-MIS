@@ -56,13 +56,13 @@
                             @enderror
                         </div>
 
-                        <div class="col-span-2">
+                        {{-- <div class="col-span-2">
                             <label class="block text-sm font-medium text-gray-700">Address</label>
                             <textarea name="address" class="mt-1 w-full textarea textarea-bordered" rows="3" required>{{ old('address', $student->studentProfile->address) }}</textarea>
                             @error('address')
                                 <p class="mt-1 text-sm text-error">{{ $message }}</p>
                             @enderror
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="flex justify-end">

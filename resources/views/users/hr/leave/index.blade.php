@@ -89,10 +89,8 @@
                 </div>
             </div>
 
-            <div x-data="leaveCalendar"
-                 x-ref="calendar"
-                 data-events='@json($calendarEvents)'
-                 class="min-h-[600px]">
+            <div x-data="leaveCalendar" x-ref="calendar" data-events='@json($calendarEvents)'
+                class="min-h-[600px]">
             </div>
         </div>
 
@@ -185,10 +183,11 @@
                                 </td>
                                 <td>{{ ucfirst($request->type) }}</td>
                                 <td>
-                                    {{ date('M d, Y', strtotime(' $request->start_date'))  }} -
+                                    {{ date('M d, Y', strtotime( $request->start_date)) }} -
                                     {{ date('M d, Y', strtotime($request->end_date)) }}
                                     <div class="text-sm text-gray-500">
-                                        {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }} days
+                                        {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }}
+                                        days
                                     </div>
                                 </td>
                                 <td>
@@ -224,9 +223,60 @@
                                             </form>
                                         </div>
                                     @else
-                                        <a href="#" class="btn btn-ghost btn-sm">
-                                            View Details
-                                        </a>
+                                        <div x-data="{ requestData: {} }">
+
+                                            <button
+                                                @click="
+            requestData = {
+                name: '  {{ $request->employee->first_name }} {{ $request->employee->last_name }}',
+
+                duration: ' {{ date('M d, Y', strtotime( $request->start_date)) }} - {{ date('M d, Y', strtotime($request->end_date)) }}',
+                reason: '{{ addslashes($request->reason) }}',
+                status: '{{ ucfirst($request->status) }}'
+            };
+            leave_details_modal.showModal();
+        "
+                                                class="btn btn-ghost btn-sm">
+                                                View Details
+                                            </button>
+                                            <dialog id="leave_details_modal" class="modal">
+                                                <div class="modal-box">
+                                                    <h3 class="font-bold text-lg mb-4">Leave Request Details</h3>
+                                                    <div class="space-y-3">
+                                                        <div>
+                                                            <span class="text-sm text-gray-600">Employee:</span>
+                                                            <span class="font-medium"
+                                                                x-text="requestData.name"></span>
+                                                        </div>
+                                                        {{-- <div>
+                                                            <span class="text-sm text-gray-600">Leave Type:</span>
+                                                            <span class="font-medium"
+                                                                x-text="requestData.leaveType"></span>
+                                                        </div> --}}
+                                                        <div>
+                                                            <span class="text-sm text-gray-600">Duration:</span>
+                                                            <span class="font-medium"
+                                                                x-text="requestData.duration"></span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-sm text-gray-600">Reason:</span>
+                                                            <p class="mt-1" x-text="requestData.reason"></p>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-sm text-gray-600">Status:</span>
+                                                            <span class="font-medium"
+                                                                x-text="requestData.status"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-action">
+                                                        <form method="dialog">
+                                                            <button class="btn">Close</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </dialog>
+
+                                        </div>
                                     @endif
                                 </td>
                             </tr>
@@ -246,37 +296,5 @@
         </div>
     </div>
 
-    <!-- Leave Details Modal -->
-    <dialog id="leave-details-modal" class="modal">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Leave Request Details</h3>
-            <div class="space-y-3">
-                <div>
-                    <span class="text-sm text-gray-600">Employee:</span>
-                    <span class="font-medium employee-name"></span>
-                </div>
-                <div>
-                    <span class="text-sm text-gray-600">Leave Type:</span>
-                    <span class="font-medium leave-type"></span>
-                </div>
-                <div>
-                    <span class="text-sm text-gray-600">Duration:</span>
-                    <span class="font-medium leave-duration"></span>
-                </div>
-                <div>
-                    <span class="text-sm text-gray-600">Reason:</span>
-                    <p class="mt-1 leave-reason"></p>
-                </div>
-                <div>
-                    <span class="text-sm text-gray-600">Status:</span>
-                    <span class="leave-status"></span>
-                </div>
-            </div>
-            <div class="modal-action">
-                <form method="dialog">
-                    <button class="btn">Close</button>
-                </form>
-            </div>
-        </div>
-    </dialog>
+
 </x-dashboard.hr.base>

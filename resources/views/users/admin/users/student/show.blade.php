@@ -8,7 +8,7 @@
             <div class="flex flex-col gap-2 w-1/3 h-full border-r-2 border-gray-100">
                 <div class="flex justify-center">
                     <div class="flex flex-col gap-2 items-center">
-                        <img src="https://ui-avatars.com/api/?name=ariel+recto" class="w-32 h-32 rounded-full" />
+                        <img src="https://ui-avatars.com/api/?name={{$student->name}}" class="w-32 h-32 rounded-full" />
                         <h1 class="text-lg font-bold tracking-widest capitalize">{{ $student->name }}</h1>
                         <a href="#" class="text-sm text-blue-700 underline">Edit</a>
                     </div>

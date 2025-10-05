@@ -83,7 +83,8 @@
                  alt="Theos Higher Ground Academe Logo"
                  class="school-logo">
             <h1 class="text-xl font-bold">Theos Higher Ground Academe</h1>
-            <p>Daang Amaya III, Tanza, Cavite</p>
+            <p>Fairgrounds, Imus City,
+Cavite.</p>
             <h2 class="text-lg font-bold mt-4">STUDENT REPORT CARD</h2>
             <p class="text-sm">Academic Year {{ $academicRecord->academicYear->name }}</p>
         </div>

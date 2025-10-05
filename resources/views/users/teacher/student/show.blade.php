@@ -5,7 +5,7 @@
     <div class="grid grid-cols-12 gap-6">
         <!-- Student Profile Card -->
         <div class="col-span-12 md:col-span-4">
-            <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="p-6 bg-white rounded-lg shadow-lg">
                 <div class="flex flex-col items-center">
                     <div class="avatar">
                         <div class="w-32 h-32 rounded-full">
@@ -16,12 +16,12 @@
                     <h2 class="mt-4 text-xl font-bold">{{ $student->name }}</h2>
                     <p class="text-gray-500">{{ $student->email }}</p>
                     <div class="mt-4 w-full">
-                        <div class="stats stats-vertical w-full">
-                            <div class="stat">
+                        <div class="w-full stats stats-vertical">
+                            {{-- <div class="stat">
                                 <div class="stat-title">Attendance Rate</div>
                                 <div class="stat-value text-accent">{{ number_format($attendanceRate, 1) }}%</div>
                                 <div class="stat-desc">Last 30 days</div>
-                            </div>
+                            </div> --}}
                             <div class="stat">
                                 <div class="stat-title">Tasks Completed</div>
                                 <div class="stat-value text-accent">{{ $completedTasks }}/{{ $totalTasks }}</div>
@@ -42,8 +42,8 @@
         <div class="col-span-12 md:col-span-8">
             <div class="grid gap-6">
                 <!-- Tasks Overview -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-lg font-bold mb-4">Recent Tasks</h3>
+                <div class="p-6 bg-white rounded-lg shadow-lg">
+                    <h3 class="mb-4 text-lg font-bold">Recent Tasks</h3>
                     <div class="overflow-x-auto">
                         <table class="table w-full">
                             <thead>
@@ -74,7 +74,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-4">No tasks found</td>
+                                        <td colspan="4" class="py-4 text-center">No tasks found</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -83,7 +83,7 @@
                 </div>
 
                 <!-- Attendance Log -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                {{-- <div class="p-6 bg-white rounded-lg shadow-lg">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-bold">Attendance History</h3>
                         <div class="flex gap-2">
@@ -115,13 +115,13 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center py-4">No attendance records found</td>
+                                        <td colspan="4" class="py-4 text-center">No attendance records found</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

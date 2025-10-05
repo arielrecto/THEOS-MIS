@@ -93,17 +93,21 @@
                                             <i class="fi fi-rr-eye mr-2"></i>
                                             {{ __('View') }}
                                         </a>
-                                        <a href="{{ route('teacher.announcements.edit', ['announcement' => $announcement->id, 'type' => 'general']) }}"
-                                            class="btn btn-sm btn-outline btn-warning">
-                                            <i class="fi fi-rr-edit mr-2"></i>
-                                            {{ __('Edit') }}
-                                        </a>
-                                        <button type="button"
-                                            onclick="confirmDelete('{{ $announcement->id }}', 'general')"
-                                            class="btn btn-sm btn-outline btn-error">
-                                            <i class="fi fi-rr-trash mr-2"></i>
-                                            {{ __('Delete') }}
-                                        </button>
+
+                                        @if ($announcement->posted_by === auth()->id())
+                                            <a href="{{ route('teacher.announcements.edit', ['announcement' => $announcement->id, 'type' => 'general']) }}"
+                                                class="btn btn-sm btn-outline btn-warning">
+                                                <i class="fi fi-rr-edit mr-2"></i>
+                                                {{ __('Edit') }}
+                                            </a>
+                                            <button type="button"
+                                                onclick="confirmDelete('{{ $announcement->id }}', 'general')"
+                                                class="btn btn-sm btn-outline btn-error">
+                                                <i class="fi fi-rr-trash mr-2"></i>
+                                                {{ __('Delete') }}
+                                            </button>
+                                        @endif
+
                                     </div>
                                 </td>
                             </tr>

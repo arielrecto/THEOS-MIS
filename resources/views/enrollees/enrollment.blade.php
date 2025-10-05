@@ -107,7 +107,7 @@
                 <!-- Contact Support -->
                 <div class="mt-8 text-center text-gray-600">
                     <p>Need assistance? Contact our admissions office:</p>
-                    <p class="font-medium">(046) 123-4567 | admissions@sta.edu.ph</p>
+                    <p class="font-medium">0917547 5374 | admissions@sta.edu.ph</p>
                 </div>
             </div>
         </div>

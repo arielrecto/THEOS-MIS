@@ -12,10 +12,10 @@
                         <i class="fi fi-rr-print"></i>
                         Print Report
                     </button> --}}
-                    <a href="#" class="btn btn-accent btn-sm gap-2">
+                    {{-- <a href="#" class="btn btn-accent btn-sm gap-2">
                         <i class="fi fi-rr-download"></i>
                         Export
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         </div>

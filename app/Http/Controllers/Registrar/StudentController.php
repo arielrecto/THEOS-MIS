@@ -25,8 +25,10 @@ class StudentController extends Controller
                 },
             ])
             ->when($request->academic_year, function ($query) use ($request) {
-                $query->whereHas('academicRecords', function ($q) use ($request) {
-                    $q->where('academic_year_id', $request->academic_year);
+                $query->whereHas('studentProfile', function ($q) use ($request) {
+                    $q->whereHas('academicRecords', function ($q) use ($request) {
+                        $q->where('academic_year_id', $request->academic_year);
+                    });
                 });
             })
             ->orderBy('name')
@@ -40,11 +42,11 @@ class StudentController extends Controller
         $student = User::role('student')
             ->with([
                 'studentProfile',
-                'studentProfile.academicRecords' => function($query) use ($request) {
-                    $query->when($request->academic_year, function($q) use ($request) {
+                'studentProfile.academicRecords' => function ($query) use ($request) {
+                    $query->when($request->academic_year, function ($q) use ($request) {
                         $q->where('academic_year_id', $request->academic_year);
                     })
-                    ->orderBy('grade_level', 'desc');
+                        ->orderBy('grade_level', 'desc');
                 },
                 'studentProfile.academicRecords.academicYear',
                 'studentProfile.academicRecords.grades'
@@ -62,7 +64,7 @@ class StudentController extends Controller
 
         $academicRecord = AcademicRecord::with([
             'academicYear',
-            'grades' => function($query) {
+            'grades' => function ($query) {
                 $query->orderBy('subject')->orderBy('quarter');
             }
         ])->findOrFail($academicRecordId);
@@ -81,10 +83,10 @@ class StudentController extends Controller
     public function printForm137(string $id)
     {
         $student = User::with([
-            'studentProfile' => function($query) {
+            'studentProfile' => function ($query) {
                 $query->with([
-                    'academicRecords' => function($q) {
-                        $q->with(['academicYear', 'grades' => function($query) {
+                    'academicRecords' => function ($q) {
+                        $q->with(['academicYear', 'grades' => function ($query) {
                             $query->orderBy('subject')->orderBy('quarter');
                         }]);
                     },

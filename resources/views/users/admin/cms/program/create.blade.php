@@ -1,13 +1,13 @@
 <x-dashboard.admin.base>
-    <div class="container mx-auto p-6">
+    <div class="container p-6 mx-auto">
         <!-- Header -->
         <div class="mb-6">
-            <div class="flex items-center justify-between">
+            <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">Add Academic Program</h1>
                     <p class="text-gray-600">Create a new academic program</p>
                 </div>
-                <a href="{{ route('admin.CMS.programs.index') }}" class="btn btn-ghost gap-2">
+                <a href="{{ route('admin.CMS.programs.index') }}" class="gap-2 btn btn-ghost">
                     <i class="fi fi-rr-arrow-left"></i>
                     Back to Programs
                 </a>
@@ -15,8 +15,8 @@
         </div>
 
         <!-- Form -->
-        <div class="max-w-2xl mx-auto">
-            <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="mx-auto max-w-2xl">
+            <div class="p-6 bg-white rounded-lg shadow-sm">
                 <form action="{{ route('admin.CMS.programs.store') }}"
                       method="POST"
                       enctype="multipart/form-data"
@@ -45,8 +45,8 @@
                             <option value="">Select a category</option>
                             <option value="Pre-School" {{ old('category') === 'Pre-School' ? 'selected' : '' }}>Pre-School</option>
                             <option value="Elementary" {{ old('category') === 'Elementary' ? 'selected' : '' }}>Elementary</option>
-                            <option value="Junior High School" {{ old('category') === 'Junior High School' ? 'selected' : '' }}>Junior High School</option>
-                            <option value="Senior High School" {{ old('category') === 'Senior High School' ? 'selected' : '' }}>Senior High School</option>
+                            {{-- <option value="Junior High School" {{ old('category') === 'Junior High School' ? 'selected' : '' }}>Junior High School</option> --}}
+                            {{-- <option value="Senior High School" {{ old('category') === 'Senior High School' ? 'selected' : '' }}>Senior High School</option> --}}
                             @for($i = 1; $i <= 10; $i++)
                                 <option value="Grade {{ $i }}" {{ old('category') === "Grade $i" ? 'selected' : '' }}>Grade {{ $i }}</option>
                             @endfor
