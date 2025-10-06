@@ -26,7 +26,6 @@ class DashboardController extends Controller
 
         $announcements = GeneralAnnouncement::with(['postedBy', 'attachments'])
             ->withCount('attachments')
-            ->where('is_published', true)
             ->where(function($query) {
                 $query->where('expires_at', '>', now())
                       ->orWhereNull('expires_at');
