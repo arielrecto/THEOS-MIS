@@ -7,21 +7,21 @@
     @vite(['resources/css/app.css'])
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto p-6 print:p-0">
+    <div class="container p-6 mx-auto print:p-0">
         <!-- Report Controls (hidden in print) -->
         <div class="mb-6 print:hidden">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('hr.dashboard') }}" class="btn btn-ghost btn-sm gap-2">
+            <div class="flex justify-between items-center">
+                <div class="flex gap-4 items-center">
+                    <a href="{{ route('hr.dashboard') }}" class="gap-2 btn btn-ghost btn-sm">
                         <i class="fi fi-rr-arrow-left"></i>
                         Back
                     </a>
-                    <button class="btn btn-primary btn-sm gap-2" onclick="window.print()">
+                    <button class="gap-2 btn btn-primary btn-sm" onclick="window.print()">
                         <i class="fi fi-rr-print"></i>
                         Print Report
                     </button>
                     <form class="flex gap-4">
-                        <select name="department_id" class="select text-xs select-bordered select-sm">
+                        <select name="department_id" class="text-xs select select-bordered select-sm">
                             <option value="">All Departments</option>
                             @foreach($departments as $department)
                                 <option value="{{ $department->id }}"
@@ -30,7 +30,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <select name="status" class="select text-xs select-bordered select-sm">
+                        <select name="status" class="text-xs select select-bordered select-sm">
                             <option value="">All Status</option>
                             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending Review</option>
                             <option value="shortlisted" {{ request('status') === 'shortlisted' ? 'selected' : '' }}>Shortlisted</option>
@@ -49,11 +49,11 @@
         </div>
 
         <!-- Formal Report -->
-        <div class="bg-white rounded-lg shadow-sm p-8 print:p-0 print:shadow-none">
+        <div class="p-8 bg-white rounded-lg shadow-sm print:p-0 print:shadow-none">
             <!-- Report Header -->
-            <div class="text-center mb-8">
-                <h1 class="text-2xl font-bold mb-2">RECRUITMENT REPORT</h1>
-                <div class="text-sm text-gray-600 space-y-1">
+            <div class="mb-8 text-center">
+                <h1 class="mb-2 text-2xl font-bold">RECRUITMENT REPORT</h1>
+                <div class="space-y-1 text-sm text-gray-600">
                     <p class="font-semibold">{{ config('app.name') }}</p>
                     <p>Period: {{ request('start_date', now()->startOfMonth()->format('F d, Y')) }}
                        to {{ request('end_date', now()->format('F d, Y')) }}</p>
@@ -67,7 +67,7 @@
 
             <!-- Summary Section -->
             <div class="mb-8">
-                <h2 class="text-lg font-semibold mb-4 border-b pb-2">RECRUITMENT SUMMARY</h2>
+                <h2 class="pb-2 mb-4 text-lg font-semibold border-b">RECRUITMENT SUMMARY</h2>
                 <div class="grid grid-cols-2 gap-6">
                     <div>
                         <table class="min-w-full">
@@ -110,7 +110,7 @@
 
             <!-- Detailed Records -->
             <div>
-                <h2 class="text-lg font-semibold mb-4 border-b pb-2">APPLICATION DETAILS</h2>
+                <h2 class="pb-2 mb-4 text-lg font-semibold border-b">APPLICATION DETAILS</h2>
                 <table class="min-w-full text-sm">
                     <thead>
                         <tr class="border-b">
@@ -148,21 +148,21 @@
             </div>
 
             <!-- Signatory Section -->
-            <div class="mt-16 grid grid-cols-3 gap-8">
+            <div class="grid grid-cols-3 gap-8 mt-16">
                 <div class="text-center">
-                    <div class="border-t border-gray-300 pt-2">
+                    <div class="pt-2 border-t border-gray-300">
                         <p class="font-medium">Prepared by</p>
                         <p class="text-sm text-gray-600">HR Recruitment Officer</p>
                     </div>
                 </div>
                 <div class="text-center">
-                    <div class="border-t border-gray-300 pt-2">
+                    <div class="pt-2 border-t border-gray-300">
                         <p class="font-medium">Reviewed by</p>
-                        <p class="text-sm text-gray-600">HR Manager</p>
+                        <p class="text-sm text-gray-600 capitalize">{{ App\Models\User::first()->name }} Manager</p>
                     </div>
                 </div>
                 <div class="text-center">
-                    <div class="border-t border-gray-300 pt-2">
+                    <div class="pt-2 border-t border-gray-300">
                         <p class="font-medium">Approved by</p>
                         <p class="text-sm text-gray-600">Director</p>
                     </div>
@@ -170,7 +170,7 @@
             </div>
 
             <!-- Report Footer -->
-            <div class="mt-8 pt-8 border-t text-sm">
+            <div class="pt-8 mt-8 text-sm border-t">
                 <div class="flex justify-between">
                     <div>
                         <p>Generated by: {{ auth()->user()->name }}</p>

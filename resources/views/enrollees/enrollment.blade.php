@@ -1,25 +1,25 @@
 <x-landing-page.base>
-    <div class="min-h-screen bg-gray-50 py-12">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto">
+    <div class="py-12 min-h-screen bg-gray-50">
+        <div class="container px-4 mx-auto">
+            <div class="mx-auto max-w-4xl">
                 <!-- Header Section -->
-                <div class="text-center mb-8">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Enrollment Now Open</h1>
+                <div class="mb-8 text-center">
+                    <h1 class="mb-4 text-4xl font-bold text-gray-900">Enrollment Now Open</h1>
                     <p class="text-lg text-gray-600">Theos Higher Ground Academe. welcomes new students for the upcoming academic year</p>
                 </div>
 
                 <!-- Main Content -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="overflow-hidden bg-white rounded-2xl shadow-lg">
                     <!-- Enrollment Status Banner -->
-                    <div class="bg-accent/10 px-6 py-4 border-b">
-                        <div class="flex items-center justify-between">
+                    <div class="px-6 py-4 border-b bg-accent/10">
+                        <div class="flex justify-between items-center">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800">
                                     Academic Year {{ date('Y', strtotime($enrollment->academicYear->start_date)) }} - {{ date('Y', strtotime($enrollment->academicYear->end_date)) }}
                                 </h2>
-                                <p class="text-gray-600 mt-1">Secure your child's future with quality Christian education</p>
+                                <p class="mt-1 text-gray-600">Secure your child's future with quality Christian education</p>
                             </div>
-                            <span class="px-4 py-2 bg-green-500 text-white rounded-full text-sm font-medium">
+                            <span class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-full">
                                 Enrollment Active
                             </span>
                         </div>
@@ -27,27 +27,27 @@
 
                     <!-- Enrollment Details -->
                     <div class="p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-2">
                             <div class="space-y-2">
                                 <h3 class="text-sm font-medium text-gray-500">Enrollment Period</h3>
                                 <div class="flex items-center text-gray-800">
-                                    <i class="fi fi-rr-calendar mr-2 text-accent"></i>
+                                    <i class="mr-2 fi fi-rr-calendar text-accent"></i>
                                     <span>{{ date('F d', strtotime($enrollment->start_date)) }} - {{ date('F d, Y', strtotime($enrollment->end_date)) }}</span>
                                 </div>
                             </div>
                             <div class="space-y-2">
                                 <h3 class="text-sm font-medium text-gray-500">Available Programs</h3>
                                 <div class="flex items-center text-gray-800">
-                                    <i class="fi fi-rr-graduation-cap mr-2 text-accent"></i>
-                                    <span>Elementary to Senior High School</span>
+                                    <i class="mr-2 fi fi-rr-graduation-cap text-accent"></i>
+                                    <span>Elementary to Grade 10</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Description -->
-                        <div class="bg-gray-50 rounded-xl p-6 mb-8">
-                            <h3 class="text-sm font-medium text-gray-500 mb-3">Important Information</h3>
-                            <div class="prose prose-sm max-w-none text-gray-600">
+                        <div class="p-6 mb-8 bg-gray-50 rounded-xl">
+                            <h3 class="mb-3 text-sm font-medium text-gray-500">Important Information</h3>
+                            <div class="max-w-none text-gray-600 prose prose-sm">
                                 {{ $enrollment->description }}
                             </div>
                         </div>
@@ -55,34 +55,34 @@
                         <!-- Requirements Section -->
                         <div class="flex justify-between">
                             <div class="mb-8">
-                                <h3 class="text-sm font-medium text-gray-500 mb-3">New/Transferee</h3>
+                                <h3 class="mb-3 text-sm font-medium text-gray-500">New/Transferee</h3>
 
-                                <h3 class="text-sm font-medium text-gray-500 mb-3">Requirements</h3>
+                                <h3 class="mb-3 text-sm font-medium text-gray-500">Requirements</h3>
                                 <ul class="space-y-2">
                                     <li class="flex items-start">
-                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <i class="mt-1 mr-2 fi fi-rr-check text-accent"></i>
                                         <span class="text-gray-600">Birth Certificate (PSA/NSO)</span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <i class="mt-1 mr-2 fi fi-rr-check text-accent"></i>
                                         <span class="text-gray-600">Report Card from previous school</span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <i class="mt-1 mr-2 fi fi-rr-check text-accent"></i>
                                         <span class="text-gray-600">2x2 ID Picture (4 pieces)</span>
                                     </li>
                                     <li class="flex items-start">
-                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <i class="mt-1 mr-2 fi fi-rr-check text-accent"></i>
                                         <span class="text-gray-600">Good Moral Certificate</span>
                                     </li>
                                 </ul>
                             </div>
                             <div class="mb-8">
 
-                                <h3 class="text-sm font-medium text-gray-500 mb-3">Old Student Requirements:</h3>
+                                <h3 class="mb-3 text-sm font-medium text-gray-500">Old Student Requirements:</h3>
                                 <ul class="space-y-2">
                                     <li class="flex items-start">
-                                        <i class="fi fi-rr-check text-accent mt-1 mr-2"></i>
+                                        <i class="mt-1 mr-2 fi fi-rr-check text-accent"></i>
                                         <span class="text-gray-600">Grade Report Card</span>
                                     </li>
 
@@ -94,9 +94,9 @@
 
                         <!-- Action Section -->
                         <div class="text-center">
-                            <p class="text-gray-600 mb-4">Ready to begin your journey with Theos Higher Ground Academe?</p>
+                            <p class="mb-4 text-gray-600">Ready to begin your journey with Theos Higher Ground Academe?</p>
                             <a href="{{ route('enrollment.form', ['enrollment' => $enrollment->id]) }}"
-                               class="btn btn-accent btn-lg gap-2">
+                               class="gap-2 btn btn-accent btn-lg">
                                 <i class="fi fi-rr-edit"></i>
                                 Start Enrollment Process
                             </a>

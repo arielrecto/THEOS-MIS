@@ -70,7 +70,7 @@
             <div class="p-6 bg-white rounded-lg shadow-lg">
                 <i class="fi fi-rr-heart text-4xl text-accent mb-4"></i>
                 <h3 class="text-xl font-bold mb-3">Christian Values</h3>
-                <p class="text-gray-600">Formation of character guided by Catholic teachings and moral principles</p>
+                <p class="text-gray-600">Formation of character guided by Christian teachings and moral principles</p>
             </div>
             <div class="p-6 bg-white rounded-lg shadow-lg">
                 <i class="fi fi-rr-users text-4xl text-accent mb-4"></i>
