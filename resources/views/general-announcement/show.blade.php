@@ -44,7 +44,7 @@
                 @if ($announcement->image)
                     <div class="w-full h-96 relative cursor-pointer"
                         onclick="document.getElementById('image_preview_modal').showModal()">
-                        <img src="{{ $announcement->image }}" alt="{{ $announcement->title }}"
+                        <img src="{{ asset($announcement->image) }}" alt="{{ $announcement->title }}"
                             class="w-full h-full object-cover hover:opacity-95 transition-opacity">
                         <div
                             class="absolute inset-0 bg-black/0 hover:bg-black/10 flex items-center justify-center transition-colors">
