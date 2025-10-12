@@ -138,8 +138,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($announcements as $announcement)
             <div
+
+
                 class="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="{{  asset($announcement->image) ?? asset('images/announcement-default.jpg') }}"
+                <img src="{{ $announcement->image  }}"
                     alt="Announcement Image" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $announcement->title }}</h3>
