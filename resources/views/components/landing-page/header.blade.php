@@ -141,7 +141,7 @@
 
 
                 class="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="{{ $announcement->image  }}"
+                <img src="{{ asset($announcement->image)  }}"
                     alt="Announcement Image" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $announcement->title }}</h3>
