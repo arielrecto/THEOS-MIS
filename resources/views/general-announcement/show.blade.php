@@ -42,9 +42,14 @@
             {{-- Main Content --}}
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                 @if ($announcement->image)
-                    <div class="w-full h-96 relative">
+                    <div class="w-full h-96 relative cursor-pointer"
+                        onclick="document.getElementById('image_preview_modal').showModal()">
                         <img src="{{ $announcement->image }}" alt="{{ $announcement->title }}"
-                            class="w-full h-full object-cover">
+                            class="w-full h-full object-cover hover:opacity-95 transition-opacity">
+                        <div
+                            class="absolute inset-0 bg-black/0 hover:bg-black/10 flex items-center justify-center transition-colors">
+                            <i class="fi fi-rr-zoom-in text-white text-2xl opacity-0 hover:opacity-100"></i>
+                        </div>
                     </div>
                 @endif
 
@@ -123,4 +128,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Image Preview Modal -->
+    <dialog id="image_preview_modal" class="modal">
+        <div class="modal-box max-w-5xl h-auto p-0 bg-transparent shadow-none">
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white z-10">✕</button>
+            </form>
+            @if ($announcement->image)
+                <img src="{{ $announcement->image }}"
+                     alt="{{ $announcement->title }}"
+                     class="w-full h-auto max-h-[80vh] object-contain rounded-lg">
+            @endif
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 </x-landing-page.base>

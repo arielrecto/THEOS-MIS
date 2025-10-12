@@ -164,7 +164,7 @@
                 <div class="text-center">
                     <div class="pt-2 border-t border-gray-300">
                         <p class="font-medium">Approved by</p>
-                        <p class="text-sm text-gray-600">Director</p>
+                        <p class="text-sm text-gray-600">Administrator</p>
                     </div>
                 </div>
             </div>

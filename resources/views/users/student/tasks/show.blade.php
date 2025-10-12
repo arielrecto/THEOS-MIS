@@ -14,7 +14,8 @@
                         <h1 class="text-2xl font-bold text-gray-900">{{ $studentTask->task->name }}</h1>
                     </div>
                     <div class="flex flex-col gap-2 items-end">
-                        <div class="badge badge-lg {{ $studentTask->status === 'submitted' ? 'badge-success' : 'badge-warning' }}">
+                        <div
+                            class="badge badge-lg {{ $studentTask->status === 'submitted' ? 'badge-success' : 'badge-warning' }}">
                             {{ ucfirst($studentTask->status) }}
                         </div>
                         <div class="text-sm text-gray-500">
@@ -31,12 +32,14 @@
                     <div class="flex gap-2 items-center text-sm">
                         <i class="fi fi-rr-calendar text-accent"></i>
                         <span class="text-gray-600">Posted:</span>
-                        <span class="font-medium">{{ \Carbon\Carbon::parse($studentTask->task->created_at)->format('M d, Y') }}</span>
+                        <span
+                            class="font-medium">{{ \Carbon\Carbon::parse($studentTask->task->created_at)->format('M d, Y') }}</span>
                     </div>
                     <div class="flex gap-2 items-center text-sm">
                         <i class="fi fi-rr-hourglass-end text-accent"></i>
                         <span class="text-gray-600">Due:</span>
-                        <span class="font-medium">{{ \Carbon\Carbon::parse($studentTask->task->end_date)->format('M d, Y g:i A') }}</span>
+                        <span
+                            class="font-medium">{{ \Carbon\Carbon::parse($studentTask->task->end_date)->format('M d, Y g:i A') }}</span>
                     </div>
                 </div>
 
@@ -46,22 +49,24 @@
                 </div>
 
                 <!-- Task Attachments -->
-                @if($studentTask->task->attachments->count() > 0)
+                @if ($studentTask->task->attachments->count() > 0)
                     <div class="mb-8">
                         <h3 class="mb-3 text-sm font-medium text-gray-500">Task Materials</h3>
                         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2" x-data="generateThumbnail">
-                            @foreach($studentTask->task->attachments as $attachment)
-                                <div class="flex items-center p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
+                            @foreach ($studentTask->task->attachments as $attachment)
+                                <div
+                                    class="flex items-center p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
                                     <div class="flex flex-1 gap-3 items-center min-w-0">
-                                        <img :src="getThumbnail('{{ $attachment->extension }}')" class="w-8 h-8" alt="File icon">
+                                        <img :src="getThumbnail('{{ $attachment->extension }}')" class="w-8 h-8"
+                                            alt="File icon">
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">{{ $attachment->name }}</p>
+                                            <p class="text-sm font-medium text-gray-900 truncate">
+                                                {{ $attachment->name }}</p>
                                             {{-- <p class="text-xs text-gray-500">{{ human_filesize($attachment->size) }}</p> --}}
                                         </div>
                                     </div>
-                                    <a href="{{ asset($attachment->file_dir) }}"
-                                       class="gap-2 btn btn-ghost btn-sm"
-                                       download>
+                                    <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
+                                        download>
                                         <i class="fi fi-rr-download text-accent"></i>
                                     </a>
                                 </div>
@@ -71,23 +76,19 @@
                 @endif
 
                 <!-- Submission Section -->
-                @if($studentTask->status !== 'submitted')
+                @if ($studentTask->status !== 'submitted')
                     <div class="p-6 bg-white rounded-lg border">
                         <h3 class="mb-4 text-lg font-semibold">Your Work</h3>
-                        <form action="{{ route('student.tasks.submit', $studentTask->id) }}"
-                              method="POST"
-                              enctype="multipart/form-data"
-                              class="space-y-4">
+                        <form action="{{ route('student.tasks.submit', $studentTask->id) }}" method="POST"
+                            enctype="multipart/form-data" class="space-y-4">
                             @csrf
                             <div class="form-control">
                                 <label class="label">
                                     <span class="font-medium label-text">Add or Create</span>
                                 </label>
                                 <div class="flex gap-4 items-center">
-                                    <input type="file"
-                                           name="attachments[]"
-                                           multiple
-                                           class="w-full max-w-xs file-input file-input-bordered file-input-accent" />
+                                    <input type="file" name="attachments[]" multiple
+                                        class="w-full max-w-xs file-input file-input-bordered file-input-accent" />
                                     <button type="submit" class="btn btn-accent">
                                         <i class="mr-2 fi fi-rr-upload"></i>
                                         Turn in
@@ -105,18 +106,20 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2" x-data="generateThumbnail">
-                            @foreach($studentTask->attachments as $attachment)
-                                <div class="flex items-center p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
+                            @foreach ($studentTask->attachments as $attachment)
+                                <div
+                                    class="flex items-center p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
                                     <div class="flex flex-1 gap-3 items-center min-w-0">
-                                        <img :src="getThumbnail('{{ $attachment->extension }}')" class="w-8 h-8" alt="File icon">
+                                        <img :src="getThumbnail('{{ $attachment->extension }}')" class="w-8 h-8"
+                                            alt="File icon">
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">{{ $attachment->name }}</p>
+                                            <p class="text-sm font-medium text-gray-900 truncate">
+                                                {{ $attachment->name }}</p>
                                             {{-- <p class="text-xs text-gray-500">{{ human_filesize($attachment->size) }}</p> --}}
                                         </div>
                                     </div>
-                                    <a href="{{ asset($attachment->file_dir) }}"
-                                       class="gap-2 btn btn-ghost btn-sm"
-                                       download>
+                                    <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
+                                        download>
                                         <i class="fi fi-rr-download text-accent"></i>
                                     </a>
                                 </div>
@@ -131,5 +134,44 @@
                 @endif
             </div>
         </div>
+
+        <form action="{{ route('student.tasks.comments.store', $studentTask->id) }}" method="POST" class="mt-8">
+            @csrf
+            <div class="form-control">
+                <label class="label">
+                    <span class="font-medium label-text">Add a comment</span>
+                </label>
+                <input type="hidden" name="student_task_id" value="{{ $studentTask->id }}">
+                <textarea name="content"
+                    class="textarea textarea-bordered min-h-[100px] w-full @error('content') textarea-error @enderror"
+                    placeholder="Write your comment here..."></textarea>
+                @error('content')
+                    <label class="label">
+                        <span class="label-text-alt text-error">{{ $message }}</span>
+                    </label>
+                @enderror
+            </div>
+            <div class="flex justify-end mt-4">
+                <button type="submit" class="btn btn-accent">
+                    <i class="mr-2 fi fi-rr-comment"></i>
+                    Post Comment
+                </button>
+            </div>
+        </form>
+
+
+       
+        <div class="space-y-6">
+                @forelse($studentTask->comments->sortByDesc('created_at') as $comment)
+
+                <x-commentThread :comment="$comment" :url="route('student.tasks.comments.reply', $comment->id)" />
+                   
+                @empty
+                    <div class="py-8 text-center text-gray-500">
+                        <i class="mb-2 text-3xl fi fi-rr-comment-alt"></i>
+                        <p>No comments yet</p>
+                    </div>
+                @endforelse
+            </div>
     </div>
 </x-dashboard.student.base>

@@ -29,7 +29,7 @@
                                     </td>
                                     <td>{{ $message->full_name }}</td>
                                     <td>
-                                        <a href="mailto:{{ $message->email }}" class="link link-hover text-accent">
+                                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $message->email }}" target="_blank" class="link link-hover text-accent">
                                             {{ $message->email }}
                                         </a>
                                     </td>

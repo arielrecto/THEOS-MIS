@@ -99,10 +99,10 @@
                             <i class="fi fi-rr-marker"></i>
                             <span>On-site</span>
                         </div>
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                        {{-- <div class="flex items-center gap-2 text-sm text-gray-600">
                             <i class="fi fi-rr-coins"></i>
                             <span>₱{{ number_format($job->min_salary) }} - ₱{{ number_format($job->max_salary) }}</span>
-                        </div>
+                        </div> --}}
                     </div>
 
                     @if($job->description)

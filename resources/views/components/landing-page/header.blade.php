@@ -192,7 +192,7 @@
                     <i class="fi fi-rr-phone-call text-3xl text-accent mb-4"></i>
                     <h3 class="text-lg font-bold mb-2">Contact Information</h3>
                     <p class="text-gray-600">Phone: 0917547 5374</p>
-                    <p class="text-gray-600">Email: info@sta.edu.ph</p>
+                    <p class="text-gray-600">Email: thgaofficial@gmail.com</p>
                 </div>
             </div>
         </div>

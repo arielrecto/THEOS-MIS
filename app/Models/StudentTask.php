@@ -41,4 +41,8 @@ class StudentTask extends Model
     public function grade(){
         return $this->belongsTo(Grade::class);
     }
+
+    public function comments(){
+       return $this->morphMany(Comment::class, 'commentable');    
+    }
 }

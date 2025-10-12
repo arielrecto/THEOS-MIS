@@ -207,7 +207,7 @@
 
 
                             <!-- Permanent Address -->
-                            <h3 class="mb-4 text-sm font-medium text-gray-500">Permanent Address</h3>
+                            {{-- <h3 class="mb-4 text-sm font-medium text-gray-500">Permanent Address</h3>
                             <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 
                                 <div class="flex flex-col gap-2">
@@ -216,7 +216,7 @@
 
                                     @if($errors->has('perm_house_no'))
                                         <span class="text-sm text-red-600">{{ $errors->first('perm_house_no') }}</span>
-                                    @endif  
+                                    @endif
                                 </div>
 
                                 <div class="flex flex-col gap-2">
@@ -264,7 +264,7 @@
                                         <span class="text-sm text-red-600">{{ $errors->first('perm_zip_code') }}</span>
                                     @endif
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <!-- Parent/Guardian Information -->

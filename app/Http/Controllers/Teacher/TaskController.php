@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Models\Task;
+use App\Models\User;
+use App\Models\Comment;
 use App\Models\Classroom;
 use App\Models\StudentTask;
 use Illuminate\Http\Request;
 use App\Models\AttachmentTask;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use App\Notifications\TaskNotification;
 use Illuminate\Support\Facades\Storage;
 
@@ -162,6 +164,48 @@ class TaskController extends Controller
         $task->delete();
 
         return back()->with(['message' => 'task Deleted Success']);
+    }
+
+    public function comment(Request $request){
+        $studentTask = StudentTask::find($request->student_task_id);
+
+
+       
+
+        Comment::create([
+            'content' => $request->content, 
+            'user_id' => Auth::user()->id, 
+            'commentable_id' => $studentTask->id, 
+            'commentable_type' => get_class($studentTask)
+        ]);
+
+        return back()
+            ->with('success', 'Comment added successfully');
+    }
+
+
+    public function commentDelete(string $id){
+        $comment = Comment::find($id);
+
+        $comment->delete();
+
+        return back()
+            ->with('success', 'Comment deleted successfully');
+    }
+
+
+    public function commentReply (Request $request, $id){
+        $comment = Comment::find($id);
+
+        Comment::create([
+            'content' => $request->content, 
+            'user_id' => Auth::user()->id, 
+            'commentable_id' => $comment->id, 
+            'commentable_type' => get_class($comment)
+        ]);
+
+        return back()
+            ->with('success', 'Comment added successfully');
     }
 
 

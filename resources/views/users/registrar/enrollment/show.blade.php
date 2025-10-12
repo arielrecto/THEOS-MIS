@@ -16,12 +16,18 @@
         </div>
 
         <div class="flex justify-end">
+
+            <a href="{{route('registrar.enrollments.print', ['id' => $enrollment->id])}}" class="gap-2 btn btn-ghost btn-sm" >
+                <i class="fi fi-rr-print"></i>
+                Print
+            </a>
             @if ($enrollment->status !== 'closed')
-                <form action="{{ route('registrar.enrollments.close', ['enrollment' =>  $enrollment->id ]) }}" method="POST" class="ml-4"
+                <form action="{{ route('registrar.enrollments.close', ['enrollment' => $enrollment->id]) }}"
+                    method="POST" class="ml-4"
                     onsubmit="return confirm('Are you sure you want to close this enrollment period?')">
                     @csrf
                     @method('PATCH')
-                    <button type="submit" class="btn btn-error gap-2">
+                    <button type="submit" class="gap-2 btn btn-error">
                         <i class="fi fi-rr-lock"></i>
                         Close Enrollment
                     </button>

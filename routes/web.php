@@ -209,6 +209,11 @@ Route::middleware(['auth'])->group(function () {
                     ->group(function () {
                         Route::get('{student_task}', [StudentTaskController::class, 'show'])->name('show');
                         Route::post('{student_task}/add-score', [StudentTaskController::class, 'addScore'])->name('addScore');
+                        Route::prefix('comments')->as('comments.')->group(function(){
+                            Route::post('', [TaskController::class, 'comment'])->name('store');
+                            Route::delete('{comment}', [TaskController::class, 'commentDelete'])->name('delete');
+                            Route::post('{id}/replies', [TaskController::class, 'commentReply'])->name('reply');
+                        });
                     });
 
                 Route::prefix('announcements')
@@ -241,6 +246,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('/form/{id}', [EnrollmentController::class, 'showEnrollee'])->name('showEnrollee');
                     Route::put('/form/{id}', [EnrollmentController::class, 'enrolled'])->name('enrolled');
                     Route::patch('{enrollment}/close', [EnrollmentController::class, 'close'])->name('close');
+                    Route::get('/print/{id}', [EnrollmentController::class, 'print'])->name('print');
                 });
 
             Route::prefix('students')
@@ -289,6 +295,11 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('{id}', action: [StudentTasksController::class, 'show'])->name('show');
                     Route::post('{id}/submit', action: [StudentTasksController::class, 'submitTask'])->name('submit');
                     Route::post('{id}/unsubmit', action: [StudentTasksController::class, 'unsubmitTask'])->name('unsubmit');
+                    Route::prefix('comments')->as('comments.')->group(function(){
+                        Route::post('', action: [StudentTasksController::class, 'comment'])->name('store');
+                        Route::delete('{comment}', action: [StudentTasksController::class, 'commentDelete'])->name('delete');
+                        Route::post('{id}/replies', action: [StudentTasksController::class, 'commentReply'])->name('reply');
+                    });
                 });
 
             Route::prefix('settings')

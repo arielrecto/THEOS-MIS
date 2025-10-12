@@ -34,7 +34,7 @@
                 </div>
 
                 <!-- Salary Range -->
-                <div>
+                {{-- <div>
                     <h2 class="mb-4 text-2xl font-semibold text-gray-800">Salary Range</h2>
                     <div class="p-6 rounded-lg bg-accent/5">
                         <p class="text-2xl font-bold text-accent">
@@ -42,7 +42,7 @@
                         </p>
                         <p class="mt-1 text-gray-600">Per month</p>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Application Form -->

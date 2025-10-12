@@ -34,6 +34,7 @@ class EnrollmentController extends Controller
         return view('users.registrar.enrollment.index', compact('enrollments'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -252,5 +253,23 @@ class EnrollmentController extends Controller
         return redirect()
             ->route('registrar.enrollments.show', $enrollment)
             ->with('success', 'Enrollment period has been closed successfully');
+    }
+
+    /**
+     * Display the specified enrollment's print view.
+     */
+    public function print($id)
+    {
+        $enrollment = Enrollment::where('id', $id)->with([
+            'enrollees' => function ($query) {
+                $query->orderBy('grade_level')
+                    ->orderBy('last_name')
+                    ->orderBy('first_name');
+            },
+            'academicYear'
+        ])->first();
+
+
+        return view('users.registrar.enrollment.print', compact('enrollment'));
     }
 }
