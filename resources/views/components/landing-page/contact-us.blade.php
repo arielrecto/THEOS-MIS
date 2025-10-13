@@ -1,3 +1,12 @@
+@php
+    use App\Models\AboutUs;
+    use App\Models\ContactUs;
+
+    $aboutUs = AboutUs::first();
+    $contactUs = ContactUs::first();
+
+@endphp
+
 <x-landing-page.base>
     <x-notification-message />
         <section class="py-16 bg-gray-100">
@@ -30,13 +39,13 @@
                 <p class="mt-4 text-gray-600">Feel free to reach out to us through the following channels:</p>
                 <ul class="mt-4 space-y-2">
                     <li class="flex gap-2 items-center text-gray-700">
-                        <i class="text-blue-600 fi fi-rr-marker"></i> Gold Street, Citihomes Subd, Molino IV, Bacoor City; Fairgrounds Subd, Imus City
+                        <i class="text-blue-600 fi fi-rr-marker"></i> {{ $aboutUs?->address ?? 'set address in the admin cms panel' }}
                     </li>
                     <li class="flex gap-2 items-center text-gray-700">
-                        <i class="text-blue-600 fi fi-rr-phone-call"></i> 09175475374
+                        <i class="text-blue-600 fi fi-rr-phone-call"></i> {{ $contactUs?->phone_number ?? 'set phone number in the admin cms panel' }}
                     </li>
                     <li class="flex gap-2 items-center text-gray-700">
-                        <i class="text-blue-600 fi fi-rr-envelope"></i> thgaofficial@gmail.com
+                        <i class="text-blue-600 fi fi-rr-envelope"></i> {{ $contactUs?->email_address ?? 'set email address in the admin cms panel' }}
                 </ul>
                 <h3 class="mt-6 text-2xl font-semibold text-blue-900">Follow Us</h3>
                 <div class="flex gap-4 mt-4">

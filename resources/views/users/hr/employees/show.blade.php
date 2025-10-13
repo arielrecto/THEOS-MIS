@@ -13,6 +13,8 @@
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl font-bold text-gray-800">Employee Profile</h1>
                 <div class="flex items-center gap-2">
+                    <h1 class="text-lg">Status: <span class="{{ $employee->status == 'active' ? 'text-greed-500' : 'text-red-500' }} capitalize">{{ $employee->status }}</span></h1>
+
                     <a href="{{route('hr.employees.print', $employee)}}" class="btn btn-ghost btn-sm gap-2">
                         <i class="fi fi-rr-print"></i>
                         Print

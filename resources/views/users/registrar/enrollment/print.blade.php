@@ -135,7 +135,7 @@
                         <th class="px-4 py-3 text-left">#</th>
                         <th class="px-4 py-3 text-left">Student Name</th>
                         <th class="px-4 py-3 text-left">Grade Level</th>
-                        <th class="px-4 py-3 text-left">Track/Strand</th>
+                        {{-- <th class="px-4 py-3 text-left">Track/Strand</th> --}}
                         <th class="px-4 py-3 text-left">Status</th>
                     </tr>
                 </thead>
@@ -153,10 +153,10 @@
                             <td class="px-4 py-3">
                                 {{ $enrollee->grade_level }}
                             </td>
-                            <td class="px-4 py-3">
+                            {{-- <td class="px-4 py-3">
                                 {{ $enrollee->preferred_track }}
                                 {{ $enrollee->preferred_strand ? ' - ' . $enrollee->preferred_strand : '' }}
-                            </td>
+                            </td> --}}
                             <td class="px-4 py-3">
                                 @php
                                     $statusClass =
@@ -189,19 +189,19 @@
         <div class="text-center">
             <div class="pt-2 border-t border-gray-300">
                 <p class="font-medium">Prepared by</p>
-                <p class="text-sm text-gray-600">HR Staff</p>
+                <p class="text-sm text-gray-600">Registrar</p>
             </div>
         </div>
         <div class="text-center">
             <div class="pt-2 border-t border-gray-300">
                 <p class="font-medium">Reviewed by</p>
-                <p class="text-sm text-gray-600 capitalize">{{ App\Models\User::first()->name }} Manager</p>
+                <p class="text-sm text-gray-600 capitalize">Admin </p>
             </div>
         </div>
         <div class="text-center">
             <div class="pt-2 border-t border-gray-300">
                 <p class="font-medium">Approved by</p>
-                <p class="text-sm text-gray-600">Director</p>
+                <p class="text-sm text-gray-600">Registrar</p>
             </div>
         </div>
     </div>

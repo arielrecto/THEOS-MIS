@@ -152,13 +152,13 @@
                 <div class="text-center">
                     <div class="pt-2 border-t border-gray-300">
                         <p class="font-medium">Prepared by</p>
-                        <p class="text-sm text-gray-600">HR Recruitment Officer</p>
+                        <p class="text-sm text-gray-600">HR</p>
                     </div>
                 </div>
                 <div class="text-center">
                     <div class="pt-2 border-t border-gray-300">
                         <p class="font-medium">Reviewed by</p>
-                        <p class="text-sm text-gray-600 capitalize">{{ App\Models\User::first()->name }} Manager</p>
+                        <p class="text-sm text-gray-600 capitalize">Administrator</p>
                     </div>
                 </div>
                 <div class="text-center">

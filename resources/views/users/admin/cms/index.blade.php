@@ -194,6 +194,48 @@
                 </div>
             </div>
 
+            <!-- Contact Us Management Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex justify-center items-center w-12 h-12 rounded-lg bg-success/10">
+                            <i class="text-2xl fi fi-rr-address-book text-success"></i>
+                        </div>
+                        @if($contactInfo = \App\Models\ContactUs::first())
+                            <span class="badge badge-success">Last updated {{ $contactInfo->updated_at->diffForHumans() }}</span>
+                        @else
+                            <span class="badge badge-ghost">Not Set</span>
+                        @endif
+                    </div>
+                    <h3 class="mb-2 text-lg font-semibold">Contact Information</h3>
+                    <p class="mb-4 text-gray-600">Manage contact details and information displayed on the website.</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">Phone Number</span>
+                            @if($contactInfo?->phone_number)
+                                <span class="text-success">Set</span>
+                            @else
+                                <span class="text-error">Not Set</span>
+                            @endif
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">Email Address</span>
+                            @if($contactInfo?->email_address)
+                                <span class="text-success">Set</span>
+                            @else
+                                <span class="text-error">Not Set</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <a href="{{ route('admin.CMS.contact.index') }}" class="gap-2 w-full btn btn-success">
+                            <i class="fi fi-rr-edit"></i>
+                            Manage Contact Info
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Placeholder for other CMS options -->
             {{-- <div class="bg-white rounded-lg shadow-sm opacity-50 transition-shadow hover:shadow-md">
                 <div class="p-6">

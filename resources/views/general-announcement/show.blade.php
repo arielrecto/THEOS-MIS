@@ -81,7 +81,7 @@
                                         <a href="{{ Storage::url($attachment->file_dir) }}"
                                             class="btn btn-sm btn-ghost text-accent" target="_blank">
                                             <i class="fi fi-rr-download mr-1"></i>
-                                            Download
+                                            View
                                         </a>
                                     </div>
                                 @endforeach

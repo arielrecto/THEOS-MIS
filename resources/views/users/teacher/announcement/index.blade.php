@@ -13,11 +13,11 @@
                             {{ __('Create Announcement') }}
                         </a>
                     @endif
-                @else
+                {{-- @else
                     <a href="{{ route('teacher.announcements.create', ['type' => 'general']) }}" class="btn btn-accent">
                         <i class="fi fi-rr-plus mr-2"></i>
                         {{ __('Create Announcement') }}
-                    </a>
+                    </a> --}}
                 @endif
 
 

@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\HR\DepartmentController;
 use App\Http\Controllers\Teacher\GradeController;
 use App\Http\Controllers\HR\JobPositionController;
+use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Teacher\ClassroomController;
 use App\Http\Controllers\Admin\AcademicYearController;
@@ -158,6 +159,15 @@ Route::middleware(['auth'])->group(function () {
                 Route::prefix('programs')->as('programs.')->group(function () {
                     Route::put('{program}/toggle', [AcademicProgramController::class, 'toggleActive'])->name('toggle');
                 });
+
+
+                Route::prefix('contact')->as('contact.')->group(function () {
+                    Route::get('', [ContactUsController::class, 'index'])->name('index');
+                    Route::post('', [ContactUsController::class, 'store'])->name('store');
+                });
+
+
+
                 Route::resource('programs', AcademicProgramController::class);
 
                 Route::resource('gallery', GalleryController::class);
@@ -209,7 +219,7 @@ Route::middleware(['auth'])->group(function () {
                     ->group(function () {
                         Route::get('{student_task}', [StudentTaskController::class, 'show'])->name('show');
                         Route::post('{student_task}/add-score', [StudentTaskController::class, 'addScore'])->name('addScore');
-                        Route::prefix('comments')->as('comments.')->group(function(){
+                        Route::prefix('comments')->as('comments.')->group(function () {
                             Route::post('', [TaskController::class, 'comment'])->name('store');
                             Route::delete('{comment}', [TaskController::class, 'commentDelete'])->name('delete');
                             Route::post('{id}/replies', [TaskController::class, 'commentReply'])->name('reply');
@@ -295,7 +305,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('{id}', action: [StudentTasksController::class, 'show'])->name('show');
                     Route::post('{id}/submit', action: [StudentTasksController::class, 'submitTask'])->name('submit');
                     Route::post('{id}/unsubmit', action: [StudentTasksController::class, 'unsubmitTask'])->name('unsubmit');
-                    Route::prefix('comments')->as('comments.')->group(function(){
+                    Route::prefix('comments')->as('comments.')->group(function () {
                         Route::post('', action: [StudentTasksController::class, 'comment'])->name('store');
                         Route::delete('{comment}', action: [StudentTasksController::class, 'commentDelete'])->name('delete');
                         Route::post('{id}/replies', action: [StudentTasksController::class, 'commentReply'])->name('reply');
@@ -352,6 +362,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('{employee}', [EmployeeController::class, 'update'])->name('update');
                 Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
                 Route::patch('{employee}/toggle-teacher', [EmployeeController::class, 'toggleTeacher'])->name('toggle-teacher');
+                Route::patch('{employee}/toggle-registrar', [EmployeeController::class, 'toggleRegistrar'])->name('toggle-registrar');
             });
 
             Route::prefix('attendance')->as('attendance.')->group(function () {

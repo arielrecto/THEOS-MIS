@@ -99,10 +99,10 @@
                                 <i class="fi fi-rr-briefcase"></i>
                                 <span>{{ ucfirst($position->type) }}</span>
                             </div>
-                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                            {{-- <div class="flex items-center gap-2 text-sm text-gray-600">
                                 <i class="fi fi-rr-coins"></i>
                                 <span>₱{{ number_format($position->min_salary) }} - ₱{{ number_format($position->max_salary) }}</span>
-                            </div>
+                            </div> --}}
                         </div>
 
                         @if($position->description)

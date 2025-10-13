@@ -151,6 +151,14 @@
                             </li>
                         @endif
 
+                        @if (Auth::user()->hasRole('registrar'))
+                            <li>
+                                <a href="{{ route('registrar.dashboard') }}" class="flex gap-2 items-center">
+                                    <i class="fi fi-rr-diploma"></i>
+                                    Registrar Dashboard
+                                </a>
+                            </li>
+                        @endif
 
                         @if (Auth::user()->hasRole('employee'))
                             <li>

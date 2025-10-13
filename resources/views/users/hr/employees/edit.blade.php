@@ -149,7 +149,7 @@
                             </label>
                         @enderror
                     </div>
-                    
+
                     <!-- Leave Credit -->
                     <div class="form-control">
                         <label class="label">
@@ -225,6 +225,33 @@
                                       class="textarea textarea-bordered h-20 @error('address') textarea-error @enderror"
                                       required>{{ old('address', $employee->address) }}</textarea>
                             @error('address')
+                                <label class="label">
+                                    <span class="label-text-alt text-error">{{ $message }}</span>
+                                </label>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Status Section -->
+                    <div class="pt-6 mt-2 border-t md:col-span-2">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-800">Status</h2>
+                    </div>
+
+                    <!-- Status Toggle -->
+                    <div class="md:col-span-2">
+                        <div class="form-control">
+                            <label class="cursor-pointer label justify-start gap-4">
+                                <input type="checkbox"
+                                       name="status"
+                                       class="toggle toggle-success"
+                                       {{ $employee->status == 'active' ? 'checked' : '' }}
+                                >
+                                <span class="font-medium label-text">Active Status</span>
+                                <span class="text-sm text-gray-500">
+                                    ({{ $employee->status == 'active' ? 'Currently Active' : 'Currently Inactive' }})
+                                </span>
+                            </label>
+                            @error('status')
                                 <label class="label">
                                     <span class="label-text-alt text-error">{{ $message }}</span>
                                 </label>

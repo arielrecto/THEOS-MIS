@@ -61,6 +61,7 @@ class AnnouncementController extends Controller
         $classroomId = $request->classroom_id;
 
 
+
         $announcement = Announcement::create([
             'title' => $request->title,
             'description' => $request->description,

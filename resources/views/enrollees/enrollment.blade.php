@@ -5,7 +5,8 @@
                 <!-- Header Section -->
                 <div class="mb-8 text-center">
                     <h1 class="mb-4 text-4xl font-bold text-gray-900">Enrollment Now Open</h1>
-                    <p class="text-lg text-gray-600">Theos Higher Ground Academe. welcomes new students for the upcoming academic year</p>
+                    <p class="text-lg text-gray-600">Theos Higher Ground Academe. welcomes new students for the upcoming
+                        academic year</p>
                 </div>
 
                 <!-- Main Content -->
@@ -15,13 +16,23 @@
                         <div class="flex justify-between items-center">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800">
-                                    Academic Year {{ date('Y', strtotime($enrollment->academicYear->start_date)) }} - {{ date('Y', strtotime($enrollment->academicYear->end_date)) }}
+                                    Academic Year {{ date('Y', strtotime($enrollment->academicYear->start_date)) }} -
+                                    {{ date('Y', strtotime($enrollment->academicYear->end_date)) }}
                                 </h2>
-                                <p class="mt-1 text-gray-600">Secure your child's future with quality Christian education</p>
+                                <p class="mt-1 text-gray-600">Secure your child's future with quality Christian
+                                    education</p>
                             </div>
-                            <span class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-full">
-                                Enrollment Active
-                            </span>
+
+                            @if ($enrollment->academicYear->status === 'inactive')
+                                <span class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-full">
+                                    Enrollment Inactive
+                                </span>
+                            @else
+                                <span class="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-full">
+                                    Enrollment Active
+                                </span>
+                            @endif
+
                         </div>
                     </div>
 
@@ -32,7 +43,8 @@
                                 <h3 class="text-sm font-medium text-gray-500">Enrollment Period</h3>
                                 <div class="flex items-center text-gray-800">
                                     <i class="mr-2 fi fi-rr-calendar text-accent"></i>
-                                    <span>{{ date('F d', strtotime($enrollment->start_date)) }} - {{ date('F d, Y', strtotime($enrollment->end_date)) }}</span>
+                                    <span>{{ date('F d', strtotime($enrollment->start_date)) }} -
+                                        {{ date('F d, Y', strtotime($enrollment->end_date)) }}</span>
                                 </div>
                             </div>
                             <div class="space-y-2">
@@ -94,9 +106,10 @@
 
                         <!-- Action Section -->
                         <div class="text-center">
-                            <p class="mb-4 text-gray-600">Ready to begin your journey with Theos Higher Ground Academe?</p>
+                            <p class="mb-4 text-gray-600">Ready to begin your journey with Theos Higher Ground Academe?
+                            </p>
                             <a href="{{ route('enrollment.form', ['enrollment' => $enrollment->id]) }}"
-                               class="gap-2 btn btn-accent btn-lg">
+                                class="gap-2 btn btn-accent btn-lg">
                                 <i class="fi fi-rr-edit"></i>
                                 Start Enrollment Process
                             </a>
@@ -107,7 +120,7 @@
                 <!-- Contact Support -->
                 <div class="mt-8 text-center text-gray-600">
                     <p>Need assistance? Contact our admissions office:</p>
-                    <p class="font-medium">0917547 5374 | admissions@sta.edu.ph</p>
+                    <p class="font-medium">0917547 5374 | thgaofficial@gmail.com</p>
                 </div>
             </div>
         </div>

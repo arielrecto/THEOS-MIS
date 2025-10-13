@@ -82,7 +82,9 @@
                             <span class="label-text-alt text-error">*</span>
                         </label>
                         <input type="tel" name="phone"
-                            class="input input-bordered @error('phone') input-error @enderror"
+                            class="input input-bordered @error('phone') input-error @enderror" inputmode="numeric"
+                            minlength="11" maxlength="11" pattern="\d{11}"
+                            oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
                             value="{{ old('phone', $applicant?->phone) }}" required>
                         @error('phone')
                             <label class="label">

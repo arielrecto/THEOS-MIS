@@ -84,7 +84,7 @@
                                             <i class="fi fi-rr-menu-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                            <li><a href="#">View Details</a></li>
+                                            <li><a href="{{ route('hr.applicants.show', $applicant) }}">View Details</a></li>
                                             <li>
                                                 <a href="#"
                                                    :class="isLoadingAction({{ $applicant->id }}, 'screening') ? 'disabled' : ''"

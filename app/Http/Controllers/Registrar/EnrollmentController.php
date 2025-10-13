@@ -125,7 +125,7 @@ class EnrollmentController extends Controller
                 'header' => 'Enrollment Period Update',
                 'message' => "Enrollment period '{$enrollment->name}' is now {$enrollment->status}",
                 'type' => 'enrollment',
-                'url' => route('enrollees.form')
+                'url' => route('enrollment.form')
             ];
 
             $this->notificationActions->notifyRole('student', $notificationData, $enrollment);

@@ -135,6 +135,16 @@
                                                 <i class="fi fi-rr-graduation-cap"></i>
                                             </button>
                                         </form>
+                                        <!-- Add the registrar role toggle -->
+                                        <form action="{{ route('hr.employees.toggle-registrar', $employee) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                    class="btn btn-sm {{ $employee->user->hasRole('registrar') ? 'btn-info' : 'btn-ghost' }}"
+                                                    title="{{ $employee->user->hasRole('registrar') ? 'Remove Registrar Role' : 'Add Registrar Role' }}">
+                                                <i class="fi fi-rr-diploma"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

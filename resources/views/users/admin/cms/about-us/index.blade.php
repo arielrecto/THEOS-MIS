@@ -106,6 +106,22 @@
                             </label>
                         @enderror
                     </div>
+
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">Address</span>
+                            <span class="label-text-alt text-error">*</span>
+                        </label>
+                        <textarea name="address"
+                                  class="textarea textarea-bordered h-32 @error('address') textarea-error @enderror"
+                                  required>{{ old('address', $aboutUs->address) }}</textarea>
+                        @error('address')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Form Actions -->

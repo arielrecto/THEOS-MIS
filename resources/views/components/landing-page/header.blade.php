@@ -7,6 +7,7 @@
     use App\Models\Logo;
     use App\Models\Enrollment;
     use App\Enums\EnrollmentStatus;
+    use App\Models\AboutUs;
     use Illuminate\Support\Facades\Storage;
 
     $mainLogo = Logo::where('type', 'main')
@@ -19,6 +20,9 @@
     $activeEnrollment = Enrollment::where('status', EnrollmentStatus::ONGOING)
         ->latest()
         ->first();
+
+        $aboutUs = AboutUs::first();
+        $a = $aboutUs ? $aboutUs->address : 'set address in the admin panel';
 @endphp
 
 <!-- Hero Section -->
@@ -187,8 +191,7 @@
                 <div class="p-6 bg-white rounded-lg shadow-lg">
                     <i class="fi fi-rr-marker text-3xl text-accent mb-4"></i>
                     <h3 class="text-lg font-bold mb-2">Address</h3>
-                    <p class="text-gray-600">Fairgrounds, Imus City,
-                        Cavite.</p>
+                    <p class="text-gray-600">{{ $aboutUs->address }}</p>
                 </div>
                 <div class="p-6 bg-white rounded-lg shadow-lg">
                     <i class="fi fi-rr-phone-call text-3xl text-accent mb-4"></i>

@@ -83,7 +83,7 @@ class EmployeeController extends Controller
             'leave_credit' => 'required|numeric|min:0'
         ]);
 
-        $password = 'password123'; // You might want to generate a random password
+        $password = $validated['first_name'] . '123'; // You might want to generate a random password
 
         // Create user account
         $user = User::create([
@@ -159,8 +159,11 @@ class EmployeeController extends Controller
             'job_position_id' => 'required|exists:job_positions,id',
             'photo' => 'nullable|image|max:2048',
             'salary' => 'required|numeric|min:0',
-            'leave_credit' => 'required|numeric|min:0'
+            'leave_credit' => 'required|numeric|min:0',
+            'status' => 'nullable'
         ]);
+
+
 
         // Update user
         $employee->user->update([
@@ -177,7 +180,8 @@ class EmployeeController extends Controller
             'address' => $validated['address'],
             'date_of_birth' => $validated['date_of_birth'],
             'salary' => $validated['salary'],
-            'leave_credit' => $validated['leave_credit']
+            'leave_credit' => $validated['leave_credit'],
+            'status' => $request->has('status') ? 'active' : 'inactive'
         ]);
 
         if ($request->hasFile('photo')) {
@@ -248,8 +252,50 @@ class EmployeeController extends Controller
         }
     }
 
+    public function toggleRegistrar(EmployeeProfile $employee)
+    {
+        try {
+            $user = $employee->user;
+
+            if ($user->hasRole('registrar')) {
+                // Remove registrar role
+                $user->removeRole('registrar');
+                $message = 'Registrar role removed successfully';
+            } else {
+                // Assign registrar role
+                $user->assignRole('registrar');
+
+                // Create profile if doesn't exist
+                if (!$user->profile) {
+                    Profile::create([
+                        'user_id' => $user->id,
+                        'first_name' => $employee->first_name,
+                        'last_name' => $employee->last_name,
+                        'address' => $employee->address,
+                        'contact_no' => $employee->phone,
+                        'image' => $employee->photo
+                    ]);
+                }
+
+                $message = 'Registrar role and profile created successfully';
+            }
+
+            return redirect()
+                ->back()
+                ->with('message', $message);
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update registrar role: ' . $e->getMessage());
+        }
+    }
+
     public function print($id){
         $employee = EmployeeProfile::findOrFail($id);
         return view('users.hr.employees.print', compact('employee'));
     }
+
+
+
 }

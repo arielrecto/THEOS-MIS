@@ -36,10 +36,10 @@
                             <i class="fi fi-rr-print"></i>
                             Print Report
                         </a>
-                        <button class="btn btn-accent btn-sm gap-2">
+                        {{-- <button class="btn btn-accent btn-sm gap-2">
                             <i class="fi fi-rr-download"></i>
                             Export Data
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
             </div>

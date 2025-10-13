@@ -48,6 +48,11 @@ class ClassroomController extends Controller
 
         $academicYear = AcademicYear::where('status', AcademicYearStatus::Active->value)->latest()->first();
 
+
+        if (!$academicYear) {
+            return back()->with(['error' => 'Action rejected, no active academic year please contact the admin']);
+        }
+
         return view('users.teacher.classroom.create', compact(['subjects', 'strands', 'academicYear']));
     }
 
@@ -66,25 +71,33 @@ class ClassroomController extends Controller
 
 
 
-        $classroom_code = 'CLSSRM'.uniqid();
+        $classroom_code = 'CLSSRM' . uniqid();
 
 
-        $imageName = 'IMG-' . uniqid() . '.' . $request->image->extension();
-        $dir = $request->image->storeAs('/classroom', $imageName, 'public');
-
-       Classroom::create([
-        'image' => asset('/storage/' . $dir),
-        'name' => $request->name,
-        'class_code' => $classroom_code,
-        'description' => $request->description,
-        'subject_id' => $request->subject,
-        'strand_id' => $request->strand,
-        'academic_year_id' => $request->academic_year,
-        'teacher_id' => Auth::user()->id
-       ]);
 
 
-       return  back()->with(['success' => 'Classroom Added']);
+        $classroom = Classroom::create([
+            'name' => $request->name,
+            'class_code' => $classroom_code,
+            'description' => $request->description,
+            'subject_id' => $request->subject,
+            'strand_id' => $request->strand,
+            'academic_year_id' => $request->academic_year,
+            'teacher_id' => Auth::user()->id
+        ]);
+
+
+        if ($request->has('image')) {
+            $imageName = 'IMG-' . uniqid() . '.' . $request->image->extension();
+            $dir = $request->image->storeAs('/classroom', $imageName, 'public');
+
+            $classroom->update([
+                'image' => asset('/storage/' . $dir),
+            ]);
+        }
+
+
+        return  back()->with(['success' => 'Classroom Added']);
     }
 
     /**
@@ -158,7 +171,8 @@ class ClassroomController extends Controller
         return to_route('teacher.classrooms.index')->with(['message' => 'classroom deleted']);
     }
 
-    public function students(string $id){
+    public function students(string $id)
+    {
 
 
         $classroomStudents = Classroom::whereId($id)->first()->classroomStudents;
@@ -166,16 +180,15 @@ class ClassroomController extends Controller
 
 
         return view('users.teacher.classroom.student.index', compact('classroomStudents', 'id'));
-
     }
 
-    public function removeStudent(string $id){
+    public function removeStudent(string $id)
+    {
         $classroomStudent = ClassroomStudent::find($id);
 
         $classroomStudent->delete();
 
 
         return back()->with(['message' => 'Student Successfully Remove in Classroom']);
-
     }
 }

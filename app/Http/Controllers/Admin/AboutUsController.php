@@ -22,7 +22,8 @@ class AboutUsController extends Controller
             'sub_title' => 'nullable|string|max:255',
             'description' => 'required|string',
             'mission_and_vision' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'address' => 'nullable'
         ]);
 
         $aboutUs = AboutUs::first() ?? new AboutUs();

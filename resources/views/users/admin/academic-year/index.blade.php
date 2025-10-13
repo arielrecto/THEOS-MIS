@@ -25,7 +25,7 @@
                     <td>{{$academicYear->start_date}}</td>
                     <td>{{$academicYear->end_date}}</td>
                     <td>
-                        <span class="px-2 py-1 rounded text-white {{ $academicYear->status === 'active' ? 'bg-green-500' : 'bg-gray-400' }}">
+                        <span class="px-2 py-1 rounded text-white {{ $academicYear->status === 'active' ? 'bg-green-500' : 'bg-red-400' }}">
                             {{ ucfirst($academicYear->status) }}
                         </span>
                     </td>
