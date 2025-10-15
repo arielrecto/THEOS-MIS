@@ -114,7 +114,7 @@
                         <div class="mt-6 pt-4 border-t flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="text-sm text-gray-600">Hiring Status:</span>
-                                <form action="{{ route('hr.positions.toggle-hiring', $position) }}" method="POST" class="inline">
+                                <form action="{{ route('hr.positions.toggle-hiring', ['id' => $position->id]) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit"
                                             class="btn btn-sm {{ $position->is_hiring ? 'btn-error' : 'btn-accent' }}">

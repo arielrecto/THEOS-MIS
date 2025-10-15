@@ -65,10 +65,19 @@
                                             {{-- <p class="text-xs text-gray-500">{{ human_filesize($attachment->size) }}</p> --}}
                                         </div>
                                     </div>
-                                    <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
-                                        download>
-                                        <i class="fi fi-rr-download text-accent"></i>
-                                    </a>
+
+                                    @if ($attachment->extension === 'url')
+                                        <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
+                                            target="_blank" rel="noopener noreferrer">
+                                            <i class="fi fi-rr-eye text-accent"></i>
+                                        </a>
+                                    @else
+                                        <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
+                                            download>
+                                            <i class="fi fi-rr-download text-accent"></i>
+                                        </a>
+                                    @endif
+
                                 </div>
                             @endforeach
                         </div>
@@ -160,18 +169,17 @@
         </form>
 
 
-       
-        <div class="space-y-6">
-                @forelse($studentTask->comments->sortByDesc('created_at') as $comment)
 
+        <div class="space-y-6">
+            @forelse($studentTask->comments->sortByDesc('created_at') as $comment)
                 <x-commentThread :comment="$comment" :url="route('student.tasks.comments.reply', $comment->id)" />
-                   
-                @empty
-                    <div class="py-8 text-center text-gray-500">
-                        <i class="mb-2 text-3xl fi fi-rr-comment-alt"></i>
-                        <p>No comments yet</p>
-                    </div>
-                @endforelse
-            </div>
+
+            @empty
+                <div class="py-8 text-center text-gray-500">
+                    <i class="mb-2 text-3xl fi fi-rr-comment-alt"></i>
+                    <p>No comments yet</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 </x-dashboard.student.base>

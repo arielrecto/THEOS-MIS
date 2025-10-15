@@ -7,6 +7,9 @@ use App\Enums\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+
+
 
 class StudentController extends Controller
 {
@@ -95,5 +98,65 @@ class StudentController extends Controller
         $student->delete();
 
         return back()->with(['message' => 'Student Date Deleted']);
+    }
+
+
+    public function updateProfile(Request $request, $id)
+    {
+        $student = User::find($id);
+
+
+
+
+        $validated = $request->validate([
+            // 'lrn' => ['required', 'string', 'max:255'],
+            'contact_number' => ['nullable', 'string', 'max:255'],
+            'parent_name' => ['required', 'string', 'max:255'],
+            'relationship' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+        ]);
+
+        $student->studentProfile->update($validated);
+
+        return back()->with('success', 'Profile updated successfully');
+    }
+
+
+    public function updateEmail(Request $request, $id)
+    {
+        $request->validate([
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . auth()->id()],
+        ]);
+
+
+        $student = User::find($id);
+
+        $student->update(['email' => $request->email]);
+
+        return back()->with('success', 'Email updated successfully');
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+
+
+        $student = User::find($id);
+
+        if (Hash::check($request->current_password, $student->password)) {
+            $validated = $request->validate([
+                'password' => ['required', 'confirmed', Password::defaults()],
+            ]);
+
+            $student->update([
+                'password' => Hash::make($validated['password']),
+            ]);
+
+            return back()->with('success', 'Password updated successfully');
+        } else {
+            return back()->withErrors(['current_password' => 'Current password is incorrect']);
+        }
+
+
+        return back()->with('success', 'Password updated successfully');
     }
 }

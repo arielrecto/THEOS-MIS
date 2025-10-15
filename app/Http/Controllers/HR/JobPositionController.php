@@ -224,8 +224,11 @@ class JobPositionController extends Controller
         return view('users.hr.positions.applicant.show', compact('applicant'));
     }
 
-    public function toggleHiring(JobPosition $position)
+    public function toggleHiring($id)
     {
+
+        $position = JobPosition::findOrFail($id);
+
         $position->update([
             'is_hiring' => !$position->is_hiring
         ]);

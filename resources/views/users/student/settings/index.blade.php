@@ -8,7 +8,7 @@
                 <h2 class="mb-4 text-lg font-medium text-gray-900">Profile Information</h2>
                 <form method="POST" action="{{ route('student.settings.profile.update') }}" class="space-y-6">
                     @csrf
-                    @method('PUT')
+                    @method('PATCH')
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>

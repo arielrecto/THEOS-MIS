@@ -105,7 +105,7 @@
                                 <td>{{ ucfirst($leave->leave_type) }}</td>
                                 <td>
                                     {{  date('M d, Y', strtotime( $leave->start_date))}} -
-                                    {{ date('M d, Y', strtotime($leave->end_type))}}
+                                    {{ date('M d, Y', strtotime($leave->end_date))}}
                                     <div class="text-sm text-gray-500">
                                         {{  Carbon::parse($leave->start_date)->diffInDays($leave->end_date) + 1 }} days
                                     </div>

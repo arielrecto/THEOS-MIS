@@ -42,11 +42,11 @@ class ProfileController extends Controller
         if ($request->hasFile('image')) {
 
 
-            $request->hasProfile() ? $request->user()->profile()->profilePicture()->updateOrCreate([
+            $request->hasProfile() ? $request->user()->profile->profilePicture()->updateOrCreate([
                 'file_dir' => asset('storage/profile_picture/' . $request->file('image')->getClientOriginalName()),
                 'file_name' => $request->file('image')->getClientOriginalName(),
                 'file_type' => $request->file('image')->getClientMimeType(),
-                'attachable_id' => $request->user()->profile()->id,
+                'attachable_id' => $request->user()->profile->id,
                 'attachable_type' => Profile::class,
                 'file_size' => $request->file('image')->getSize(),
             ]) : $request->user()->profilePicture()->create([

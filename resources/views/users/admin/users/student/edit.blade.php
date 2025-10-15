@@ -6,7 +6,7 @@
             <!-- Profile Information -->
             <div class="p-6 bg-white rounded-lg shadow-md">
                 <h2 class="mb-4 text-lg font-medium text-gray-900">Profile Information</h2>
-                <form method="POST" action="{{ route('student.settings.profile.update') }}" class="space-y-6">
+                <form method="POST" action="{{ route('admin.users.students.update-profile', ['id' => $student->id]) }}" class="space-y-6">
                     @csrf
                     @method('PUT')
 
@@ -74,7 +74,7 @@
             <!-- Update Email -->
             <div class="p-6 bg-white rounded-lg shadow-md">
                 <h2 class="mb-4 text-lg font-medium text-gray-900">Update Email</h2>
-                <form method="POST" action="{{ route('student.settings.email.update') }}" class="space-y-6">
+                <form method="POST" action="{{ route('admin.users.students.update-email', ['id' => $student->id]) }}" class="space-y-6">
                     @csrf
                     @method('PUT')
 
@@ -96,7 +96,7 @@
             <!-- Update Password -->
             <div class="p-6 bg-white rounded-lg shadow-md">
                 <h2 class="mb-4 text-lg font-medium text-gray-900">Update Password</h2>
-                <form method="POST" action="{{ route('student.settings.password.update') }}" class="space-y-6">
+                <form method="POST" action="{{ route('admin.users.students.update-password', ['id' => $student->id]) }}" class="space-y-6">
                     @csrf
                     @method('PUT')
 

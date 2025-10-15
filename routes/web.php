@@ -122,6 +122,11 @@ Route::middleware(['auth'])->group(function () {
                 ->as('users.')
                 ->group(function () {
                     Route::get('', [UserController::class, 'index'])->name('index');
+                    Route::prefix('students')->as('students.')->group(function () {
+                        Route::put('update-profile/{id}', [StudentController::class, 'updateProfile'])->name('update-profile');
+                        Route::put('update-email/{id}', [StudentController::class, 'updateEmail'])->name('update-email');
+                        Route::put('update-password/{id}', [StudentController::class, 'updatePassword'])->name('update-password');
+                    });
                     Route::resource('students', StudentController::class);
                     Route::resource('teacher', TeacherController::class);
                 });
@@ -345,7 +350,7 @@ Route::middleware(['auth'])->group(function () {
             });
             Route::resource('departments', DepartmentController::class);
             Route::prefix('positions')->as('positions.')->group(function () {
-                Route::post('{positions}/toggle-hiring', [JobPositionController::class, 'toggleHiring'])->name('toggle-hiring');
+                Route::post('{id}/toggle-hiring', [JobPositionController::class, 'toggleHiring'])->name('toggle-hiring');
             });
             Route::resource('positions', JobPositionController::class);
             Route::get('applicants', [JobPositionController::class, 'applicants'])->name('applicants.index');

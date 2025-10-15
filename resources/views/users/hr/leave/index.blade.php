@@ -183,7 +183,7 @@
                                 </td>
                                 <td>{{ ucfirst($request->type) }}</td>
                                 <td>
-                                    {{ date('M d, Y', strtotime( $request->start_date)) }} -
+                                    {{ date('M d, Y', strtotime($request->start_date)) }} -
                                     {{ date('M d, Y', strtotime($request->end_date)) }}
                                     <div class="text-sm text-gray-500">
                                         {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }}
@@ -223,60 +223,85 @@
                                             </form>
                                         </div>
                                     @else
-                                        <div x-data="{ requestData: {} }">
-
-                                            <button
-                                                @click="
-            requestData = {
-                name: '  {{ $request->employee->first_name }} {{ $request->employee->last_name }}',
-
-                duration: ' {{ date('M d, Y', strtotime( $request->start_date)) }} - {{ date('M d, Y', strtotime($request->end_date)) }}',
-                reason: '{{ addslashes($request->reason) }}',
-                status: '{{ ucfirst($request->status) }}'
-            };
-            leave_details_modal.showModal();
-        "
-                                                class="btn btn-ghost btn-sm">
+                                        <div>
+                                            <button onclick="leave_details_modal_{{ $request->id }}.showModal()"
+                                                class="btn btn-ghost btn-sm gap-2">
+                                                <i class="fi fi-rr-eye"></i>
                                                 View Details
                                             </button>
-                                            <dialog id="leave_details_modal" class="modal">
-                                                <div class="modal-box">
-                                                    <h3 class="font-bold text-lg mb-4">Leave Request Details</h3>
-                                                    <div class="space-y-3">
+                                        </div>
+
+                                        <dialog id="leave_details_modal_{{ $request->id }}" class="modal">
+                                            <div class="modal-box">
+                                                <h3 class="font-bold text-lg mb-4">Leave Request Details</h3>
+                                                <div class="space-y-4">
+                                                    <div class="grid grid-cols-2 gap-4">
                                                         <div>
-                                                            <span class="text-sm text-gray-600">Employee:</span>
-                                                            <span class="font-medium"
-                                                                x-text="requestData.name"></span>
+
+
+                                                            <span class="text-sm text-gray-600">Employee:
+                                                                {{ $request->employee->first_name . ' ' . $request->employee->last_name }}
+                                                            </span>
+                                                            <p class="font-medium" x-text="requestData.name"></p>
                                                         </div>
                                                         {{-- <div>
                                                             <span class="text-sm text-gray-600">Leave Type:</span>
-                                                            <span class="font-medium"
-                                                                x-text="requestData.leaveType"></span>
+                                                            <p class="font-medium" x-text="requestData.type"></p>
                                                         </div> --}}
-                                                        <div>
-                                                            <span class="text-sm text-gray-600">Duration:</span>
+                                                    </div>
+
+                                                    <div>
+                                                        <span class="text-sm text-gray-600">Duration:
+                                                            {{ date('M d, Y', strtotime($request->start_date)) }} -
+                                                            {{ date('M d, Y', strtotime($request->end_date)) }}</span>
+                                                        <div class="flex flex-col">
                                                             <span class="font-medium"
                                                                 x-text="requestData.duration"></span>
-                                                        </div>
-                                                        <div>
-                                                            <span class="text-sm text-gray-600">Reason:</span>
-                                                            <p class="mt-1" x-text="requestData.reason"></p>
-                                                        </div>
-                                                        <div>
-                                                            <span class="text-sm text-gray-600">Status:</span>
-                                                            <span class="font-medium"
-                                                                x-text="requestData.status"></span>
+                                                            <span class="text-sm text-gray-500"
+                                                                x-text="requestData.days + ' days'"></span>
                                                         </div>
                                                     </div>
-                                                    <div class="modal-action">
-                                                        <form method="dialog">
-                                                            <button class="btn">Close</button>
-                                                        </form>
+
+                                                    <div>
+                                                        <span class="text-sm text-gray-600">Reason:
+                                                            {{ $request->reason }}</span>
+                                                        <p class="mt-1 text-gray-700 whitespace-pre-wrap"
+                                                            x-text="requestData.reason"></p>
+                                                    </div>
+
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="text-sm text-gray-600">Status:
+
+                                                            @if ($request->status === 'pending')
+                                                                <span class="badge badge-warning">Pending</span>
+                                                            @elseif($request->status === 'approved')
+                                                                <span class="badge badge-success">Approved</span>
+                                                            @else
+                                                                <span class="badge badge-error">Rejected</span>
+                                                            @endif
+                                                        </span>
+                                                        <span
+                                                            x-bind:class="{
+                                                                'badge badge-warning': requestData
+                                                                    .status === 'Pending',
+                                                                'badge badge-success': requestData
+                                                                    .status === 'Approved',
+                                                                'badge badge-error': requestData.status === 'Rejected'
+                                                            }"
+                                                            x-text="requestData.status"></span>
                                                     </div>
                                                 </div>
-                                            </dialog>
 
-                                        </div>
+                                                <div class="modal-action">
+                                                    <form method="dialog">
+                                                        <button class="btn">Close</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <form method="dialog" class="modal-backdrop">
+                                                <button>close</button>
+                                            </form>
+                                        </dialog>
                                     @endif
                                 </td>
                             </tr>
@@ -295,6 +320,7 @@
             </div>
         </div>
     </div>
+
 
 
 </x-dashboard.hr.base>
