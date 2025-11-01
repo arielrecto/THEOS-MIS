@@ -40,6 +40,16 @@
             'name' => 'Inbox',
             'icon' => '<i class="fi fi-rr-inbox"></i>',
         ],
+        [
+            'url' => 'admin.payment-accounts.index',
+            'name' => 'Payment Accounts',
+            'icon' => '<i class="fi fi-rr-credit-card"></i>',
+        ],
+        [
+            'url' => 'admin.payments.index',
+            'name' => 'Payments',
+            'icon' => '<i class="fi fi-rr-money-check"></i>',
+        ],
     ];
 @endphp
 

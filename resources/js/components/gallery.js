@@ -1,5 +1,6 @@
 export default () => ({
-    categories: ['School Events', 'Academic Events', 'Campus Life', 'Activities'],
+    // categories: ['School Events', 'Academic Events', 'Campus Life', 'Activities'],
+    categories: [],
     selectedCategory: 'all',
     isModalOpen: false,
     selectedImage: null,

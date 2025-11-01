@@ -159,11 +159,23 @@ class EnrollmentController extends Controller
         $enrollee = EnrollmentForm::findOrFail($id);
 
 
+        if ($enrollee->type === 'old') {
+            $enrollee->update([
+                'status' => 'Enrolled'
+            ]);
+
+            return back()->with('success', 'Enrollee enrolled successfully');
+        }
+
+
         $user = User::create([
             'name' => $enrollee->first_name . ' ' . $enrollee->last_name,
             'email' => $enrollee->email,
             'password' => bcrypt('password'),
         ]);
+
+        $studentRole = Role::where('name', 'student')->first();
+        $user->assignRole($studentRole);
 
 
         $studentProfile = StudentProfile::create([
@@ -206,10 +218,10 @@ class EnrollmentController extends Controller
             'grade_level' => $enrollee->grade_level,
         ]);
 
-        $studentRole = Role::where('name', 'student')->first();
-        $user->assignRole($studentRole);
+
         $enrollee->update([
-            'status' => 'Enrolled'
+            'status' => 'Enrolled',
+            'user_id' => $user->id
         ]);
 
         Mail::to($enrollee->email)->send(new ApproveEnrollment($enrollee, $user));

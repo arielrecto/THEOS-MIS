@@ -145,4 +145,9 @@ class User extends Authenticatable
     public function profilePicture(){
         return $this->morphOne(Attachment::class, 'attachable')->latest();
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

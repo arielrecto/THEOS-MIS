@@ -24,17 +24,17 @@ class EmployeeController extends Controller
             'user',
             'position',
             'position.department'
-        ]);
+        ])->where('status', '!=', 'archived');
 
         if ($request->filled('search')) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('first_name', 'like', "%{$request->search}%")
-                  ->orWhere('last_name', 'like', "%{$request->search}%");
+                    ->orWhere('last_name', 'like', "%{$request->search}%");
             });
         }
 
         if ($request->filled('department')) {
-            $query->whereHas('position.department', function($q) use ($request) {
+            $query->whereHas('position.department', function ($q) use ($request) {
                 $q->where('id', $request->department);
             });
         }
@@ -291,11 +291,30 @@ class EmployeeController extends Controller
         }
     }
 
-    public function print($id){
+    public function toggleArchive(EmployeeProfile $employee)
+    {
+        try {
+            $employee->update([
+                'status' => 'archived'
+            ]);
+
+
+            $message = 'Employee archived successfully';
+
+            return redirect()
+                ->back()
+                ->with('message', $message);
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update archived status: ' . $e->getMessage());
+        }
+    }
+
+    public function print($id)
+    {
         $employee = EmployeeProfile::findOrFail($id);
         return view('users.hr.employees.print', compact('employee'));
     }
-
-
-
 }

@@ -86,6 +86,28 @@
                     </div> --}}
                 </div>
 
+
+                <!-- Department Head -->
+                <div class="form-control mt-6">
+                    <label class="label">
+                        <span class="label-text font-medium">Head</span>
+                        <span class="label-text-alt text-error">*</span>
+                    </label>
+                    <select name="head" class="select select-bordered w-full @error('head') select-error @enderror" required>
+                        <option value="" disabled selected>Select department head</option>
+                        @foreach($employees as $employee)
+                            <option value="{{ $employee->name }}" {{ old('head', $department->head) == $employee->id ? 'selected' : '' }}>
+                                {{ $employee->name }} ({{ $employee->email }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('head')
+                        <label class="label">
+                            <span class="label-text-alt text-error">{{ $message }}</span>
+                        </label>
+                    @enderror
+                </div>
+
                 <!-- Form Actions -->
                 <div class="flex items-center justify-end gap-3 mt-8 pt-6 border-t">
                     <a href="{{ route('hr.departments.index') }}"

@@ -5,11 +5,11 @@
             'name' => 'dashboard',
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
         ],
-        [
-            'url' => 'employee.attendance.index',
-            'name' => 'attendance',
-            'icon' => '<i class="fi fi-rr-time-check"></i>',
-        ],
+        // [
+        //     'url' => 'employee.attendance.index',
+        //     'name' => 'attendance',
+        //     'icon' => '<i class="fi fi-rr-time-check"></i>',
+        // ],
         [
             'url' => 'employee.leaves.index',
             'name' => 'leaves',

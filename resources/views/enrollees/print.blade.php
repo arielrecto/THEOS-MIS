@@ -1,3 +1,11 @@
+@php
+use App\Models\Logo;
+
+$logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.png');
+
+@endphp
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +29,7 @@
         .field-label {
             font-size: 0.8rem;
             color: #555;
+            font-weight: 500;
         }
 
         /* Style for the small text below the fields (e.g., "Last Name") */
@@ -36,19 +45,19 @@
                 print-color-adjust: exact;
             }
 
-             /* ADD THIS PART to hide the buttons on the printed paper */
-             #no-print {
+            /* ADD THIS PART to hide the buttons on the printed paper */
+            #no-print {
                 display: none;
             }
         }
-
     </style>
 </head>
 
 <body class="p-4 bg-gray-100 sm:p-8">
 
     <div class="flex fixed top-4 right-4 z-50 gap-3" id="no-print">
-        <a href="/" class="px-4 py-2 font-semibold text-black bg-gray-200 rounded-lg shadow hover:bg-gray-300">
+        <a href="{{ url()->previous() }}"
+            class="px-4 py-2 font-semibold text-black bg-gray-200 rounded-lg shadow hover:bg-gray-300">
             Back
         </a>
         <button onclick="document.getElementById('no-print').style.display = 'none'; window.print(); document.getElementById('no-print').style.display = 'flex';"
@@ -58,7 +67,20 @@
     </div>
 
     <div class="mx-auto max-w-4xl bg-white shadow-lg">
-        <div class="p-3 text-xl font-bold text-center text-white bg-blue-900">
+        <!-- Header -->
+        <div class="flex justify-between items-center p-6 border-b">
+            <div>
+                <h1 class="text-3xl font-bold text-blue-900">THEOS HIGHER GROUND ACADEME</h1>
+                <p class="text-lg text-gray-600">SY {{ $student->school_year ?? '&nbsp;' }}</p>
+            </div>
+            <div>
+                <!-- Using a placeholder for the logo -->
+                <img src="{{ $logo }}" alt="School Logo" class="h-24 w-24">
+            </div>
+        </div>
+
+        <!-- Enrollment Form Section -->
+        <div class="p-2 pl-6 font-bold text-white bg-blue-900">
             ENROLLMENT FORM
         </div>
 
@@ -66,11 +88,11 @@
             <div class="grid grid-cols-1 gap-y-4 gap-x-8 items-end md:grid-cols-5">
                 <div class="md:col-span-2">
                     <p class="field-label">School Year:</p>
-                    <p class="form-data">{{ $student->school_year ?? '2025-2026' }}</p>
+                    <p class="form-data">{{ $student->school_year ?? '&nbsp;' }}</p>
                 </div>
                 <div class="md:col-span-2">
                     <p class="field-label">Grade Level to Enroll:</p>
-                    <p class="form-data">{{ $student->grade_level ?? 'Grade 10' }}</p>
+                    <p class="form-data">{{ $student->grade_level ?? '&nbsp;' }}</p>
                 </div>
                 <div class="md:col-span-1">
                     <p class="field-label">Learner's Reference Number:</p>
@@ -79,129 +101,149 @@
             </div>
         </div>
 
+        <!-- Student's Information Section -->
         <div class="p-2 pl-6 font-bold text-white bg-blue-900">
             STUDENT'S INFORMATION
         </div>
 
         <div class="p-6 space-y-6">
+            <!-- Names -->
             <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-4">
                 <div>
-                    <p class="form-data">{{ $student->last_name ?? 'Doe' }}</p>
+                    <p class="form-data">{{ $student->last_name ?? '&nbsp;' }}</p>
                     <p class="sub-label">Last Name</p>
                 </div>
                 <div>
-                    <p class="form-data">{{ $student->first_name ?? 'John' }}</p>
+                    <p class="form-data">{{ $student->first_name ?? '&nbsp;' }}</p>
                     <p class="sub-label">First Name</p>
                 </div>
                 <div>
-                    <p class="form-data">{{ $student->middle_name ?? 'Smith' }}</p>
+                    <p class="form-data">{{ $student->middle_name ?? '&nbsp;' }}</p>
                     <p class="sub-label">Middle Name</p>
                 </div>
                 <div>
-                    <p class="form-data">{{ $student->extension_name ?? 'N/A' }}</p>
+                    <p class="form-data">{{ $student->extension_name ?? '&nbsp;' }}</p>
                     <p class="sub-label">Extension Name <span class="italic">(e.g. Jr, III)</span></p>
                 </div>
             </div>
 
+            <!-- Full Address -->
             <div>
                 <p class="mb-2 field-label">Full Address</p>
-                <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-5">
-                    <div class="md:col-span-5">
-                        <p class="form-data">
-                            {{ $student->current_address ?? 'Block 1, Lot 2, Friendly Subdivision, Brgy. San Jose, Tanza, Cavite, Philippines 4108' }}
-                        </p>
-                        <p class="sub-label">Block/Lot, Street, Subdivision, Barangay, Municipality/City, Province,
-                            Country, Zip Code</p>
+                <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-4">
+                    <div>
+                        <p class="form-data">{{ $student->house_no ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Block and Lot</p>
+                    </div>
+                    <div>
+                        <p class="form-data">{{ $student->street ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Street Name</p>
+                    </div>
+                    <div>
+                        <p class="form-data">{{ $student->subdivision ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Subdivision</p>
+                    </div>
+                    <div>
+                        <p class="form-data">{{ $student->barangay ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Barangay</p>
+                    </div>
+                    <div>
+                        <p class="form-data">{{ $student->city ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Municipality/City</p>
+                    </div>
+                    <div>
+                        <p class="form-data">{{ $student->province ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Province</p>
+                    </div>
+                    <div>
+                        <p class="form-data">{{ $student->country ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Country</p>
+                    </div>
+                    <div>
+                        <p class="form-data">{{ $student->zip_code ?? '&nbsp;' }}</p>
+                        <p class="sub-label">Zip Code</p>
                     </div>
                 </div>
             </div>
 
+            <!-- Birth Info -->
             <div class="grid grid-cols-1 gap-y-4 gap-x-6 items-end md:grid-cols-6">
                 <div class="md:col-span-2">
                     <p class="field-label">Date of Birth (DD/MM/YYYY):</p>
                     <p class="form-data">
-                        {{ isset($student->date_of_birth) ? date('d / m / Y', strtotime($student->date_of_birth)) : '15 / 01 / 2010' }}
+                        {{ isset($student->birthdate) ? date('d / m / Y', strtotime($student->birthdate)) : '&nbsp;' }}
                     </p>
                 </div>
                 <div class="md:col-span-1">
                     <p class="field-label">Sex:</p>
-                    <p class="form-data">{{ $student->sex ?? 'Male' }}</p>
+                    <p class="form-data">{{ $student->sex ?? '&nbsp;' }}</p>
                 </div>
                 <div class="md:col-span-1">
                     <p class="field-label">Age:</p>
-                    <p class="form-data">
-                        {{ isset($student->date_of_birth) ? date_diff(date_create($student->date_of_birth), date_create('today'))->y : '15' }}
-                    </p>
+                    <p class="form-data">{{ $student->age ?? '&nbsp;' }}</p>
                 </div>
                 <div class="md:col-span-2">
                     <p class="field-label">Place of Birth:</p>
-                    <p class="form-data">{{ $student->place_of_birth ?? 'Manila, Philippines' }}</p>
+                    <p class="form-data">{{ $student->birthplace ?? '&nbsp;' }}</p>
                 </div>
             </div>
         </div>
 
+        <!-- Parent Info Section -->
         <div class="p-6 border-t">
-            <div class="grid grid-cols-1 gap-y-6 gap-x-8 md:grid-cols-3">
+            <div class="grid grid-cols-1 gap-y-6 gap-x-8 md:grid-cols-2">
+                <!-- Father's Info -->
                 <div class="space-y-4">
                     <p class="font-semibold">Father's Name</p>
                     <div>
-                        <p class="form-data">{{ $student->father_last_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->parent_last_name ?? '&nbsp;' }}</p>
                         <p class="sub-label">Last Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->father_first_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->parent_name ?? '&nbsp;' }}</p>
                         <p class="sub-label">First Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->father_middle_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->parent_middle_name ?? '&nbsp;' }}</p>
                         <p class="sub-label">Middle Name</p>
                     </div>
                     <div>
                         <p class="field-label">Contact Number:</p>
-                        <p class="form-data">{{ $student->father_contact_number ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->contact_number ?? '&nbsp;' }}</p>
+                    </div>
+                    <div>
+                        <p class="field-label">Occupation:</p>
+                        <p class="form-data">{{ $student->occupation ?? '&nbsp;' }}</p>
                     </div>
                 </div>
+                <!-- Mother's Info -->
                 <div class="space-y-4">
                     <p class="font-semibold">Mother's Name</p>
                     <div>
-                        <p class="form-data">{{ $student->mother_last_name ?? 'Doe' }}</p>
+                        <p class="form-data">{{ $student->mother_last_name ?? '&nbsp;' }}</p>
                         <p class="sub-label">Last Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->mother_first_name ?? 'Jane' }}</p>
+                        <p class="form-data">{{ $student->mother_name ?? '&nbsp;' }}</p>
                         <p class="sub-label">First Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->mother_middle_name ?? 'Smith' }}</p>
+                        <p class="form-data">{{ $student->mother_middle_name ?? '&nbsp;' }}</p>
                         <p class="sub-label">Middle Name</p>
                     </div>
                     <div>
                         <p class="field-label">Contact Number:</p>
-                        <p class="form-data">{{ $student->mother_contact_number ?? '0917-123-4567' }}</p>
-                    </div>
-                </div>
-                <div class="space-y-4">
-                    <p class="font-semibold">Guardian's Name</p>
-                    <div>
-                        <p class="form-data">{{ $student->guardian_last_name ?? '&nbsp;' }}</p>
-                        <p class="sub-label">Last Name</p>
+                        <p class="form-data">{{ $student->mother_contact_number ?? '&nbsp;' }}</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->guardian_first_name ?? '&nbsp;' }}</p>
-                        <p class="sub-label">First Name</p>
-                    </div>
-                    <div>
-                        <p class="form-data">{{ $student->guardian_middle_name ?? '&nbsp;' }}</p>
-                        <p class="sub-label">Middle Name</p>
-                    </div>
-                    <div>
-                        <p class="field-label">Contact Number:</p>
-                        <p class="form-data">{{ $student->guardian_contact_number ?? '&nbsp;' }}</p>
+                        <p class="field-label">Occupation:</p>
+                        <p class="form-data">{{ $student->mother_occupation ?? '&nbsp;' }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Agreement Section -->
         <div class="p-6 text-sm border-t">
             <p class="mb-4">
                 I hereby certify that the above information given are true and correct to the best of my knowledge and I
@@ -221,25 +263,21 @@
                     <div class="w-full h-10 border-b-2 border-black"></div>
                     <p class="mt-1 text-center">Signature of Mother</p>
                 </div>
-                <div>
-                    <div class="w-full h-10 border-b-2 border-black"></div>
-                    <p class="mt-1 text-center">Date signed</p>
+                <div class="flex flex-col justify-end">
+                    <p class="form-data text-center">
+                        {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : '&nbsp;' }}
+                    </p>
+                    <p class="mt-1 text-center sub-label">Date signed</p>
                 </div>
                 <div>
                     <div class="w-full h-10 border-b-2 border-black"></div>
                     <p class="mt-1 text-center">Signature of Father</p>
                 </div>
-                <div>
-                    <div class="w-full h-10 border-b-2 border-black"></div>
-                    <p class="mt-1 text-center">Date signed</p>
-                </div>
-                <div>
-                    <div class="w-full h-10 border-b-2 border-black"></div>
-                    <p class="mt-1 text-center">Signature of Guardian</p>
-                </div>
-                <div>
-                    <div class="w-full h-10 border-b-2 border-black"></div>
-                    <p class="mt-1 text-center">Date signed</p>
+                <div class="flex flex-col justify-end">
+                    <p class="form-data text-center">
+                        {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : '&nbsp;' }}
+                    </p>
+                    <p class="mt-1 text-center sub-label">Date signed</p>
                 </div>
             </div>
         </div>
@@ -247,7 +285,5 @@
     </div>
 
 </body>
-
-
 
 </html>

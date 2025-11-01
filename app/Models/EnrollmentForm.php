@@ -33,9 +33,17 @@ class EnrollmentForm extends Model
         'perm_province',
         'perm_zip_code',
         'parent_name',
+        'parent_last_name',
+        'parent_middle_name',
         'relationship',
         'contact_number',
         'occupation',
+        'mother_name',
+        'mother_last_name',
+        'mother_middle_name',
+        'mother_relationship',
+        'mother_contact_number',
+        'mother_occupation',
         'preferred_track',
         'preferred_strand',
         'modality',
@@ -44,6 +52,8 @@ class EnrollmentForm extends Model
         'status',
         'email',
         'user_id',
+        'type',
+        'lrn',
     ];
 
     protected $casts = [
@@ -59,5 +69,9 @@ class EnrollmentForm extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 }

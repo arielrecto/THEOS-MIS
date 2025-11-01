@@ -79,14 +79,14 @@
                                 <td>
                                     @if($department->head)
                                         <div class="flex items-center gap-3">
-                                            <div class="avatar">
+                                            {{-- <div class="avatar">
                                                 <div class="w-8 h-8 rounded-full">
                                                     <img src="{{ $department->head->avatar_url }}" alt="Avatar">
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div>
-                                                <div class="font-medium">{{ $department->head->name }}</div>
-                                                <div class="text-sm opacity-50">Since {{ $department->head->appointed_at->format('M Y') }}</div>
+                                                <div class="font-medium capitalize">{{ $department->head }}</div>
+                                                {{-- <div class="text-sm opacity-50">Since {{ $department->head->appointed_at->format('M Y') }}</div> --}}
                                             </div>
                                         </div>
                                     @else

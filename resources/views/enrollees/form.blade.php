@@ -17,16 +17,17 @@
                     </div>
                 @endif
 
-                <form action="{{ route('enrollment.store') }}" method="POST" class="space-y-8">
+                <form action="{{ route('enrollment.store') }}" method="POST" class="space-y-8"
+                    enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="academic_year_id" value="{{ $academicYear->id }}">
                     <input type="hidden" name="enrollment_id" value="{{ $enrollmentID }}">
-
-                    <!-- Enrollment Details Card -->
+                    <input type="hidden" name="user_id" value="{{auth()->id ?? null}}" />
+                    <!-- Enrollment Form Card -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800">
-                            <i class="fi fi-rr-graduation-cap"></i>
-                            <span>Enrollment Details</span>
+                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800 uppercase">
+                            <i class="fi fi-rr-document"></i>
+                            <span>Enrollment Form</span>
                         </div>
 
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -44,11 +45,12 @@
                                     <span class="font-medium label-text">Grade Level to Enroll</span>
                                 </label>
                                 <select name="grade_level"
-                                    class="select select-bordered @error('grade_level') select-error @enderror">
+                                    class="select select-bordered @error('grade_level') select-error @enderror"
+                                    required>
                                     <option value="" disabled selected>Select Grade Level</option>
                                     @foreach ($gradeLevels as $grade)
                                         <option value="{{ $grade->name }}"
-                                            {{ old('grade_level') == $grade ? 'selected' : '' }}>
+                                            {{ old('grade_level') == $grade->name ? 'selected' : '' }}>
                                             {{ $grade->name }}
                                         </option>
                                     @endforeach
@@ -57,35 +59,39 @@
 
                             <div class="form-control md:col-span-2">
                                 <label class="label">
-                                    <span class="font-medium label-text">Returning (Balik-Aral) Learner?</span>
+                                    <span class="font-medium label-text">Learner's Reference Number (LRN)</span>
                                 </label>
-                                <div class="flex gap-6">
-                                    <label class="flex gap-2 items-center cursor-pointer">
-                                        <input type="radio" name="balik_aral" value="yes"
-                                            class="radio radio-accent"
-                                            {{ old('balik_aral') == 'yes' ? 'checked' : '' }}>
-                                        <span>Yes</span>
-                                    </label>
-                                    <label class="flex gap-2 items-center cursor-pointer">
-                                        <input type="radio" name="balik_aral" value="no"
-                                            class="radio radio-accent"
-                                            {{ old('balik_aral') == 'no' ? 'checked' : '' }}>
-                                        <span>No</span>
-                                    </label>
-                                </div>
+                                <input type="text" name="lrn" value="{{ old('lrn') }}"
+                                    class="input input-bordered @error('lrn') input-error @enderror"
+                                    placeholder="Enter LRN if available">
                             </div>
+                        </div>
+
+
+                        <div class="flex flex-col  gap-2 mt-5">
+                            <p class="font-medium label-text">Balik Aral:</p>
+                            <select name="balik_aral" class="select select-bordered">
+                                <option value="yes" {{ old('balik_aral') == 'yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ old('balik_aral') == 'no' ? 'selected' : '' }}>No</option>
+                            </select>
+                        </div>
+
+                         <div class="flex flex-col  gap-2 mt-5">
+                            <p class="font-medium label-text">Enrollment type:</p>
+                            <input type="text" name="type" value="{{ request()->query('type') }}" class="input input-bordered" readonly>
                         </div>
                     </div>
 
                     <!-- Student Information Card -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800">
+                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800 uppercase">
                             <i class="fi fi-rr-user"></i>
-                            <span>Student Information</span>
+                            <span>Student's Information</span>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <div class="form-control">
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-4">
+                            <!-- Names -->
+                            <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">Last Name</span>
                                 </label>
@@ -93,7 +99,7 @@
                                     class="input input-bordered @error('last_name') input-error @enderror" required>
                             </div>
 
-                            <div class="form-control">
+                            <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">First Name</span>
                                 </label>
@@ -101,7 +107,7 @@
                                     class="input input-bordered @error('first_name') input-error @enderror" required>
                             </div>
 
-                            <div class="form-control">
+                            <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">Middle Name</span>
                                 </label>
@@ -109,7 +115,7 @@
                                     class="input input-bordered">
                             </div>
 
-                            <div class="form-control">
+                            <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">Extension Name</span>
                                     <span class="text-gray-500 label-text-alt">(Jr., III, etc.)</span>
@@ -118,7 +124,8 @@
                                     class="input input-bordered">
                             </div>
 
-                            <div class="form-control">
+                            <!-- Birth Info -->
+                            <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">Date of Birth</span>
                                 </label>
@@ -126,243 +133,336 @@
                                     class="input input-bordered @error('birthdate') input-error @enderror" required>
                             </div>
 
-                            <div class="form-control">
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Sex</span>
+                                </label>
+                                <div class="flex gap-6 pt-2">
+                                    <label class="flex gap-2 items-center cursor-pointer">
+                                        <input type="radio" name="sex" value="Male"
+                                            class="radio radio-accent"
+                                            {{ old('sex') == 'Male' ? 'checked' : '' }}>
+                                        <span>Male</span>
+                                    </label>
+                                    <label class="flex gap-2 items-center cursor-pointer">
+                                        <input type="radio" name="sex" value="Female"
+                                            class="radio radio-accent"
+                                            {{ old('sex') == 'Female' ? 'checked' : '' }}>
+                                        <span>Female</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Age</span>
+                                </label>
+                                <input type="number" name="age" value="{{ old('age') }}"
+                                    class="input input-bordered @error('age') input-error @enderror" min="0">
+                            </div>
+
+                            <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">Place of Birth</span>
                                 </label>
                                 <input type="text" name="birthplace" value="{{ old('birthplace') }}"
                                     class="input input-bordered @error('birthplace') input-error @enderror" required>
                             </div>
+
+                            <!-- Full Address -->
+                            <h3 class="md:col-span-4 mt-4 font-medium text-gray-700">Full Address</h3>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Block and Lot</span>
+                                </label>
+                                <input type="text" name="house_no" value="{{ old('house_no') }}"
+                                    placeholder="Block and Lot"
+                                    class="input input-bordered @error('house_no') input-error @enderror">
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Street Name</span>
+                                </label>
+                                <input type="text" name="street" value="{{ old('street') }}"
+                                    placeholder="Street Name"
+                                    class="input input-bordered @error('street') input-error @enderror">
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Subdivision</span>
+                                </label>
+                                <input type="text" name="subdivision" value="{{ old('subdivision') }}"
+                                    placeholder="Subdivision"
+                                    class="input input-bordered @error('subdivision') input-error @enderror">
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Barangay</span>
+                                </label>
+                                <input type="text" name="barangay" value="{{ old('barangay') }}"
+                                    placeholder="Barangay"
+                                    class="input input-bordered @error('barangay') input-error @enderror" required>
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Municipality/City</span>
+                                </label>
+                                <input type="text" name="city" value="{{ old('city') }}"
+                                    placeholder="Municipality/City"
+                                    class="input input-bordered @error('city') input-error @enderror" required>
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Province</span>
+                                </label>
+                                <input type="text" name="province" value="{{ old('province') }}"
+                                    placeholder="Province"
+                                    class="input input-bordered @error('province') input-error @enderror" required>
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Country</span>
+                                </label>
+                                <input type="text" name="country" value="{{ old('country', 'Philippines') }}"
+                                    placeholder="Country"
+                                    class="input input-bordered @error('country') input-error @enderror" required>
+                            </div>
+
+                            <div class="form-control md:col-span-1">
+                                <label class="label">
+                                    <span class="font-medium label-text">Zip Code</span>
+                                </label>
+                                <input type="text" name="zip_code" value="{{ old('zip_code') }}"
+                                    placeholder="Zip Code"
+                                    class="input input-bordered @error('zip_code') input-error @enderror">
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Address Information -->
-                    <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800">
-                            <i class="fi fi-rr-home"></i>
-                            <span>Address Information</span>
-                        </div>
-
-                        <!-- Current Address -->
-                        <h3 class="mb-4 text-sm font-medium text-gray-500">Current Address</h3>
-                        <div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-3">
-
-                            <div class="flex flex-col gap-2">
-                                <input type="text" name="house_no" placeholder="House No."
-                                    class="input input-bordered">
-
-                                @if ($errors->has('house_no'))
-                                    <span class="text-sm text-red-600">{{ $errors->first('house_no') }}</span>
-                                @endif
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <input type="text" name="street" placeholder="Street"
-                                    class="input input-bordered">
-                                @if ($errors->has('street'))
-                                    <span class="text-sm text-red-600">{{ $errors->first('street') }}</span>
-                                @endif
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <input type="text" name="barangay" placeholder="Barangay"
-                                    class="input input-bordered">
-                                @if ($errors->has('barangay'))
-                                    <span class="text-sm text-red-600">{{ $errors->first('barangay') }}</span>
-                                @endif
-                            </div>
-
-
-                            <div>
-                                <input type="text" name="city" placeholder="Municipality/City"
-                                    class="w-full input input-bordered">
-                                @if ($errors->has('city'))
-                                    <span class="text-sm text-red-600">{{ $errors->first('city') }}</span>
-                                @endif
-
-                            </div>
-
-
-                            <div>
-
-
-                                <input type="text" name="province" placeholder="Province"
-                                    class="w-full input input-bordered">
-                                @if ($errors->has('province'))
-                                    <span class="text-sm text-red-600">{{ $errors->first('province') }}</span>
-                                @endif
-
-                            </div>
-
-
-
-                            <div>
-
-                                <input type="text" name="zip_code" placeholder="Zip Code"
-                                    class="w-full input input-bordered">
-                                @if ($errors->has('zip_code'))
-                                    <span class="text-sm text-red-600">{{ $errors->first('zip_code') }}</span>
-                                @endif
-
-                            </div>
-                        </div>
-
-
-                        <!-- Permanent Address -->
-                        {{-- <h3 class="mb-4 text-sm font-medium text-gray-500">Permanent Address</h3>
-                            <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-
-                                <div class="flex flex-col gap-2">
-                                    <input type="text" name="perm_house_no" placeholder="House No."
-                                    class="input input-bordered">
-
-                                    @if ($errors->has('perm_house_no'))
-                                        <span class="text-sm text-red-600">{{ $errors->first('perm_house_no') }}</span>
-                                    @endif
-                                </div>
-
-                                <div class="flex flex-col gap-2">
-                                    <input type="text" name="perm_street" placeholder="Street"
-                                    class="input input-bordered">
-
-                                    @if ($errors->has('perm_street'))
-                                        <span class="text-sm text-red-600">{{ $errors->first('perm_street') }}</span>
-                                    @endif
-                                </div>
-
-                                <div class="flex flex-col gap-2">
-                                    <input type="text" name="perm_barangay" placeholder="Barangay"
-                                    class="input input-bordered">
-
-                                    @if ($errors->has('perm_barangay'))
-                                        <span class="text-sm text-red-600">{{ $errors->first('perm_barangay') }}</span>
-                                    @endif
-                                </div>
-
-                                <div class="flex flex-col gap-2">
-                                    <input type="text" name="perm_city" placeholder="Municipality/City"
-                                    class="input input-bordered">
-
-                                    @if ($errors->has('perm_city'))
-                                        <span class="text-sm text-red-600">{{ $errors->first('perm_city') }}</span>
-                                    @endif
-                                </div>
-                                <div class="flex flex-col">
-                                    <input type="text" name="perm_province" placeholder="Province"
-                                    class="input input-bordered">
-
-                                    @if ($errors->has('perm_province'))
-                                        <span class="text-sm text-red-600">{{ $errors->first('perm_province') }}</span>
-                                    @endif
-                                </div>
-
-
-
-                                <div class="flex flex-col">
-                                    <input type="text" name="perm_zip_code" placeholder="Zip Code"
-                                    class="input input-bordered">
-
-                                    @if ($errors->has('perm_zip_code'))
-                                        <span class="text-sm text-red-600">{{ $errors->first('perm_zip_code') }}</span>
-                                    @endif
-                                </div>
-                            </div> --}}
                     </div>
 
                     <!-- Parent/Guardian Information -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800">
-                            <i class="fi fi-rr-user"></i>
+                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800 uppercase">
+                            <i class="fi fi-rr-users-alt"></i>
                             <span>Parent/Guardian Information</span>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="font-medium label-text">Full Name</span>
-                                </label>
-                                <input type="text" name="parent_name" value="{{ old('parent_name') }}"
-                                    class="input input-bordered @error('parent_name') input-error @enderror" required>
+                        <div class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-2">
+                            <!-- Father's Information -->
+                            <div class="space-y-4">
+                                <h3 class="font-medium text-gray-700">Father's Name</h3>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Last Name</span>
+                                    </label>
+                                    <input type="text" name="parent_last_name"
+                                        value="{{ old('parent_last_name') }}" placeholder="Last Name"
+                                        class="input input-bordered @error('parent_last_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">First Name</span>
+                                    </label>
+                                    <input type="text" name="parent_name" value="{{ old('parent_name') }}"
+                                        placeholder="First Name"
+                                        class="input input-bordered @error('parent_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Middle Name</span>
+                                    </label>
+                                    <input type="text" name="parent_middle_name"
+                                        value="{{ old('parent_middle_name') }}" placeholder="Middle Name"
+                                        class="input input-bordered @error('parent_middle_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Contact Number</span>
+                                    </label>
+                                    <input type="text" name="contact_number" value="{{ old('contact_number') }}"
+                                        placeholder="Contact Number"
+                                        inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}"
+                                        oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
+                                        class="input input-bordered @error('contact_number') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Occupation</span>
+                                    </label>
+                                    <input type="text" name="occupation" value="{{ old('occupation') }}"
+                                        placeholder="Occupation"
+                                        class="input input-bordered @error('occupation') input-error @enderror">
+                                </div>
                             </div>
 
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="font-medium label-text">Relationship to Student</span>
-                                </label>
-                                <input type="text" name="relationship" value="{{ old('relationship') }}"
-                                    class="input input-bordered @error('relationship') input-error @enderror" required>
-                            </div>
-
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="font-medium label-text">Contact Number</span>
-                                </label>
-                                <input type="text" name="contact_number" value="{{ old('contact_number') }}"
-                                    inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}"
-                                    oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
-                                    class="input input-bordered @error('contact_number') input-error @enderror"
-                                    required>
-                            </div>
-
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="font-medium label-text">Occupation</span>
-                                </label>
-                                <input type="text" name="occupation" value="{{ old('occupation') }}"
-                                    class="input input-bordered">
+                            <!-- Mother's Information -->
+                            <div class="space-y-4">
+                                <h3 class="font-medium text-gray-700">Mother's Name</h3>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Last Name</span>
+                                    </label>
+                                    <input type="text" name="mother_last_name"
+                                        value="{{ old('mother_last_name') }}" placeholder="Last Name"
+                                        class="input input-bordered @error('mother_last_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">First Name</span>
+                                    </label>
+                                    <input type="text" name="mother_name" value="{{ old('mother_name') }}"
+                                        placeholder="First Name"
+                                        class="input input-bordered @error('mother_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Middle Name</span>
+                                    </label>
+                                    <input type="text" name="mother_middle_name"
+                                        value="{{ old('mother_middle_name') }}" placeholder="Middle Name"
+                                        class="input input-bordered @error('mother_mddle_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Contact Number</span>
+                                    </label>
+                                    <input type="text" name="mother_contact_number"
+                                        value="{{ old('mother_contact_number') }}" placeholder="Contact Number"
+                                        inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}"
+                                        oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
+                                        class="input input-bordered @error('mother_contact_number') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Occupation</span>
+                                    </label>
+                                    <input type="text" name="mother_occupation"
+                                        value="{{ old('mother_occupation') }}" placeholder="Occupation"
+                                        class="input input-bordered @error('mother_occupation') input-error @enderror">
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Senior High School Preferences -->
-                    {{-- <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800">
-                            <i class="fi fi-rr-graduation-cap"></i>
-                            <span>For Learning in Senior High School</span>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="font-medium label-text">Preferred Track</span>
-                                </label>
-                                <select name="preferred_track" class="select select-bordered @error('preferred_track') select-error @enderror">
-                                    <option value="" disabled selected>Select Track</option>
-                                    <option value="academic" {{ old('preferred_track') == 'academic' ? 'selected' : '' }}>Academic</option>
-                                    <option value="technical and vocational and livelihood" {{ old('preferred_track') == 'technical and vocational and livelihood' ? 'selected' : '' }}>Technical-Vocational-Livelihood (TVL)</option>
-                                    <option value="arts and design" {{ old('preferred_track') == 'arts and design' ? 'selected' : '' }}>Arts and Design</option>
-                                    <option value="sports" {{ old('preferred_track') == 'sports' ? 'selected' : '' }}>Sports</option>
-                                </select>
-                            </div>
-
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="font-medium label-text">Preferred Strand</span>
-                                </label>
-                                <select name="preferred_strand" class="select select-bordered @error('preferred_strand') select-error @enderror">
-                                    <option value="" disabled selected>Select Strand</option>
-                                    <option value="general academic" {{ old('preferred_strand') == 'general academic' ? 'selected' : '' }}>General Academic</option>
-                                    <option value="science, technology, engineering, and mathematics" {{ old('preferred_strand') == 'science, technology, engineering, and mathematics' ? 'selected' : '' }}>Science, Technology, Engineering, and Mathematics (STEM)</option>
-                                    <option value="accountancy, business, and management" {{ old('preferred_strand') == 'accountancy, business, and management' ? 'selected' : '' }}>Accountancy, Business, and Management (ABM)</option>
-                                    <option value="information and communication technology" {{ old('preferred_strand') == 'information and communication technology' ? 'selected' : '' }}>Information and Communication Technology (ICT)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div> --}}
-
-                    <!-- Contact Information -->
+                    <!-- Required Documents -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800">
-                            <i class="fi fi-rr-envelope"></i>
-                            <span>Contact Information</span>
+                        <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800 uppercase">
+                            <i class="fi fi-rr-clip"></i>
+                            <span>Required Documents</span>
                         </div>
 
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="font-medium label-text">Email Address</span>
-                                <span class="text-gray-500 label-text-alt">For verification purposes only</span>
-                            </label>
-                            <input type="email" name="email" value="{{ old('email') }}"
-                                class="input input-bordered @error('email') input-error @enderror" required>
+                        <div class="space-y-6">
+                            <!-- Document Upload Instructions -->
+                            <div class="p-4 bg-blue-50 rounded-lg">
+                                <h4 class="flex gap-2 items-center text-sm font-medium text-blue-800">
+                                    <i class="fi fi-rr-info"></i>
+                                    <span>Document Requirements</span>
+                                </h4>
+                                <ul class="mt-2 ml-5 text-sm text-blue-700 list-disc">
+                                    <li>All documents must be clear and readable</li>
+                                    <li>Accepted formats: PDF, JPG, PNG (max 5MB per file)</li>
+                                    <li>Make sure all pages are properly scanned</li>
+                                </ul>
+                            </div>
+
+                            <!-- Document Upload Section -->
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                <!-- Required Documents -->
+                                <div class="space-y-4">
+                                    <h4 class="font-medium text-gray-700">Required Documents</h4>
+                                    @foreach(['birth_certificate' => 'Birth Certificate (PSA/NSO)',
+                                             'form_138' => 'Report Card (Form 138)',
+                                             'good_moral' => 'Good Moral Certificate'] as $key => $label)
+                                        <div class="form-control">
+                                            <label class="label">
+                                                <span class="font-medium label-text">{{ $label }}</span>
+                                                <span class="text-error label-text-alt">*</span>
+                                            </label>
+                                            <input type="file"
+                                                   name="attachments[{{ $key }}]"
+                                                   accept=".pdf,.jpg,.jpeg,.png"
+                                                   class="file-input file-input-bordered file-input-accent w-full @error('attachments.' . $key) file-input-error @enderror"
+                                                   required>
+                                            @error('attachments.' . $key)
+                                                <label class="label">
+                                                    <span class="text-error label-text-alt">{{ $message }}</span>
+                                                </label>
+                                            @enderror
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- Additional Documents -->
+                                <div class="space-y-4">
+                                    <h4 class="font-medium text-gray-700">Additional Documents</h4>
+                                    <div class="form-control">
+                                        <label class="label">
+                                            <span class="font-medium label-text">Additional Files</span>
+                                        </label>
+                                        <input type="file"
+                                               name="attachments[additional][]"
+                                               accept=".pdf,.jpg,.jpeg,.png"
+                                               class="file-input file-input-bordered w-full"
+                                               multiple>
+                                        <label class="label">
+                                            <span class="text-gray-500 label-text-alt">You can select multiple files</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="p-6 bg-white rounded-lg shadow-lg">
+                        <p class="font-medium label-text">use for communication only</p>
+                        <div class="flex gap-2 flex-col mb-6 text-lg font-semibold text-gray-800 uppercase">
+                            <i class="fi fi-rr-file-contract"></i>
+                            <span class="font-medium label-text">Email:</span>
+
+                           <input type="email" name="email" value="{{ old('email') }}"
+                                    class="input input-bordered @error('email') input-error @enderror"
+                                    placeholder="Enter Email">
+                        </div>
+                        {{-- <div class="prose prose-sm max-w-none">
+                            <p>
+                                I hereby certify that the above information given are true and correct to the best of my
+                                knowledge and I allow Theos Higher Ground Academe to use my child's details to create
+                                and/or update his/her learner profile in the Learner Information System. The
+                                information herein shall be treated as confidential in compliance with the Data Privacy
+                                Act of 2012.
+                            </p>
+                            <p>
+                                By signing, I also hereby certify that I have read and understand the informational
+                                materials furnished above and agree/s that our/my child submits to Theos Higher Ground
+                                Academe's program, academic and disciplinary regulations and all other requirements
+                                indicated by the Administration and carried out by the School Principal and Faculty.
+                            </p>
+                        </div> --}}
+
+                        {{-- <div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
+                            <div class="space-y-2">
+                                <span class="font-medium">Signature of Mother:</span>
+                                <div class="w-full h-12 bg-gray-100 rounded-md border border-dashed"></div>
+                                <span class="font-medium">Signature of Father:</span>
+                                <div class="w-full h-12 bg-gray-100 rounded-md border border-dashed"></div>
+                                <span class="font-medium">Signature of Guardian:</span>
+                                <div class="w-full h-12 bg-gray-100 rounded-md border border-dashed"></div>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="font-medium label-text">Date Signed</span>
+                                </label>
+                                <input type="date" name="date_signed" value="{{ old('date_signed', date('Y-m-d')) }}"
+                                    class="input input-bordered @error('date_signed') input-error @enderror" required>
+                            </div>
+                        </div> --}}
                     </div>
 
                     <!-- Form Actions -->
@@ -377,4 +477,34 @@
             </div>
         </div>
     </div>
+
+    <!-- Add this script at the bottom of your form -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const additionalDocs = document.querySelector('input[name="additional_docs[]"]');
+            const previewContainer = document.getElementById('filePreviewContainer');
+            const fileList = document.getElementById('fileList');
+
+            additionalDocs.addEventListener('change', function() {
+                fileList.innerHTML = '';
+
+                if (this.files.length > 0) {
+                    previewContainer.classList.remove('hidden');
+                    Array.from(this.files).forEach(file => {
+                        const li = document.createElement('li');
+                        li.className = 'flex items-center gap-2';
+                        li.innerHTML = `
+                            <i class="fi fi-rr-document text-accent"></i>
+                            <span>${file.name}</span>
+                            <span class="text-xs text-gray-500">(${(file.size / (1024 * 1024)).toFixed(2)} MB)</span>
+                        `;
+                        fileList.appendChild(li);
+                    });
+                } else {
+                    previewContainer.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </x-landing-page.base>
+

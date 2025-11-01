@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\HR;
 
+use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -23,7 +24,12 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('users.hr.departments.create');
+
+        $employees = User::role(['employee', 'admin', 'human-resource', 'teacher'])->get();
+
+
+
+        return view('users.hr.departments.create', compact(['employees']));
     }
 
     /**
@@ -34,6 +40,7 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'head' => 'nullable'
         ]);
 
         Department::create($request->all());
@@ -59,7 +66,9 @@ class DepartmentController extends Controller
     {
         $department = Department::findOrFail($id);
 
-        return view('users.hr.departments.edit', compact('department'));
+        $employees = User::role(['employee', 'admin', 'human-resource', 'teacher'])->get();
+
+        return view('users.hr.departments.edit', compact('department', 'employees'));
     }
 
     /**

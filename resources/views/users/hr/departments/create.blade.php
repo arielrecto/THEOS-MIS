@@ -24,12 +24,9 @@
                             <span class="label-text font-medium">Department Name</span>
                             <span class="label-text-alt text-error">*</span>
                         </label>
-                        <input type="text"
-                               name="name"
-                               class="input input-bordered @error('name') input-error @enderror"
-                               value="{{ old('name') }}"
-                               placeholder="Enter department name"
-                               required>
+                        <input type="text" name="name"
+                            class="input input-bordered @error('name') input-error @enderror"
+                            value="{{ old('name') }}" placeholder="Enter department name" required>
                         @error('name')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
@@ -42,10 +39,32 @@
                         <label class="label">
                             <span class="label-text font-medium">Description</span>
                         </label>
-                        <textarea name="description"
-                                  class="textarea textarea-bordered h-24 @error('description') textarea-error @enderror"
-                                  placeholder="Enter department description">{{ old('description') }}</textarea>
+                        <textarea name="description" class="textarea textarea-bordered h-24 @error('description') textarea-error @enderror"
+                            placeholder="Enter department description">{{ old('description') }}</textarea>
                         @error('description')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">Head</span>
+                            <span class="label-text-alt text-error">*</span>
+                        </label>
+
+
+                        <select name="head" class="select select-bordered w-full @error('head') select-error @enderror" required>
+                            <option value="" disabled selected>Select department head</option>
+                            @foreach($employees as $employee)
+                                <option value="{{ $employee->name }}" {{ old('head') == $employee->id ? 'selected' : '' }}>
+                                    {{ $employee->name }} ({{ $employee->email }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('head')
                             <label class="label">
                                 <span class="label-text-alt text-error">{{ $message }}</span>
                             </label>
@@ -85,8 +104,7 @@
 
                 <!-- Form Actions -->
                 <div class="flex items-center justify-end gap-3 mt-8 pt-6 border-t">
-                    <a href="{{ route('hr.departments.index') }}"
-                       class="btn btn-ghost">
+                    <a href="{{ route('hr.departments.index') }}" class="btn btn-ghost">
                         Cancel
                     </a>
                     <button type="submit" class="btn btn-accent">

@@ -25,14 +25,17 @@ use App\Http\Controllers\Teacher\GradeController;
 use App\Http\Controllers\HR\JobPositionController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Student\PaymentController;
 use App\Http\Controllers\Teacher\ClassroomController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Teacher\AttendanceController;
 use App\Http\Controllers\Teacher\StudentTaskController;
+use App\Http\Controllers\Admin\PaymentAccountController;
 use App\Http\Controllers\Registrar\EnrollmentController;
 use App\Http\Controllers\Teacher\AnnouncementController;
 use App\Http\Controllers\Admin\AcademicProgramController;
 use App\Http\Controllers\Admin\GeneralAnnouncementController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\HR\DashboardController as HRDashboardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
@@ -49,6 +52,7 @@ use App\Http\Controllers\Student\DashboardController as StudentDashboardControll
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Employee\DashboardController as EmployeeDashboardController;
 use App\Http\Controllers\Student\AttendanceController as StudentAttendanceController;
+use App\Http\Controllers\Student\EnrollmentController as StudentEnrollmentController;
 use App\Http\Controllers\Employee\AttendanceController as EmployeeAttendanceController;
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
@@ -68,6 +72,7 @@ Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 Route::get('/contact-us', [LandingPageController::class, 'contact'])->name('contact');
 Route::post('/contact-us', [InboxController::class, 'store'])->name('contact.submit');
 Route::get('/gallery', [LandingPageController::class, 'gallery'])->name('gallery');
+Route::get('/academic-programs/{id}', [LandingPageController::class, 'showAcademicProgram'])->name('academic-programs.show');
 Route::get('/about-us', [LandingPageController::class, 'about'])->name('about');
 Route::get('job-opportunities', [LandingPageController::class, 'jobOpportunities'])->name('job-opportunities');
 Route::get('/job-opportunities/{position}', [LandingPageController::class, 'showJob'])->name('job-opportunities.show');
@@ -81,7 +86,8 @@ Route::prefix('enrollment')
     ->as('enrollment.')
     ->group(function () {
         Route::get('/form', [ControllersEnrollmentController::class, 'form'])->name('form');
-        Route::get('/{enrollemntForm}/application-message', [ControllersEnrollmentController::class, 'applicationMessage'])->name('applicationMessage');
+        Route::get('/{enrollmentForm}/application-message', [ControllersEnrollmentController::class, 'applicationMessage'])->name('applicationMessage');
+         Route::get('/type', [ControllersEnrollmentController::class, 'enrollmentType'])->name('type');
         Route::get('/{id}', [ControllersEnrollmentController::class, 'show'])->name('show');
         Route::get('/{id}/print', [ControllersEnrollmentController::class, 'print'])->name('print');
         Route::post('/', [ControllersEnrollmentController::class, 'store'])->name('store');
@@ -178,7 +184,13 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('gallery', GalleryController::class);
             });
 
+             Route::resource('payment-accounts', PaymentAccountController::class);
 
+            Route::prefix('payments')->as('payments.')->group(function(){
+                Route::get('', [AdminPaymentController::class, 'index'])->name('index');
+                Route::get('{payment}', [AdminPaymentController::class, 'show'])->name('show');
+                Route::post('/payments/{payment}/status', [AdminPaymentController::class, 'updateStatus'])->name('update-status');
+            });
             Route::prefix('inbox')->group(function () {
                 Route::post('{inbox}/read', [InboxController::class, 'markAsRead'])->name('admin.inbox.read');
             });
@@ -339,6 +351,16 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('', [StudentAttendanceController::class, 'index'])->name('index');
                 Route::get('/scanner', [StudentAttendanceController::class, 'scanner'])->name('scanner');
             });
+
+            Route::prefix('enrollment')->as('enrollment.')->group(function () {
+                Route::get('', [StudentEnrollmentController::class, 'index'])->name('index');
+                Route::get('{enrollment}', [StudentEnrollmentController::class, 'show'])->name('show');
+            });
+
+            Route::prefix('payments')->as('payments.')->group(function(){
+                Route::post('', [PaymentController::class, 'store'])->name('store');
+                Route::get('', [PaymentController::class, 'index'])->name('index');
+            });
         });
     Route::middleware(['role:human-resource|admin', 'two_factor_authentication'])
         ->prefix('hr')
@@ -368,6 +390,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('{employee}', [EmployeeController::class, 'destroy'])->name('destroy');
                 Route::patch('{employee}/toggle-teacher', [EmployeeController::class, 'toggleTeacher'])->name('toggle-teacher');
                 Route::patch('{employee}/toggle-registrar', [EmployeeController::class, 'toggleRegistrar'])->name('toggle-registrar');
+                Route::patch('{employee}/toggle-archive', [EmployeeController::class, 'toggleArchive'])->name('toggle-archive');
             });
 
             Route::prefix('attendance')->as('attendance.')->group(function () {

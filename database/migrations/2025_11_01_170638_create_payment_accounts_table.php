@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('payment_accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->longText('description')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->string('head')->nullable();
+            $table->string('account_name');
+            $table->string('account_number');
+            $table->string('provider')->default('Gcash');
+            $table->string('qr_image_path')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('payment_accounts');
     }
 };

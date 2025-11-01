@@ -20,6 +20,16 @@
             'name' => 'tasks',
             'icon' => '<i class="fi fi-rr-list"></i>',
         ],
+         [
+            'url' => 'student.enrollment.index',
+            'name' => 'requirements',
+            'icon' => '<i class="fi fi-rr-list"></i>',
+        ],
+        [
+            'url' => 'student.payments.index',
+            'name' => 'payments',
+            'icon' => '<i class="fi fi-rr-credit-card"></i>',
+        ],
         // [
         //     'url' => 'student.attendances.index',
         //     'name' => 'attendance',

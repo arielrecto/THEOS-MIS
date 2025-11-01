@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AboutUs;
 use App\Models\Gallery;
 use App\Models\Department;
+use App\Models\Enrollment;
 use App\Models\JobPosition;
 use Illuminate\Http\Request;
 use App\Models\AcademicProgram;
@@ -27,6 +28,13 @@ class LandingPageController extends Controller
     public function contact()
     {
         return view('components.landing-page.contact-us');
+    }
+
+
+    public function showAcademicProgram($id){
+        $program = AcademicProgram::findOrFail($id);
+        $activeEnrollment = Enrollment::where('is_active', true)->latest()->first();
+        return view('components.landing-page.academic-program-show', compact('program', 'activeEnrollment'));
     }
 
     public function gallery(Request $request)
@@ -81,6 +89,8 @@ class LandingPageController extends Controller
     {
         return view('enrollees.form');
     }
+
+
 
     public function jobOpportunities(Request $request)
     {

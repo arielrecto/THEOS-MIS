@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('school_year');
             $table->string('grade_level');
             $table->boolean('balik_aral')->default(false);
+            $table->string('lrn')->nullable();
 
             // Learner Information
             $table->string('last_name');
@@ -48,9 +49,20 @@ return new class extends Migration
 
             // Parent/Guardian Information
             $table->string('parent_name')->nullable();
-            $table->string('relationship')->nullable();
+            $table->string('parent_last_name')->nullable();
+            $table->string('parent_middle_name')->nullable();
+            $table->string('relationship')->nullable()->default('father');
             $table->string('contact_number')->nullable();
             $table->string('occupation')->nullable();
+
+
+            $table->string('mother_name')->nullable();
+            $table->string('mother_last_name')->nullable();
+            $table->string('mother_middle_name')->nullable();
+            $table->string('mother_relationship')->nullable()->default('mother');
+            $table->string('mother_contact_number')->nullable();
+            $table->string('mother_occupation')->nullable();
+
 
             // Senior High School Preferences
             $table->string('preferred_track')->nullable();
@@ -61,6 +73,8 @@ return new class extends Migration
 
 
             $table->string('email')->nullable();
+
+            $table->string('type')->default('new');
 
             $table->string('status')->default('pending');
             // Foreign key constraint

@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Strand;
+use App\Models\Attachment;
 use App\Models\Enrollment;
+use Illuminate\Support\Str;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 use App\Models\EnrollmentForm;
 use App\Enums\AcademicYearStatus;
-use App\Models\User;
-use App\Actions\NotificationActions;
-use App\Models\Strand;
 use Spatie\Permission\Models\Role;
+use App\Actions\NotificationActions;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class EnrollmentController extends Controller
 {
@@ -27,10 +31,42 @@ class EnrollmentController extends Controller
         return view('enrollees.enrollment', compact('enrollment'));
     }
 
+    public function enrollmentType(Request $request)
+    {
+        $enrollment = Enrollment::findOrFail($request->enrollment);
+
+        $user = Auth::user();
+        if ($user) {
+            return to_route('enrollment.form', [
+                'enrollment' => $enrollment->id,
+                'type' => 'old'
+            ]);
+        }
+
+        return view('enrollees.select-enrollment-type', compact('enrollment'));
+    }
+
     public function form(Request $request)
     {
 
         $enrollmentID  = $request->enrollment;
+
+
+
+
+        $type = $request->query('type', 'new');
+
+        // Validate type parameter
+        if (!in_array($type, ['new', 'old'])) {
+            return redirect()->route('enrollment.type');
+        }
+
+
+        
+
+        if($type == 'old' && !Auth::check()) {
+            return to_route('login');
+        }
 
 
         $gradeLevels = Strand::get();
@@ -42,87 +78,124 @@ class EnrollmentController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'school_year' => 'required',
-            'grade_level' => 'required',
-            'balik_aral' => 'required',
-            'last_name' => 'required',
-            'first_name' => 'required',
-            'middle_name' => 'required',
-            'extension_name' => 'nullable',
-            'birthdate' => 'required',
-            'birthplace' => 'required',
-            'house_no' => 'required',
-            'street' => 'required',
-            'barangay' => 'required',
-            'city' => 'required',
-            'province' => 'required',
-            'zip_code' => 'required',
-            // 'perm_house_no' => 'required',
-            // 'perm_street' => 'required',
-            // 'perm_barangay' => 'required',
-            // 'perm_city' => 'required',
-            // 'perm_province' => 'required',
-            // 'perm_zip_code' => 'required',
-            'parent_name' => 'required',
-            'relationship' => 'required',
-            'contact_number' => 'required',
-            'occupation' => 'required',
-            // 'preferred_track' => 'required',
-            // 'preferred_strand' => 'required',
-            'modality' => 'nullable',
-            'email' => 'required',
+
+
+
+        // Add validation rules for attachments
+        $validated = $request->validate([
+            'school_year' => 'required|string',
+            'grade_level' => 'required|string',
+            'balik_aral' => 'required|in:yes,no',
+            'type' => 'required|in:new,old',
+            'lrn' => 'nullable',
+
+            // Student Information
+            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'extension_name' => 'nullable|string|max:255',
+            'birthdate' => 'required|date',
+            'birthplace' => 'required|string|max:255',
+
+            // Address Information
+            'house_no' => 'required|string|max:255',
+            'street' => 'required|string|max:255',
+            'barangay' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'zip_code' => 'required|string|max:10',
+
+            // Parent Information
+            'parent_name' => 'required|string|max:255',
+            'parent_last_name' => 'nullable|string|max:255',
+            'parent_middle_name' => 'nullable|string|max:255',
+            'relationship' => 'nullable|string|max:255',
+            'contact_number' => 'required|string|size:11',
+            'occupation' => 'required|string|max:255',
+
+            // Mother's Information (if needed)
+            'mother_name' => 'nullable|string|max:255',
+            'mother_last_name' => 'nullable|string|max:255',
+            'mother_middle_name' => 'nullable|string|max:255',
+            'mother_relationship' => 'nullable|string|max:255',
+            'mother_contact_number' => 'nullable|string|size:11',
+            'mother_occupation' => 'nullable|string|max:255',
+
+            // Academic Information
+            'preferred_track' => 'nullable|string|max:255',
+            'preferred_strand' => 'nullable|string|max:255',
+            'modality' => 'nullable|array',
+
+            // Required IDs
+            'academic_year_id' => 'required|exists:academic_years,id',
+            'enrollment_id' => 'required|exists:enrollments,id',
+
+            // Contact
+            'email' => 'required|email|max:255',
+            'user_id' => 'nullable',
+
+            // Attachments
+            'attachments' => 'required|array',
+            'attachments.birth_certificate' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'attachments.form_138' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'attachments.good_moral' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'attachments.additional.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
-        $enrollment = EnrollmentForm::create([
-            'school_year' => $request->school_year,
-            'grade_level' => $request->grade_level,
-            'balik_aral' => $request->balik_aral,
-            'last_name' => $request->last_name,
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'extension_name' => $request->extension_name,
-            'birthdate' => $request->birthdate,
-            'birthplace' => $request->birthplace,
-            'house_no' => $request->house_no,
-            'street' => $request->street,
-            'barangay' => $request->barangay,
-            'city' => $request->city,
-            'province' => $request->province,
-            'zip_code' => $request->zip_code,
-            // 'perm_house_no' => $request->perm_house_no,
-            // 'perm_street' => $request->perm_street,
-            // 'perm_barangay' => $request->perm_barangay,
-            // 'perm_city' => $request->perm_city,
-            // 'perm_province' => $request->perm_province,
-            // 'perm_zip_code' => $request->perm_zip_code,
-            'parent_name' => $request->parent_name,
-            'relationship' => $request->relationship,
-            'contact_number' => $request->contact_number,
-            'occupation' => $request->occupation,
-            'preferred_track' => $request->preferred_track ?? 'N\A',
-            'preferred_strand' => $request->preferred_strand ?? 'N\A',
-            'modality' => $request->modality,
-            'academic_year_id' => $request->academic_year_id,
-            'enrollment_id' => $request->enrollment_id,
-            'email' => $request->email,
+        // Create enrollment form
+        $enrollment = EnrollmentForm::create($validated + [
+            'status' => 'pending',
+            'type' => $request->type
         ]);
 
-        // Prepare notification data
+        // Handle file uploads
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $type => $files) {
+                if (is_array($files)) {
+                    // Handle multiple files (additional documents)
+                    foreach ($files as $file) {
+                        $this->createAttachment($file, $enrollment, $type);
+                    }
+                } else {
+                    // Handle single files (required documents)
+                    $this->createAttachment($files, $enrollment, $type);
+                }
+            }
+        }
+
+        // Notification logic
         $notificationData = [
             'header' => 'New Enrollment Application',
-            'message' => "New enrollment application from {$enrollment->first_name} {$enrollment->last_name} for Grade {$enrollment->grade_level}",
+            'message' => "New {$request->type} student enrollment application from {$enrollment->first_name} {$enrollment->last_name} for Grade {$enrollment->grade_level}",
             'type' => 'enrollment',
             'url' => route('registrar.enrollments.showEnrollee', $enrollment->id)
         ];
 
-        // Get all users with registrar role
+        // Get registrars and notify them
         $registrars = User::role('registrar')->get();
-
-        // Send notification to all registrars
         $this->notificationActions->notifyUsers($registrars, $notificationData, $enrollment);
 
-        return to_route('enrollment.applicationMessage', $enrollment->id)->with('success', 'Enrollment successfully created.');
+        return to_route('enrollment.applicationMessage', $enrollment->id)
+            ->with('success', 'Your enrollment application has been submitted successfully.');
+    }
+
+    protected function createAttachment($file, $enrollment, $type)
+    {
+        $fileName = Str::random(40) . '.' . $file->getClientOriginalExtension();
+        $filePath = $file->storeAs(
+            'enrollments/' . $enrollment->id . '/' . $type,
+            $fileName,
+            'public'
+        );
+
+        Attachment::create([
+            'file_dir' => $filePath,
+            'file_name' => $file->getClientOriginalName(),
+            'file_type' => $file->getClientMimeType(),
+            'file_size' => $file->getSize(),
+            'attachable_id' => $enrollment->id,
+            'attachable_type' => EnrollmentForm::class,
+        ]);
     }
 
     public function applicationMessage($enrollmentForm)

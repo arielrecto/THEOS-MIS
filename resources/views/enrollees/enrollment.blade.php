@@ -108,7 +108,7 @@
                         <div class="text-center">
                             <p class="mb-4 text-gray-600">Ready to begin your journey with Theos Higher Ground Academe?
                             </p>
-                            <a href="{{ route('enrollment.form', ['enrollment' => $enrollment->id]) }}"
+                            <a href="{{ route('enrollment.type', ['enrollment' => $enrollment->id]) }}"
                                 class="gap-2 btn btn-accent btn-lg">
                                 <i class="fi fi-rr-edit"></i>
                                 Start Enrollment Process

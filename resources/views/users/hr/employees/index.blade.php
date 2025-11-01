@@ -145,6 +145,17 @@
                                                 <i class="fi fi-rr-diploma"></i>
                                             </button>
                                         </form>
+
+
+                                        <form action="{{ route('hr.employees.toggle-archive', $employee) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                    class="btn btn-sm {{ $employee->status === 'archived' ? 'btn-info' : 'btn-ghost' }}"
+                                                    title="{{ $employee->status === 'archived' ? 'Unarchive Employee' : 'Archive Employee' }}">
+                                               <i class="fi fi-rr-folder-download"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
