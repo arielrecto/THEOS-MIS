@@ -137,7 +137,7 @@
                 <h2 class="text-lg font-bold text-gray-700">Student Profile</h2>
                 <p class="mt-2 text-sm text-gray-600">
                     <strong>Name:</strong> {{ $student->name }}<br>
-                    <strong>Student ID:</strong> {{ $student->studentProfile->lrn }}<br>
+                    <strong>Student ID:</strong> {{ $student->studentProfile->lrn ?? 'Not Enrolled' }}<br>
                     <strong>Grade Level:</strong>
                     {{ $student->studentProfile?->academicRecords()?->latest()->first()?->grade_level }}
                 </p>

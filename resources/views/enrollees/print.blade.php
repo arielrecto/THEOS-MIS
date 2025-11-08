@@ -1,7 +1,7 @@
 @php
-use App\Models\Logo;
+    use App\Models\Logo;
 
-$logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.png');
+    $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.png');
 
 @endphp
 
@@ -60,7 +60,8 @@ $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.pn
             class="px-4 py-2 font-semibold text-black bg-gray-200 rounded-lg shadow hover:bg-gray-300">
             Back
         </a>
-        <button onclick="document.getElementById('no-print').style.display = 'none'; window.print(); document.getElementById('no-print').style.display = 'flex';"
+        <button
+            onclick="document.getElementById('no-print').style.display = 'none'; window.print(); document.getElementById('no-print').style.display = 'flex';"
             class="px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">
             Print Form
         </button>
@@ -71,7 +72,7 @@ $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.pn
         <div class="flex justify-between items-center p-6 border-b">
             <div>
                 <h1 class="text-3xl font-bold text-blue-900">THEOS HIGHER GROUND ACADEME</h1>
-                <p class="text-lg text-gray-600">SY {{ $student->school_year ?? '&nbsp;' }}</p>
+                <p class="text-lg text-gray-600">SY {{ $student->school_year ?? 'N\A' }}</p>
             </div>
             <div>
                 <!-- Using a placeholder for the logo -->
@@ -85,18 +86,22 @@ $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.pn
         </div>
 
         <div class="p-6 border-b">
-            <div class="grid grid-cols-1 gap-y-4 gap-x-8 items-end md:grid-cols-5">
-                <div class="md:col-span-2">
+            <!-- Added print:grid and print:grid-cols-5 -->
+            <div class="grid grid-cols-1 gap-y-4 gap-x-8 items-end md:grid-cols-5 print:grid print:grid-cols-5">
+                <!-- Added print:col-span-2 -->
+                <div class="md:col-span-2 print:col-span-2">
                     <p class="field-label">School Year:</p>
-                    <p class="form-data">{{ $student->school_year ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->school_year ?? 'N\A' }}</p>
                 </div>
-                <div class="md:col-span-2">
+                <!-- Added print:col-span-2 -->
+                <div class="md:col-span-2 print:col-span-2">
                     <p class="field-label">Grade Level to Enroll:</p>
-                    <p class="form-data">{{ $student->grade_level ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->grade_level ?? 'N\A' }}</p>
                 </div>
-                <div class="md:col-span-1">
+                <!-- Added print:col-span-1 -->
+                <div class="md:col-span-1 print:col-span-1">
                     <p class="field-label">Learner's Reference Number:</p>
-                    <p class="form-data">{{ $student->lrn ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->lrn ?? 'N\A' }}</p>
                 </div>
             </div>
         </div>
@@ -108,21 +113,22 @@ $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.pn
 
         <div class="p-6 space-y-6">
             <!-- Names -->
-            <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-4">
+            <!-- Added print:grid and print:grid-cols-4 -->
+            <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-4 print:grid print:grid-cols-4">
                 <div>
-                    <p class="form-data">{{ $student->last_name ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->last_name ?? 'N\A' }}</p>
                     <p class="sub-label">Last Name</p>
                 </div>
                 <div>
-                    <p class="form-data">{{ $student->first_name ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->first_name ?? 'N\A' }}</p>
                     <p class="sub-label">First Name</p>
                 </div>
                 <div>
-                    <p class="form-data">{{ $student->middle_name ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->middle_name ?? 'N\A' }}</p>
                     <p class="sub-label">Middle Name</p>
                 </div>
                 <div>
-                    <p class="form-data">{{ $student->extension_name ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->extension_name ?? 'N\A' }}</p>
                     <p class="sub-label">Extension Name <span class="italic">(e.g. Jr, III)</span></p>
                 </div>
             </div>
@@ -130,114 +136,122 @@ $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.pn
             <!-- Full Address -->
             <div>
                 <p class="mb-2 field-label">Full Address</p>
-                <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-4">
+                <!-- Added print:grid and print:grid-cols-4 -->
+                <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-4 print:grid print:grid-cols-4">
                     <div>
-                        <p class="form-data">{{ $student->house_no ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->house_no ?? 'N\A' }}</p>
                         <p class="sub-label">Block and Lot</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->street ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->street ?? 'N\A' }}</p>
                         <p class="sub-label">Street Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->subdivision ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->subdivision ?? 'N\A' }}</p>
                         <p class="sub-label">Subdivision</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->barangay ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->barangay ?? 'N\A' }}</p>
                         <p class="sub-label">Barangay</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->city ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->city ?? 'N\A' }}</p>
                         <p class="sub-label">Municipality/City</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->province ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->province ?? 'N\A' }}</p>
                         <p class="sub-label">Province</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->country ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->country ?? 'N\A' }}</p>
                         <p class="sub-label">Country</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->zip_code ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->zip_code ?? 'N\A' }}</p>
                         <p class="sub-label">Zip Code</p>
                     </div>
                 </div>
             </div>
 
             <!-- Birth Info -->
-            <div class="grid grid-cols-1 gap-y-4 gap-x-6 items-end md:grid-cols-6">
-                <div class="md:col-span-2">
+            <!-- Added print:grid and print:grid-cols-6 -->
+            <div
+                class="grid grid-cols-1 gap-y-4 gap-x-6 items-end md:grid-cols-6 print:grid print:grid-cols-6 print:items-end">
+                <!-- Added print:col-span-2 -->
+                <div class="md:col-span-2 print:col-span-2">
                     <p class="field-label">Date of Birth (DD/MM/YYYY):</p>
                     <p class="form-data">
-                        {{ isset($student->birthdate) ? date('d / m / Y', strtotime($student->birthdate)) : '&nbsp;' }}
+                        {{ isset($student->birthdate) ? date('d / m / Y', strtotime($student->birthdate)) : 'N\A' }}
                     </p>
                 </div>
-                <div class="md:col-span-1">
+                <!-- Added print:col-span-1 -->
+                <div class="md:col-span-1 print:col-span-1">
                     <p class="field-label">Sex:</p>
-                    <p class="form-data">{{ $student->sex ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->sex ?? 'N\A' }}</p>
                 </div>
-                <div class="md:col-span-1">
+                <!-- Added print:col-span-1 -->
+                <div class="md:col-span-1 print:col-span-1">
                     <p class="field-label">Age:</p>
-                    <p class="form-data">{{ $student->age ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->age ?? 'N\A' }}</p>
                 </div>
-                <div class="md:col-span-2">
+                <!-- Added print:col-span-2 -->
+                <div class="md:col-span-2 print:col-span-2">
                     <p class="field-label">Place of Birth:</p>
-                    <p class="form-data">{{ $student->birthplace ?? '&nbsp;' }}</p>
+                    <p class="form-data">{{ $student->birthplace ?? 'N\A' }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Parent Info Section -->
         <div class="p-6 border-t">
-            <div class="grid grid-cols-1 gap-y-6 gap-x-8 md:grid-cols-2">
+            <!-- Added print:grid and print:grid-cols-2 -->
+            <div class="grid grid-cols-1 gap-y-6 gap-x-8 md:grid-cols-2 print:grid print:grid-cols-2">
                 <!-- Father's Info -->
                 <div class="space-y-4">
                     <p class="font-semibold">Father's Name</p>
                     <div>
-                        <p class="form-data">{{ $student->parent_last_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->parent_last_name ?? 'N\A' }}</p>
                         <p class="sub-label">Last Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->parent_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->parent_name ?? 'N\A' }}</p>
                         <p class="sub-label">First Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->parent_middle_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->parent_middle_name ?? 'N\A' }}</p>
                         <p class="sub-label">Middle Name</p>
                     </div>
                     <div>
                         <p class="field-label">Contact Number:</p>
-                        <p class="form-data">{{ $student->contact_number ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->contact_number ?? 'N\A' }}</p>
                     </div>
                     <div>
                         <p class="field-label">Occupation:</p>
-                        <p class="form-data">{{ $student->occupation ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->occupation ?? 'N\A' }}</p>
                     </div>
                 </div>
                 <!-- Mother's Info -->
                 <div class="space-y-4">
                     <p class="font-semibold">Mother's Name</p>
                     <div>
-                        <p class="form-data">{{ $student->mother_last_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->mother_last_name ?? 'N\A' }}</p>
                         <p class="sub-label">Last Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->mother_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->mother_name ?? 'N\A' }}</p>
                         <p class="sub-label">First Name</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->mother_middle_name ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->mother_middle_name ?? 'N\A' }}</p>
                         <p class="sub-label">Middle Name</p>
                     </div>
                     <div>
                         <p class="field-label">Contact Number:</p>
-                        <p class="form-data">{{ $student->mother_contact_number ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->mother_contact_number ?? 'N\A' }}</p>
                     </div>
                     <div>
                         <p class="field-label">Occupation:</p>
-                        <p class="form-data">{{ $student->mother_occupation ?? '&nbsp;' }}</p>
+                        <p class="form-data">{{ $student->mother_occupation ?? 'N\A' }}</p>
                     </div>
                 </div>
             </div>
@@ -258,14 +272,15 @@ $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.pn
                 the School Principal and Faculty.
             </p>
 
-            <div class="grid grid-cols-1 gap-x-12 gap-y-12 mt-12 md:grid-cols-2">
+            <!-- Added print:grid and print:grid-cols-2 -->
+            <div class="grid grid-cols-1 gap-x-12 gap-y-12 mt-12 md:grid-cols-2 print:grid print:grid-cols-2">
                 <div>
                     <div class="w-full h-10 border-b-2 border-black"></div>
                     <p class="mt-1 text-center">Signature of Mother</p>
                 </div>
                 <div class="flex flex-col justify-end">
                     <p class="form-data text-center">
-                        {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : '&nbsp;' }}
+                        {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : 'N\A' }}
                     </p>
                     <p class="mt-1 text-center sub-label">Date signed</p>
                 </div>
@@ -275,8 +290,8 @@ $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.pn
                 </div>
                 <div class="flex flex-col justify-end">
                     <p class="form-data text-center">
-                        {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : '&nbsp;' }}
-                    </p>
+                        {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : 'N\A' }}
+                        </s_p>
                     <p class="mt-1 text-center sub-label">Date signed</p>
                 </div>
             </div>

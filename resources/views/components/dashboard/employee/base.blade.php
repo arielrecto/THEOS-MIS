@@ -4,6 +4,7 @@
             'url' => 'employee.dashboard',
             'name' => 'dashboard',
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
+            'is_active' => true,
         ],
         // [
         //     'url' => 'employee.attendance.index',
@@ -14,6 +15,7 @@
             'url' => 'employee.leaves.index',
             'name' => 'leaves',
             'icon' => '<i class="fi fi-rr-calendar"></i>',
+            'is_active' => true,
         ],
         // [
         //     'url' => '#',

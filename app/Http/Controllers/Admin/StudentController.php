@@ -142,20 +142,13 @@ class StudentController extends Controller
 
         $student = User::find($id);
 
-        if (Hash::check($request->current_password, $student->password)) {
-            $validated = $request->validate([
-                'password' => ['required', 'confirmed', Password::defaults()],
-            ]);
+        $validated = $request->validate([
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
 
-            $student->update([
-                'password' => Hash::make($validated['password']),
-            ]);
-
-            return back()->with('success', 'Password updated successfully');
-        } else {
-            return back()->withErrors(['current_password' => 'Current password is incorrect']);
-        }
-
+        $student->update([
+            'password' => Hash::make($validated['password']),
+        ]);
 
         return back()->with('success', 'Password updated successfully');
     }

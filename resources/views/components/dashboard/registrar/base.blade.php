@@ -4,21 +4,25 @@
             'url' => 'registrar.dashboard',
             'name' => 'dashboard',
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'registrar.enrollments.index',
             'name' => 'enrollments',
             'icon' => '<i class="fi fi-rr-users"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'registrar.students.index',
             'name' => 'students',
             'icon' => '<i class="fi fi-rr-users"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'registrar.grades.index',
             'name' => 'grades',
             'icon' => '<i class="fi fi-rr-users"></i>',
+            'is_active' => true,
         ]
     ];
 

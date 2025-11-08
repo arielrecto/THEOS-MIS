@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Strand;
 use App\Models\Subject;
-use Illuminate\Http\Request;
 use Mockery\Matcher\Subset;
+use Illuminate\Http\Request;
+use App\Models\GradeLevelSubject;
+use App\Http\Controllers\Controller;
 
 class SubjectController extends Controller
 {
@@ -25,7 +27,8 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        return view('users.admin.subject.create');
+        $strands = Strand::all();
+        return view('users.admin.subject.create', compact('strands'));
     }
 
     /**
@@ -33,21 +36,30 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'subject_code' => 'required',
-            'description' => 'required'
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'subject_code' => 'required|string|max:255|unique:subjects',
+            'description' => 'nullable|string',
+            'strands' => 'required|array|exists:strands,id'
         ]);
 
-
-        Subject::create([
-            'name' => $request->name,
-            'subject_code' => $request->subject_code,
-            'description' => $request->description
+        $subject = Subject::create([
+            'name' => $validated['name'],
+            'subject_code' => $validated['subject_code'],
+            'description' => $validated['description']
         ]);
 
+        // Create grade level subject relationships
+        foreach ($validated['strands'] as $strandId) {
+            GradeLevelSubject::create([
+                'strand_id' => $strandId,
+                'subject_id' => $subject->id
+            ]);
+        }
 
-        return back()->with(['message' => 'Subject Added']);
+        return redirect()
+            ->route('admin.subjects.index')
+            ->with('success', 'Subject created successfully');
     }
 
     /**
@@ -66,8 +78,8 @@ class SubjectController extends Controller
     public function edit(string $id)
     {
         $subject = Subject::find($id);
-
-        return view('users.admin.subject.edit', compact('subject'));
+        $strands = Strand::all();
+        return view('users.admin.subject.edit', compact('subject', 'strands'));
     }
 
     /**

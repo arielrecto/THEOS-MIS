@@ -6,6 +6,8 @@
             <!-- Profile Information -->
             <div class="p-6 bg-white rounded-lg shadow-md">
                 <h2 class="mb-4 text-lg font-medium text-gray-900">Profile Information</h2>
+
+                @if($student->studentProfile)
                 <form method="POST" action="{{ route('admin.users.students.update-profile', ['id' => $student->id]) }}" class="space-y-6">
                     @csrf
                     @method('PUT')
@@ -13,7 +15,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">LRN</label>
-                            <input type="text"  name="lrn"
+                            <input type="number"  name="lrn"
                                 value="{{ old('lrn', $student->studentProfile->lrn) }}"
                                 class="mt-1 w-full input input-bordered" required>
                             @error('lrn')
@@ -69,6 +71,10 @@
                         <button type="submit" class="btn btn-accent">Update Profile</button>
                     </div>
                 </form>
+                @else
+
+                    <h1 class="text-lg font-medium text-gray-900">No Record</h1>
+                @endif
             </div>
 
             <!-- Update Email -->
@@ -100,14 +106,14 @@
                     @csrf
                     @method('PUT')
 
-                    <div>
+                    {{-- <div>
                         <label class="block text-sm font-medium text-gray-700">Current Password</label>
                         <input type="password" name="current_password" class="mt-1 w-full input input-bordered"
                             required>
                         @error('current_password')
                             <p class="mt-1 text-sm text-error">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">New Password</label>

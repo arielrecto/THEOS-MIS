@@ -12,9 +12,10 @@ use App\Models\StudentProfile;
 use App\Mail\ApproveEnrollment;
 use App\Enums\AcademicYearStatus;
 use Spatie\Permission\Models\Role;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
 use App\Actions\NotificationActions;
+use App\Http\Controllers\Controller;
+use App\Mail\EnrollmentStatusUpdate;
+use Illuminate\Support\Facades\Mail;
 
 class EnrollmentController extends Controller
 {
@@ -168,14 +169,9 @@ class EnrollmentController extends Controller
         }
 
 
-        $user = User::create([
-            'name' => $enrollee->first_name . ' ' . $enrollee->last_name,
-            'email' => $enrollee->email,
-            'password' => bcrypt('password'),
-        ]);
+        $user = User::find($enrollee->user_id);
 
-        $studentRole = Role::where('name', 'student')->first();
-        $user->assignRole($studentRole);
+
 
 
         $studentProfile = StudentProfile::create([
@@ -283,5 +279,80 @@ class EnrollmentController extends Controller
 
 
         return view('users.registrar.enrollment.print', compact('enrollment'));
+    }
+
+    public function updateStatus(Request $request, string $id)
+    {
+
+
+        $request->validate([
+            'status' => 'required|in:pending,review,interviewed,enrolled',
+            'remarks' => 'nullable|string|max:500'
+        ]);
+
+        $enrollee = EnrollmentForm::findOrFail($id);
+        $oldStatus = $enrollee->status;
+
+        // Update status
+        $enrollee->update([
+            'status' => $request->status,
+            'remarks' => $request->remarks
+        ]);
+
+        // Send email notification
+        Mail::to($enrollee->email)->send(new EnrollmentStatusUpdate(
+            $enrollee,
+            $request->status,
+            $request->remarks
+        ));
+
+        // Create notification
+        $notificationData = [
+            'header' => 'Enrollment Status Update',
+            'message' => "Your enrollment status has been updated to " . ucfirst($request->status),
+            'type' => 'enrollment_status',
+            'url' => route('enrollment.status', $enrollee->id)
+        ];
+
+        // Notify the student
+        if ($enrollee->user_id) {
+            $this->notificationActions->notifyUser(
+                $enrollee->user_id,
+                $notificationData,
+                $enrollee
+            );
+        }
+
+        // If status is enrolled, create student profile and academic record
+        if ($request->status === 'enrolled' && $enrollee->type === 'new') {
+            $this->processEnrollment($enrollee);
+        }
+
+        return back()->with('success', 'Enrollment status updated successfully');
+    }
+
+    private function processEnrollment(EnrollmentForm $enrollee)
+    {
+        // Create or update student profile
+        $studentProfile = StudentProfile::updateOrCreate(
+            ['user_id' => $enrollee->user_id],
+            [
+                'lrn' => $enrollee->lrn,
+                'last_name' => $enrollee->last_name,
+                'first_name' => $enrollee->first_name,
+                'middle_name' => $enrollee->middle_name,
+                'extension_name' => $enrollee->extension_name,
+                // ...other fields...
+            ]
+        );
+
+        // Create academic record
+        AcademicRecord::create([
+            'student_profile_id' => $studentProfile->id,
+            'enrollment_id' => $enrollee->enrollment_id,
+            'academic_year_id' => $enrollee->academic_year_id,
+            'school_year' => $enrollee->school_year,
+            'grade_level' => $enrollee->grade_level,
+        ]);
     }
 }

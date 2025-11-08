@@ -1,34 +1,45 @@
 @php
+
+$user = Auth::user();
+
+$isEnrolled = $user->studentProfile !== null && $user->studentProfile->academicRecords()->exists();
+
     $links = [
         [
             'url' => 'student.dashboard',
             'name' => 'dashboard',
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
+            'is_active' => $isEnrolled,
         ],
         [
             'url' => 'student.announcements.index',
             'name' => 'announcements',
             'icon' => '<i class="fi fi-rr-bell"></i>',
+            'is_active' => $isEnrolled,
         ],
         [
             'url' => 'student.classrooms.index',
             'name' => 'classrooms',
             'icon' => '<i class="fi fi-rr-users-alt"></i>',
+            'is_active' => $isEnrolled,
         ],
         [
             'url' => 'student.tasks.index',
             'name' => 'tasks',
             'icon' => '<i class="fi fi-rr-list"></i>',
+            'is_active' => $isEnrolled,
         ],
          [
             'url' => 'student.enrollment.index',
             'name' => 'requirements',
             'icon' => '<i class="fi fi-rr-list"></i>',
+            'is_active' => $isEnrolled || !$user->studentProfile,
         ],
         [
             'url' => 'student.payments.index',
             'name' => 'payments',
             'icon' => '<i class="fi fi-rr-credit-card"></i>',
+            'is_active' => $isEnrolled || !$user->studentProfile,
         ],
         // [
         //     'url' => 'student.attendances.index',
@@ -39,6 +50,7 @@
             'url' => 'student.settings.index',
             'name' => 'settings',
             'icon' => '<i class="fi fi-rr-settings"></i>',
+            'is_active' => $isEnrolled,
         ],
     ];
 

@@ -2,20 +2,58 @@
     <div class="py-8">
         <div class="container px-4 mx-auto">
             <div class="mx-auto max-w-5xl">
-                <x-dashboard.page-title
-                    :title="__('Enrollee Details')"
-                    :back_url="route('registrar.enrollments.index')"
-                >
+                <x-dashboard.page-title :title="__('Enrollee Details')" :back_url="route('registrar.enrollments.index')">
                     <x-slot name="other">
                         @if ($enrollee->status == 'pending')
-                            <form action="{{ route('registrar.enrollments.enrolled', $enrollee->id) }}" method="post">
+                            <div class="dropdown dropdown-end">
+                                <button class="btn btn-ghost btn-xs">
+                                    <i class="fi fi-rr-menu-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                    @foreach(['pending', 'review', 'interviewed'] as $status)
+                                        <li>
+                                            <form action="{{ route('registrar.enrollments.update-status', $enrollee->id) }}"
+                                                  method="POST"
+                                                  class="w-full">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="status" value="{{ $status }}">
+                                                <button type="button"
+                                                        onclick="updateStatus(this.form, '{{ $status }}')"
+                                                        class="w-full text-left {{ $enrollee->status === $status ? 'bg-accent/10 text-accent' : '' }}">
+                                                    {{ ucfirst($status) }}
+                                                </button>
+                                            </form>
+                                        </li>
+                                    @endforeach
+
+
+                                    <li>
+                                            <form action="{{ route('registrar.enrollments.enrolled', $enrollee->id) }}"
+                                                  method="POST"
+                                                  class="w-full">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="status" value="enrolled">
+                                                <button type="button"
+                                                        onclick="updateStatus(this.form, 'enrolled')"
+                                                        class="w-full text-left {{ $enrollee->status === 'enrolled' ? 'bg-accent/10 text-accent' : '' }}">
+                                                    {{ ucfirst('enrolled') }}
+                                                </button>
+                                            </form>
+                                        </li>
+                                </ul>
+                            </div>
+
+
+                            {{-- <form action="{{ route('registrar.enrollments.enrolled', $enrollee->id) }}" method="post">
                                 @csrf
                                 @method('PUT')
                                 <button type="submit" class="gap-2 btn btn-sm btn-accent">
                                     <i class="fi fi-rr-check"></i>
                                     Mark as Enrolled
                                 </button>
-                            </form>
+                            </form> --}}
                         @endif
                     </x-slot>
                 </x-dashboard.page-title>
@@ -65,7 +103,8 @@
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div>
                             <p class="text-sm font-medium text-gray-600">Full Name</p>
-                            <p class="mt-1">{{ $enrollee->first_name }} {{ $enrollee->middle_name }} {{ $enrollee->last_name }} {{ $enrollee->extension_name }}</p>
+                            <p class="mt-1">{{ $enrollee->first_name }} {{ $enrollee->middle_name }}
+                                {{ $enrollee->last_name }} {{ $enrollee->extension_name }}</p>
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-600">Date of Birth</p>
@@ -88,7 +127,8 @@
                     <div class="space-y-6">
                         <div>
                             <h3 class="mb-2 text-sm font-medium text-gray-600">Current Address</h3>
-                            <p>{{ $enrollee->house_no }} {{ $enrollee->street }}, {{ $enrollee->barangay }}, {{ $enrollee->city }}, {{ $enrollee->province }}, {{ $enrollee->zip_code }}</p>
+                            <p>{{ $enrollee->house_no }} {{ $enrollee->street }}, {{ $enrollee->barangay }},
+                                {{ $enrollee->city }}, {{ $enrollee->province }}, {{ $enrollee->zip_code }}</p>
                         </div>
 
                         {{-- <div>
@@ -192,24 +232,27 @@
                             $requiredDocs = [
                                 'birth_certificate' => ['Birth Certificate (PSA/NSO)', 'fi-rr-id-badge'],
                                 'form_138' => ['Report Card (Form 138)', 'fi-rr-diploma'],
-                                'good_moral' => ['Good Moral Certificate', 'fi-rr-document']
+                                'good_moral' => ['Good Moral Certificate', 'fi-rr-document'],
                             ];
                         @endphp
 
-                        @foreach($requiredDocs as $type => $details)
+                        @foreach ($requiredDocs as $type => $details)
                             @php
-                                $attachment = $enrollee->attachments()
+                                $attachment = $enrollee
+                                    ->attachments()
                                     ->where('file_dir', 'like', "%/{$type}/%")
                                     ->first();
                             @endphp
-                            <div class="p-4 bg-gray-50 rounded-lg border {{ $attachment ? 'border-accent/20' : 'border-error/20' }}">
+                            <div
+                                class="p-4 bg-gray-50 rounded-lg border {{ $attachment ? 'border-accent/20' : 'border-error/20' }}">
                                 <div class="flex items-start gap-3">
                                     <div class="p-3 rounded-lg {{ $attachment ? 'bg-accent/10' : 'bg-error/10' }}">
-                                        <i class="text-lg fi {{ $details[1] }} {{ $attachment ? 'text-accent' : 'text-error' }}"></i>
+                                        <i
+                                            class="text-lg fi {{ $details[1] }} {{ $attachment ? 'text-accent' : 'text-error' }}"></i>
                                     </div>
                                     <div class="flex-1">
                                         <h3 class="font-medium text-gray-900">{{ $details[0] }}</h3>
-                                        @if($attachment)
+                                        @if ($attachment)
                                             <p class="mt-1 text-xs text-gray-500">
                                                 {{ $attachment->file_name }}
                                                 <span class="block text-gray-400">
@@ -217,9 +260,8 @@
                                                 </span>
                                             </p>
                                             <div class="flex gap-2 mt-3">
-                                                <a href="{{ Storage::url($attachment->file_dir) }}"
-                                                   target="_blank"
-                                                   class="btn btn-xs btn-ghost gap-1">
+                                                <a href="{{ Storage::url($attachment->file_dir) }}" target="_blank"
+                                                    class="btn btn-xs btn-ghost gap-1">
                                                     <i class="fi fi-rr-eye text-xs"></i>
                                                     View
                                                 </a>
@@ -240,12 +282,10 @@
 
                     <!-- Additional Documents Section -->
                     @php
-                        $additionalDocs = $enrollee->attachments()
-                            ->where('file_dir', 'like', "%/additional/%")
-                            ->get();
+                        $additionalDocs = $enrollee->attachments()->where('file_dir', 'like', '%/additional/%')->get();
                     @endphp
 
-                    @if($additionalDocs->count() > 0)
+                    @if ($additionalDocs->count() > 0)
                         <div class="mt-6">
                             <h3 class="mb-4 font-medium text-gray-700">Additional Documents</h3>
                             <div class="overflow-x-auto">
@@ -259,7 +299,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($additionalDocs as $doc)
+                                        @foreach ($additionalDocs as $doc)
                                             <tr>
                                                 <td class="max-w-xs truncate">{{ $doc->file_name }}</td>
                                                 <td>
@@ -270,9 +310,8 @@
                                                 <td>{{ number_format($doc->file_size / 1024 / 1024, 2) }} MB</td>
                                                 <td class="text-right">
                                                     <div class="flex gap-2 justify-end">
-                                                        <a href="{{ Storage::url($doc->file_dir) }}"
-                                                           target="_blank"
-                                                           class="btn btn-ghost btn-xs gap-1">
+                                                        <a href="{{ Storage::url($doc->file_dir) }}" target="_blank"
+                                                            class="btn btn-ghost btn-xs gap-1">
                                                             <i class="fi fi-rr-eye text-xs"></i>
                                                             View
                                                         </a>
@@ -306,4 +345,30 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+    function updateStatus(form, status) {
+        let remarks = '';
+
+        if (['review', 'interviewed', 'enrolled'].includes(status)) {
+            remarks = prompt('Enter any additional remarks (optional):');
+        }
+
+        if (status === 'enrolled') {
+            if (!confirm('Are you sure you want to enroll this student?')) {
+                return;
+            }
+        }
+
+        const remarksInput = document.createElement('input');
+        remarksInput.type = 'hidden';
+        remarksInput.name = 'remarks';
+        remarksInput.value = remarks || '';
+
+        form.appendChild(remarksInput);
+        form.submit();
+    }
+    </script>
+    @endpush
 </x-dashboard.registrar.base>

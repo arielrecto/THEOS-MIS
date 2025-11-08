@@ -274,6 +274,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/form/{id}', [EnrollmentController::class, 'enrolled'])->name('enrolled');
                     Route::patch('{enrollment}/close', [EnrollmentController::class, 'close'])->name('close');
                     Route::get('/print/{id}', [EnrollmentController::class, 'print'])->name('print');
+                    Route::put('{id}/status', [EnrollmentController::class, 'updateStatus'])->name('update-status');
                 });
 
             Route::prefix('students')

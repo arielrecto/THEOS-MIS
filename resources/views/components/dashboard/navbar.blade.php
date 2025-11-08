@@ -38,7 +38,7 @@
                     <button class="btn btn-ghost btn-sm">
                         <div class="indicator">
                             <i class="text-lg fi fi-rr-bell"></i>
-                            @if($unread_count > 0)
+                            @if ($unread_count > 0)
                                 <span class="badge badge-xs badge-accent indicator-item">{{ $unread_count }}</span>
                             @endif
                         </div>
@@ -47,7 +47,7 @@
                         <div class="card-body">
                             <div class="flex justify-between items-center mb-2">
                                 <h3 class="font-semibold">Notifications</h3>
-                                @if($unread_count > 0)
+                                @if ($unread_count > 0)
                                     <form action="{{ route('notifications.mark-all-read') }}" method="POST">
                                         @csrf
                                         <button type="submit" class="text-sm text-accent hover:underline">
@@ -67,8 +67,9 @@
                                                     {{ $notification->created_at->diffForHumans() }}
                                                 </span>
                                             </div>
-                                            @if(!$notification->is_read)
-                                                <form action="{{ route('notifications.mark-as-read', $notification) }}" method="POST">
+                                            @if (!$notification->is_read)
+                                                <form action="{{ route('notifications.mark-as-read', $notification) }}"
+                                                    method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-ghost btn-xs">
                                                         <i class="text-xs fi fi-rr-check"></i>
@@ -84,7 +85,7 @@
                                     </div>
                                 @endforelse
                             </div>
-                            @if($notifications->count() > 0)
+                            @if ($notifications->count() > 0)
                                 <div class="mt-2 card-actions">
                                     <a href="{{ route('notifications.index') }}" class="btn btn-ghost btn-sm btn-block">
                                         View All Notifications
@@ -106,10 +107,11 @@
                             @if ($user?->profile?->image)
                                 <img src="{{ $user->profile->image }}" alt="Profile Picture" class="object-cover" />
                             @elseif ($user->profilePicture)
-                                <img src="{{ $user->profilePicture->file_dir }}" alt="Profile Picture" class="object-cover" />
+                                <img src="{{ $user->profilePicture->file_dir }}" alt="Profile Picture"
+                                    class="object-cover" />
                             @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=7F9CF5&background=EBF4FF" alt="Profile Picture" class="object-cover" />
-
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=7F9CF5&background=EBF4FF"
+                                    alt="Profile Picture" class="object-cover" />
                             @endif
 
                             {{-- <img src="{{ $user->profilePicture->file_dir ?? asset('sticker/man.png') }}"
@@ -167,11 +169,31 @@
                                     Employee Dashboard
                                 </a>
                             </li>
+                        @endif
+
+
+                        @if (Auth::user()->hasRole('student'))
+
+                            <li>
+                                <a href="{{ route('student.enrollment.index') }}" class="flex gap-2 items-center">
+                                    <i class="fi fi-rr-dashboard"></i>
+                                    Enrollment
+                                </a>
+                            </li>
+
+                            @if (Auth::user()->studentProfile)
+                                <li>
+                                    <a href="{{ route('student.dashboard') }}" class="flex gap-2 items-center">
+                                        <i class="fi fi-rr-dashboard"></i>
+                                        Dashboard
+                                    </a>
+                                </li>
+                            @endif
 
                         @endif
 
                         <li>
-                            <a href="{{route('profile.edit')}}" class="flex gap-2 items-center">
+                            <a href="{{ route('profile.edit') }}" class="flex gap-2 items-center">
                                 <i class="fi fi-rr-settings"></i>
                                 Settings
                             </a>

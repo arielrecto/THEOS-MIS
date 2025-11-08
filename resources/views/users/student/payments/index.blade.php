@@ -2,7 +2,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Payment Overview Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {{-- <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <!-- Total Payments -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <div class="flex items-center gap-4">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Payment History -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -88,12 +88,12 @@
                                                 {{ ucfirst($payment->status) }}
                                             </span>
                                         </td>
-                                        <td>
+                                        {{-- <td> --}}
                                             {{-- <button onclick="showPaymentDetails('{{ $payment->id }}')"
                                                     class="btn btn-ghost btn-sm">
                                                 <i class="fi fi-rr-eye"></i>
                                             </button> --}}
-                                        </td>
+                                        {{-- </td> --}}
                                     </tr>
                                 @empty
                                     <tr>

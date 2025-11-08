@@ -19,4 +19,8 @@ class Subject extends Model
     public function classrooms(){
         return $this->hasMany(Classroom::class);
     }
+
+    public function gradeLevels(){
+        return $this->hasMany(GradeLevelSubject::class);
+    }
 }

@@ -4,26 +4,31 @@
             'url' => 'teacher.dashboard',
             'name' => 'dashboard',
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'teacher.classrooms.index',
             'name' => 'classrooms',
             'icon' => '<i class="fi fi-rr-users-alt"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'teacher.announcements.index',
             'name' => 'announcements',
             'icon' => '<i class="fi fi-rr-bell"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'teacher.student.index',
             'name' => 'students',
             'icon' => '<i class="fi fi-rr-student"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'teacher.grades.index',
             'name' => 'grades',
             'icon' => '<i class="fi fi-rr-list-check"></i>',
+            'is_active' => true,
         ],
     ];
 

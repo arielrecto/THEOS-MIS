@@ -12,8 +12,10 @@ use Illuminate\Http\Request;
 use App\Models\EnrollmentForm;
 use App\Enums\AcademicYearStatus;
 use Spatie\Permission\Models\Role;
+use App\Notifications\UserCreation;
 use App\Actions\NotificationActions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class EnrollmentController extends Controller
@@ -62,9 +64,9 @@ class EnrollmentController extends Controller
         }
 
 
-        
 
-        if($type == 'old' && !Auth::check()) {
+
+        if ($type == 'old' && !Auth::check()) {
             return to_route('login');
         }
 
@@ -142,10 +144,25 @@ class EnrollmentController extends Controller
             'attachments.additional.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
+        $generatedPassword = Str::random(12);
+
+        $user = User::create([
+            'name' => $validated['first_name'] . ' ' . $validated['last_name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($generatedPassword), // Generate a random password
+        ]);
+
+
+        $role = Role::where('name', 'student')->first();
+
+        $user->assignRole($role);
+
         // Create enrollment form
-        $enrollment = EnrollmentForm::create($validated + [
+        $enrollment = EnrollmentForm::create([
+            ...$validated,
             'status' => 'pending',
-            'type' => $request->type
+            'type' => $request->type,
+            'user_id' => $user->id,
         ]);
 
         // Handle file uploads
@@ -163,6 +180,7 @@ class EnrollmentController extends Controller
             }
         }
 
+
         // Notification logic
         $notificationData = [
             'header' => 'New Enrollment Application',
@@ -170,6 +188,14 @@ class EnrollmentController extends Controller
             'type' => 'enrollment',
             'url' => route('registrar.enrollments.showEnrollee', $enrollment->id)
         ];
+
+        $notificationNewUser = [
+            'message' => "Your account has been created. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in.",
+        ];
+
+
+        $user->notify(new UserCreation($notificationNewUser));
+
 
         // Get registrars and notify them
         $registrars = User::role('registrar')->get();

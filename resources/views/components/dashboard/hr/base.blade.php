@@ -4,36 +4,43 @@
             'url' => 'hr.dashboard',
             'name' => 'dashboard',
             'icon' => '<i class="fi fi-rr-dashboard"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'hr.employees.index',
             'name' => 'employees',
             'icon' => '<i class="fi fi-rr-users"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'hr.departments.index',
             'name' => 'departments',
             'icon' => '<i class="fi fi-rr-users"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'hr.positions.index',
             'name' => 'positions',
             'icon' => '<i class="fi fi-rr-briefcase"></i>',
+            'is_active' => true,
         ],
         [
             'url' => 'hr.leaves.index',
             'name' => 'leaves',
             'icon' => '<i class="fi fi-rr-calendar"></i>',
+            'is_active' => true,
         ],
-        [
-            'url' => 'hr.attendance.index',
-            'name' => 'attendance',
-            'icon' => '<i class="fi fi-rr-time-check"></i>',
-        ],
+        // [
+        //     'url' => 'hr.attendance.index',
+        //     'name' => 'attendance',
+        //     'icon' => '<i class="fi fi-rr-time-check"></i>',
+        //     'is_active' => true,
+        // ],
         [
             'url' => 'hr.reports.index',
             'name' => 'reports',
             'icon' => '<i class="fi fi-rr-chart-histogram"></i>',
+            'is_active' => true,
         ],
     ];
 

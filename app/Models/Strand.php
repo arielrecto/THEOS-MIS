@@ -23,4 +23,7 @@ class Strand extends Model
     }
 
 
+    public function subjects(){
+        return $this->hasMany(GradeLevelSubject::class);
+    }
 }
