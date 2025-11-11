@@ -22,7 +22,7 @@
                     @csrf
                     <input type="hidden" name="academic_year_id" value="{{ $academicYear->id }}">
                     <input type="hidden" name="enrollment_id" value="{{ $enrollmentID }}">
-                    <input type="hidden" name="user_id" value="{{auth()->id ?? null}}" />
+                    <input type="hidden" name="user_id" value="{{ auth()->id ?? null }}" />
                     <!-- Enrollment Form Card -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
                         <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800 uppercase">
@@ -68,7 +68,7 @@
                         </div>
 
 
-                        <div class="flex flex-col  gap-2 mt-5">
+                        <div class="flex flex-col gap-2 mt-5">
                             <p class="font-medium label-text">Balik Aral:</p>
                             <select name="balik_aral" class="select select-bordered">
                                 <option value="yes" {{ old('balik_aral') == 'yes' ? 'selected' : '' }}>Yes</option>
@@ -76,9 +76,10 @@
                             </select>
                         </div>
 
-                         <div class="flex flex-col  gap-2 mt-5">
+                        <div class="flex flex-col gap-2 mt-5">
                             <p class="font-medium label-text">Enrollment type:</p>
-                            <input type="text" name="type" value="{{ request()->query('type') }}" class="input input-bordered" readonly>
+                            <input type="text" name="type" value="{{ request()->query('type') }}"
+                                class="input input-bordered" readonly>
                         </div>
                     </div>
 
@@ -140,14 +141,12 @@
                                 <div class="flex gap-6 pt-2">
                                     <label class="flex gap-2 items-center cursor-pointer">
                                         <input type="radio" name="sex" value="Male"
-                                            class="radio radio-accent"
-                                            {{ old('sex') == 'Male' ? 'checked' : '' }}>
+                                            class="radio radio-accent" {{ old('sex') == 'Male' ? 'checked' : '' }}>
                                         <span>Male</span>
                                     </label>
                                     <label class="flex gap-2 items-center cursor-pointer">
                                         <input type="radio" name="sex" value="Female"
-                                            class="radio radio-accent"
-                                            {{ old('sex') == 'Female' ? 'checked' : '' }}>
+                                            class="radio radio-accent" {{ old('sex') == 'Female' ? 'checked' : '' }}>
                                         <span>Female</span>
                                     </label>
                                 </div>
@@ -170,7 +169,7 @@
                             </div>
 
                             <!-- Full Address -->
-                            <h3 class="md:col-span-4 mt-4 font-medium text-gray-700">Full Address</h3>
+                            <h3 class="mt-4 font-medium text-gray-700 md:col-span-4">Full Address</h3>
 
                             <div class="form-control md:col-span-1">
                                 <label class="label">
@@ -190,14 +189,14 @@
                                     class="input input-bordered @error('street') input-error @enderror">
                             </div>
 
-                            <div class="form-control md:col-span-1">
+                            {{-- <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">Subdivision</span>
                                 </label>
                                 <input type="text" name="subdivision" value="{{ old('subdivision') }}"
                                     placeholder="Subdivision"
                                     class="input input-bordered @error('subdivision') input-error @enderror">
-                            </div>
+                            </div> --}}
 
                             <div class="form-control md:col-span-1">
                                 <label class="label">
@@ -253,7 +252,7 @@
                             <span>Parent/Guardian Information</span>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-y-6 gap-x-12 md:grid-cols-2">
                             <!-- Father's Information -->
                             <div class="space-y-4">
                                 <h3 class="font-medium text-gray-700">Father's Name</h3>
@@ -286,8 +285,8 @@
                                         <span class="font-medium label-text">Contact Number</span>
                                     </label>
                                     <input type="text" name="contact_number" value="{{ old('contact_number') }}"
-                                        placeholder="Contact Number"
-                                        inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}"
+                                        placeholder="Contact Number" inputmode="numeric" minlength="11"
+                                        maxlength="11" pattern="\d{11}"
                                         oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
                                         class="input input-bordered @error('contact_number') input-error @enderror">
                                 </div>
@@ -364,7 +363,7 @@
                                     <i class="fi fi-rr-info"></i>
                                     <span>Document Requirements</span>
                                 </h4>
-                                <ul class="mt-2 ml-5 text-sm text-blue-700 list-disc">
+                                <ul class="mt-2 ml-5 text-sm list-disc text-blue-700">
                                     <li>All documents must be clear and readable</li>
                                     <li>Accepted formats: PDF, JPG, PNG (max 5MB per file)</li>
                                     <li>Make sure all pages are properly scanned</li>
@@ -376,19 +375,16 @@
                                 <!-- Required Documents -->
                                 <div class="space-y-4">
                                     <h4 class="font-medium text-gray-700">Required Documents</h4>
-                                    @foreach(['birth_certificate' => 'Birth Certificate (PSA/NSO)',
-                                             'form_138' => 'Report Card (Form 138)',
-                                             'good_moral' => 'Good Moral Certificate'] as $key => $label)
+                                    @foreach (['birth_certificate' => 'Birth Certificate (PSA/NSO)', 'form_138' => 'Report Card (Form 138)', 'good_moral' => 'Good Moral Certificate'] as $key => $label)
                                         <div class="form-control">
                                             <label class="label">
                                                 <span class="font-medium label-text">{{ $label }}</span>
                                                 <span class="text-error label-text-alt">*</span>
                                             </label>
-                                            <input type="file"
-                                                   name="attachments[{{ $key }}]"
-                                                   accept=".pdf,.jpg,.jpeg,.png"
-                                                   class="file-input file-input-bordered file-input-accent w-full @error('attachments.' . $key) file-input-error @enderror"
-                                                   required>
+                                            <input type="file" name="attachments[{{ $key }}]"
+                                                accept=".pdf,.jpg,.jpeg,.png"
+                                                class="file-input file-input-bordered file-input-accent w-full @error('attachments.' . $key) file-input-error @enderror"
+                                                required>
                                             @error('attachments.' . $key)
                                                 <label class="label">
                                                     <span class="text-error label-text-alt">{{ $message }}</span>
@@ -405,13 +401,12 @@
                                         <label class="label">
                                             <span class="font-medium label-text">Additional Files</span>
                                         </label>
-                                        <input type="file"
-                                               name="attachments[additional][]"
-                                               accept=".pdf,.jpg,.jpeg,.png"
-                                               class="file-input file-input-bordered w-full"
-                                               multiple>
+                                        <input type="file" name="attachments[additional][]"
+                                            accept=".pdf,.jpg,.jpeg,.png"
+                                            class="w-full file-input file-input-bordered" multiple>
                                         <label class="label">
-                                            <span class="text-gray-500 label-text-alt">You can select multiple files</span>
+                                            <span class="text-gray-500 label-text-alt">You can select multiple
+                                                files</span>
                                         </label>
                                     </div>
                                 </div>
@@ -422,15 +417,26 @@
                     <!-- Email -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
                         <p class="font-medium label-text">use for communication only</p>
-                        <div class="flex gap-2 flex-col mb-6 text-lg font-semibold text-gray-800 uppercase">
+                        <div class="flex flex-col gap-2 mb-6 text-lg font-semibold text-gray-800 uppercase">
                             <i class="fi fi-rr-file-contract"></i>
                             <span class="font-medium label-text">Email:</span>
 
-                           <input type="email" name="email" value="{{ old('email') }}"
-                                    class="input input-bordered @error('email') input-error @enderror"
-                                    placeholder="Enter Email">
+
+                            @if(!request()->query('type') == 'old' )
+
+                            <input type="email" name="email" value="{{ old('email') }}"
+                                class="input input-bordered @error('email') input-error @enderror"
+                                placeholder="Enter Email">
+                            @else
+
+                            <p class="text-xs text-gray-500"> Already logged in as {{ Auth::user()->email }} you have already account</p>
+                            <input type="email" name="email" value="{{ Auth::user()->email }}"
+                                class="input input-bordered @error('email') input-error @enderror"
+                                placeholder="Enter Email" readonly>
+
+                                @endif
                         </div>
-                        {{-- <div class="prose prose-sm max-w-none">
+                        {{-- <div class="max-w-none prose prose-sm">
                             <p>
                                 I hereby certify that the above information given are true and correct to the best of my
                                 knowledge and I allow Theos Higher Ground Academe to use my child's details to create
@@ -507,4 +513,3 @@
         });
     </script>
 </x-landing-page.base>
-

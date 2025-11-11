@@ -79,6 +79,9 @@ class SubjectController extends Controller
     {
         $subject = Subject::find($id);
         $strands = Strand::all();
+
+
+
         return view('users.admin.subject.edit', compact('subject', 'strands'));
     }
 

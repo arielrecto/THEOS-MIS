@@ -41,7 +41,7 @@ class EnrollmentController extends Controller
         if ($user) {
             return to_route('enrollment.form', [
                 'enrollment' => $enrollment->id,
-                'type' => 'old'
+                'type' => 'old',
             ]);
         }
 
@@ -50,11 +50,7 @@ class EnrollmentController extends Controller
 
     public function form(Request $request)
     {
-
-        $enrollmentID  = $request->enrollment;
-
-
-
+        $enrollmentID = $request->enrollment;
 
         $type = $request->query('type', 'new');
 
@@ -63,13 +59,9 @@ class EnrollmentController extends Controller
             return redirect()->route('enrollment.type');
         }
 
-
-
-
         if ($type == 'old' && !Auth::check()) {
             return to_route('login');
         }
-
 
         $gradeLevels = Strand::get();
 
@@ -80,9 +72,6 @@ class EnrollmentController extends Controller
 
     public function store(Request $request)
     {
-
-
-
         // Add validation rules for attachments
         $validated = $request->validate([
             'school_year' => 'required|string',
@@ -146,24 +135,22 @@ class EnrollmentController extends Controller
 
         $generatedPassword = Str::random(12);
 
-        $user = User::create([
-            'name' => $validated['first_name'] . ' ' . $validated['last_name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($generatedPassword), // Generate a random password
-        ]);
+        $user = Auth::user();
 
+        if (!$user) {
+          $user = User::create([
+                'name' => $validated['first_name'] . ' ' . $validated['last_name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($generatedPassword), // Generate a random password
+            ]);
+        }
 
         $role = Role::where('name', 'student')->first();
 
         $user->assignRole($role);
 
         // Create enrollment form
-        $enrollment = EnrollmentForm::create([
-            ...$validated,
-            'status' => 'pending',
-            'type' => $request->type,
-            'user_id' => $user->id,
-        ]);
+        $enrollment = EnrollmentForm::create([...$validated, 'status' => 'pending', 'type' => $request->type, 'user_id' => $user->id]);
 
         // Handle file uploads
         if ($request->hasFile('attachments')) {
@@ -180,39 +167,31 @@ class EnrollmentController extends Controller
             }
         }
 
-
         // Notification logic
         $notificationData = [
             'header' => 'New Enrollment Application',
             'message' => "New {$request->type} student enrollment application from {$enrollment->first_name} {$enrollment->last_name} for Grade {$enrollment->grade_level}",
             'type' => 'enrollment',
-            'url' => route('registrar.enrollments.showEnrollee', $enrollment->id)
+            'url' => route('registrar.enrollments.showEnrollee', $enrollment->id),
         ];
 
         $notificationNewUser = [
             'message' => "Your account has been created. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in.",
         ];
 
-
         $user->notify(new UserCreation($notificationNewUser));
-
 
         // Get registrars and notify them
         $registrars = User::role('registrar')->get();
         $this->notificationActions->notifyUsers($registrars, $notificationData, $enrollment);
 
-        return to_route('enrollment.applicationMessage', $enrollment->id)
-            ->with('success', 'Your enrollment application has been submitted successfully.');
+        return to_route('enrollment.applicationMessage', $enrollment->id)->with('success', 'Your enrollment application has been submitted successfully.');
     }
 
     protected function createAttachment($file, $enrollment, $type)
     {
         $fileName = Str::random(40) . '.' . $file->getClientOriginalExtension();
-        $filePath = $file->storeAs(
-            'enrollments/' . $enrollment->id . '/' . $type,
-            $fileName,
-            'public'
-        );
+        $filePath = $file->storeAs('enrollments/' . $enrollment->id . '/' . $type, $fileName, 'public');
 
         Attachment::create([
             'file_dir' => $filePath,

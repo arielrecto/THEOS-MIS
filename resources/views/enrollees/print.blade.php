@@ -76,7 +76,7 @@
             </div>
             <div>
                 <!-- Using a placeholder for the logo -->
-                <img src="{{ $logo }}" alt="School Logo" class="h-24 w-24">
+                <img src="{{ $logo }}" alt="School Logo" class="w-24 h-24">
             </div>
         </div>
 
@@ -146,10 +146,10 @@
                         <p class="form-data">{{ $student->street ?? 'N\A' }}</p>
                         <p class="sub-label">Street Name</p>
                     </div>
-                    <div>
+                    {{-- <div>
                         <p class="form-data">{{ $student->subdivision ?? 'N\A' }}</p>
                         <p class="sub-label">Subdivision</p>
-                    </div>
+                    </div> --}}
                     <div>
                         <p class="form-data">{{ $student->barangay ?? 'N\A' }}</p>
                         <p class="sub-label">Barangay</p>
@@ -163,7 +163,7 @@
                         <p class="sub-label">Province</p>
                     </div>
                     <div>
-                        <p class="form-data">{{ $student->country ?? 'N\A' }}</p>
+                        <p class="form-data">Philippines</p>
                         <p class="sub-label">Country</p>
                     </div>
                     <div>
@@ -279,7 +279,7 @@
                     <p class="mt-1 text-center">Signature of Mother</p>
                 </div>
                 <div class="flex flex-col justify-end">
-                    <p class="form-data text-center">
+                    <p class="text-center form-data">
                         {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : 'N\A' }}
                     </p>
                     <p class="mt-1 text-center sub-label">Date signed</p>
@@ -289,7 +289,7 @@
                     <p class="mt-1 text-center">Signature of Father</p>
                 </div>
                 <div class="flex flex-col justify-end">
-                    <p class="form-data text-center">
+                    <p class="text-center form-data">
                         {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : 'N\A' }}
                         </s_p>
                     <p class="mt-1 text-center sub-label">Date signed</p>
