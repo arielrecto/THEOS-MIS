@@ -100,7 +100,23 @@ class SubjectController extends Controller
         ]);
 
 
-        return back()->with(['message' => 'Subject Data Updated']);
+
+        $subject->gradeLevels()->delete();
+
+
+        collect($request->strands)->each(function ($strandId) use ($subject) {
+            $subject->gradeLevels()->create([
+                'strand_id' => $strandId,
+                'subject_id' => $subject->id
+            ]);
+        });
+
+
+
+
+
+
+        return back()->with(['success' => 'Subject Data Updated']);
     }
 
     /**

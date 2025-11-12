@@ -422,19 +422,17 @@
                             <span class="font-medium label-text">Email:</span>
 
 
-                            @if(!request()->query('type') == 'old' )
-
-                            <input type="email" name="email" value="{{ old('email') }}"
-                                class="input input-bordered @error('email') input-error @enderror"
-                                placeholder="Enter Email">
+                            @if (!(request()->query('type') == 'old'))
+                                <input type="email" name="email" value="{{ old('email') }}"
+                                    class="input input-bordered @error('email') input-error @enderror"
+                                    placeholder="Enter Email">
                             @else
-
-                            <p class="text-xs text-gray-500"> Already logged in as {{ Auth::user()->email }} you have already account</p>
-                            <input type="email" name="email" value="{{ Auth::user()->email }}"
-                                class="input input-bordered @error('email') input-error @enderror"
-                                placeholder="Enter Email" readonly>
-
-                                @endif
+                                <p class="text-xs text-gray-500"> Already logged in as {{ Auth::user()->email }} you
+                                    have already account</p>
+                                <input type="email" name="email" value="{{ Auth::user()->email }}"
+                                    class="input input-bordered @error('email') input-error @enderror"
+                                    placeholder="Enter Email" readonly>
+                            @endif
                         </div>
                         {{-- <div class="max-w-none prose prose-sm">
                             <p>

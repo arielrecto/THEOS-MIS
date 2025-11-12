@@ -56,7 +56,7 @@
                                    name="strands[]"
                                    value="{{ $strand->id }}"
                                    class="checkbox checkbox-accent"
-                                   {{ in_array($strand->id, old('strands', $subject->gradeLevels->pluck('id')->toArray())) ? 'checked' : '' }}>
+                                   {{ in_array($strand->id, old('strands', $subject->gradeLevels->pluck('strand_id')->toArray())) ? 'checked' : '' }}>
                             <div>
                                 <p class="font-medium">{{ $strand->name }}</p>
                                 <p class="text-sm text-gray-500">{{ $strand->acronym }}</p>

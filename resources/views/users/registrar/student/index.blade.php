@@ -9,7 +9,7 @@
                 <!-- Academic Year Filter -->
                 <div class="form-control">
                     <label class="label">
-                        <span class="label-text font-medium">Academic Year</span>
+                        <span class="font-medium label-text">Academic Year</span>
                     </label>
                     <select name="academic_year"
                             onchange="this.form.submit()"
@@ -28,11 +28,11 @@
                 @if(request('academic_year'))
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-medium opacity-0">Clear</span>
+                            <span class="font-medium opacity-0 label-text">Clear</span>
                         </label>
                         <a href="{{ route('registrar.students.index') }}"
                            class="btn btn-ghost btn-sm">
-                            <i class="fi fi-rr-refresh mr-2"></i>
+                            <i class="mr-2 fi fi-rr-refresh"></i>
                             Clear Filter
                         </a>
                     </div>
@@ -42,36 +42,36 @@
 
         <!-- Students Table -->
         <div class="overflow-x-auto">
-            <table class="table table-zebra w-full">
+            <table class="table w-full table-zebra">
                 <thead>
                     <tr>
-                        <th class="bg-accent text-white">Student Name</th>
-                        <th class="bg-accent text-white">LRN</th>
-                        <th class="bg-accent text-white">Current Grade</th>
-                        <th class="bg-accent text-white">Academic Year</th>
-                        <th class="bg-accent text-white text-center">Actions</th>
+                        <th class="text-white bg-accent">Student Name</th>
+                        <th class="text-white bg-accent">LRN</th>
+                        <th class="text-white bg-accent">Current Grade</th>
+                        <th class="text-white bg-accent">Academic Year</th>
+                        <th class="text-center text-white bg-accent">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($students as $student)
                         <tr class="hover">
-                            <td>{{ $student->name }}</td>
-                            <td>{{ $student->studentProfile->lrn }}</td>
-                            <td>Grade {{ $student->currentAcademicRecord?->grade_level ?? 'N/A' }}</td>
-                            <td>{{ $student->currentAcademicRecord?->academicYear->name ?? 'N/A' }}</td>
+                            <td>{{ $student?->name ?? 'N/A' }}</td>
+                            <td>{{ $student?->studentProfile->lrn ?? 'N/A' }}</td>
+                            <td>Grade {{ $student?->currentAcademicRecord?->grade_level ?? 'N/A' }}</td>
+                            <td>{{ $student?->currentAcademicRecord?->academicYear->name ?? 'N/A' }}</td>
                             <td class="text-center">
                                 <a href="{{ route('registrar.students.show', $student->id) }}"
                                    class="btn btn-sm btn-ghost text-accent">
-                                    <i class="fi fi-rr-user mr-2"></i>
+                                    <i class="mr-2 fi fi-rr-user"></i>
                                     View Record
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-4">
-                                <div class="flex flex-col items-center justify-center text-gray-500">
-                                    <i class="fi fi-rr-users text-3xl mb-2"></i>
+                            <td colspan="5" class="py-4 text-center">
+                                <div class="flex flex-col justify-center items-center text-gray-500">
+                                    <i class="mb-2 text-3xl fi fi-rr-users"></i>
                                     <p>No students found</p>
                                 </div>
                             </td>

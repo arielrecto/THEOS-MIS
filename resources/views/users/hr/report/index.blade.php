@@ -1,8 +1,8 @@
 <x-dashboard.hr.base>
-    <div class="container mx-auto p-6">
+    <div class="container p-6 mx-auto">
         <!-- Header -->
         <div class="mb-6">
-            <div class="flex items-center justify-between">
+            <div class="flex justify-between items-center">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">HR Reports</h1>
                     <p class="text-gray-600">View and generate various HR reports</p>
@@ -11,13 +11,13 @@
         </div>
 
         <!-- Report Categories -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
             <!-- Attendance Report -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            {{-- <div class="p-6 bg-white rounded-lg shadow-sm">
                 <div class="flex flex-col h-full">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="p-3 bg-primary/10 rounded-lg">
-                            <i class="fi fi-rr-time-check text-primary text-2xl"></i>
+                    <div class="flex gap-4 items-center mb-4">
+                        <div class="p-3 rounded-lg bg-primary/10">
+                            <i class="text-2xl fi fi-rr-time-check text-primary"></i>
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold">Attendance Report</h2>
@@ -25,18 +25,18 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4 flex-grow">
+                    <div class="flex-grow space-y-4">
                         <div class="text-sm text-gray-600">
                             <ul class="space-y-2">
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Daily attendance summaries
                                 </li>
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Late arrival tracking
                                 </li>
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Work hour analysis
                                 </li>
@@ -45,20 +45,20 @@
                     </div>
 
                     <div class="mt-6">
-                        <a href="{{ route('hr.reports.attendance') }}" class="btn btn-primary w-full gap-2">
+                        <a href="{{ route('hr.reports.attendance') }}" class="gap-2 w-full btn btn-primary">
                             <i class="fi fi-rr-file-chart-line"></i>
                             Generate Report
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Leave Report -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="p-6 bg-white rounded-lg shadow-sm">
                 <div class="flex flex-col h-full">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="p-3 bg-accent/10 rounded-lg">
-                            <i class="fi fi-rr-calendar-clock text-accent text-2xl"></i>
+                    <div class="flex gap-4 items-center mb-4">
+                        <div class="p-3 rounded-lg bg-accent/10">
+                            <i class="text-2xl fi fi-rr-calendar-clock text-accent"></i>
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold">Leave Report</h2>
@@ -66,18 +66,18 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4 flex-grow">
+                    <div class="flex-grow space-y-4">
                         <div class="text-sm text-gray-600">
                             <ul class="space-y-2">
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Leave usage statistics
                                 </li>
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Leave balance tracking
                                 </li>
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Leave type analysis
                                 </li>
@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <a href="{{ route('hr.reports.leave') }}" class="btn btn-accent w-full gap-2">
+                        <a href="{{ route('hr.reports.leave') }}" class="gap-2 w-full btn btn-accent">
                             <i class="fi fi-rr-file-chart-line"></i>
                             Generate Report
                         </a>
@@ -95,11 +95,11 @@
             </div>
 
             <!-- Recruitment Report -->
-            <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="p-6 bg-white rounded-lg shadow-sm">
                 <div class="flex flex-col h-full">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="p-3 bg-success/10 rounded-lg">
-                            <i class="fi fi-rr-users text-success text-2xl"></i>
+                    <div class="flex gap-4 items-center mb-4">
+                        <div class="p-3 rounded-lg bg-success/10">
+                            <i class="text-2xl fi fi-rr-users text-success"></i>
                         </div>
                         <div>
                             <h2 class="text-lg font-semibold">Recruitment Report</h2>
@@ -107,18 +107,18 @@
                         </div>
                     </div>
 
-                    <div class="space-y-4 flex-grow">
+                    <div class="flex-grow space-y-4">
                         <div class="text-sm text-gray-600">
                             <ul class="space-y-2">
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Application statistics
                                 </li>
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Hiring progress tracking
                                 </li>
-                                <li class="flex items-center gap-2">
+                                <li class="flex gap-2 items-center">
                                     <i class="fi fi-rr-check text-success"></i>
                                     Position fill rates
                                 </li>
@@ -127,7 +127,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <a href="{{ route('hr.reports.recruitment') }}" class="btn btn-success w-full gap-2">
+                        <a href="{{ route('hr.reports.recruitment') }}" class="gap-2 w-full btn btn-success">
                             <i class="fi fi-rr-file-chart-line"></i>
                             Generate Report
                         </a>
