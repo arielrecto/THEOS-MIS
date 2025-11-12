@@ -56,7 +56,7 @@
                     @forelse($students as $student)
                         <tr class="hover">
                             <td>{{ $student?->name ?? 'N/A' }}</td>
-                            <td>{{ $student?->studentProfile->lrn ?? 'N/A' }}</td>
+                            <td>{{ $student?->studentProfile?->lrn ?? 'N/A' }}</td>
                             <td>Grade {{ $student?->currentAcademicRecord?->grade_level ?? 'N/A' }}</td>
                             <td>{{ $student?->currentAcademicRecord?->academicYear->name ?? 'N/A' }}</td>
                             <td class="text-center">
