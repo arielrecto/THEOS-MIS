@@ -17,9 +17,9 @@ class GradeController extends Controller
             ->with([
                 'studentProfile.academicRecords.academicYear',
                 'studentProfile.academicRecords.grades'
-            ])
-            ->when($request->academic_year, function($query) use ($request) {
-                $query->whereHas('studentProfile.academicRecords', function($q) use ($request) {
+            ])->whereHas('studentProfile')
+            ->when($request->academic_year, function ($query) use ($request) {
+                $query->whereHas('studentProfile.academicRecords', function ($q) use ($request) {
                     $q->where('academic_year_id', $request->academic_year);
                 });
             })

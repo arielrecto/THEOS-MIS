@@ -15,7 +15,7 @@
                 <div class="flex justify-between">
                     <div>
                         <h2 class="text-2xl font-bold">{{ $student->name }}</h2>
-                        <p class="text-gray-600">LRN: {{ $student->studentProfile->lrn }}</p>
+                        <p class="text-gray-600">LRN: {{ $student?->studentProfile?->lrn   ?? 'N/A'}}</p>
                     </div>
                     <div class="space-x-2">
                         <a href="{{ route('registrar.students.good-moral', $student->id) }}"
@@ -46,21 +46,21 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Date of Birth</p>
-                                <p class="mt-1">{{ $student->studentProfile->birthdate }}</p>
+                                <p class="mt-1">{{ $student?->studentProfile?->birthdate ?? 'N/A' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Contact</p>
-                                <p class="mt-1">{{ $student->studentProfile->contact_number }}</p>
+                                <p class="mt-1">{{ $student?->studentProfile?->contact_number ?? 'N/A' }}</p>
                             </div>
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-500">Address</p>
-                            <p class="mt-1">{{ $student->studentProfile->address }}</p>
+                            <p class="mt-1">{{ $student?->studentProfile?->address ?? 'N/A' }}</p>
                         </div>
                         <div class="pt-4 border-t">
                             <p class="text-sm font-medium text-gray-500">Parent/Guardian</p>
-                            <p class="mt-1 font-medium">{{ $student->studentProfile->parent_name }}</p>
-                            <p class="text-sm text-gray-500">{{ $student->studentProfile->relationship }}</p>
+                            <p class="mt-1 font-medium">{{ $student?->studentProfile?->parent_name ?? 'N/A' }}</p>
+                            <p class="text-sm text-gray-500">{{ $student?->studentProfile?->relationship ?? 'N/A' }}</p>
                         </div>
                     </div>
                 </div>
@@ -106,17 +106,17 @@
                         @endif
                     </div>
 
-                    @forelse($student->studentProfile->academicRecords as $record)
+                    @forelse($student?->studentProfile?->academicRecords ?? [] as $record)
                         <div class="mb-8 last:mb-0">
                             <div class="flex justify-between items-center mb-4">
                                 <div>
-                                    <h4 class="text-lg font-medium">Grade {{ $record->grade_level }}</h4>
-                                    <p class="text-sm text-gray-600">{{ $record->academicYear->name }}</p>
+                                    <h4 class="text-lg font-medium">Grade {{ $record?->grade_level ?? 'N/A' }}</h4>
+                                    <p class="text-sm text-gray-600">{{ $record?->academicYear?->name ?? 'N/A' }}</p>
                                 </div>
                                 <div class="flex items-center gap-4">
                                     <div class="text-right">
-                                        <span class="text-2xl font-bold {{ $record->average >= 75 ? 'text-success' : 'text-error' }}">
-                                            {{ number_format($record->average, 1) }}%
+                                        <span class="text-2xl font-bold {{ $record?->average >= 75 ? 'text-success' : 'text-error' }}">
+                                            {{ number_format($record?->average ?? 0, 1) }}%
                                         </span>
                                         <div class="text-sm text-gray-500">Average</div>
                                     </div>
@@ -139,15 +139,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($record->grades as $grade)
+                                        @foreach($record?->grades ?? [] as $grade)
                                             <tr>
-                                                <td>{{ $grade->subject }}</td>
+                                                <td>{{ $grade?->subject ?? 'N/A' }}</td>
                                                 <td class="text-right font-medium">
-                                                    {{ number_format($grade->grade, 1) }}
+                                                    {{ number_format($grade?->grade ?? 0, 1) }}
                                                 </td>
                                                 <td class="text-right">
-                                                    <span class="badge {{ $grade->grade >= 75 ? 'badge-success' : 'badge-error' }}">
-                                                        {{ $grade->remarks }}
+                                                    <span class="badge {{ $grade?->grade >= 75 ? 'badge-success' : 'badge-error' }}">
+                                                        {{ $grade?->remarks ?? 'N/A' }}
                                                     </span>
                                                 </td>
                                             </tr>

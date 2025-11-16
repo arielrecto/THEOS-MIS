@@ -27,7 +27,7 @@
 
     <div class="grid grid-cols-2 gap-6 mt-6">
 
-            <x-dashboard.bar-chart />
+            {{-- <x-dashboard.bar-chart /> --}}
 
 
         <!-- Upcoming Deadlines -->

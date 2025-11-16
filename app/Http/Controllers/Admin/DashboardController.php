@@ -87,7 +87,7 @@ class DashboardController extends Controller
         return [
             'labels' => $studentsPerStrand->pluck('name'),
             'datasets' => [[
-                'label' => 'Students per Strand',
+                'label' => 'Students per Grade Level',
                 'data' => $studentsPerStrand->pluck('student_count'),
                 'backgroundColor' => $colors['background'],
                 'borderColor' => $colors['border'],

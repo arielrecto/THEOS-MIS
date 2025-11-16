@@ -19,12 +19,13 @@ class SettingsController extends Controller
     {
         $student = auth()->user();
 
+
         $validated = $request->validate([
             // 'lrn' => ['required', 'string', 'max:255'],
             'contact_number' => ['nullable', 'string', 'max:255'],
             'parent_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
+            // 'address' => ['required', 'string', 'max:255'],
         ]);
 
         $student->studentProfile->update($validated);

@@ -87,7 +87,7 @@ Route::prefix('enrollment')
     ->group(function () {
         Route::get('/form', [ControllersEnrollmentController::class, 'form'])->name('form');
         Route::get('/{enrollmentForm}/application-message', [ControllersEnrollmentController::class, 'applicationMessage'])->name('applicationMessage');
-         Route::get('/type', [ControllersEnrollmentController::class, 'enrollmentType'])->name('type');
+        Route::get('/type', [ControllersEnrollmentController::class, 'enrollmentType'])->name('type');
         Route::get('/{id}', [ControllersEnrollmentController::class, 'show'])->name('show');
         Route::get('/{id}/print', [ControllersEnrollmentController::class, 'print'])->name('print');
         Route::post('/', [ControllersEnrollmentController::class, 'store'])->name('store');
@@ -184,9 +184,9 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('gallery', GalleryController::class);
             });
 
-             Route::resource('payment-accounts', PaymentAccountController::class);
+            Route::resource('payment-accounts', PaymentAccountController::class);
 
-            Route::prefix('payments')->as('payments.')->group(function(){
+            Route::prefix('payments')->as('payments.')->group(function () {
                 Route::get('', [AdminPaymentController::class, 'index'])->name('index');
                 Route::get('{payment}', [AdminPaymentController::class, 'show'])->name('show');
                 Route::post('/payments/{payment}/status', [AdminPaymentController::class, 'updateStatus'])->name('update-status');
@@ -213,6 +213,9 @@ Route::middleware(['auth'])->group(function () {
                         Route::post('/attendances/student', [AttendanceController::class, 'studentAttendance'])->name('attendances.students');
                         Route::get('/{classroom}/student', [ClassroomController::class, 'students'])->name('students');
                         Route::delete('/student/{classroom_student}', [ClassroomController::class, 'removeStudent'])->name('student.remove');
+                        Route::post('/{classroom}/archive', [ClassroomController::class, 'archive'])->name('archive');
+                        Route::get('/archived', [ClassroomController::class, 'archived'])->name('archived');
+                        Route::post('/{classroom}/unarchive', [ClassroomController::class, 'unarchive'])->name('unarchive');
                     });
 
                 Route::prefix('student')
@@ -358,7 +361,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('{enrollment}', [StudentEnrollmentController::class, 'show'])->name('show');
             });
 
-            Route::prefix('payments')->as('payments.')->group(function(){
+            Route::prefix('payments')->as('payments.')->group(function () {
                 Route::post('', [PaymentController::class, 'store'])->name('store');
                 Route::get('', [PaymentController::class, 'index'])->name('index');
             });

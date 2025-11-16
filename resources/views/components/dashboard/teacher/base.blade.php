@@ -30,6 +30,12 @@
             'icon' => '<i class="fi fi-rr-list-check"></i>',
             'is_active' => true,
         ],
+        [
+            'url' => 'teacher.classrooms.archived',
+            'name' => 'archived classrooms',
+            'icon' => '<i class="fi fi-rr-archive"></i>',
+            'is_active' => true,
+        ]
     ];
 
     $user = Auth::user();

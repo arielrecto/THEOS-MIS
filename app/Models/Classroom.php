@@ -17,6 +17,7 @@ class Classroom extends Model
         'subject_id',
         'strand_id',
         'academic_year_id',
+        'is_archived',
         'teacher_id'
     ];
 

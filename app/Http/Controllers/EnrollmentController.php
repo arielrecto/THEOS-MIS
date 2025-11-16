@@ -133,6 +133,12 @@ class EnrollmentController extends Controller
             'attachments.additional.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
+
+        if(User::where('email', $validated['email'])->exists()){
+            return back()->withInput()->withErrors(['email' => 'The email has already been taken.
+            Please use a different email or log in if you already have an account and enroll as old student.'] );
+        }
+
         $generatedPassword = Str::random(12);
 
         $user = Auth::user();

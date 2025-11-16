@@ -48,23 +48,23 @@
                         <div class="flex items-center gap-4 mb-4">
                             <div class="avatar placeholder">
                                 <div class="bg-accent text-white rounded-full w-12">
-                                    <span class="text-xl">{{ substr($student->name, 0, 1) }}</span>
+                                    <span class="text-xl">{{ substr($student?->name ?? 'N/A', 0, 1) }}</span>
                                 </div>
                             </div>
                             <div>
-                                <h2 class="card-title">{{ $student->name }}</h2>
-                                <p class="text-sm text-gray-600">LRN: {{ $student->studentProfile->lrn }}</p>
+                                <h2 class="card-title">{{ $student?->name ?? 'N/A' }}</h2>
+                                <p class="text-sm text-gray-600">LRN: {{ $student?->studentProfile?->lrn ?? 'N/A' }}</p>
                             </div>
                         </div>
 
                         <!-- Academic Records -->
                         <div class="space-y-3">
-                            @forelse($student->studentProfile->academicRecords()->with(['academicYear', 'grades'])->get() as $record)
+                            @forelse($student?->studentProfile?->academicRecords()->with(['academicYear', 'grades'])->get() as $record)
                                 <div class="bg-base-200 p-4 rounded-lg">
                                     <div class="flex justify-between items-center mb-2">
                                         <div>
-                                            <h3 class="font-medium">Grade {{ $record->grade_level }}</h3>
-                                            <p class="text-sm text-gray-600">{{ $record->academicYear->name }}</p>
+                                            <h3 class="font-medium">Grade {{ $record?->grade_level ?? 'N/A' }}</h3>
+                                            <p class="text-sm text-gray-600">{{ $record?->academicYear?->name ?? 'N/A' }}</p>
                                         </div>
                                         <div class="text-right">
                                             <span class="font-bold text-accent">{{ number_format($record->average, 1) }}%</span>

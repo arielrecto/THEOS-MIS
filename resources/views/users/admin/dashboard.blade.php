@@ -62,7 +62,7 @@
         {{-- Students per Strand Chart --}}
         <div class="p-6 rounded-lg shadow-lg bg-base-100">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-2xl font-bold text-primary">Students per Strand</h2>
+                <h2 class="text-2xl font-bold text-primary">Students per Grade Level</h2>
                 <span class="text-sm text-gray-500">Current Academic Year</span>
             </div>
             <x-charts.bar-chart
@@ -70,7 +70,7 @@
                 :labels="$studentsPerStrand['labels']"
                 :datasets="$studentsPerStrand['datasets']"
                 :options="[
-                    'title' => 'Strand Distribution',
+                    'title' => 'Grade Levels Distribution',
                     'plugins' => [
                         'legend' => [
                             'position' => 'bottom'

@@ -128,6 +128,10 @@
                                         </div>
                                     </div>
                                     <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
+                                        target="_blank" rel="noopener noreferrer">
+                                        <i class="fi fi-rr-eye text-accent"></i>
+                                    </a>
+                                    <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
                                         download>
                                         <i class="fi fi-rr-download text-accent"></i>
                                     </a>

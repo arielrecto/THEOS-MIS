@@ -1,7 +1,11 @@
 <x-dashboard.student.base>
     <div class="container p-6 mx-auto">
         <h1 class="mb-6 text-2xl font-bold text-gray-700">Account Settings</h1>
-
+        @if ($errors->any())
+            @foreach($errors->all() as $error)
+                <p>{{$error}}</p>
+            @endforeach
+        @endif
         <div class="grid gap-6">
             <!-- Profile Information -->
             <div class="p-6 bg-white rounded-lg shadow-md">
@@ -76,7 +80,7 @@
                 <h2 class="mb-4 text-lg font-medium text-gray-900">Update Email</h2>
                 <form method="POST" action="{{ route('student.settings.email.update') }}" class="space-y-6">
                     @csrf
-                    @method('PUT')
+                    @method('PATCH')
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email Address</label>
@@ -98,7 +102,7 @@
                 <h2 class="mb-4 text-lg font-medium text-gray-900">Update Password</h2>
                 <form method="POST" action="{{ route('student.settings.password.update') }}" class="space-y-6">
                     @csrf
-                    @method('PUT')
+                    @method('PATCH')
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Current Password</label>

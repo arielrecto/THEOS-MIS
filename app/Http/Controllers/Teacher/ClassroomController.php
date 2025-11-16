@@ -24,6 +24,7 @@ class ClassroomController extends Controller
 
         $query = Classroom::query()
             ->where('teacher_id', Auth::id())
+            ->where('is_archived', false)
             ->with(['subject', 'strand', 'teacher.profile', 'academicYear', 'classroomStudents']);
 
         if ($request->has('academic_year')) {
@@ -190,5 +191,69 @@ class ClassroomController extends Controller
 
 
         return back()->with(['message' => 'Student Successfully Remove in Classroom']);
+    }
+
+
+    public function archive(Classroom $classroom)
+    {
+        // Check if the classroom belongs to the authenticated teacher
+        if ($classroom->teacher_id !== auth()->id()) {
+            return back()->with('error', 'Unauthorized action');
+        }
+
+        $classroom->update([
+            'is_archived' => true,
+            'archived_at' => now()
+        ]);
+
+        return back()->with('success', 'Classroom archived successfully');
+    }
+
+    public function archived()
+    {
+        $archivedClassrooms = Classroom::where('teacher_id', auth()->id())
+            ->where('is_archived', true)
+            ->with(['subject', 'strand'])
+            ->latest('archived_at')
+            ->paginate(10);
+
+        return view('users.teacher.archived.index', compact('archivedClassrooms'));
+    }
+
+    public function unarchive(Classroom $classroom)
+    {
+
+        // Check if the classroom belongs to the authenticated teacher
+        if ($classroom->teacher_id !== auth()->id()) {
+            return back()->with('error', 'Unauthorized action');
+        }
+
+        $classroom->update([
+            'is_archived' => false,
+            'archived_at' => null
+        ]);
+
+        return back()->with('success', 'Classroom unarchived successfully');
+    }
+
+    public function forceDelete(Classroom $classroom)
+    {
+        // Check if the classroom belongs to the authenticated teacher
+        if ($classroom->teacher_id !== auth()->id()) {
+            return back()->with('error', 'Unauthorized action');
+        }
+
+        // Check if classroom has related data
+        if ($classroom->students()->count() > 0) {
+            return back()->with('error', 'Cannot delete classroom with enrolled students');
+        }
+
+        if ($classroom->grades()->count() > 0) {
+            return back()->with('error', 'Cannot delete classroom with existing grades');
+        }
+
+        $classroom->forceDelete();
+
+        return back()->with('success', 'Classroom deleted permanently');
     }
 }
