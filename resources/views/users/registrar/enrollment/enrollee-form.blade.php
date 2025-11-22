@@ -1,6 +1,6 @@
 <x-dashboard.registrar.base>
     <div class="py-8">
-        <div class="container px-4 mx-auto">
+        <div class="container px-4 sm:px-6 mx-auto">
             <div class="mx-auto max-w-5xl">
                 <x-dashboard.page-title :title="__('Enrollee Details')" :back_url="route('registrar.enrollments.index')">
                     <x-slot name="other">
@@ -27,33 +27,22 @@
                                         </li>
                                     @endforeach
 
-
                                     <li>
-                                            <form action="{{ route('registrar.enrollments.enrolled', $enrollee->id) }}"
-                                                  method="POST"
-                                                  class="w-full">
-                                                @csrf
-                                                @method('PUT')
-                                                <input type="hidden" name="status" value="enrolled">
-                                                <button type="button"
-                                                        onclick="updateStatus(this.form, 'enrolled')"
-                                                        class="w-full text-left {{ $enrollee->status === 'enrolled' ? 'bg-accent/10 text-accent' : '' }}">
-                                                    {{ ucfirst('enrolled') }}
-                                                </button>
-                                            </form>
-                                        </li>
+                                        <form action="{{ route('registrar.enrollments.enrolled', $enrollee->id) }}"
+                                              method="POST"
+                                              class="w-full">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status" value="enrolled">
+                                            <button type="button"
+                                                    onclick="updateStatus(this.form, 'enrolled')"
+                                                    class="w-full text-left {{ $enrollee->status === 'enrolled' ? 'bg-accent/10 text-accent' : '' }}">
+                                                {{ ucfirst('enrolled') }}
+                                            </button>
+                                        </form>
+                                    </li>
                                 </ul>
                             </div>
-
-
-                            {{-- <form action="{{ route('registrar.enrollments.enrolled', $enrollee->id) }}" method="post">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="gap-2 btn btn-sm btn-accent">
-                                    <i class="fi fi-rr-check"></i>
-                                    Mark as Enrolled
-                                </button>
-                            </form> --}}
                         @endif
                     </x-slot>
                 </x-dashboard.page-title>
@@ -103,7 +92,7 @@
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div>
                             <p class="text-sm font-medium text-gray-600">Full Name</p>
-                            <p class="mt-1">{{ $enrollee->first_name }} {{ $enrollee->middle_name }}
+                            <p class="mt-1 break-words">{{ $enrollee->first_name }} {{ $enrollee->middle_name }}
                                 {{ $enrollee->last_name }} {{ $enrollee->extension_name }}</p>
                         </div>
                         <div>
@@ -127,14 +116,9 @@
                     <div class="space-y-6">
                         <div>
                             <h3 class="mb-2 text-sm font-medium text-gray-600">Current Address</h3>
-                            <p>{{ $enrollee->house_no }} {{ $enrollee->street }}, {{ $enrollee->barangay }},
+                            <p class="break-words">{{ $enrollee->house_no }} {{ $enrollee->street }}, {{ $enrollee->barangay }},
                                 {{ $enrollee->city }}, {{ $enrollee->province }}, {{ $enrollee->zip_code }}</p>
                         </div>
-
-                        {{-- <div>
-                            <h3 class="mb-2 text-sm font-medium text-gray-600">Permanent Address</h3>
-                            <p>{{ $enrollee->perm_house_no }} {{ $enrollee->perm_street }}, {{ $enrollee->perm_barangay }}, {{ $enrollee->perm_city }}, {{ $enrollee->perm_province }}, {{ $enrollee->perm_zip_code }}</p>
-                        </div> --}}
                     </div>
                 </div>
 
@@ -154,7 +138,7 @@
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 bg-gray-50 p-4 rounded-lg">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Full Name</p>
-                                <p class="mt-1">
+                                <p class="mt-1 break-words">
                                     {{ $enrollee->parent_last_name }},
                                     {{ $enrollee->parent_name }}
                                     {{ $enrollee->parent_middle_name }}
@@ -184,7 +168,7 @@
                         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 bg-gray-50 p-4 rounded-lg">
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Full Name</p>
-                                <p class="mt-1">
+                                <p class="mt-1 break-words">
                                     {{ $enrollee->mother_last_name }},
                                     {{ $enrollee->mother_name }}
                                     {{ $enrollee->mother_middle_name }}
@@ -215,7 +199,7 @@
 
                     <div>
                         <p class="text-sm font-medium text-gray-600">Email Address</p>
-                        <p class="mt-1">{{ $enrollee->email ?? 'N/A' }}</p>
+                        <p class="mt-1 break-words">{{ $enrollee->email ?? 'N/A' }}</p>
                     </div>
                 </div>
 
@@ -227,7 +211,7 @@
                     </div>
 
                     <!-- Required Documents Grid -->
-                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6">
                         @php
                             $requiredDocs = [
                                 'birth_certificate' => ['Birth Certificate (PSA/NSO)', 'fi-rr-id-badge'],
@@ -250,26 +234,21 @@
                                         <i
                                             class="text-lg fi {{ $details[1] }} {{ $attachment ? 'text-accent' : 'text-error' }}"></i>
                                     </div>
-                                    <div class="flex-1">
-                                        <h3 class="font-medium text-gray-900">{{ $details[0] }}</h3>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-medium text-gray-900 truncate">{{ $details[0] }}</h3>
                                         @if ($attachment)
-                                            <p class="mt-1 text-xs text-gray-500">
+                                            <p class="mt-1 text-xs text-gray-500 truncate">
                                                 {{ $attachment->file_name }}
                                                 <span class="block text-gray-400">
                                                     {{ number_format($attachment->file_size / 1024 / 1024, 2) }} MB
                                                 </span>
                                             </p>
-                                            <div class="flex gap-2 mt-3">
+                                            <div class="flex gap-2 mt-3 flex-wrap">
                                                 <a href="{{ Storage::url($attachment->file_dir) }}" target="_blank"
                                                     class="btn btn-xs btn-ghost gap-1">
                                                     <i class="fi fi-rr-eye text-xs"></i>
                                                     View
                                                 </a>
-                                                {{-- <a href="{{ route('registrar.attachments.download', $attachment->id) }}"
-                                                   class="btn btn-xs btn-ghost gap-1">
-                                                    <i class="fi fi-rr-download text-xs"></i>
-                                                    Download
-                                                </a> --}}
                                             </div>
                                         @else
                                             <p class="mt-1 text-xs text-error">Document not uploaded</p>
@@ -286,9 +265,11 @@
                     @endphp
 
                     @if ($additionalDocs->count() > 0)
-                        <div class="mt-6">
+                        <div class="mt-4">
                             <h3 class="mb-4 font-medium text-gray-700">Additional Documents</h3>
-                            <div class="overflow-x-auto">
+
+                            {{-- Desktop/Table View --}}
+                            <div class="hidden md:block overflow-x-auto">
                                 <table class="table table-zebra w-full">
                                     <thead>
                                         <tr>
@@ -315,11 +296,6 @@
                                                             <i class="fi fi-rr-eye text-xs"></i>
                                                             View
                                                         </a>
-                                                        {{-- <a href="{{ route('registrar.attachments.download', $doc->id) }}"
-                                                           class="btn btn-ghost btn-xs gap-1">
-                                                            <i class="fi fi-rr-download text-xs"></i>
-                                                            Download
-                                                        </a> --}}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -327,20 +303,39 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            {{-- Mobile Card List --}}
+                            <div class="md:hidden space-y-3">
+                                @foreach ($additionalDocs as $doc)
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="min-w-0">
+                                                <p class="font-medium text-sm truncate">{{ $doc->file_name }}</p>
+                                                <p class="text-xs text-gray-500 mt-1">
+                                                    {{ strtoupper(pathinfo($doc->file_name, PATHINFO_EXTENSION)) }} •
+                                                    {{ number_format($doc->file_size / 1024 / 1024, 2) }} MB
+                                                </p>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <a href="{{ Storage::url($doc->file_dir) }}" target="_blank"
+                                                   class="btn btn-ghost btn-xs">
+                                                    <i class="fi fi-rr-eye text-xs"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex gap-4 justify-end mt-6">
-                    <a href="{{ route('registrar.enrollments.index') }}" class="btn btn-ghost">
+                <div class="flex flex-col sm:flex-row gap-3 justify-end mt-6">
+                    <a href="{{ route('registrar.enrollments.index') }}" class="btn btn-ghost w-full sm:w-auto">
                         <i class="fi fi-rr-arrow-left"></i>
-                        Back to List
+                        <span class="hidden sm:inline">Back to List</span>
                     </a>
-                    {{-- <a href="{{ route('registrar.enrollments.print', $enrollee->id) }}" class="gap-2 btn btn-accent">
-                        <i class="fi fi-rr-print"></i>
-                        Print Form
-                    </a> --}}
                 </div>
             </div>
         </div>
