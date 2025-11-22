@@ -22,16 +22,19 @@ class ClassroomController extends Controller
     {
         $academicYears = AcademicYear::orderBy('created_at', 'desc')->get();
 
-        $query = Classroom::query()
-            ->where('teacher_id', Auth::id())
+        $query = Classroom::where('teacher_id', Auth::user()->id)
             ->where('is_archived', false)
             ->with(['subject', 'strand', 'teacher.profile', 'academicYear', 'classroomStudents']);
+
 
         if ($request->has('academic_year')) {
             $query->where('academic_year_id', $request->academic_year);
         }
 
         $classrooms = $query->latest()->paginate(10);
+
+
+
 
         return view('users.teacher.classroom.index', compact('classrooms', 'academicYears'));
     }

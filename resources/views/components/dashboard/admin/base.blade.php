@@ -64,14 +64,25 @@
 @endphp
 
 <x-app-layout>
-    <div class="flex justify-center w-full h-full bg-base-100">
-        <div class="flex overflow-hidden w-full min-h-screen shadow-lg 4xl:rounded-lg 4xl:w-5/6">
-            <x-dashboard.sidebar :links="$links" class="shadow-md bg-secondary text-primary" />
-            <div class="flex flex-col gap-4 p-6 w-full h-full">
-                <x-dashboard.navbar class="rounded-lg shadow-md bg-primary text-neutral" />
+    <div class="min-h-screen bg-base-100">
+        <div class="mx-auto w-full 4xl:w-5/6">
+            <div class="flex h-screen overflow-hidden">
+                <!-- Sidebar (desktop) -->
+                <x-dashboard.sidebar :links="$links" class="shadow-md bg-secondary text-primary" />
 
-                <div class="p-6 bg-white rounded-lg shadow-md main">
-                    {{ $slot }}
+                <!-- Main content area -->
+                <div class="flex-1 flex flex-col">
+                    <!-- Top navbar -->
+                    <header class="w-full z-20">
+                        <x-dashboard.navbar class="rounded-lg shadow-md bg-primary text-neutral" />
+                    </header>
+
+                    <!-- Page content: add bottom padding to avoid mobile bottom nav overlap -->
+                    <main class="flex-1 overflow-auto p-4 md:p-6">
+                        <div class="p-6 bg-white rounded-lg shadow-md main pb-28 md:pb-6">
+                            {{ $slot }}
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

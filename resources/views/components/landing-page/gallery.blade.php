@@ -22,7 +22,7 @@
         <!-- Filter Tabs - Scrollable on mobile -->
         <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 mb-8 sm:mb-12">
             <div class="flex flex-nowrap sm:flex-wrap sm:justify-center gap-2 sm:gap-3 min-w-max sm:min-w-0">
-                <a class="btn btn-sm whitespace-nowrap"
+                {{-- <a class="btn btn-sm whitespace-nowrap"
                    href="/gallery"
                    :class="request()->query('category') === 'all' || !request()->query('category') ? 'btn-accent' : 'btn-ghost hover:bg-accent/10'">
                     All
@@ -33,7 +33,7 @@
                        :class="'{{request()->query('category')}}' === category ? 'btn-accent' : 'btn-ghost hover:bg-accent/10'"
                        x-text="category">
                     </a>
-                </template>
+                </template> --}}
             </div>
         </div>
 

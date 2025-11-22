@@ -1,7 +1,7 @@
 export default () => ({
     // categories: ['School Events', 'Academic Events', 'Campus Life', 'Activities'],
     categories: [],
-    selectedCategory: 'all',
+    selectedCategory: '',
     isModalOpen: false,
     selectedImage: null,
     loading: false,
@@ -16,7 +16,7 @@ export default () => ({
     },
 
     get filteredImages() {
-        return this.selectedCategory === 'all'
+        return this.selectedCategory === ''
             ? this.images
             : this.images.filter(img => img.category === this.selectedCategory);
     },

@@ -48,7 +48,7 @@
                     class="inline-flex items-center btn btn-lg btn-primary bg-white text-accent hover:bg-gray-100 hover:scale-105 transform transition-all duration-300 shadow-lg">
                     <i class="fi fi-rr-graduation-cap mr-2"></i>
                     Enroll Now
-                    <span class="ml-2 badge badge-accent">Open</span>
+                    {{-- <span class="ml-2 badge badge-accent">Open</span> --}}
                 </a>
             @else
                 <button disabled class="btn btn-lg bg-gray-200/20 text-white/60 cursor-not-allowed backdrop-blur-sm">
@@ -113,7 +113,7 @@
                     class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
                     <div class="aspect-w-16 aspect-h-9 overflow-hidden relative">
                         <img src="{{ Storage::url($program->path) }}" alt="{{ $program->title }}"
-                            class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                            class="w-full min-h-96 object-cover transform transition-transform duration-500 group-hover:scale-110"
                             onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop'">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 right-4">
@@ -123,9 +123,12 @@
                     <div class="p-6">
                         <p class="text-gray-600 mb-4 line-clamp-3">{{ $program->description }}</p>
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-accent font-medium">Learn More</span>
+                            <a href="{{ route('academic-programs.show', $program->id) }}" class="text-accent">
+
+                                <span class="text-sm text-accent font-medium">See More</span></a>
+                            {{--
                             <a href="{{ route('academic-programs.show', $program->id) }}" class="text-accent"><i
-                                    class="fi fi-rr-arrow-right text-accent"></i></a>
+                                    class="fi fi-rr-arrow-right text-accent"></i></a> --}}
                         </div>
                     </div>
                 </div>
