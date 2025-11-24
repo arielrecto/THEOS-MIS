@@ -27,7 +27,7 @@
                 @if ($link['is_active'] ?? false)
                     <li>
                         <a href="{{ $link['url'] === '#' ? '#' : route($link['url']) }}"
-                           class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary hover:text-neutral
+                            class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary hover:text-neutral
                                   {{ Route::is($link['url']) ? 'font-bold bg-primary text-neutral' : '' }}">
                             {!! $link['icon'] !!}
                             <span class="truncate">{{ $link['name'] }}</span>
@@ -50,12 +50,13 @@
                 $href = $link['url'] === '#' ? '#' : route($link['url']);
             @endphp
             <a href="{{ $href }}" class="flex-1">
-                <div class="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg transition-colors duration-150
+                <div
+                    class="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg transition-colors duration-150
                             {{ $isActive ? 'bg-primary text-neutral' : 'text-primary hover:bg-secondary hover:text-neutral' }}">
                     <div class="text-lg">
                         {!! $link['icon'] !!}
                     </div>
-                    <span class="text-xs truncate w-16">{{ $link['name'] }}</span>
+                    <span class="text-xs truncate text-center w-full">{{ $link['name'] }}</span>
                 </div>
             </a>
         @endforeach
