@@ -2,7 +2,7 @@
     <x-dashboard.page-title :title="_('Student Grades')" />
     <x-notification-message />
 
-    <div class="p-6 bg-white rounded-lg shadow-lg">
+    <div class="p-4 sm:p-6 bg-white rounded-lg shadow-lg">
         <!-- Filters Section -->
         <div class="mb-6">
             <form method="GET" class="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -11,13 +11,12 @@
                     <label class="label">
                         <span class="label-text font-medium">Academic Year</span>
                     </label>
-                    <select name="academic_year"
-                            onchange="this.form.submit()"
-                            class="select select-bordered w-full sm:w-auto">
+                    <select name="academic_year" onchange="this.form.submit()"
+                        class="select select-bordered w-full sm:w-auto">
                         <option value="">{{ __('All Academic Years') }}</option>
-                        @foreach($academicYears as $year)
+                        @foreach ($academicYears as $year)
                             <option value="{{ $year->id }}"
-                                    {{ request('academic_year') == $year->id ? 'selected' : '' }}>
+                                {{ request('academic_year') == $year->id ? 'selected' : '' }}>
                                 {{ $year->name }}
                             </option>
                         @endforeach
@@ -25,13 +24,12 @@
                 </div>
 
                 <!-- Clear Filters -->
-                @if(request('academic_year'))
+                @if (request('academic_year'))
                     <div class="form-control w-full sm:w-auto">
                         <label class="label">
                             <span class="label-text font-medium opacity-0">Clear</span>
                         </label>
-                        <a href="{{ route('registrar.grades.index') }}"
-                           class="btn btn-ghost btn-sm w-full sm:w-auto">
+                        <a href="{{ route('registrar.grades.index') }}" class="btn btn-ghost btn-sm w-full sm:w-auto">
                             <i class="fi fi-rr-refresh mr-2"></i>
                             Clear Filter
                         </a>
@@ -46,43 +44,51 @@
                 <div class="card bg-base-100 shadow-xl flex flex-col">
                     <div class="card-body flex-1">
                         <div class="flex items-center gap-4 mb-4">
-                            <div class="avatar placeholder">
-                                <div class="bg-accent text-white rounded-full w-12 h-12 flex items-center justify-center text-xl">
+                            <div class="avatar placeholder flex-shrink-0">
+                                <div
+                                    class="bg-accent text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-lg sm:text-xl">
                                     {{ substr($student?->name ?? 'N/A', 0, 1) }}
                                 </div>
                             </div>
                             <div class="min-w-0">
-                                <h2 class="card-title truncate">{{ $student?->name ?? 'N/A' }}</h2>
-                                <p class="text-sm text-gray-600 truncate">LRN: {{ $student?->studentProfile?->lrn ?? 'N/A' }}</p>
+                                <h2 class="card-title truncate text-sm sm:text-base">{{ $student?->name ?? 'N/A' }}</h2>
+                                <p class="text-xs sm:text-sm text-gray-600 truncate">LRN:
+                                    {{ $student?->studentProfile?->lrn ?? 'N/A' }}</p>
                             </div>
                         </div>
 
                         <!-- Academic Records -->
                         <div class="space-y-3">
                             @forelse($student?->studentProfile?->academicRecords()->with(['academicYear', 'grades'])->get() as $record)
-                                <div class="bg-base-200 p-4 rounded-lg">
-                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-3">
+                                <div class="bg-base-200 p-3 sm:p-4 rounded-lg">
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-3">
                                         <div>
-                                            <h3 class="font-medium">Grade {{ $record?->grade_level ?? 'N/A' }}</h3>
-                                            <p class="text-sm text-gray-600">{{ $record?->academicYear?->name ?? 'N/A' }}</p>
+                                            <h3 class="font-medium text-sm">Grade {{ $record?->grade_level ?? 'N/A' }}
+                                            </h3>
+                                            <p class="text-xs sm:text-sm text-gray-600">
+                                                {{ $record?->academicYear?->name ?? 'N/A' }}</p>
                                         </div>
-                                        <div class="flex items-center justify-between sm:justify-end gap-3 mt-3 sm:mt-0">
+                                        <div
+                                            class="flex flex-col sm:flex-row items-start sm:items-center justify-between sm:justify-end gap-3 mt-3 sm:mt-0 w-full sm:w-auto">
                                             <div class="text-right">
-                                                <span class="font-bold text-accent">{{ number_format($record->average, 1) }}%</span>
+                                                <span
+                                                    class="font-bold text-accent text-sm sm:text-base">{{ number_format($record->average, 1) }}%</span>
                                                 <div class="text-xs text-gray-500">Average</div>
                                             </div>
 
                                             <!-- Desktop: modal trigger -->
-                                            <button class="btn btn-xs btn-ghost hidden md:inline-flex"
-                                                    onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">
+                                            <button class="btn btn-xs sm:btn-sm btn-ghost hidden md:inline-flex"
+                                                onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">
                                                 View Grades
                                             </button>
 
                                             <!-- Mobile: collapsible -->
-                                            <details class="md:hidden">
-                                                <summary class="text-sm btn btn-xs btn-ghost w-full text-left">View Grades</summary>
+                                            <details class="md:hidden w-full">
+                                                <summary class="text-sm btn btn-xs btn-ghost w-full text-left">View
+                                                    Grades</summary>
                                                 <div class="mt-3 overflow-x-auto">
-                                                    <table class="table table-zebra w-full">
+                                                    <table class="table table-zebra w-full text-sm">
                                                         <thead>
                                                             <tr>
                                                                 <th>Subject</th>
@@ -91,12 +97,14 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach($record->grades as $grade)
+                                                            @foreach ($record->grades as $grade)
                                                                 <tr>
                                                                     <td class="truncate">{{ $grade->subject }}</td>
-                                                                    <td class="text-right font-medium">{{ number_format($grade->grade, 1) }}</td>
+                                                                    <td class="text-right font-medium">
+                                                                        {{ number_format($grade->grade, 1) }}</td>
                                                                     <td class="text-right">
-                                                                        <span class="badge {{ $grade->grade >= 75 ? 'badge-success' : 'badge-error' }}">
+                                                                        <span
+                                                                            class="badge {{ $grade->grade >= 75 ? 'badge-success' : 'badge-error' }}">
                                                                             {{ $grade->remarks }}
                                                                         </span>
                                                                     </td>
@@ -106,7 +114,8 @@
                                                         <tfoot>
                                                             <tr>
                                                                 <td class="font-medium">Average</td>
-                                                                <td class="text-right font-bold text-accent" colspan="2">
+                                                                <td class="text-right font-bold text-accent"
+                                                                    colspan="2">
                                                                     {{ number_format($record->average, 1) }}%
                                                                 </td>
                                                             </tr>
@@ -116,23 +125,25 @@
                                             </details>
 
                                             <!-- Keep a consistent button on mobile for layout -->
-                                            <button class="btn btn-xs btn-ghost w-full sm:hidden mt-2" onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">Open</button>
+                                            <button class="btn btn-xs btn-ghost w-full md:hidden mt-2"
+                                                onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">Open</button>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Grades Modal (desktop/tablet) -->
                                 <dialog id="grades_modal_{{ $record->id }}" class="modal">
-                                    <div class="modal-box max-w-3xl w-full">
+                                    <div class="modal-box w-full max-w-full sm:max-w-3xl p-4 sm:p-6">
                                         <form method="dialog">
-                                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                            <button
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                         </form>
                                         <h3 class="font-bold text-lg mb-4">
                                             Grade {{ $record->grade_level }} - {{ $record->academicYear->name }}
                                         </h3>
 
                                         <div class="overflow-x-auto">
-                                            <table class="table table-zebra w-full">
+                                            <table class="table table-zebra w-full text-sm sm:text-base">
                                                 <thead>
                                                     <tr>
                                                         <th>Subject</th>
@@ -141,14 +152,15 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($record->grades as $grade)
+                                                    @foreach ($record->grades as $grade)
                                                         <tr>
                                                             <td class="truncate">{{ $grade->subject }}</td>
                                                             <td class="text-right font-medium">
                                                                 {{ number_format($grade->grade, 1) }}
                                                             </td>
                                                             <td class="text-right">
-                                                                <span class="badge {{ $grade->grade >= 75 ? 'badge-success' : 'badge-error' }}">
+                                                                <span
+                                                                    class="badge {{ $grade->grade >= 75 ? 'badge-success' : 'badge-error' }}">
                                                                     {{ $grade->remarks }}
                                                                 </span>
                                                             </td>
@@ -177,15 +189,10 @@
                             @endforelse
                         </div>
                     </div>
-
-                    {{-- <div class="card-actions mt-4">
-                        <a href="{{ route('registrar.grades.student', $student->id ?? 0) }}" class="btn btn-sm btn-outline w-full sm:w-auto">
-                            View Student
-                        </a>
-                    </div> --}}
                 </div>
             @empty
-                <div class="col-span-full flex flex-col items-center justify-center p-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                <div
+                    class="col-span-full flex flex-col items-center justify-center p-6 sm:p-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
                     <div class="w-16 h-16 mb-4 text-gray-400">
                         <i class="fi fi-rr-users text-4xl"></i>
                     </div>

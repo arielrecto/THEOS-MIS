@@ -185,15 +185,15 @@
                     </p>
                 </div>
                 <!-- Added print:col-span-1 -->
-                <div class="md:col-span-1 print:col-span-1">
+                {{-- <div class="md:col-span-1 print:col-span-1">
                     <p class="field-label">Sex:</p>
                     <p class="form-data">{{ $student->sex ?? 'N\A' }}</p>
-                </div>
+                </div> --}}
                 <!-- Added print:col-span-1 -->
-                <div class="md:col-span-1 print:col-span-1">
+                {{-- <div class="md:col-span-1 print:col-span-1">
                     <p class="field-label">Age:</p>
                     <p class="form-data">{{ $student->age ?? 'N\A' }}</p>
-                </div>
+                </div> --}}
                 <!-- Added print:col-span-2 -->
                 <div class="md:col-span-2 print:col-span-2">
                     <p class="field-label">Place of Birth:</p>

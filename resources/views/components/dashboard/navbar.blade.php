@@ -4,6 +4,13 @@
     $user = User::find(Auth::user()->id);
     $notifications = $user->notificationLogs()->latest()->take(5)->get();
     $unread_count = $user->getUnreadNotificationsCountAttribute();
+
+    use App\Models\Logo;
+
+    // Get active main logo or default to logo-modified.png
+    $mainLogo = Logo::where('type', 'main')->where('is_active', true)->latest()->first();
+    $logoPath = $mainLogo ? Storage::url($mainLogo->path) : asset('logo.jpg');
+
 @endphp
 
 @props([
@@ -17,18 +24,21 @@
             <div class="flex gap-4 items-center">
                 <!-- Menu Toggle for Mobile -->
                 <button id="mobile_menu_toggle" class="btn btn-ghost btn-sm lg:hidden" aria-label="Toggle menu">
-                    <i class="text-lg fi fi-rr-menu-burger"></i>
-                </button>
+                    {{-- <i class="text-lg fi fi-rr-menu-burger"></i> --}}
+                    <img src="{{ $logoPath }}" alt="School Logo"
+                        class="object-contain w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-20 lg:h-20 rounded-full"
+                        </button>
 
-                <!-- Dashboard Title (responsive) -->
-                <div class="min-w-0">
-                    <h1 class="text-lg font-semibold text-gray-800 truncate">
-                        <span class="hidden sm:inline">Welcome back, </span>{{ Auth::user()->name }}!
-                    </h1>
-                    <p class="text-xs sm:text-sm text-gray-600 truncate">
-                        {{ now()->format('l, F d, Y') }}
-                    </p>
-                </div>
+                    <!-- Dashboard Title (responsive) -->
+                    <div class="min-w-0">
+                        <h1 class="text-sm lg:text-lg font-semibold text-gray-800 truncate">
+                            <span class="hidden sm:inline">Welcome back, </span>
+                            {{ Auth::user()->name }}!
+                        </h1>
+                        <p class="text-xs sm:text-sm text-gray-600 truncate">
+                            {{ now()->format('l, F d, Y') }}
+                        </p>
+                    </div>
             </div>
 
             <!-- Right side -->
@@ -62,7 +72,8 @@
                                         <div class="flex gap-3 items-start">
                                             <div class="flex-1">
                                                 <p class="text-sm font-medium truncate">{{ $notification->header }}</p>
-                                                <p class="text-xs text-gray-500 truncate">{{ $notification->message }}</p>
+                                                <p class="text-xs text-gray-500 truncate">{{ $notification->message }}
+                                                </p>
                                                 <span class="text-xs text-gray-400">
                                                     {{ $notification->created_at->diffForHumans() }}
                                                 </span>
@@ -98,12 +109,15 @@
 
                 <!-- Profile Dropdown (compact on mobile) -->
                 <div class="dropdown dropdown-end">
-                    <button id="profile_btn" class="btn btn-ghost btn-circle avatar" aria-haspopup="true" aria-expanded="false">
+                    <button id="profile_btn" class="btn btn-ghost btn-circle avatar" aria-haspopup="true"
+                        aria-expanded="false">
                         <div class="w-10 rounded-full overflow-hidden">
                             @if ($user?->profile?->image)
-                                <img src="{{ $user->profile->image }}" alt="Profile Picture" class="object-cover w-full h-full" />
+                                <img src="{{ $user->profile->image }}" alt="Profile Picture"
+                                    class="object-cover w-full h-full" />
                             @elseif ($user->profilePicture)
-                                <img src="{{ $user->profilePicture->file_dir }}" alt="Profile Picture" class="object-cover w-full h-full" />
+                                <img src="{{ $user->profilePicture->file_dir }}" alt="Profile Picture"
+                                    class="object-cover w-full h-full" />
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=7F9CF5&background=EBF4FF"
                                     alt="Profile Picture" class="object-cover w-full h-full" />
@@ -122,30 +136,38 @@
                         @endif
 
                         @if (Auth::user()->hasRole('admin'))
-                            <li><a href="{{ route('admin.dashboard') }}" class="flex gap-2 items-center"><i class="fi fi-rr-shield"></i> Admin</a></li>
-                            <li><a href="{{ route('hr.dashboard') }}" class="flex gap-2 items-center"><i class="fi fi-rr-briefcase"></i> HR</a></li>
+                            <li><a href="{{ route('admin.dashboard') }}" class="flex gap-2 items-center"><i
+                                        class="fi fi-rr-shield"></i> Admin</a></li>
+                            <li><a href="{{ route('hr.dashboard') }}" class="flex gap-2 items-center"><i
+                                        class="fi fi-rr-briefcase"></i> HR</a></li>
                         @endif
 
                         @if (Auth::user()->hasRole('teacher'))
-                            <li><a href="{{ route('teacher.dashboard') }}" class="flex gap-2 items-center"><i class="fi fi-rr-workshop"></i> Teacher</a></li>
+                            <li><a href="{{ route('teacher.dashboard') }}" class="flex gap-2 items-center"><i
+                                        class="fi fi-rr-workshop"></i> Teacher</a></li>
                         @endif
 
                         @if (Auth::user()->hasRole('registrar'))
-                            <li><a href="{{ route('registrar.dashboard') }}" class="flex gap-2 items-center"><i class="fi fi-rr-diploma"></i> Registrar</a></li>
+                            <li><a href="{{ route('registrar.dashboard') }}" class="flex gap-2 items-center"><i
+                                        class="fi fi-rr-diploma"></i> Registrar</a></li>
                         @endif
 
                         @if (Auth::user()->hasRole('employee'))
-                            <li><a href="{{ route('employee.dashboard') }}" class="flex gap-2 items-center"><i class="fi fi-rr-dashboard"></i> Employee</a></li>
+                            <li><a href="{{ route('employee.dashboard') }}" class="flex gap-2 items-center"><i
+                                        class="fi fi-rr-dashboard"></i> Employee</a></li>
                         @endif
 
                         @if (Auth::user()->hasRole('student'))
-                            <li><a href="{{ route('student.enrollment.index') }}" class="flex gap-2 items-center"><i class="fi fi-rr-dashboard"></i> Enrollment</a></li>
+                            <li><a href="{{ route('student.enrollment.index') }}" class="flex gap-2 items-center"><i
+                                        class="fi fi-rr-dashboard"></i> Enrollment</a></li>
                             @if (Auth::user()->studentProfile)
-                                <li><a href="{{ route('student.dashboard') }}" class="flex gap-2 items-center"><i class="fi fi-rr-dashboard"></i> Dashboard</a></li>
+                                <li><a href="{{ route('student.dashboard') }}" class="flex gap-2 items-center"><i
+                                            class="fi fi-rr-dashboard"></i> Dashboard</a></li>
                             @endif
                         @endif
 
-                        <li><a href="{{ route('profile.edit') }}" class="flex gap-2 items-center"><i class="fi fi-rr-settings"></i> Settings</a></li>
+                        <li><a href="{{ route('profile.edit') }}" class="flex gap-2 items-center"><i
+                                    class="fi fi-rr-settings"></i> Settings</a></li>
                         <div class="my-1 divider"></div>
                         <li>
                             <form action="{{ route('logout') }}" method="post">
@@ -166,9 +188,11 @@
                 <div class="flex items-center gap-3">
                     <div class="w-10 rounded-full overflow-hidden">
                         @if ($user?->profile?->image)
-                            <img src="{{ $user->profile->image }}" alt="Profile Picture" class="object-cover w-full h-full" />
+                            <img src="{{ $user->profile->image }}" alt="Profile Picture"
+                                class="object-cover w-full h-full" />
                         @elseif ($user->profilePicture)
-                            <img src="{{ $user->profilePicture->file_dir }}" alt="Profile Picture" class="object-cover w-full h-full" />
+                            <img src="{{ $user->profilePicture->file_dir }}" alt="Profile Picture"
+                                class="object-cover w-full h-full" />
                         @else
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=7F9CF5&background=EBF4FF"
                                 alt="Profile Picture" class="object-cover w-full h-full" />
@@ -182,7 +206,8 @@
 
                 <div class="divider"></div>
 
-                <a href="{{ route('notifications.index') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
+                <a href="{{ route('notifications.index') }}"
+                    class="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
                     <i class="fi fi-rr-bell"></i>
                     <span>Notifications</span>
                     @if ($unread_count > 0)
@@ -196,15 +221,21 @@
                 </a>
 
                 @if (Auth::user()->hasRole('admin'))
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i class="fi fi-rr-shield"></i><span>Admin</span></a>
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-shield"></i><span>Admin</span></a>
                 @endif
 
                 @if (Auth::user()->hasRole('teacher'))
-                    <a href="{{ route('teacher.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i class="fi fi-rr-workshop"></i><span>Teacher</span></a>
+                    <a href="{{ route('teacher.dashboard') }}"
+                        class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-workshop"></i><span>Teacher</span></a>
                 @endif
 
                 @if (Auth::user()->hasRole('student') && Auth::user()->studentProfile)
-                    <a href="{{ route('student.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i class="fi fi-rr-dashboard"></i><span>Student Dashboard</span></a>
+                    <a href="{{ route('student.dashboard') }}"
+                        class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-dashboard"></i><span>Student Dashboard</span></a>
                 @endif
 
                 <form action="{{ route('logout') }}" method="post" class="mt-2">
@@ -217,19 +248,19 @@
 </div>
 
 @push('scripts')
-<script>
-    (function(){
-        const toggle = document.getElementById('mobile_menu_toggle');
-        const panel = document.getElementById('mobile_panel');
+    <script>
+        (function() {
+            const toggle = document.getElementById('mobile_menu_toggle');
+            const panel = document.getElementById('mobile_panel');
 
-        if (toggle && panel) {
-            toggle.addEventListener('click', () => {
-                panel.classList.toggle('hidden');
-                panel.classList.toggle('block');
-                // ensure focus for accessibility
-                if (!panel.classList.contains('hidden')) panel.querySelector('a, button, input')?.focus();
-            });
-        }
-    })();
-</script>
+            if (toggle && panel) {
+                toggle.addEventListener('click', () => {
+                    panel.classList.toggle('hidden');
+                    panel.classList.toggle('block');
+                    // ensure focus for accessibility
+                    if (!panel.classList.contains('hidden')) panel.querySelector('a, button, input')?.focus();
+                });
+            }
+        })();
+    </script>
 @endpush

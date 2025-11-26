@@ -20,7 +20,7 @@
 
                     @forelse ($enrollments as $enrollment)
                         <!-- row 1 -->
-                        <tr>
+                        <tr class="hover:bg-gray-100 transition-colors">
                             <th></th>
                             <td>{{ $enrollment->name }}</td>
                             <td>{{ $enrollment->academicYear->name }}</td>
@@ -38,7 +38,9 @@
                                     <i class="fi fi-rr-edit"></i>
                                 </a>
 
-                                <form action="{{route('registrar.enrollments.destroy', ['enrollment' => $enrollment->id])}}" method="post">
+                                <form
+                                    action="{{ route('registrar.enrollments.destroy', ['enrollment' => $enrollment->id]) }}"
+                                    method="post">
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-xs btn-error">
@@ -49,7 +51,7 @@
                         </tr>
                     @empty
                         <!-- row 1 -->
-                        <tr>
+                        <tr class="hover:bg-gray-100 transition-colors">
                             <th>No Enrollments</th>
 
                         </tr>

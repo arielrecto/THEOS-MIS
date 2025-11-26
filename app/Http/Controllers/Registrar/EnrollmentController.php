@@ -311,7 +311,7 @@ class EnrollmentController extends Controller
             'header' => 'Enrollment Status Update',
             'message' => "Your enrollment status has been updated to " . ucfirst($request->status),
             'type' => 'enrollment_status',
-            'url' => route('enrollment.status', $enrollee->id)
+            // 'url' => route('enrollment.status', $enrollee->id)
         ];
 
         // Notify the student
