@@ -36,11 +36,10 @@
                             {{ Auth::user()->name }}!
                         </h1>
                         <p class="text-xs sm:text-sm text-gray-600 truncate">
-                            {{ now()->format('l, F d, Y') }}
+                            {{ now()->format('l F d, Y') }}
                         </p>
                     </div>
-            </div>
-
+                </div>
             <!-- Right side -->
             <div class="flex gap-3 items-center">
                 <!-- Notifications -->
@@ -206,37 +205,53 @@
 
                 <div class="divider"></div>
 
-                <a href="{{ route('notifications.index') }}"
+                {{-- <a href="{{ route('notifications.index') }}"
                     class="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
                     <i class="fi fi-rr-bell"></i>
                     <span>Notifications</span>
                     @if ($unread_count > 0)
                         <span class="ml-auto badge badge-xs badge-accent">{{ $unread_count }}</span>
                     @endif
-                </a>
+                </a> --}}
+
+
+
+                @if (Auth::user()->hasRole('admin'))
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-shield"></i> Admin</a>
+                    <a href="{{ route('hr.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-briefcase"></i> HR</a>
+                @endif
+
+                @if (Auth::user()->hasRole('teacher'))
+                    <a href="{{ route('teacher.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-workshop"></i> Teacher</a>
+                @endif
+
+                @if (Auth::user()->hasRole('registrar'))
+                    <a href="{{ route('registrar.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-diploma"></i> Registrar</a>
+                @endif
+
+                @if (Auth::user()->hasRole('employee'))
+                    <a href="{{ route('employee.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-dashboard"></i> Employee</a>
+                @endif
+
+                @if (Auth::user()->hasRole('student'))
+                    <a href="{{ route('student.enrollment.index') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                            class="fi fi-rr-dashboard"></i> Enrollment</a>
+                    @if (Auth::user()->studentProfile)
+                        <a href="{{ route('student.dashboard') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
+                                class="fi fi-rr-dashboard"></i> Dashboard</a>
+                    @endif
+                @endif
+
 
                 <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 p-2 rounded hover:bg-gray-50">
                     <i class="fi fi-rr-settings"></i>
                     <span>Settings</span>
                 </a>
-
-                @if (Auth::user()->hasRole('admin'))
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
-                            class="fi fi-rr-shield"></i><span>Admin</span></a>
-                @endif
-
-                @if (Auth::user()->hasRole('teacher'))
-                    <a href="{{ route('teacher.dashboard') }}"
-                        class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
-                            class="fi fi-rr-workshop"></i><span>Teacher</span></a>
-                @endif
-
-                @if (Auth::user()->hasRole('student') && Auth::user()->studentProfile)
-                    <a href="{{ route('student.dashboard') }}"
-                        class="flex items-center gap-3 p-2 rounded hover:bg-gray-50"><i
-                            class="fi fi-rr-dashboard"></i><span>Student Dashboard</span></a>
-                @endif
 
                 <form action="{{ route('logout') }}" method="post" class="mt-2">
                     @csrf

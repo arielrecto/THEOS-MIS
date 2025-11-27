@@ -125,6 +125,74 @@
                         @endif
                     </div>
 
+                    {{-- NEW: Enrolled subjects from ClassroomStudent with grades (if present) --}}
+                    <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                        <h4 class="text-base font-medium mb-3">Enrolled Subjects (from Classrooms)</h4>
+
+                        @php
+                            // pick record to check grades against: prefer requested academic year, fallback to latest
+                            $profile = $student?->studentProfile;
+                            $selectedRecord = null;
+                            if($profile) {
+                                if(request('academic_year')) {
+                                    $selectedRecord = $profile->academicRecords->firstWhere('academic_year_id', request('academic_year'));
+                                }
+                                $selectedRecord = $selectedRecord ?? $profile->academicRecords->sortByDesc('id')->first();
+                            }
+                        @endphp
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @php
+                                // prefer the explicit user relation if available (asStudentClassrooms),
+                                // otherwise fall back to classroomStudents
+                                $studentClassrooms = $student->asStudentClassrooms ?? $student->classroomStudents ?? collect();
+                            @endphp
+
+                            @forelse($studentClassrooms as $classroomStudent)
+                                @php
+                                    // support cases where relation returns ClassroomStudent or Classroom directly
+                                    $classroom = $classroomStudent->classroom ?? $classroomStudent;
+                                    $subject = $classroom->subject ?? null;
+
+                                    // grade records store subject as string — match by subject name when available
+                                    $matchedGrade = null;
+                                    if ($selectedRecord && $selectedRecord->grades && $subject) {
+                                        $matchedGrade = $selectedRecord->grades->firstWhere('subject', $subject->name);
+                                    }
+                                @endphp
+
+                                <div class="flex items-center justify-between bg-base-100 rounded-md p-3">
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-800 truncate">
+                                            {{ $subject->name ?? ($classroom->name ?? 'N/A') }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 truncate">
+                                            Classroom: {{ $classroom->name ?? 'N/A' }}
+                                        </p>
+                                    </div>
+
+                                    <div class="text-right">
+                                        @if($matchedGrade)
+                                            <div class="text-sm font-semibold {{ $matchedGrade->grade >= 75 ? 'text-success' : 'text-error' }}">
+                                                {{ number_format($matchedGrade->grade, 1) }}
+                                            </div>
+                                            <div class="text-xs text-gray-400 mt-1">
+                                                <span class="badge {{ $matchedGrade->grade >= 75 ? 'badge-success' : 'badge-error' }} text-xs">
+                                                    {{ $matchedGrade->remarks ?? 'N/A' }}
+                                                </span>
+                                            </div>
+                                        @else
+                                            <div class="text-sm text-gray-500">No grade</div>
+                                            <div class="text-xs text-gray-400 mt-1">Record: {{ $selectedRecord?->academicYear?->name ?? '—' }}</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-sm text-gray-500">No enrolled classrooms found for this student.</div>
+                            @endforelse
+                        </div>
+                    </div>
+
                     {{-- Desktop / Tablet: table view --}}
                     <div class="hidden md:block">
                         @forelse($student?->studentProfile?->academicRecords ?? [] as $record)
@@ -214,9 +282,9 @@
                                             <i class="fi fi-rr-print"></i>
                                         </a>
 
-                                        <button type="button" class="btn btn-outline btn-xs" x-data @click="$dispatch('open-record', {{ $record->id ?? 'null' }})">
+                                        {{-- <button type="button" class="btn btn-outline btn-xs" x-data @click="$dispatch('open-record', {{ $record->id ?? 'null' }})">
                                             View Subjects
-                                        </button>
+                                        </button> --}}
                                     </div>
                                 </div>
 
