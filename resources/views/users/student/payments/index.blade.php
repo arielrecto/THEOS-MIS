@@ -75,7 +75,8 @@
                                         <td>
                                             <div class="flex flex-col">
                                                 <span class="font-medium">{{ $payment->paymentAccount->provider }}</span>
-                                                <span class="text-sm text-gray-500">{{ $payment->paymentAccount->account_number }}</span>
+                                                <span
+                                                    class="text-sm text-gray-500">{{ $payment->paymentAccount->account_number }}</span>
                                             </div>
                                         </td>
                                         <td>
@@ -83,17 +84,56 @@
                                                 'badge',
                                                 'badge-warning' => $payment->status === 'pending',
                                                 'badge-success' => $payment->status === 'approved',
-                                                'badge-error' => $payment->status === 'rejected'
+                                                'badge-error' => $payment->status === 'rejected',
                                             ])>
                                                 {{ ucfirst($payment->status) }}
                                             </span>
                                         </td>
-                                        {{-- <td> --}}
-                                            {{-- <button onclick="showPaymentDetails('{{ $payment->id }}')"
-                                                    class="btn btn-ghost btn-sm">
+
+                                        <!-- Actions: view details (opens modal) -->
+                                        <td class="text-right">
+                                            <button onclick="payment_details_modal_{{ $payment->id }}.showModal()"
+                                                type="button" class="btn btn-ghost btn-sm"
+                                                aria-label="View payment details">
                                                 <i class="fi fi-rr-eye"></i>
-                                            </button> --}}
-                                        {{-- </td> --}}
+                                                <span class="hidden sm:inline ml-2">View</span>
+                                            </button>
+
+                                            <!-- Payment Details Modal (DaisyUI) -->
+                                            <dialog id="payment_details_modal_{{ $payment->id }}" class="modal">
+                                                <form method="dialog" class="modal-box max-w-2xl w-full">
+                                                    <h3 id="payment_details_title" class="font-bold text-lg">Payment
+                                                        Details</h3>
+
+                                                    <div id="payment_details_content"
+                                                        class="mt-4 space-y-4 text-sm text-gray-700">
+                                                        <p><strong>Date:</strong>
+                                                            {{ $payment->created_at->format('M d, Y h:i A') }}</p>
+                                                        <p><strong>Amount:</strong>
+                                                            ₱{{ number_format($payment->amount, 2) }}</p>
+                                                        <p><strong>Payment Method:</strong>
+                                                            {{ ucfirst(str_replace('_', ' ', $payment->payment_method)) }}
+                                                        </p>
+                                                        <p><strong>Account Provider:</strong>
+                                                            {{ $payment->paymentAccount->provider }}</p>
+                                                        <p><strong>Account Number:</strong>
+                                                            {{ $payment->paymentAccount->account_number }}</p>
+                                                        <p><strong>Status:</strong>
+                                                            {{-- {{ ucfirst($payment->status) }}</p>
+                                                        <p><strong>Reference Number:</strong>
+                                                            {{ $payment->reference_number ?? 'N/A' }}</p>
+                                                        <p><strong>Remarks:</strong>
+                                                            {{ $payment->remarks ?? 'N/A' }}</p> --}}
+
+                                                    </div>
+
+                                                    <div class="modal-action">
+                                                        <button type="button" class="btn"
+                                                            onclick="document.getElementById('payment_details_modal').close()">Close</button>
+                                                    </div>
+                                                </form>
+                                            </dialog>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -118,77 +158,7 @@
         </div>
     </div>
 
-    {{-- <!-- Payment Details Modal -->
-    <dialog id="payment_details_modal" class="modal">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Payment Details</h3>
-            <div id="payment_details_content" class="space-y-4">
-                <!-- Content will be loaded dynamically -->
-            </div>
-            <div class="modal-action">
-                <form method="dialog">
-                    <button class="btn">Close</button>
-                </form>
-            </div>
-        </div>
-    </dialog> --}}
 
-    {{-- @push('scripts')
-    <script>
-        async function showPaymentDetails(paymentId) {
-            try {
-                const response = await fetch(`/student/payments/${paymentId}`);
-                const data = await response.json();
 
-                const content = document.getElementById('payment_details_content');
-                content.innerHTML = `
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-sm text-gray-600">Amount</p>
-                            <p class="font-medium">₱${parseFloat(data.amount).toFixed(2)}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Status</p>
-                            <span class="badge ${getStatusClass(data.status)}">${capitalizeFirst(data.status)}</span>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Payment Method</p>
-                            <p class="font-medium">${capitalizeFirst(data.payment_method.replace('_', ' '))}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Date</p>
-                            <p class="font-medium">${new Date(data.created_at).toLocaleDateString()}</p>
-                        </div>
-                    </div>
-                    ${data.note ? `
-                        <div>
-                            <p class="text-sm text-gray-600">Note</p>
-                            <p class="font-medium">${data.note}</p>
-                        </div>
-                    ` : ''}
-                    <div>
-                        <p class="text-sm text-gray-600 mb-2">Payment Proof</p>
-                        <img src="${data.attachment_url}" alt="Payment Proof" class="max-w-full rounded-lg">
-                    </div>
-                `;
 
-                document.getElementById('payment_details_modal').showModal();
-            } catch (error) {
-                console.error('Error fetching payment details:', error);
-            }
-        }
-
-        function getStatusClass(status) {
-            return {
-                'pending': 'badge-warning',
-                'approved': 'badge-success',
-                'rejected': 'badge-error'
-            }[status] || 'badge-ghost';
-        }
-
-        function capitalizeFirst(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-    </script>
-    @endpush --}}
 </x-dashboard.student.base>

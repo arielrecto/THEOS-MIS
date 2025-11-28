@@ -41,7 +41,8 @@
 
 {{-- Mobile Bottom Navigation --}}
 <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-neutral border-t shadow-inner">
-    <div class="flex justify-between items-center px-2 py-1">
+    <!-- make this container horizontally scrollable when items overflow -->
+    <div class="flex items-center gap-2 px-2 py-1 overflow-x-auto whitespace-nowrap">
         @foreach ($links as $link)
             @continue(!($link['is_active'] ?? false))
             @php
@@ -49,15 +50,13 @@
                 // build url (allow '#' as placeholder)
                 $href = $link['url'] === '#' ? '#' : route($link['url']);
             @endphp
-            <a href="{{ $href }}" class="flex-1">
-                <div
-                    class="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-lg transition-colors duration-150
-                            {{ $isActive ? 'bg-primary text-neutral' : 'text-primary hover:bg-secondary hover:text-neutral' }}">
-                    <div class="text-lg">
-                        {!! $link['icon'] !!}
-                    </div>
-                    <span class="text-xs truncate text-center w-full">{{ $link['name'] }}</span>
+            <a href="{{ $href }}"
+                class="inline-flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-lg transition-colors duration-150 flex-shrink-0
+                    {{ $isActive ? 'bg-primary text-neutral' : 'text-primary hover:bg-secondary hover:text-neutral' }}">
+                <div class="text-lg">
+                    {!! $link['icon'] !!}
                 </div>
+                <span class="text-xs truncate text-center">{{ $link['name'] }}</span>
             </a>
         @endforeach
     </div>

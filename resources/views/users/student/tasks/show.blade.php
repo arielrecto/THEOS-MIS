@@ -3,17 +3,22 @@
         <!-- Task Header -->
         <div class="overflow-hidden bg-white rounded-xl shadow-lg">
             <div class="p-6 border-b">
-                <div class="flex gap-4 justify-between items-start">
-                    <div class="flex-1">
-                        <div class="flex gap-2 items-center mb-2 text-sm text-gray-600">
+                <div class="flex flex-col md:flex-row gap-4 md:justify-between items-start md:items-center">
+                    <div class="flex-1 min-w-0"> {{-- critical: min-w-0 prevents flex children from overflowing --}}
+                        <div class="flex flex-wrap gap-2 items-center mb-2 text-sm text-gray-600">
                             <i class="fi fi-rr-book-alt"></i>
-                            <span>{{ $studentTask->task->classroom->name }}</span>
+                            <span class="min-w-0 truncate"> {{ $studentTask->task->classroom->name }} </span>
                             <i class="fi fi-rr-angle-right"></i>
-                            <span>Tasks</span>
+                            <span class="min-w-0 truncate">Tasks</span>
                         </div>
-                        <h1 class="text-2xl font-bold text-gray-900">{{ $studentTask->task->name }}</h1>
+
+                        <!-- Title: allow wrapping on small screens, prevent overflow -->
+                        <h1 class="text-2xl sm:text-3xl md:text-2xl font-bold text-gray-900 break-words leading-tight">
+                            {{ $studentTask->task->name }}
+                        </h1>
                     </div>
-                    <div class="flex flex-col gap-2 items-end">
+
+                    <div class="flex flex-row sm:flex-col items-center sm:items-end gap-2 mt-3 md:mt-0">
                         <div
                             class="badge badge-lg {{ $studentTask->status === 'submitted' ? 'badge-success' : 'badge-warning' }}">
                             {{ ucfirst($studentTask->status) }}
@@ -28,23 +33,23 @@
             <!-- Task Details -->
             <div class="p-6">
                 <!-- Due Dates -->
-                <div class="flex flex-wrap gap-4 mb-6">
-                    <div class="flex gap-2 items-center text-sm">
+                <div class="flex flex-wrap gap-4 mb-6 text-sm">
+                    <div class="flex gap-2 items-center min-w-0">
                         <i class="fi fi-rr-calendar text-accent"></i>
                         <span class="text-gray-600">Posted:</span>
                         <span
-                            class="font-medium">{{ \Carbon\Carbon::parse($studentTask->task->created_at)->format('M d, Y') }}</span>
+                            class="font-medium truncate">{{ \Carbon\Carbon::parse($studentTask->task->created_at)->format('M d, Y') }}</span>
                     </div>
-                    <div class="flex gap-2 items-center text-sm">
+                    <div class="flex gap-2 items-center min-w-0">
                         <i class="fi fi-rr-hourglass-end text-accent"></i>
                         <span class="text-gray-600">Due:</span>
                         <span
-                            class="font-medium">{{ \Carbon\Carbon::parse($studentTask->task->end_date)->format('M d, Y g:i A') }}</span>
+                            class="font-medium truncate">{{ \Carbon\Carbon::parse($studentTask->task->end_date)->format('M d, Y g:i A') }}</span>
                     </div>
                 </div>
 
-                <!-- Task Description -->
-                <div class="mb-8 max-w-none prose">
+                <!-- Task Description: preserve line breaks and allow wrapping on small screens -->
+                <div class="mb-8 max-w-none prose prose-sm sm:prose sm:prose-lg break-words whitespace-pre-wrap">
                     {{ $studentTask->task->description }}
                 </div>
 
@@ -52,32 +57,34 @@
                 @if ($studentTask->task->attachments->count() > 0)
                     <div class="mb-8">
                         <h3 class="mb-3 text-sm font-medium text-gray-500">Task Materials</h3>
-                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2" x-data="generateThumbnail">
+                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             @foreach ($studentTask->task->attachments as $attachment)
                                 <div
                                     class="flex items-center p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
                                     <div class="flex flex-1 gap-3 items-center min-w-0">
-                                        <img :src="getThumbnail('{{ $attachment->extension }}')" class="w-8 h-8"
-                                            alt="File icon">
+                                        <img :src="getThumbnail('{{ $attachment->extension }}')"
+                                            class="w-8 h-8 flex-shrink-0" alt="File icon">
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">
-                                                {{ $attachment->name }}</p>
-                                            {{-- <p class="text-xs text-gray-500">{{ human_filesize($attachment->size) }}</p> --}}
+                                            <!-- allow long filenames to wrap instead of overflowing -->
+                                            <p class="text-sm font-medium text-gray-900 break-words">
+                                                {{ $attachment->name }}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    @if ($attachment->extension === 'url')
-                                        <a href="{{ asset($attachment->file) }}" class="gap-2 btn btn-ghost btn-sm"
-                                            target="_blank" rel="noopener noreferrer">
-                                            <i class="fi fi-rr-eye text-accent"></i>
-                                        </a>
-                                    @else
-                                        <a href="{{ asset($attachment->file) }}" class="gap-2 btn btn-ghost btn-sm"
-                                            download>
-                                            <i class="fi fi-rr-download text-accent"></i>
-                                        </a>
-                                    @endif
-
+                                    <div class="flex-shrink-0 ml-3 flex items-center gap-2">
+                                        @if ($attachment->extension === 'url')
+                                            <a href="{{ asset($attachment->file) }}" class="gap-2 btn btn-ghost btn-sm"
+                                                target="_blank" rel="noopener noreferrer">
+                                                <i class="fi fi-rr-eye text-accent"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{ asset($attachment->file) }}" class="gap-2 btn btn-ghost btn-sm"
+                                                download>
+                                                <i class="fi fi-rr-download text-accent"></i>
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -95,10 +102,10 @@
                                 <label class="label">
                                     <span class="font-medium label-text">Add or Create</span>
                                 </label>
-                                <div class="flex gap-4 items-center">
+                                <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                                     <input type="file" name="attachments[]" multiple
-                                        class="w-full max-w-xs file-input file-input-bordered file-input-accent" />
-                                    <button type="submit" class="btn btn-accent">
+                                        class="w-full file-input file-input-bordered file-input-accent" />
+                                    <button type="submit" class="btn btn-accent w-full sm:w-auto">
                                         <i class="mr-2 fi fi-rr-upload"></i>
                                         Turn in
                                     </button>
@@ -108,40 +115,44 @@
                     </div>
                 @else
                     <div class="p-6 bg-white rounded-lg border">
-                        <div class="flex justify-between items-center mb-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
                             <h3 class="text-lg font-semibold">Submitted Work</h3>
-                            <div class="text-sm text-gray-500">
+                            <div class="text-sm text-gray-500 whitespace-nowrap">
                                 Turned in {{ $studentTask->created_at->format('M d, Y g:i A') }}
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2" x-data="generateThumbnail">
+
+                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             @foreach ($studentTask->attachments as $attachment)
                                 <div
                                     class="flex items-center p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
                                     <div class="flex flex-1 gap-3 items-center min-w-0">
-                                        <img :src="getThumbnail('{{ $attachment->extension }}')" class="w-8 h-8"
-                                            alt="File icon">
+                                        <img :src="getThumbnail('{{ $attachment->extension }}')"
+                                            class="w-8 h-8 flex-shrink-0" alt="File icon">
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">
-                                                {{ $attachment->name }}</p>
-                                            {{-- <p class="text-xs text-gray-500">{{ human_filesize($attachment->size) }}</p> --}}
+                                            <p class="text-sm font-medium text-gray-900 break-words">
+                                                {{ $attachment->name }}
+                                            </p>
                                         </div>
                                     </div>
-                                    <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
-                                        target="_blank" rel="noopener noreferrer">
-                                        <i class="fi fi-rr-eye text-accent"></i>
-                                    </a>
-                                    <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
-                                        download>
-                                        <i class="fi fi-rr-download text-accent"></i>
-                                    </a>
+                                    <div class="flex gap-2 ml-2">
+                                        <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
+                                            target="_blank" rel="noopener noreferrer">
+                                            <i class="fi fi-rr-eye text-accent"></i>
+                                        </a>
+                                        <a href="{{ asset($attachment->file_dir) }}" class="gap-2 btn btn-ghost btn-sm"
+                                            download>
+                                            <i class="fi fi-rr-download text-accent"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
 
-                        <form action="{{ route('student.tasks.unsubmit', $studentTask->id) }}" method="POST">
+                        <form action="{{ route('student.tasks.unsubmit', $studentTask->id) }}" method="POST"
+                            class="mt-4">
                             @csrf
-                            <button type="submit" class="btn btn-error">Unsubmit</button>
+                            <button type="submit" class="btn btn-error w-full sm:w-auto">Unsubmit</button>
                         </form>
                     </div>
                 @endif
@@ -165,19 +176,16 @@
                 @enderror
             </div>
             <div class="flex justify-end mt-4">
-                <button type="submit" class="btn btn-accent">
+                <button type="submit" class="btn btn-accent w-full sm:w-auto">
                     <i class="mr-2 fi fi-rr-comment"></i>
                     Post Comment
                 </button>
             </div>
         </form>
 
-
-
         <div class="space-y-6">
             @forelse($studentTask->comments->sortByDesc('created_at') as $comment)
                 <x-commentThread :comment="$comment" :url="route('student.tasks.comments.reply', $comment->id)" />
-
             @empty
                 <div class="py-8 text-center text-gray-500">
                     <i class="mb-2 text-3xl fi fi-rr-comment-alt"></i>

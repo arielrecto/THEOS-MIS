@@ -71,9 +71,9 @@
 
         <!-- Calendar Section -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold">Leave Calendar</h2>
-                <div class="flex items-center gap-4">
+                <div class="flex flex-col lg:flex-row lg:items-center gap-4">
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded-full bg-warning"></span>
                         <span class="text-sm">Pending</span>
@@ -97,19 +97,19 @@
         <!-- Filters -->
         <div class="bg-white rounded-lg shadow-sm mb-6">
             <div class="p-4 border-b">
-                <form class="flex flex-wrap items-end gap-4">
+                <form class="flex flex-col lg:flex-row lg:flex-wrap lg:items-end gap-4">
                     <div class="form-control flex-1">
                         <label class="label">
                             <span class="label-text">Search</span>
                         </label>
-                        <input type="text" name="search" class="input input-bordered input-sm"
+                        <input type="text" name="search" class="input input-bordered input-sm w-full"
                             placeholder="Search by employee name..." value="{{ request('search') }}">
                     </div>
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text">Status</span>
                         </label>
-                        <select name="status" class="select text-sm select-bordered select-sm">
+                        <select name="status" class="select text-sm select-bordered select-sm w-48 max-w-full">
                             <option value="">All Status</option>
                             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending
                             </option>
@@ -123,12 +123,13 @@
                         <label class="label">
                             <span class="label-text">Date Range</span>
                         </label>
-                        <div class="flex flex-col lg:flex lg:items-center gap-2">
-                            <input type="date" name="start_date" class="input  input-bordered input-sm"
+                        <div class="flex flex-col lg:flex-row lg:items-center gap-2">
+                            <input type="date" name="start_date"
+                                class="input input-bordered input-sm w-full lg:w-auto" +
                                 value="{{ request('start_date') }}">
-                            <span>to</span>
-                            <input type="date" name="end_date" class="input input-bordered input-sm"
-                                value="{{ request('end_date') }}">
+                            <span class="hidden lg:inline">to</span>
+                            <input type="date" name="end_date" class="input input-bordered input-sm w-full lg:w-auto"
+                                + value="{{ request('end_date') }}">
                         </div>
                     </div>
                     <div class="form-control">
@@ -145,9 +146,11 @@
                 <article class="bg-white rounded-lg shadow-sm p-4">
                     <div class="flex items-start gap-3">
                         <div class="flex-shrink-0">
-                            <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+                            <div
+                                class="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
                                 @if ($request->employee->photo)
-                                    <img src="{{ Storage::url($request->employee->photo) }}" alt="Avatar" class="w-full h-full object-cover">
+                                    <img src="{{ Storage::url($request->employee->photo) }}" alt="Avatar"
+                                        class="w-full h-full object-cover">
                                 @else
                                     <i class="fi fi-rr-user text-accent text-2xl"></i>
                                 @endif
@@ -155,21 +158,23 @@
                         </div>
 
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-start justify-between gap-3">
+                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                                 <div class="min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                    <p class="text-sm font-medium text-gray-900 break-words">
                                         {{ $request->employee->first_name }} {{ $request->employee->last_name }}
                                     </p>
-                                    <p class="text-xs text-gray-500 truncate">{{ $request->employee->position?->name ?? 'No Position' }}</p>
-                                    <p class="text-xs text-gray-500 mt-2 truncate">
-                                        {{ date('M d, Y', strtotime($request->start_date)) }} - {{ date('M d, Y', strtotime($request->end_date)) }}
+                                    <p class="text-xs text-gray-500 break-words">
+                                        {{ $request->employee->position?->name ?? 'No Position' }}</p>
+                                    <p class="text-xs text-gray-500 mt-2 break-words">
+                                        {{ date('M d, Y', strtotime($request->start_date)) }} -
+                                        {{ date('M d, Y', strtotime($request->end_date)) }}
                                     </p>
                                     <p class="text-xs text-gray-400 mt-1">
-                                        {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }} days
+                                        {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }}
+                                        days
                                     </p>
                                 </div>
-
-                                <div class="flex-shrink-0 text-right">
+                                <div class="flex-shrink-0 text-right mt-1 sm:mt-0">
                                     @if ($request->status === 'pending')
                                         <span class="badge badge-warning text-xs">Pending</span>
                                     @elseif($request->status === 'approved')
@@ -182,16 +187,23 @@
 
                             <div class="mt-3 flex items-center gap-2">
                                 @if ($request->status === 'pending')
-                                    <form action="{{ route('hr.leaves.approve', $request) }}" method="POST" class="flex-1">
-                                        @method('PUT') @csrf
-                                        <button type="submit" class="btn btn-success btn-sm w-full" onclick="return confirm('Approve this leave request?')">Approve</button>
-                                    </form>
-                                    <form action="{{ route('hr.leaves.reject', $request) }}" method="POST" class="flex-1">
-                                        @csrf @method('PUT')
-                                        <button type="submit" class="btn btn-error btn-sm w-full" onclick="return confirm('Reject this leave request?')">Reject</button>
-                                    </form>
+                                    <div class="flex flex-col sm:flex-row gap-2 w-full">
+                                        <form action="{{ route('hr.leaves.approve', $request) }}" method="POST"
+                                            class="flex-1">
+                                            @method('PUT') @csrf
+                                            <button type="submit" class="btn btn-success btn-sm w-full"
+                                                onclick="return confirm('Approve this leave request?')">Approve</button>
+                                        </form>
+                                        <form action="{{ route('hr.leaves.reject', $request) }}" method="POST"
+                                            class="flex-1">
+                                            @csrf @method('PUT')
+                                            <button type="submit" class="btn btn-error btn-sm w-full"
+                                                onclick="return confirm('Reject this leave request?')">Reject</button>
+                                        </form>
+                                    </div>
                                 @else
-                                    <button onclick="leave_details_modal_{{ $request->id }}.showModal()" class="btn btn-ghost btn-sm w-full">
+                                    <button onclick="leave_details_modal_{{ $request->id }}.showModal()"
+                                        class="btn btn-ghost btn-sm w-full">
                                         <i class="fi fi-rr-eye mr-2"></i> View Details
                                     </button>
                                 @endif
@@ -205,13 +217,18 @@
                             <div class="space-y-4 text-sm">
                                 <div>
                                     <span class="text-gray-600">Employee:</span>
-                                    <div class="font-medium">{{ $request->employee->first_name . ' ' . $request->employee->last_name }}</div>
+                                    <div class="font-medium">
+                                        {{ $request->employee->first_name . ' ' . $request->employee->last_name }}
+                                    </div>
                                 </div>
 
                                 <div>
                                     <span class="text-gray-600">Duration:</span>
-                                    <div>{{ date('M d, Y', strtotime($request->start_date)) }} - {{ date('M d, Y', strtotime($request->end_date)) }}</div>
-                                    <div class="text-xs text-gray-500">{{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }} days</div>
+                                    <div>{{ date('M d, Y', strtotime($request->start_date)) }} -
+                                        {{ date('M d, Y', strtotime($request->end_date)) }}</div>
+                                    <div class="text-xs text-gray-500">
+                                        {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }}
+                                        days</div>
                                 </div>
 
                                 <div>
@@ -275,27 +292,35 @@
                                         <div class="avatar">
                                             <div class="w-12 h-12 rounded-full overflow-hidden">
                                                 @if ($request->employee->photo)
-                                                    <img src="{{ Storage::url($request->employee->photo) }}" alt="Avatar" class="object-cover w-full h-full">
+                                                    <img src="{{ Storage::url($request->employee->photo) }}"
+                                                        alt="Avatar" class="object-cover w-full h-full">
                                                 @else
-                                                    <div class="bg-accent/10 w-full h-full flex items-center justify-center">
+                                                    <div
+                                                        class="bg-accent/10 w-full h-full flex items-center justify-center">
                                                         <i class="fi fi-rr-user text-accent text-xl"></i>
                                                     </div>
                                                 @endif
                                             </div>
                                         </div>
                                         <div>
-                                            <div class="font-medium text-sm">{{ $request->employee->first_name }} {{ $request->employee->last_name }}</div>
-                                            <div class="text-xs opacity-50">{{ $request->employee->position?->name ?? 'No Position' }}</div>
+                                            <div class="font-medium text-sm">{{ $request->employee->first_name }}
+                                                {{ $request->employee->last_name }}</div>
+                                            <div class="text-xs opacity-50">
+                                                {{ $request->employee->position?->name ?? 'No Position' }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="capitalize text-sm">{{ ucfirst($request->type) }}</td>
                                 <td>
-                                    <div class="text-sm">{{ date('M d, Y', strtotime($request->start_date)) }} - {{ date('M d, Y', strtotime($request->end_date)) }}</div>
-                                    <div class="text-xs text-gray-500">{{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }} days</div>
+                                    <div class="text-sm">{{ date('M d, Y', strtotime($request->start_date)) }} -
+                                        {{ date('M d, Y', strtotime($request->end_date)) }}</div>
+                                    <div class="text-xs text-gray-500">
+                                        {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }}
+                                        days</div>
                                 </td>
-                                <td>
-                                    <p class="truncate max-w-xs text-sm">{{ $request->reason }}</p>
+                                <td class="align-top max-w-[18rem] md:max-w-none">
+                                    <p class="text-sm break-words truncate md:truncate-none">{{ $request->reason }}
+                                    </p>
                                 </td>
                                 <td>
                                     @if ($request->status === 'pending')
@@ -308,19 +333,23 @@
                                 </td>
                                 <td class="text-right">
                                     @if ($request->status === 'pending')
-                                        <div class="flex items-center justify-end gap-2">
+                                        <div
+                                            class="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2">
                                             <form action="{{ route('hr.leaves.approve', $request) }}" method="POST">
                                                 @method('PUT') @csrf
-                                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Approve this leave request?')">Approve</button>
+                                                <button type="submit" class="btn btn-success btn-sm w-full sm:w-auto"
+                                                    onclick="return confirm('Approve this leave request?')">Approve</button>
                                             </form>
                                             <form action="{{ route('hr.leaves.reject', $request) }}" method="POST">
                                                 @csrf @method('PUT')
-                                                <button type="submit" class="btn btn-error btn-sm" onclick="return confirm('Reject this leave request?')">Reject</button>
+                                                <button type="submit" class="btn btn-error btn-sm w-full sm:w-auto"
+                                                    onclick="return confirm('Reject this leave request?')">Reject</button>
                                             </form>
                                         </div>
                                     @else
                                         <div class="flex items-center justify-end gap-2">
-                                            <button onclick="leave_details_modal_{{ $request->id }}.showModal()" class="btn btn-ghost btn-sm gap-2">
+                                            <button onclick="leave_details_modal_{{ $request->id }}.showModal()"
+                                                class="btn btn-ghost btn-sm gap-2">
                                                 <i class="fi fi-rr-eye"></i>
                                                 <span class="hidden lg:inline">View Details</span>
                                             </button>
@@ -332,18 +361,24 @@
                                                 <div class="space-y-4 text-sm">
                                                     <div>
                                                         <span class="text-gray-600">Employee:</span>
-                                                        <div class="font-medium">{{ $request->employee->first_name . ' ' . $request->employee->last_name }}</div>
+                                                        <div class="font-medium">
+                                                            {{ $request->employee->first_name . ' ' . $request->employee->last_name }}
+                                                        </div>
                                                     </div>
 
                                                     <div>
                                                         <span class="text-gray-600">Duration:</span>
-                                                        <div>{{ date('M d, Y', strtotime($request->start_date)) }} - {{ date('M d, Y', strtotime($request->end_date)) }}</div>
-                                                        <div class="text-xs text-gray-500">{{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }} days</div>
+                                                        <div>{{ date('M d, Y', strtotime($request->start_date)) }} -
+                                                            {{ date('M d, Y', strtotime($request->end_date)) }}</div>
+                                                        <div class="text-xs text-gray-500">
+                                                            {{ Carbon::parse($request->start_date)->diffInDays($request->end_date) + 1 }}
+                                                            days</div>
                                                     </div>
 
                                                     <div>
                                                         <span class="text-gray-600">Reason:</span>
-                                                        <p class="mt-1 text-gray-700 whitespace-pre-wrap">{{ $request->reason }}</p>
+                                                        <p class="mt-1 text-gray-700 whitespace-pre-wrap">
+                                                            {{ $request->reason }}</p>
                                                     </div>
 
                                                     <div class="flex items-center gap-2">
