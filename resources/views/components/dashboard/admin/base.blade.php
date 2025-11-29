@@ -79,7 +79,7 @@
 
                     <!-- Page content: add bottom padding to avoid mobile bottom nav overlap -->
                     <main class="flex-1 overflow-auto p-4 md:p-6">
-                        <div class="p-6 bg-white rounded-lg shadow-md main pb-28 md:pb-6">
+                        <div class="p-2 md:p-6 bg-white rounded-lg shadow-md main pb-28 md:pb-6">
                             {{ $slot }}
                         </div>
                     </main>

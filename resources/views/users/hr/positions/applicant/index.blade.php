@@ -142,7 +142,7 @@
                                                 <i class="fi fi-rr-menu-dots-vertical text-lg"></i>
                                             </button>
                                             <ul
-                                                class="dropdown-content z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-44 text-xs">
+                                                class="dropdown-content z-50 sm:z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-44 text-xs">
                                                 <li><a href="{{ route('hr.applicants.show', $applicant) }}"
                                                         class="hover:bg-accent/10">View Full Profile</a></li>
                                                 @if ($key === 'new')
@@ -154,12 +154,7 @@
                                                 @elseif($key === 'screening')
                                                     <li><a href="#"
                                                             :class="isLoadingAction({{ $applicant->id }}, 'interview') ?
-                                                                'opacity-50 cursor-not-allowed' : ''"
-                                                            @click.prevent="moveApplicant({{ $applicant->id }}, 'interview')">Move
-                                                            to Interview</a></li>
-                                                @elseif($key === 'interview')
-                                                    <li><a href="#"
-                                                            :class="isLoadingAction({{ $applicant->id }}, 'hired') ?
+// ...existing code...
                                                                 'opacity-50 cursor-not-allowed' : ''"
                                                             @click.prevent="moveApplicant({{ $applicant->id }}, 'hired')">Move
                                                             to Hired</a></li>
@@ -203,7 +198,7 @@
                     <div class="bg-gray-50/50 flex-1 p-5 rounded-b-lg space-y-4 overflow-y-auto max-h-[600px]">
                         @forelse($applicants->where('status', 'new') as $applicant)
                             <div
-                                class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md hover:border-gray-300 transition-all p-4">
+                                class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md hover:border-gray-300 transition-all p-4 overflow-visible">
                                 <div class="flex items-start justify-between gap-3 mb-3">
                                     <h4 class="font-semibold text-sm text-gray-900 truncate flex-1">
                                         {{ $applicant->name }}</h4>
@@ -212,11 +207,12 @@
                                             <i class="fi fi-rr-menu-dots-vertical"></i>
                                         </button>
                                         <ul
-                                            class="dropdown-content z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
+                                            class="dropdown-content z-50 sm:z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
                                             <li><a href="{{ route('hr.applicants.show', $applicant) }}"
                                                     class="hover:bg-accent/10">View Full Profile</a></li>
                                             <li><a href="#"
                                                     :class="isLoadingAction({{ $applicant->id }}, 'screening') ?
+// ...existing code...
                                                         'opacity-50 cursor-not-allowed' : 'hover:bg-accent/10'"
                                                     @click.prevent="moveApplicant({{ $applicant->id }}, 'screening'))">Move
                                                     to Screening</a></li>
@@ -270,7 +266,7 @@
                                             <i class="fi fi-rr-menu-dots-vertical"></i>
                                         </button>
                                         <ul
-                                            class="dropdown-content z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
+                                            class="dropdown-content z-50 sm:z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
                                             <li><a href="{{ route('hr.applicants.show', $applicant) }}"
                                                     class="hover:bg-accent/10">View Full Profile</a></li>
                                             <li><a href="#"
@@ -332,7 +328,7 @@
                                             <i class="fi fi-rr-menu-dots-vertical"></i>
                                         </button>
                                         <ul
-                                            class="dropdown-content z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
+                                            class="dropdown-content z-50 sm:z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
                                             <li><a href="{{ route('hr.applicants.show', $applicant) }}"
                                                     class="hover:bg-accent/10">View Full Profile</a></li>
                                             <li><a href="#"
@@ -413,7 +409,7 @@
                                             <i class="fi fi-rr-menu-dots-vertical"></i>
                                         </button>
                                         <ul
-                                            class="dropdown-content z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
+                                            class="dropdown-content z-50 sm:z-[1] menu p-2 shadow-lg bg-white rounded-lg border border-gray-200 w-56 text-sm">
                                             <li><a href="{{ route('hr.applicants.show', $applicant) }}"
                                                     class="hover:bg-accent/10">View Full Profile</a></li>
                                             <li><a href="{{ route('hr.employees.create', ['applicant' => $applicant->id]) }}"

@@ -3,84 +3,85 @@
         <x-dashboard.page-title :title="_('Announcement Details')" :back_url="route('teacher.announcements.index', ['type' => request()->type ?? 'general'])" />
         <x-notification-message />
 
-        <div class="overflow-hidden bg-white rounded-lg shadow-lg">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <!-- Header Section -->
             <div class="border-b border-gray-200">
-                <div class="px-6 py-4">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-4">
-                            <div class="avatar">
-                                <div class="w-12 h-12 rounded-full">
+                <div class="px-4 py-3 sm:px-6 sm:py-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div class="flex items-start sm:items-center gap-4 min-w-0">
+                            <div class="avatar flex-shrink-0 mt-1">
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden">
                                     @if ($announcement instanceof \App\Models\GeneralAnnouncement)
                                         <img src="{{ $announcement->postedBy->profile->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($announcement->postedBy->name) }}"
-                                            alt="Profile">
+                                            alt="Profile" class="object-cover w-full h-full">
                                     @else
                                         <img src="{{ $announcement->classroom->teacher->profile->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($announcement->classroom->teacher->name) }}"
-                                            alt="Profile">
+                                            alt="Profile" class="object-cover w-full h-full">
                                     @endif
                                 </div>
                             </div>
-                            <div>
-                                <h3 class="font-medium">
+
+                            <div class="min-w-0">
+                                <h3 class="font-semibold text-base sm:text-lg truncate">
                                     @if ($announcement instanceof \App\Models\GeneralAnnouncement)
                                         {{ $announcement->postedBy->name }}
-                                        <span class="ml-2 badge badge-accent">General</span>
+                                        <span class="ml-2 text-xs inline-block px-2 py-0.5 rounded bg-gray-100 text-gray-600">General</span>
                                     @else
                                         {{ $announcement->classroom->teacher->name }}
-                                        <span
-                                            class="ml-2 badge badge-accent">{{ $announcement->classroom->subject->name }}</span>
+                                        <span class="ml-2 text-xs inline-block px-2 py-0.5 rounded bg-gray-100 text-gray-600">{{ $announcement->classroom->subject->name }}</span>
                                     @endif
                                 </h3>
-                                <p class="text-sm text-gray-500">
+                                <p class="text-xs text-gray-500 mt-1 sm:mt-0">
                                     Posted {{ $announcement->created_at->format('F j, Y \a\t g:i A') }}
                                 </p>
                             </div>
                         </div>
-                        <div class="flex gap-2">
-                            {{-- <a href="{{ route('teacher.announcements.edit', ['id' => $announcement->id, 'type' => request()->type]) }}"
-                               class="btn btn-sm btn-outline btn-warning">
-                                <i class="mr-2 fi fi-rr-edit"></i>
-                                {{ __('Edit') }}
+
+                        <div class="flex items-center gap-2">
+                            <a href="{{ route('teacher.announcements.index', ['type' => request()->type ?? 'general']) }}"
+                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border border-gray-200 bg-white hover:bg-gray-50">
+                                <i class="fi fi-rr-arrow-left"></i>
+                                <span class="hidden sm:inline">Back</span>
                             </a>
-                            <button onclick="confirmDelete('{{ $announcement->id }}', '{{ request()->type }}')"
-                                    class="btn btn-sm btn-outline btn-error">
-                                <i class="mr-2 fi fi-rr-trash"></i>
-                                {{ __('Delete') }}
-                            </button> --}}
+
+                            @if ($announcement->file_dir || ($announcement instanceof \App\Models\GeneralAnnouncement && $announcement->attachments->count()))
+                                <button id="open-attachments" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm bg-accent text-white hover:opacity-95">
+                                    <i class="fi fi-rr-paperclip"></i>
+                                    <span class="hidden sm:inline">Attachments</span>
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Content Section -->
-            <div class="p-6">
-                <h2 class="mb-4 text-2xl font-bold">{{ $announcement->title }}</h2>
-                <div class="mb-6 max-w-none prose">
-                    {{ $announcement->description }}
+            <div class="p-4 sm:p-6">
+                <h2 class="mb-3 text-lg sm:text-2xl font-bold leading-tight break-words">{{ $announcement->title }}</h2>
+                <div class="mb-6 max-w-none prose prose-sm sm:prose sm:prose-lg text-gray-800 break-words">
+                    {!! nl2br(e($announcement->description)) !!}
                 </div>
 
-                <!-- Attachments Section -->
+                <!-- Attachments Section (cards collapse on small screens) -->
                 @if ($announcement instanceof \App\Models\GeneralAnnouncement)
                     @if ($announcement->attachments->count() > 0)
-                        <div class="mt-6">
-                            <h4 class="mb-4 font-medium text-gray-900">Attachments</h4>
-                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div class="mt-4">
+                            <h4 class="mb-3 text-sm font-semibold text-gray-800">Attachments</h4>
+                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                 @foreach ($announcement->attachments as $attachment)
-                                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="flex-shrink-0">
-                                                <i class="text-2xl fi fi-rr-document text-accent"></i>
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center gap-3 min-w-0">
+                                            <div class="flex-shrink-0 w-10 h-10 rounded bg-white border flex items-center justify-center text-accent">
+                                                <i class="fi fi-rr-document text-xl"></i>
                                             </div>
                                             <div class="min-w-0">
-                                                <p class="text-sm font-medium text-gray-900 truncate">
-                                                    {{ $attachment->name }}
-                                                </p>
+                                                <p class="text-sm font-medium truncate">{{ $attachment->name }}</p>
+                                                <p class="text-xs text-gray-500 truncate">{{ \Illuminate\Support\Str::limit($attachment->mime ?? '', 30) }}</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset($attachment->file_dir) }}" class="btn btn-sm btn-accent"
-                                            download>
-                                            <i class="mr-2 fi fi-rr-download"></i>
-                                            Download
+                                        <a href="{{ asset($attachment->file_dir) }}" class="ml-3 btn btn-sm btn-accent flex-shrink-0" download>
+                                            <i class="fi fi-rr-download mr-1"></i>
+                                            <span class="hidden sm:inline">Download</span>
                                         </a>
                                     </div>
                                 @endforeach
@@ -89,22 +90,21 @@
                     @endif
                 @else
                     @if ($announcement->file_dir)
-                        <div class="mt-6">
-                            <h4 class="mb-4 font-medium text-gray-900">Attachment</h4>
-                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                                <div class="flex items-center space-x-3">
-                                    <div class="flex-shrink-0">
-                                        <i class="text-2xl fi fi-rr-document text-accent"></i>
+                        <div class="mt-4">
+                            <h4 class="mb-3 text-sm font-semibold text-gray-800">Attachment</h4>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded bg-white border flex items-center justify-center text-accent">
+                                        <i class="fi fi-rr-document text-xl"></i>
                                     </div>
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900">
-                                            Attached File
-                                        </p>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium truncate">Attached File</p>
+                                        <p class="text-xs text-gray-500 truncate">{{ basename($announcement->file_dir) }}</p>
                                     </div>
                                 </div>
-                                <a href="{{ asset($announcement->file_dir) }}" class="btn btn-sm btn-accent" download>
-                                    <i class="mr-2 fi fi-rr-download"></i>
-                                    Download
+                                <a href="{{ asset($announcement->file_dir) }}" class="ml-3 btn btn-sm btn-accent flex-shrink-0" download>
+                                    <i class="fi fi-rr-download mr-1"></i>
+                                    <span class="hidden sm:inline">Download</span>
                                 </a>
                             </div>
                         </div>
@@ -114,48 +114,13 @@
         </div>
 
         <!-- Comments Section -->
-        <div class="p-6 mt-8 bg-white rounded-lg shadow-lg">
-            <h3 class="mb-6 text-lg font-bold">Comments</h3>
+        <div class="mt-6 bg-white rounded-lg shadow-lg p-4 sm:p-6">
+            <h3 class="mb-4 text-base sm:text-lg font-semibold">Comments</h3>
 
             <!-- Comments List -->
-            <div class="space-y-6">
+            <div class="space-y-4">
                 @forelse($announcement->comments->sortByDesc('created_at') as $comment)
-
                     <x-commentThread :comment="$comment" :url="route('teacher.announcements.comments.reply', ['comment' => $comment->id])" :deleteUrl="route('teacher.announcements.comments.destroy', ['comment' => $comment->id])" />
-                    {{-- <div class="flex space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="avatar">
-                                <div class="w-10 h-10 rounded-full">
-                                    <img src="{{ $comment->user->studentProfile->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($comment->user->name) }}"
-                                         alt="{{ $comment->user->name }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="font-medium">{{ $comment->user->name }}</h4>
-                                    <p class="text-xs text-gray-500">
-                                        {{ $comment->created_at->diffForHumans() }}
-                                    </p>
-                                </div>
-                                @if($comment->user_id === auth()->id())
-                                    <form method="POST"
-                                          action="{{ route('teacher.announcements.comments.destroy', ['comment' => $comment->id]) }}"
-                                          onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-ghost btn-sm text-error">
-                                            <i class="fi fi-rr-trash"></i>
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
-                            <div class="mt-2 text-gray-700">
-                                {{ $comment->content }}
-                            </div>
-                        </div>
-                    </div> --}}
                 @empty
                     <div class="py-8 text-center text-gray-500">
                         <i class="mb-2 text-3xl fi fi-rr-comment-alt"></i>
@@ -168,7 +133,7 @@
             <form action="{{ route('teacher.announcements.comments.store', [
                 'announcement' => $announcement->id,
                 'type' => $announcement instanceof \App\Models\GeneralAnnouncement ? 'general' : 'classroom'
-            ]) }}" method="POST" class="mt-8">
+            ]) }}" method="POST" class="mt-6">
                 @csrf
                 <div class="form-control">
                     <label class="label">
@@ -183,11 +148,18 @@
                         </label>
                     @enderror
                 </div>
-                <div class="flex justify-end mt-4">
-                    <button type="submit" class="btn btn-accent">
-                        <i class="mr-2 fi fi-rr-comment"></i>
-                        Post Comment
-                    </button>
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
+                    <div class="text-xs text-gray-500 hidden sm:block">
+                        Be respectful. Your comment will be visible to others.
+                    </div>
+
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button type="submit" class="btn btn-accent w-full sm:w-auto inline-flex items-center justify-center">
+                            <i class="fi fi-rr-comment mr-2"></i>
+                            Post Comment
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -208,6 +180,21 @@
                     form.submit();
                 }
             }
+
+            // Optional: simple attachments toggle for mobile
+            document.addEventListener('DOMContentLoaded', function () {
+                const btn = document.getElementById('open-attachments');
+                if (!btn) return;
+                btn.addEventListener('click', function () {
+                    // scroll to attachments section if present
+                    const attachmentsHeading = document.querySelector('h4:contains("Attachments"), h4:contains("Attachment")');
+                    if (attachmentsHeading) {
+                        attachmentsHeading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        window.scrollBy({ top: 400, behavior: 'smooth' });
+                    }
+                });
+            });
         </script>
     @endpush
 </x-dashboard.teacher.base>

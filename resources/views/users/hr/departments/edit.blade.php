@@ -1,6 +1,8 @@
 <x-dashboard.hr.base>
     <x-notification-message />
-    <div class="w-full p-6">
+
+    <!-- container with max width for better mobile readability -->
+    <div class="container mx-auto px-4 sm:px-6 p-4 sm:p-6 max-w-2xl">
         <!-- Header -->
         <div class="mb-6">
             <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
@@ -12,10 +14,10 @@
         </div>
 
         <!-- Form Card -->
-        <div class="w-full bg-white rounded-lg shadow-sm">
+        <div class="w-full bg-white rounded-lg shadow-sm overflow-hidden">
             <form action="{{ route('hr.departments.update', $department) }}"
                   method="POST"
-                  class="p-6">
+                  class="p-4 sm:p-6 space-y-6">
                 @csrf
                 @method('PUT')
 
@@ -29,7 +31,7 @@
                         </label>
                         <input type="text"
                                name="name"
-                               class="input input-bordered @error('name') input-error @enderror"
+                               class="input input-bordered w-full @error('name') input-error @enderror"
                                value="{{ old('name', $department->name) }}"
                                placeholder="Enter department name"
                                required>
@@ -46,7 +48,7 @@
                             <span class="label-text font-medium">Description</span>
                         </label>
                         <textarea name="description"
-                                  class="textarea textarea-bordered h-24 @error('description') textarea-error @enderror"
+                                  class="textarea textarea-bordered w-full h-28 sm:h-32 @error('description') textarea-error @enderror"
                                   placeholder="Enter department description">{{ old('description', $department->description) }}</textarea>
                         @error('description')
                             <label class="label">
@@ -55,7 +57,7 @@
                         @enderror
                     </div>
 
-                    <!-- Department Code -->
+                    <!-- Department Code (kept commented, responsive if enabled) -->
                     {{-- <div class="form-control">
                         <label class="label">
                             <span class="label-text font-medium">Department Code</span>
@@ -63,7 +65,7 @@
                         </label>
                         <input type="text"
                                name="code"
-                               class="input input-bordered uppercase @error('code') input-error @enderror"
+                               class="input input-bordered uppercase w-full @error('code') input-error @enderror"
                                value="{{ old('code', $department->code) }}"
                                placeholder="Enter department code"
                                required>
@@ -73,30 +75,18 @@
                             </label>
                         @enderror
                     </div> --}}
-
-                    <!-- Status -->
-                    {{-- <div class="form-control">
-                        <label class="label cursor-pointer justify-start gap-3">
-                            <input type="checkbox"
-                                   name="is_active"
-                                   class="checkbox checkbox-accent"
-                                   {{ old('is_active', $department->is_active) ? 'checked' : '' }}>
-                            <span class="label-text">Active Department</span>
-                        </label>
-                    </div> --}}
                 </div>
 
-
                 <!-- Department Head -->
-                <div class="form-control mt-6">
+                <div class="form-control">
                     <label class="label">
                         <span class="label-text font-medium">Head</span>
                         <span class="label-text-alt text-error">*</span>
                     </label>
                     <select name="head" class="select select-bordered w-full @error('head') select-error @enderror" required>
-                        <option value="" disabled selected>Select department head</option>
+                        <option value="" disabled {{ old('head', $department->head) ? '' : 'selected' }}>Select department head</option>
                         @foreach($employees as $employee)
-                            <option value="{{ $employee->name }}" {{ old('head', $department->head) == $employee->id ? 'selected' : '' }}>
+                            <option value="{{ $employee->id }}" {{ (string)old('head', $department->head) === (string)$employee->id ? 'selected' : '' }}>
                                 {{ $employee->name }} ({{ $employee->email }})
                             </option>
                         @endforeach
@@ -108,13 +98,13 @@
                     @enderror
                 </div>
 
-                <!-- Form Actions -->
-                <div class="flex items-center justify-end gap-3 mt-8 pt-6 border-t">
+                <!-- Form Actions: stacked on mobile, inline on larger screens -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 mt-2 pt-4 border-t">
                     <a href="{{ route('hr.departments.index') }}"
-                       class="btn btn-ghost">
+                       class="btn btn-ghost w-full sm:w-auto text-center">
                         Cancel
                     </a>
-                    <button type="submit" class="btn btn-accent">
+                    <button type="submit" class="btn btn-accent w-full sm:w-auto">
                         Update Department
                     </button>
                 </div>

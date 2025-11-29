@@ -85,66 +85,63 @@
                 </div>
 
                 {{-- Mobile Card List --}}
-                <div class="space-y-4 md:hidden">
+                <div class="space-y-3 md:hidden md:px-2">
                     @forelse ($announcements as $announcement)
-                        <div class="bg-white rounded-lg shadow-sm p-4 border">
-                            <div class="flex items-start gap-3">
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-start justify-between gap-3">
-                                        <div class="min-w-0">
-                                            <h3 class="text-sm font-semibold text-gray-800 truncate">
-                                                {{ $announcement->title }}</h3>
-                                            <p class="text-xs text-gray-500 mt-1 truncate">
-                                                {{ Str::limit($announcement->description, 160) }}</p>
-                                            <p class="text-xs text-gray-400 mt-2">Posted by:
-                                                {{ $announcement->postedBy->name }}</p>
-                                        </div>
+                        <div class="bg-white rounded-lg shadow-sm p-3 border w-full max-w-full overflow-hidden">
+                            <div class="flex flex-col gap-2">
+                                <div class="min-w-0">
+                                    <h3 class="text-sm font-semibold text-gray-800 leading-tight break-words">
+                                        {{ $announcement->title }}
+                                    </h3>
 
-                                        <div class="flex-shrink-0 text-right">
-                                            <div class="text-xs text-gray-500">
-                                                {{ $announcement->created_at->format('M d, Y') }}</div>
+                                    <p class="text-xs text-gray-600 mt-1 whitespace-normal break-words">
+                                        {{ Str::limit($announcement->description, 180) }}
+                                    </p>
 
-                                            <div class="mt-2">
-                                                <form
-                                                    action="{{ route('admin.general-announcements.toggle', $announcement->id) }}"
-                                                    method="POST" class="inline">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <label class="inline-flex items-center gap-2">
-                                                        <input type="checkbox" class="toggle toggle-accent"
-                                                            {{ $announcement->is_posted ? 'checked' : '' }}
-                                                            onchange="this.form.submit()">
-                                                        <span class="text-xs text-gray-600">Posted</span>
-                                                    </label>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <p class="text-2xs text-gray-400 mt-1 break-words">
+                                        Posted by: {{ $announcement->postedBy->name }}
+                                    </p>
+                                </div>
 
-                                    <div class="mt-3 flex gap-2">
-                                        <a href="{{ route('admin.general-announcements.edit', $announcement->id) }}"
-                                            class="btn btn-xs btn-info flex-1">
-                                            Edit
-                                        </a>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <div class="truncate">{{ $announcement->created_at->format('M d, Y') }}</div>
 
-                                        <form
-                                            action="{{ route('admin.general-announcements.destroy', $announcement->id) }}"
-                                            method="POST" class="flex-1"
-                                            onsubmit="return confirm('Are you sure you want to delete this announcement?')">
+                                    <div class="flex-shrink-0 ml-2">
+                                        <form action="{{ route('admin.general-announcements.toggle', $announcement->id) }}"
+                                              method="POST" class="inline-block">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-xs btn-error w-full">
-                                                Delete
-                                            </button>
+                                            @method('PUT')
+                                            <label class="inline-flex items-center gap-2">
+                                                <input type="checkbox" class="toggle toggle-accent" {{ $announcement->is_posted ? 'checked' : '' }} onchange="this.form.submit()">
+                                                <span class="text-xs text-gray-600">Posted</span>
+                                            </label>
                                         </form>
                                     </div>
+                                </div>
+
+                                <!-- Actions: stacked full-width for small screens -->
+                                <div class="flex flex-col gap-2 mt-1">
+                                    <a href="{{ route('admin.general-announcements.edit', $announcement->id) }}"
+                                       class="btn btn-sm btn-info w-full py-2 text-xs text-center">
+                                       Edit
+                                    </a>
+
+                                    <form action="{{ route('admin.general-announcements.destroy', $announcement->id) }}"
+                                          method="POST"
+                                          onsubmit="return confirm('Are you sure you want to delete this announcement?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-error w-full py-2 text-xs">
+                                            Delete
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     @empty
-                        <div class="bg-white rounded-lg shadow-sm p-6 text-center text-gray-500 border">
-                            <i class="fi fi-rr-megaphone text-3xl mb-2"></i>
-                            <p>{{ __('No Announcements Found') }}</p>
+                        <div class="bg-white rounded-lg shadow-sm p-4 text-center text-gray-500 border">
+                            <i class="fi fi-rr-megaphone text-2xl mb-2"></i>
+                            <p class="text-sm">{{ __('No Announcements Found') }}</p>
                         </div>
                     @endforelse
                 </div>

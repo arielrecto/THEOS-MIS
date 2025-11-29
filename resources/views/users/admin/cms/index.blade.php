@@ -1,277 +1,320 @@
 <x-dashboard.admin.base>
-    <div class="container p-6 mx-auto">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 p-4 sm:p-6">
         <!-- Header -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Content Management</h1>
-            <p class="text-gray-600">Manage your website content and appearance</p>
+        <div class="mb-4 sm:mb-6">
+            <h1 class="text-base sm:text-2xl md:text-3xl font-bold text-gray-800">Content Management</h1>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">Manage your website content and appearance</p>
         </div>
 
-        <!-- CMS Options Grid -->
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-            <!-- Logo Management Card -->
-            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex justify-center items-center w-12 h-12 rounded-lg bg-primary/10">
-                            <i class="text-2xl fi fi-rr-picture text-primary"></i>
+        <!-- Mobile: compact list (visible on xs only) -->
+        <div class="space-y-3 sm:hidden">
+            @php
+                $logoSet = \App\Models\Logo::where('type','main')->where('is_active',true)->exists();
+                $galleryCount = \App\Models\Gallery::count();
+                $aboutSet = \App\Models\AboutUs::exists();
+                $programCount = \App\Models\AcademicProgram::count();
+                $contactSet = \App\Models\ContactUs::exists();
+            @endphp
+
+            <a href="{{ route('admin.CMS.logos.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <i class="fi fi-rr-picture text-xl text-primary"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">Logo Management</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Logos, favicon and footer logo</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">
+                    @if($logoSet)<span class="text-success">Set</span>@else<span class="text-error">Not Set</span>@endif
+                </div>
+            </a>
+
+            <a href="{{ route('admin.CMS.gallery.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <i class="fi fi-rr-images text-xl text-accent"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">Gallery Management</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Upload and manage gallery images</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">{{ $galleryCount }} Images</div>
+            </a>
+
+            <a href="{{ route('admin.CMS.about-us.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+                    <i class="fi fi-rr-building text-xl text-secondary"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">About Us</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Organization info, mission & vision</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">
+                    @if($aboutSet)<span class="text-success">Set</span>@else<span class="text-error">Not Set</span>@endif
+                </div>
+            </a>
+
+            <a href="{{ route('admin.CMS.programs.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-info/10 flex items-center justify-center">
+                    <i class="fi fi-rr-graduation-cap text-xl text-info"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">Academic Programs</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Programs and courses offered</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">{{ $programCount }}</div>
+            </a>
+
+            <a href="{{ route('admin.CMS.contact.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
+                    <i class="fi fi-rr-address-book text-xl text-success"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">Contact Information</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Phone, email and contact details</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">
+                    @if($contactSet)<span class="text-success">Set</span>@else<span class="text-error">Not Set</span>@endif
+                </div>
+            </a>
+        </div>
+
+        <!-- Desktop & Tablet: grid (hidden on xs) -->
+        <div class="hidden sm:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Card component (keeps accessible spacing + responsive text) -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <i class="fi fi-rr-picture text-2xl text-primary"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">Logo Management</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Logos, favicon and footer logo</p>
+                            </div>
                         </div>
-                        <span class="badge badge-primary">Active</span>
+                        <div class="flex items-center justify-end">
+                            <span class="badge badge-primary text-xs">Active</span>
+                        </div>
                     </div>
-                    <h3 class="mb-2 text-lg font-semibold">Logo Management</h3>
-                    <p class="mb-4 text-gray-600">Update and manage your website logos, favicon, and footer logo.</p>
-                    <div class="space-y-2">
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Main Logo</span>
+                            <span class="text-gray-600 truncate">Main Logo</span>
                             @if($mainLogo = \App\Models\Logo::where('type', 'main')->where('is_active', true)->first())
-                                <span class="text-success">Set</span>
+                                <span class="text-success text-xs">Set</span>
                             @else
-                                <span class="text-error">Not Set</span>
+                                <span class="text-error text-xs">Not Set</span>
                             @endif
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Favicon</span>
+                            <span class="text-gray-600 truncate">Favicon</span>
                             @if($favicon = \App\Models\Logo::where('type', 'favicon')->where('is_active', true)->first())
-                                <span class="text-success">Set</span>
+                                <span class="text-success text-xs">Set</span>
                             @else
-                                <span class="text-error">Not Set</span>
+                                <span class="text-error text-xs">Not Set</span>
                             @endif
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Footer Logo</span>
+                            <span class="text-gray-600 truncate">Footer Logo</span>
                             @if($footerLogo = \App\Models\Logo::where('type', 'footer')->where('is_active', true)->first())
-                                <span class="text-success">Set</span>
+                                <span class="text-success text-xs">Set</span>
                             @else
-                                <span class="text-error">Not Set</span>
+                                <span class="text-error text-xs">Not Set</span>
                             @endif
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="{{ route('admin.CMS.logos.index') }}" class="gap-2 w-full btn btn-primary">
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.logos.index') }}" class="btn btn-primary gap-2 w-full sm:w-auto text-sm">
                             <i class="fi fi-rr-edit"></i>
-                            Manage Logos
+                            <span class="truncate">Manage Logos</span>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Gallery Management Card -->
-            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex justify-center items-center w-12 h-12 rounded-lg bg-accent/10">
-                            <i class="text-2xl fi fi-rr-images text-accent"></i>
+            <!-- Gallery Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center">
+                                <i class="fi fi-rr-images text-2xl text-accent"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">Gallery Management</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Upload and manage gallery images</p>
+                            </div>
                         </div>
-                        <span class="badge badge-accent">{{ \App\Models\Gallery::count() }} Images</span>
+                        <div class="flex items-center justify-end">
+                            <span class="badge badge-accent text-xs">{{ \App\Models\Gallery::count() }} Images</span>
+                        </div>
                     </div>
-                    <h3 class="mb-2 text-lg font-semibold">Gallery Management</h3>
-                    <p class="mb-4 text-gray-600">Upload and manage images for the website gallery section.</p>
-                    <div class="space-y-2">
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Active Images</span>
-                            <span class="text-success">{{ \App\Models\Gallery::where('is_active', true)->count() }}</span>
+                            <span class="text-gray-600 truncate">Active Images</span>
+                            <span class="text-success text-xs">{{ \App\Models\Gallery::where('is_active', true)->count() }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Inactive Images</span>
-                            <span class="text-error">{{ \App\Models\Gallery::where('is_active', false)->count() }}</span>
+                            <span class="text-gray-600 truncate">Inactive Images</span>
+                            <span class="text-error text-xs">{{ \App\Models\Gallery::where('is_active', false)->count() }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Last Updated</span>
-                            <span class="text-gray-500">
+                            <span class="text-gray-600 truncate">Last Updated</span>
+                            <span class="text-gray-500 text-xs">
                                 {{ \App\Models\Gallery::latest()->first()?->updated_at?->diffForHumans() ?? 'Never' }}
                             </span>
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="{{ route('admin.CMS.gallery.index') }}" class="gap-2 w-full btn btn-accent">
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.gallery.index') }}" class="btn btn-accent gap-2 w-full sm:w-auto text-sm">
                             <i class="fi fi-rr-edit"></i>
-                            Manage Gallery
+                            <span class="truncate">Manage Gallery</span>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- About Us Management Card -->
-            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex justify-center items-center w-12 h-12 rounded-lg bg-secondary/10">
-                            <i class="text-2xl fi fi-rr-building text-secondary"></i>
+            <!-- About Us Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
+                                <i class="fi fi-rr-building text-2xl text-secondary"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">About Us Management</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Organization info, mission & vision</p>
+                            </div>
                         </div>
-                        @if($aboutUs = \App\Models\AboutUs::first())
-                            <span class="badge badge-secondary">Last updated {{ $aboutUs->updated_at->diffForHumans() }}</span>
-                        @else
-                            <span class="badge badge-ghost">Not Set</span>
-                        @endif
-                    </div>
-                    <h3 class="mb-2 text-lg font-semibold">About Us Management</h3>
-                    <p class="mb-4 text-gray-600">Update your organization's information, mission, and vision.</p>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Title</span>
-                            @if($aboutUs?->title)
-                                <span class="text-success">Set</span>
+                        <div class="flex items-center justify-end">
+                            @if($aboutUs = \App\Models\AboutUs::first())
+                                <span class="badge badge-secondary text-xs">Last updated {{ $aboutUs->updated_at->diffForHumans() }}</span>
                             @else
-                                <span class="text-error">Not Set</span>
-                            @endif
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Description</span>
-                            @if($aboutUs?->description)
-                                <span class="text-success">Set</span>
-                            @else
-                                <span class="text-error">Not Set</span>
-                            @endif
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Mission & Vision</span>
-                            @if($aboutUs?->mission_and_vision)
-                                <span class="text-success">Set</span>
-                            @else
-                                <span class="text-error">Not Set</span>
-                            @endif
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Featured Image</span>
-                            @if($aboutUs?->path)
-                                <span class="text-success">Set</span>
-                            @else
-                                <span class="text-error">Not Set</span>
+                                <span class="badge badge-ghost text-xs">Not Set</span>
                             @endif
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="{{ route('admin.CMS.about-us.index') }}" class="gap-2 w-full btn btn-secondary">
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Title</span>
+                            <span class="{{ $aboutUs?->title ? 'text-success' : 'text-error' }} text-xs">{{ $aboutUs?->title ? 'Set' : 'Not Set' }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Description</span>
+                            <span class="{{ $aboutUs?->description ? 'text-success' : 'text-error' }} text-xs">{{ $aboutUs?->description ? 'Set' : 'Not Set' }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Mission & Vision</span>
+                            <span class="{{ $aboutUs?->mission_and_vision ? 'text-success' : 'text-error' }} text-xs">{{ $aboutUs?->mission_and_vision ? 'Set' : 'Not Set' }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Featured Image</span>
+                            <span class="{{ $aboutUs?->path ? 'text-success' : 'text-error' }} text-xs">{{ $aboutUs?->path ? 'Set' : 'Not Set' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.about-us.index') }}" class="btn btn-secondary gap-2 w-full sm:w-auto text-sm">
                             <i class="fi fi-rr-edit"></i>
-                            Manage About Us
+                            <span class="truncate">Manage About Us</span>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Academic Programs Management Card -->
-            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex justify-center items-center w-12 h-12 rounded-lg bg-info/10">
-                            <i class="text-2xl fi fi-rr-graduation-cap text-info"></i>
+            <!-- Academic Programs Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-info/10 flex items-center justify-center">
+                                <i class="fi fi-rr-graduation-cap text-2xl text-info"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">Academic Programs</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Programs and courses offered</p>
+                            </div>
                         </div>
-                        <span class="badge badge-info">{{ \App\Models\AcademicProgram::count() }} Programs</span>
-                    </div>
-                    <h3 class="mb-2 text-lg font-semibold">Academic Programs</h3>
-                    <p class="mb-4 text-gray-600">Manage educational programs and courses offered.</p>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Active Programs</span>
-                            <span class="text-success">
-                                {{ \App\Models\AcademicProgram::where('is_active', true)->count() }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Inactive Programs</span>
-                            <span class="text-error">
-                                {{ \App\Models\AcademicProgram::where('is_active', false)->count() }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Last Updated</span>
-                            <span class="text-gray-500">
-                                {{ \App\Models\AcademicProgram::latest()->first()?->updated_at?->diffForHumans() ?? 'Never' }}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Categories</span>
-                            <span class="text-info">
-                                {{ \App\Models\AcademicProgram::distinct('category')->count('category') }}
-                            </span>
+                        <div class="flex items-center justify-end">
+                            <span class="badge badge-info text-xs">{{ \App\Models\AcademicProgram::count() }} Programs</span>
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="{{ route('admin.CMS.programs.index') }}" class="gap-2 w-full btn btn-info">
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Active Programs</span>
+                            <span class="text-success text-xs">{{ \App\Models\AcademicProgram::where('is_active', true)->count() }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Inactive Programs</span>
+                            <span class="text-error text-xs">{{ \App\Models\AcademicProgram::where('is_active', false)->count() }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Last Updated</span>
+                            <span class="text-gray-500 text-xs">{{ \App\Models\AcademicProgram::latest()->first()?->updated_at?->diffForHumans() ?? 'Never' }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Categories</span>
+                            <span class="text-info text-xs">{{ \App\Models\AcademicProgram::distinct('category')->count('category') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.programs.index') }}" class="btn btn-info gap-2 w-full sm:w-auto text-sm">
                             <i class="fi fi-rr-edit"></i>
-                            Manage Programs
+                            <span class="truncate">Manage Programs</span>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Contact Us Management Card -->
-            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex justify-center items-center w-12 h-12 rounded-lg bg-success/10">
-                            <i class="text-2xl fi fi-rr-address-book text-success"></i>
+            <!-- Contact Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-success/10 flex items-center justify-center">
+                                <i class="fi fi-rr-address-book text-2xl text-success"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">Contact Information</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Phone, email and contact details</p>
+                            </div>
                         </div>
-                        @if($contactInfo = \App\Models\ContactUs::first())
-                            <span class="badge badge-success">Last updated {{ $contactInfo->updated_at->diffForHumans() }}</span>
-                        @else
-                            <span class="badge badge-ghost">Not Set</span>
-                        @endif
-                    </div>
-                    <h3 class="mb-2 text-lg font-semibold">Contact Information</h3>
-                    <p class="mb-4 text-gray-600">Manage contact details and information displayed on the website.</p>
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Phone Number</span>
-                            @if($contactInfo?->phone_number)
-                                <span class="text-success">Set</span>
+                        <div class="flex items-center justify-end">
+                            @if($contactInfo = \App\Models\ContactUs::first())
+                                <span class="badge badge-success text-xs">Last updated {{ $contactInfo->updated_at->diffForHumans() }}</span>
                             @else
-                                <span class="text-error">Not Set</span>
-                            @endif
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">Email Address</span>
-                            @if($contactInfo?->email_address)
-                                <span class="text-success">Set</span>
-                            @else
-                                <span class="text-error">Not Set</span>
+                                <span class="badge badge-ghost text-xs">Not Set</span>
                             @endif
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="{{ route('admin.CMS.contact.index') }}" class="gap-2 w-full btn btn-success">
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Phone Number</span>
+                            <span class="{{ $contactInfo?->phone_number ? 'text-success' : 'text-error' }} text-xs">{{ $contactInfo?->phone_number ? 'Set' : 'Not Set' }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Email Address</span>
+                            <span class="{{ $contactInfo?->email_address ? 'text-success' : 'text-error' }} text-xs">{{ $contactInfo?->email_address ? 'Set' : 'Not Set' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.contact.index') }}" class="btn btn-success gap-2 w-full sm:w-auto text-sm">
                             <i class="fi fi-rr-edit"></i>
-                            Manage Contact Info
+                            <span class="truncate">Manage Contact Info</span>
                         </a>
                     </div>
                 </div>
             </div>
-
-            <!-- Placeholder for other CMS options -->
-            {{-- <div class="bg-white rounded-lg shadow-sm opacity-50 transition-shadow hover:shadow-md">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex justify-center items-center w-12 h-12 bg-gray-100 rounded-lg">
-                            <i class="text-2xl text-gray-400 fi fi-rr-layout-fluid"></i>
-                        </div>
-                        <span class="badge">Coming Soon</span>
-                    </div>
-                    <h3 class="mb-2 text-lg font-semibold">Banner Management</h3>
-                    <p class="mb-4 text-gray-600">Manage website banners and hero sections.</p>
-                    <div class="mt-6">
-                        <button class="w-full btn btn-ghost" disabled>
-                            Coming Soon
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-sm opacity-50 transition-shadow hover:shadow-md">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex justify-center items-center w-12 h-12 bg-gray-100 rounded-lg">
-                            <i class="text-2xl text-gray-400 fi fi-rr-text"></i>
-                        </div>
-                        <span class="badge">Coming Soon</span>
-                    </div>
-                    <h3 class="mb-2 text-lg font-semibold">Content Blocks</h3>
-                    <p class="mb-4 text-gray-600">Manage reusable content blocks and sections.</p>
-                    <div class="mt-6">
-                        <button class="w-full btn btn-ghost" disabled>
-                            Coming Soon
-                        </button>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
 </x-dashboard.admin.base>

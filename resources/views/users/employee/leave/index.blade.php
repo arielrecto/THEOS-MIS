@@ -63,7 +63,7 @@
         <div class="p-4 sm:p-6 mb-6 bg-white rounded-lg shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
                 <h2 class="text-lg sm:text-xl font-semibold">Leave Calendar</h2>
-                <div class="flex gap-4 items-center text-sm">
+                <div class="flex flex-col md:flex-row gap-4 md:items-center text-sm">
                     <div class="flex gap-2 items-center">
                         <span class="w-3 h-3 rounded-full bg-warning"></span>
                         <span>Pending</span>
