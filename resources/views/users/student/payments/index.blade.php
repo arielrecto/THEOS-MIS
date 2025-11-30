@@ -136,7 +136,8 @@
                                                     <span class="font-mono text-sm">{{ $payment->paymentAccount->account_number }}</span>
                                                     {{-- <button type="button" class="btn btn-ghost btn-xs" onclick="copyAccount('{{ $payment->paymentAccount->account_number }}')" aria-label="Copy account number">Copy</button> --}}
                                                 </div>
-                                            </div>
+
+                                        </div>
 
                                             <div class="flex items-center justify-between">
                                                 <span class="text-gray-500">Status</span>
