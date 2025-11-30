@@ -3,8 +3,8 @@
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
             <!-- Header -->
             <div class="border-b p-4 sm:p-6">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="flex items-start sm:items-center gap-4 min-w-0">
+                <div class="flex flex-col sm:flex-row sm:justify-between gap-4">
+                    <div class="flex flex-col md:flex-row md:items-start gap-4 min-w-0">
                         <a href="{{ route('notifications.index') }}" class="btn btn-ghost btn-sm gap-2 shrink-0">
                             <i class="fi fi-rr-arrow-left"></i>
                             Back to Notifications
@@ -20,14 +20,14 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-2">
+                    {{-- <div class="flex items-center gap-2">
                         @if ($notification->url)
                             <a href="{{ $notification->url }}" class="btn btn-accent gap-2 whitespace-nowrap">
                                 <i class="fi fi-rr-link"></i>
                                 View Related Content
                             </a>
                         @endif
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
@@ -35,13 +35,13 @@
             <div class="p-4 sm:p-6">
                 <div class="flex flex-col sm:flex-row items-start sm:items-start gap-4">
                     <!-- Notification Icon -->
-                    <div class="flex-shrink-0 self-start">
+                    {{-- <div class="flex-shrink-0 self-start">
                         <div x-data="notificationIcons"
                             class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-accent/10 flex items-center justify-center">
                             <i
                                 :class="`fi ${getNotificationIcon('{{ $notification->type }}')} text-xl sm:text-2xl text-accent`"></i>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Content -->
                     <div class="flex-1 min-w-0">
@@ -50,7 +50,7 @@
                         </h2>
 
                         <p
-                            class="text-gray-600 text-base sm:text-lg mb-4 leading-relaxed break-words whitespace-pre-wrap">
+                            class="text-gray-600 text-base sm:text-lg mb-4 leading-relaxed break-words whitespace-pre-line">
                             {{ $notification->message }}
                         </p>
 

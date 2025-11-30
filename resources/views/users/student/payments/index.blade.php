@@ -128,8 +128,10 @@
                                                     </div>
 
                                                     <div class="modal-action">
-                                                        <button type="button" class="btn"
-                                                            onclick="document.getElementById('payment_details_modal').close()">Close</button>
+                                                        <form method="dialog">
+                                                        <button class="btn"
+                                                            >Close</button>
+                                                        </form>
                                                     </div>
                                                 </form>
                                             </dialog>
