@@ -69,7 +69,7 @@ class GeneralAnnouncementController extends Controller
                 Attachment::create([
                     'attachable_id' => $announcement->id,
                     'attachable_type' => get_class($announcement),
-                    'file_dir' => asset( str_replace('public/', '', $path)),
+                    'file_dir' => asset(str_replace('public/', '', $path)),
                     'file_name' => $file->getClientOriginalName(),
                     'file_type' => $file->getClientOriginalExtension(),
                     'file_size' => $file->getSize(),
@@ -87,7 +87,7 @@ class GeneralAnnouncementController extends Controller
             ];
 
             // Notify all users except admins
-            $users = \App\Models\User::whereDoesntHave('roles', function($query) {
+            $users = \App\Models\User::whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'admin');
             })->get();
 
@@ -134,7 +134,7 @@ class GeneralAnnouncementController extends Controller
         $announcement->update([
             'title' => $request->title,
             'description' => $request->description,
-            'is_posted' => $request->is_posted ?? false,
+            'is_posted' => $request->is_posted == 'on' ? true : false,
         ]);
 
         // Send notification if announcement is newly posted
@@ -147,7 +147,7 @@ class GeneralAnnouncementController extends Controller
             ];
 
             // Notify all users except admins
-            $users = \App\Models\User::whereDoesntHave('roles', function($query) {
+            $users = \App\Models\User::whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'admin');
             })->get();
 
@@ -187,7 +187,7 @@ class GeneralAnnouncementController extends Controller
             ];
 
             // Notify all users except admins
-            $users = \App\Models\User::whereDoesntHave('roles', function($query) {
+            $users = \App\Models\User::whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'admin');
             })->get();
 
