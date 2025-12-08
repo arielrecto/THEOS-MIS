@@ -27,10 +27,27 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content -->
                 <div class="lg:col-span-2">
-                    <div class="p-8 bg-white rounded-xl shadow-sm">
-                        <div class="prose prose-lg max-w-none">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-6">Program Overview</h2>
-                            <div class="text-gray-600 space-y-4">
+                    <div class="p-4 sm:p-6 md:p-8 bg-white rounded-xl shadow-sm">
+                        <div class="prose prose-sm sm:prose md:prose-lg max-w-none">
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Program Overview</h2>
+                            <div class="text-gray-600 space-y-4 text-sm sm:text-base break-words"
+                                 x-data="{
+                                     text: `{{ $program->description }}`,
+                                     init() {
+                                         this.linkifyDescription();
+                                     },
+                                     linkifyDescription() {
+                                         const urlRegex = /(https?:\/\/[^\s]+)/g;
+                                         const element = this.$el;
+
+                                         if (urlRegex.test(this.text)) {
+                                             const linked = this.text.replace(urlRegex, '<a href=\"$1\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-accent hover:underline font-medium\">$1</a>');
+                                             element.innerHTML = linked;
+                                         } else {
+                                             element.textContent = this.text;
+                                         }
+                                     }
+                                 }">
                                 {{ $program->description }}
                             </div>
                         </div>
@@ -96,4 +113,24 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            // Alpine is ready if needed for additional features
+        });
+
+        // Fallback if Alpine doesn't linkify properly
+        document.querySelectorAll('[x-data*="linkifyDescription"]').forEach(el => {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const text = el.textContent;
+
+            if (urlRegex.test(text)) {
+                const linked = text.replace(/(https?:\/\/[^\s]+)/g,
+                    '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline font-medium">$1</a>');
+                el.innerHTML = linked;
+            }
+        });
+    </script>
+    @endpush
 </x-landing-page.base>

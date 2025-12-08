@@ -9,9 +9,20 @@
                 <div class="p-5 sm:p-6 bg-white rounded-lg shadow-md flex flex-col items-center text-center">
                     <div class="avatar">
                         <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden">
-                            <img class="object-cover w-full h-full"
-                                 src="{{ $student->profile->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
-                                 alt="{{ $student->name }}">
+
+                            @if ($student->profile && $student->profile->image)
+                                <img class="object-cover w-full h-full"
+                                    src="{{ $student->profile->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
+                                    alt="{{ $student->name }}">
+                            @elseif ($student->profilePicture)
+                                <img class="object-cover w-full h-full"
+                                    src="{{ $student->profilePicture->file_dir ?? 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
+                                    alt="{{ $student->name }}">
+                            @else
+                                <img class="object-cover w-full h-full"
+                                    src="{{ 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
+                                    alt="{{ $student->name }}">
+                            @endif
                         </div>
                     </div>
 
@@ -22,13 +33,16 @@
                         <div class="grid grid-cols-1 gap-3">
                             <div class="bg-gray-50 rounded-lg p-3">
                                 <div class="text-xs text-gray-500">Tasks Completed</div>
-                                <div class="mt-1 text-lg font-semibold text-accent">{{ $completedTasks }}/{{ $totalTasks }}</div>
-                                <div class="text-xs text-gray-400 mt-1">{{ number_format($taskCompletionRate, 1) }}% completion</div>
+                                <div class="mt-1 text-lg font-semibold text-accent">
+                                    {{ $completedTasks }}/{{ $totalTasks }}</div>
+                                <div class="text-xs text-gray-400 mt-1">{{ number_format($taskCompletionRate, 1) }}%
+                                    completion</div>
                             </div>
 
                             <div class="bg-gray-50 rounded-lg p-3">
                                 <div class="text-xs text-gray-500">Average Grade</div>
-                                <div class="mt-1 text-lg font-semibold text-accent">{{ number_format($averageGrade, 1) }}</div>
+                                <div class="mt-1 text-lg font-semibold text-accent">
+                                    {{ number_format($averageGrade, 1) }}</div>
                                 <div class="text-xs text-gray-400 mt-1">Across all tasks</div>
                             </div>
                         </div>
@@ -36,7 +50,7 @@
 
                     <div class="mt-4 w-full">
                         <a href="{{ route('teacher.student.index') }}"
-                           class="btn btn-ghost btn-sm w-full sm:w-auto inline-flex items-center justify-center">
+                            class="btn btn-ghost btn-sm w-full sm:w-auto inline-flex items-center justify-center">
                             <i class="fi fi-rr-arrow-left mr-2"></i>
                             Back to Students
                         </a>
@@ -54,20 +68,24 @@
                             <div class="flex items-start justify-between gap-3">
                                 <div class="min-w-0">
                                     <div class="font-medium text-sm truncate">{{ $task->name }}</div>
-                                    <div class="text-xs text-gray-500 mt-1">Due: {{ is_numeric($task->end_date) ? date('F d, Y', $task->end_date) : \Carbon\Carbon::parse($task->end_date)->format('F d, Y') }}</div>
+                                    <div class="text-xs text-gray-500 mt-1">Due:
+                                        {{ is_numeric($task->end_date) ? date('F d, Y', $task->end_date) : \Carbon\Carbon::parse($task->end_date)->format('F d, Y') }}
+                                    </div>
                                 </div>
 
                                 <div class="text-right space-y-2">
                                     <div>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
                                             {{ $task->status === 'submitted' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
                                             {{ ucfirst($task->status) }}
                                         </span>
                                     </div>
 
                                     <div class="text-sm text-gray-700">
-                                        @if($task->score)
-                                            <span class="font-semibold">{{ $task->score }}</span>/<span class="text-xs text-gray-500">{{ $task->task->max_score }}</span>
+                                        @if ($task->score)
+                                            <span class="font-semibold">{{ $task->score }}</span>/<span
+                                                class="text-xs text-gray-500">{{ $task->task->max_score }}</span>
                                         @else
                                             <span class="text-xs text-gray-400">--</span>
                                         @endif
@@ -77,7 +95,7 @@
 
                             <div class="mt-3 flex gap-2">
                                 <a href="#"
-                                   class="btn btn-xs btn-accent w-full inline-flex items-center justify-center">
+                                    class="btn btn-xs btn-accent w-full inline-flex items-center justify-center">
                                     View
                                 </a>
                             </div>
@@ -104,14 +122,17 @@
                                 @forelse($studentTasks as $task)
                                     <tr class="align-top">
                                         <td class="text-sm">{{ $task->name }}</td>
-                                        <td class="text-sm whitespace-nowrap">{{ is_numeric($task->end_date) ? date('F d, Y', $task->end_date) : \Carbon\Carbon::parse($task->end_date)->format('F d, Y') }}</td>
+                                        <td class="text-sm whitespace-nowrap">
+                                            {{ is_numeric($task->end_date) ? date('F d, Y', $task->end_date) : \Carbon\Carbon::parse($task->end_date)->format('F d, Y') }}
+                                        </td>
                                         <td class="text-sm">
-                                            <span class="badge badge-{{ $task->status === 'submitted' ? 'success' : 'warning' }}">
+                                            <span
+                                                class="badge badge-{{ $task->status === 'submitted' ? 'success' : 'warning' }}">
                                                 {{ ucfirst($task->status) }}
                                             </span>
                                         </td>
                                         <td class="text-sm">
-                                            @if($task->score)
+                                            @if ($task->score)
                                                 {{ $task->score }}/{{ $task->task->max_score }}
                                             @else
                                                 --

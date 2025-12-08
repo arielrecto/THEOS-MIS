@@ -78,8 +78,8 @@
 
                         <div class="flex flex-col gap-2 mt-5">
                             <p class="font-medium label-text">Enrollment type:</p>
-                            <input type="text" name="type" value="{{ request()->query('type') }}"
-                                class="input input-bordered" readonly>
+                            <input type="text"  name="type" value="{{ request()->query('type') }}"
+                                class="input input-bordered capitalize" readonly>
                         </div>
                     </div>
 
@@ -416,8 +416,8 @@
 
                     <!-- Email -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
-                        <p class="font-medium label-text">use for communication only</p>
-                        <div class="flex flex-col gap-2 mb-6 text-lg font-semibold text-gray-800 uppercase">
+                        <p class="font-medium label-text">Use for communication only</p>
+                        <div class="flex flex-col gap-2 mb-6 text-lg font-semibold text-gray-800 capitalize">
                             <i class="fi fi-rr-file-contract"></i>
                             <span class="font-medium label-text">Email:</span>
 

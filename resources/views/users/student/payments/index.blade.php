@@ -137,10 +137,14 @@
                                                     {{-- <button type="button" class="btn btn-ghost btn-xs" onclick="copyAccount('{{ $payment->paymentAccount->account_number }}')" aria-label="Copy account number">Copy</button> --}}
                                                 </div>
 
+
+
                                         </div>
 
                                             <div class="flex items-center justify-between">
-                                                <span class="text-gray-500">Status</span>
+                                                <span class="text-gray-500">
+                                                    Status</span>
+
                                                 <span @class([
                                                     'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium',
                                                     'bg-yellow-100 text-yellow-800' => $payment->status === 'pending',

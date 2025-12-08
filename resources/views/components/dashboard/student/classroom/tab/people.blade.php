@@ -34,7 +34,7 @@
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <div class="bg-accent px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between gap-3">
                 <h2 class="text-base sm:text-lg font-semibold text-white">Students</h2>
-                <span class="badge badge-ghost text-white text-xs sm:text-sm">
+                <span class="badge badge-ghost  text-xs sm:text-sm">
                     {{ $classroom->classroomStudents->count() }} Students
                 </span>
             </div>
