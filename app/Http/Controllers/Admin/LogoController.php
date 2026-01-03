@@ -57,15 +57,19 @@ class LogoController extends Controller
 
     public function toggleActive(Logo $logo)
     {
-        // Deactivate all logos of the same type
+        if ($logo->is_active) {
+            $logo->update(['is_active' => false]);
+            return back()->with('success', 'Logo set to inactive.');
+        }
+
+        // When activating: deactivate other logos of same type first
         Logo::where('type', $logo->type)
             ->where('id', '!=', $logo->id)
             ->update(['is_active' => false]);
 
-        // Toggle this logo
-        $logo->update(['is_active' => !$logo->is_active]);
+        $logo->update(['is_active' => true]);
 
-        return back()->with('success', 'Logo status updated successfully');
+        return back()->with('success', 'Logo set to active.');
     }
 
     public function destroy(Logo $logo)

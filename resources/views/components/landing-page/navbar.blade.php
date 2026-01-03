@@ -76,6 +76,13 @@
                     <span>Announcements</span>
                 </a>
 
+                <!-- NEW: Campuses -->
+                <a href="/#campuses" @click="isDrawerOpen = false"
+                   class="flex items-center gap-3 p-2 text-blue-900 hover:bg-blue-50 rounded-lg">
+                    <i class="fi fi-rr-school"></i>
+                    <span>Campuses</span>
+                </a>
+
                 <a href="{{ route('gallery') }}" @click="isDrawerOpen = false"
                    class="flex items-center gap-3 p-2 text-blue-900 hover:bg-blue-50 rounded-lg">
                     <i class="fi fi-rr-picture"></i>

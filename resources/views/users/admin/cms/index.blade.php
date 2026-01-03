@@ -14,6 +14,8 @@
                 $aboutSet = \App\Models\AboutUs::exists();
                 $programCount = \App\Models\AcademicProgram::count();
                 $contactSet = \App\Models\ContactUs::exists();
+                $campusCount = \App\Models\Campus::count();
+                $founderCount = \App\Models\Founder::count();
             @endphp
 
             <a href="{{ route('admin.CMS.logos.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
@@ -76,11 +78,34 @@
                     @if($contactSet)<span class="text-success">Set</span>@else<span class="text-error">Not Set</span>@endif
                 </div>
             </a>
+
+            <a href="{{ route('admin.CMS.campuses.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center">
+                    <i class="fi fi-rr-school text-xl text-warning"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">Campus Management</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Manage campus list and details</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">{{ $campusCount }}</div>
+            </a>
+
+            <!-- NEW: Founders (Mobile) -->
+            <a href="{{ route('admin.CMS.founders.index') }}" class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+                    <i class="fi fi-rr-user text-xl text-secondary"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">Founder Management</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Manage founder profiles and images</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">{{ $founderCount }}</div>
+            </a>
         </div>
 
         <!-- Desktop & Tablet: grid (hidden on xs) -->
         <div class="hidden sm:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- Card component (keeps accessible spacing + responsive text) -->
+            <!-- Logo Management Card -->
             <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
                 <div class="p-4 sm:p-6 flex-1 flex flex-col">
                     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
@@ -94,7 +119,9 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-end">
-                            <span class="badge badge-primary text-xs">Active</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-primary/10 text-primary">
+                                Active
+                            </span>
                         </div>
                     </div>
 
@@ -148,7 +175,9 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-end">
-                            <span class="badge badge-accent text-xs">{{ \App\Models\Gallery::count() }} Images</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-accent/10 text-accent">
+                                {{ \App\Models\Gallery::count() }} Images
+                            </span>
                         </div>
                     </div>
 
@@ -193,9 +222,13 @@
                         </div>
                         <div class="flex items-center justify-end">
                             @if($aboutUs = \App\Models\AboutUs::first())
-                                <span class="badge badge-secondary text-xs">Last updated {{ $aboutUs->updated_at->diffForHumans() }}</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-secondary/10 text-secondary max-w-[14rem] truncate">
+                                    Last updated {{ $aboutUs->updated_at->diffForHumans() }}
+                                </span>
                             @else
-                                <span class="badge badge-ghost text-xs">Not Set</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-gray-100 text-gray-700">
+                                    Not Set
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -242,7 +275,9 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-end">
-                            <span class="badge badge-info text-xs">{{ \App\Models\AcademicProgram::count() }} Programs</span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-info/10 text-info">
+                                {{ \App\Models\AcademicProgram::count() }} Programs
+                            </span>
                         </div>
                     </div>
 
@@ -289,9 +324,13 @@
                         </div>
                         <div class="flex items-center justify-end">
                             @if($contactInfo = \App\Models\ContactUs::first())
-                                <span class="badge badge-success text-xs">Last updated {{ $contactInfo->updated_at->diffForHumans() }}</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-success/10 text-success max-w-[14rem] truncate">
+                                    Last updated {{ $contactInfo->updated_at->diffForHumans() }}
+                                </span>
                             @else
-                                <span class="badge badge-ghost text-xs">Not Set</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-gray-100 text-gray-700">
+                                    Not Set
+                                </span>
                             @endif
                         </div>
                     </div>
@@ -311,6 +350,102 @@
                         <a href="{{ route('admin.CMS.contact.index') }}" class="btn btn-success gap-2 w-full sm:w-auto text-sm">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage Contact Info</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campuses Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-warning/10 flex items-center justify-center">
+                                <i class="fi fi-rr-school text-2xl text-warning"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">Campus Management</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Manage campus list and details</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-warning/10 text-warning">
+                                {{ \App\Models\Campus::count() }} Campuses
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">With Images</span>
+                            <span class="text-success text-xs">
+                                {{ \App\Models\Campus::whereHas('image')->count() }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Without Images</span>
+                            <span class="text-error text-xs">
+                                {{ \App\Models\Campus::count() - \App\Models\Campus::whereHas('image')->count() }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Last Updated</span>
+                            <span class="text-gray-500 text-xs">
+                                {{ \App\Models\Campus::latest()->first()?->updated_at?->diffForHumans() ?? 'Never' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.campuses.index') }}" class="btn btn-warning gap-2 w-full sm:w-auto text-sm">
+                            <i class="fi fi-rr-edit"></i>
+                            <span class="truncate">Manage Campuses</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Founders Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center">
+                                <i class="fi fi-rr-user text-2xl text-secondary"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">Founder Management</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Manage founder profiles and images</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-secondary/10 text-secondary">
+                                {{ \App\Models\Founder::count() }} Founders
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Active</span>
+                            <span class="text-success text-xs">{{ \App\Models\Founder::where('is_active', true)->count() }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Inactive</span>
+                            <span class="text-error text-xs">{{ \App\Models\Founder::where('is_active', false)->count() }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Last Updated</span>
+                            <span class="text-gray-500 text-xs">
+                                {{ \App\Models\Founder::latest()->first()?->updated_at?->diffForHumans() ?? 'Never' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.founders.index') }}" class="btn btn-secondary gap-2 w-full sm:w-auto text-sm">
+                            <i class="fi fi-rr-edit"></i>
+                            <span class="truncate">Manage Founders</span>
                         </a>
                     </div>
                 </div>

@@ -12,10 +12,12 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\HR\EmployeeController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\Admin\CampusController;
 use App\Http\Controllers\Admin\StrandController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Teacher\TaskController;
 use App\Http\Controllers\Admin\AboutUsController;
+use App\Http\Controllers\Admin\FounderController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -35,10 +37,10 @@ use App\Http\Controllers\Registrar\EnrollmentController;
 use App\Http\Controllers\Teacher\AnnouncementController;
 use App\Http\Controllers\Admin\AcademicProgramController;
 use App\Http\Controllers\Admin\GeneralAnnouncementController;
-use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\HR\DashboardController as HRDashboardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\HR\AttendanceController as HRAttendanceController;
 use App\Http\Controllers\Employee\LeaveController as EmployeeLeaveController;
 use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
@@ -182,6 +184,11 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('programs', AcademicProgramController::class);
 
                 Route::resource('gallery', GalleryController::class);
+
+                Route::resource('campuses', CampusController::class);
+
+                Route::resource('founders', FounderController::class);
+
             });
 
             Route::resource('payment-accounts', PaymentAccountController::class);

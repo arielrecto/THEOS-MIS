@@ -57,6 +57,7 @@ Alpine.data("imageHandler", () => ({
 
 Alpine.data("lineChart", () => ({
     chart: null,
+    label : "Class Performance",
     init() {
         const chartElement = this.$refs.chart;
 
@@ -81,7 +82,7 @@ Alpine.data("lineChart", () => ({
                 curve: "straight",
             },
             title: {
-                text: "Product Trends by Month",
+                text: this.label ? this.label : "Product Trends by Month",
                 align: "left",
             },
             grid: {

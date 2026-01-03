@@ -12,7 +12,7 @@
         <div class="p-6 rounded-lg shadow-lg bg-base-100">
             <h2 class="mb-4 text-xl md:text-2xl font-bold text-primary">Class Performance</h2>
             <div x-data="lineChart">
-                <div x-ref="chart" class="w-full h-56 md:h-72 lg:h-96"></div>
+                <div x-ref="chart" x-model="label = `Class performance.`" class="w-full h-56 md:h-72 lg:h-96"></div>
             </div>
         </div>
 

@@ -1,5 +1,6 @@
 <x-dashboard.admin.base>
     <div class="container mx-auto p-4 sm:p-6">
+            <x-notification-message/>
         <!-- Header -->
         <div class="mb-6">
             <h1 class="text-lg sm:text-2xl font-bold text-gray-800">Logo Management</h1>
@@ -68,16 +69,6 @@
                                         </div>
 
                                         <div class="flex items-center gap-2">
-                                            {{-- <form action="{{ route('admin.CMS.logos.toggle', $logo) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit"
-                                                        class="btn btn-sm sm:btn-sm {{ $logo->is_active ? 'btn-accent' : 'btn-ghost' }}"
-                                                        title="{{ $logo->is_active ? 'Set Inactive' : 'Set Active' }}">
-                                                    <i class="fi fi-rr-{{ $logo->is_active ? 'check' : 'circle' }}"></i>
-                                                </button>
-                                            </form> --}}
-
                                             <form action="{{ route('admin.CMS.logos.destroy', $logo) }}" method="POST"
                                                   onsubmit="return confirm('Are you sure you want to delete this logo?')" class="inline">
                                                 @csrf
@@ -95,15 +86,25 @@
 
                                     <div class="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                         <div>
-                                            <span class="text-xs">
-                                                <span class="badge badge-sm {{ $logo->is_active ? 'badge-success' : 'badge-ghost' }}">
+                                            {{-- Toggle Active/Inactive --}}
+                                            <form action="{{ route('admin.CMS.logos.toggle', $logo) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('PUT')
+
+                                                <button type="submit"
+                                                        title="Click to toggle status"
+                                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap border
+                                                               {{ $logo->is_active
+                                                                    ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'
+                                                                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200' }}">
+                                                    <span class="w-2 h-2 rounded-full {{ $logo->is_active ? 'bg-green-600' : 'bg-gray-500' }}"></span>
                                                     {{ $logo->is_active ? 'Active' : 'Inactive' }}
-                                                </span>
-                                            </span>
+                                                </button>
+                                            </form>
                                         </div>
 
                                         <div class="flex items-center gap-2">
-                                            <a href="{{ Storage::url($logo->path) }}" target="_blank" class="text-xs text-primary underline">Open</a>
+                                            {{-- <a href="{{ Storage::url($logo->path) }}" target="_blank" class="text-xs text-primary underline">Open</a> --}}
                                             {{-- <a href="{{ route('admin.CMS.logos.edit', $logo) }}" class="hidden sm:inline text-xs text-primary">Edit</a> --}}
                                         </div>
                                     </div>
@@ -123,5 +124,5 @@
         </div>
     </div>
 
-    <x-notification-message/>
+
 </x-dashboard.admin.base>

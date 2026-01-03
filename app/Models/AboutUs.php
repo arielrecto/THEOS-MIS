@@ -14,7 +14,14 @@ class AboutUs extends Model
         'sub_title',
         'path',
         'description',
+
+        // NEW (recommended): split fields
+        'vision',
+        'mission',
+
+        // Legacy (keep for backward compatibility)
         'mission_and_vision',
-        'address'
+
+        'address',
     ];
 }

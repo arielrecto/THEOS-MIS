@@ -28,10 +28,10 @@
 
                 <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $announcement->title }}</h1>
                 <div class="flex items-center text-gray-600 gap-4">
-                    <div class="flex items-center">
+                    {{-- <div class="flex items-center">
                         <i class="fi fi-rr-user mr-2"></i>
                         <span>{{ $announcement->postedBy->name }}</span>
-                    </div>
+                    </div> --}}
                     <div class="flex items-center">
                         <i class="fi fi-rr-calendar mr-2"></i>
                         <span>{{ $announcement->created_at->format('F d, Y') }}</span>

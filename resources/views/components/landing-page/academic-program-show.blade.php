@@ -41,7 +41,7 @@
                                          const element = this.$el;
 
                                          if (urlRegex.test(this.text)) {
-                                             const linked = this.text.replace(urlRegex, '<a href=\"$1\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-accent hover:underline font-medium\">$1</a>');
+                                             const linked = this.text.replace(urlRegex, '<a href=`$1` target=`_blank` rel=`noopener noreferrer` class=`text-accent hover:underline font-medium`>$1</a>');
                                              element.innerHTML = linked;
                                          } else {
                                              element.textContent = this.text;

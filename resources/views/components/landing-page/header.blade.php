@@ -1,3 +1,4 @@
+{{-- filepath: e:\Projects\Theos MIS\resources\views\components\landing-page\header.blade.php --}}
 @props([
     'announcements' => [],
     'programs' => [],
@@ -8,16 +9,21 @@
     use App\Models\Enrollment;
     use App\Enums\EnrollmentStatus;
     use App\Models\AboutUs;
+    use App\Models\Campus;
+    use App\Models\Founder;
     use Illuminate\Support\Facades\Storage;
 
     $mainLogo = Logo::where('type', 'main')->where('is_active', true)->latest()->first();
-
     $logoPath = $mainLogo ? Storage::url($mainLogo->path) : asset('logo.jpg');
 
     $activeEnrollment = Enrollment::where('status', EnrollmentStatus::ONGOING)->latest()->first();
-
     $aboutUs = AboutUs::first();
-    $a = $aboutUs ? $aboutUs->address : 'set address in the admin panel';
+
+    // Fetch campuses with their images
+    $campuses = Campus::with('image')->get();
+
+    // NEW: founders (active only)
+    $founders = Founder::with('image')->where('is_active', true)->latest()->get();
 @endphp
 
 <!-- Hero Section - Updated for better impact -->
@@ -59,6 +65,9 @@
         </div>
     </div>
 </section>
+
+<!-- NEW: Founders Section (between Hero and Core Values) -->
+<x-landing-page.founder :founders="$founders" />
 
 <!-- Core Values Section - Updated for better visualization -->
 <section class="container px-4 mx-auto py-20">
@@ -201,6 +210,9 @@
         {{ $announcements->links() }}
     </div>
 </section>
+
+<!-- Campuses Section - NEW -->
+<x-landing-page.campuses :campuses="$campuses" />
 
 <!-- Contact Section -->
 <section class="bg-gray-50 py-16">
