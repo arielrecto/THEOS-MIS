@@ -39,6 +39,7 @@ use App\Http\Controllers\Registrar\EnrollmentController;
 use App\Http\Controllers\Teacher\AnnouncementController;
 use App\Http\Controllers\Admin\AcademicProgramController;
 use App\Http\Controllers\Admin\GeneralAnnouncementController;
+use App\Http\Controllers\Admin\AcademicProgramLabelController;
 use App\Http\Controllers\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\HR\DashboardController as HRDashboardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
@@ -221,6 +222,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('header-contents', HeaderContentController::class);
 
                 Route::resource('core-values', CoreValueController::class);
+
+                Route::resource('academic-program-label', AcademicProgramLabelController::class);
             });
 
             Route::resource('payment-accounts', PaymentAccountController::class);

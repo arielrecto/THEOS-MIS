@@ -13,6 +13,7 @@
     use App\Models\Founder;
     use App\Models\HeaderContent;
     use App\Models\CoreValue;
+    use App\Models\AcademicProgramLabel;
     use Illuminate\Support\Facades\Storage;
 
     $mainLogo = Logo::where('type', 'main')->where('is_active', true)->latest()->first();
@@ -38,6 +39,9 @@
     ])
         ->where('is_active', true)
         ->first();
+
+    // Get academic program label (use latest if available)
+    $programLabel = AcademicProgramLabel::latest()->first();
 
     // Fallback values if no active header content
     $heroTitle = $headerContent?->title ?? 'Excellence in Education,<br>Guided by Faith';
@@ -166,12 +170,19 @@
     @endif
 </section>
 
-<!-- Academic Programs Section - Redesigned for better presentation -->
+<!-- Academic Programs Section - Dynamic from AcademicProgramLabel -->
 <section class="bg-gray-50 py-20">
     <div class="container px-4 mx-auto">
         <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Academic Programs</h2>
-            <div class="w-24 h-1 bg-accent mx-auto"></div>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                {{ $programLabel?->title ?? 'Academic Programs' }}
+            </h2>
+            <div class="w-24 h-1 bg-accent mx-auto mb-4"></div>
+            @if ($programLabel?->subtitle)
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    {{ $programLabel->subtitle }}
+                </p>
+            @endif
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -191,8 +202,8 @@
                         <p class="text-gray-600 mb-4 line-clamp-3">{{ $program->description }}</p>
                         <div class="flex items-center justify-between">
                             <a href="{{ route('academic-programs.show', $program->id) }}" class="text-accent">
-
-                                <span class="text-sm text-accent font-medium">See More</span></a>
+                                <span class="text-sm text-accent font-medium">See More</span>
+                            </a>
                         </div>
                     </div>
                 </div>
