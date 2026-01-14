@@ -191,6 +191,7 @@ class ClassroomController extends Controller
      */
     public function addMultipleStudents(Request $request, string $id)
     {
+
         $request->validate([
             'student_ids' => 'required|array|min:1',
             'student_ids.*' => 'required|exists:users,id'
@@ -234,8 +235,7 @@ class ClassroomController extends Controller
 
                 $isEnrolled = AcademicRecord::where('student_profile_id', $studentProfile->id)
                     ->where('academic_year_id', $classroom->academic_year_id)
-                    ->where('strand_id', $classroom->strand_id)
-                    ->where('status', 'enrolled')
+                    ->where('grade_level', $classroom->strand->name) // Assuming grade_level corresponds to strand name
                     ->exists();
 
                 if (!$isEnrolled) {
@@ -264,6 +264,8 @@ class ClassroomController extends Controller
             if (!empty($errors)) {
                 $message .= ". Some students could not be added: " . implode(', ', $errors);
             }
+
+
 
             return back()->with(['message' => $message]);
         } catch (\Exception $e) {

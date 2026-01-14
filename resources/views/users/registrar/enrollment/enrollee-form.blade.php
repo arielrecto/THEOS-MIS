@@ -187,6 +187,43 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Guardian Information (Only show if guardian exists) -->
+                    @if($enrollee->guardian_name || $enrollee->guardian_last_name || $enrollee->guardian_middle_name)
+                        <div class="mt-8">
+                            <h3 class="mb-4 text-md font-medium text-gray-700 flex items-center gap-2">
+                                <i class="fi fi-rr-shield-check"></i>
+                                Guardian Information
+                                <span class="text-xs text-gray-500 font-normal ml-2">(If different from parents)</span>
+                            </h3>
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Full Name</p>
+                                    <p class="mt-1 break-words">
+                                        {{ $enrollee->guardian_last_name ?? 'N/A' }},
+                                        {{ $enrollee->guardian_name ?? 'N/A' }}
+                                        {{ $enrollee->guardian_middle_name ?? '' }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Relationship to Student</p>
+                                    <p class="mt-1">
+                                        <span class="badge badge-accent">
+                                            {{ $enrollee->guardian_relationship ?? 'N/A' }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Contact Number</p>
+                                    <p class="mt-1">{{ $enrollee->guardian_contact_number ?? 'N/A' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Occupation</p>
+                                    <p class="mt-1">{{ $enrollee->guardian_occupation ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Contact Information Card -->

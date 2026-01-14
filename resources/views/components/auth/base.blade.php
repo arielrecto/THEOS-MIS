@@ -1,9 +1,15 @@
 <x-app-layout>
     <x-landing-page.navbar />
 
+    <div class="flex flex-col justify-center items-center min-h-screen relative">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="{{ asset('Theos.png') }}" alt="Background" class="w-full h-full object-cover">
+            <div></div>
+        </div>
 
-    <div class="flex flex-col justify-center items-center min-h-screen bg-base-200">
-        <div class="p-6 w-full max-w-sm rounded-lg shadow-lg bg-base-100">
+        <!-- Login Card -->
+        <div class="p-6 w-full max-w-sm rounded-lg shadow-lg bg-base-100 relative z-10">
             <!-- Logo and Title -->
             <div class="flex flex-col gap-3 items-center">
                 <img src="{{ asset('logo-modified.png') }}" alt="Logo" class="object-cover w-16 h-16">
@@ -20,7 +26,7 @@
             @endif
 
             <!-- Login Form -->
-            {{$slot}}
+            {{ $slot }}
 
             <!-- Register Link -->
             {{-- <p class="mt-4 text-sm text-center text-secondary">

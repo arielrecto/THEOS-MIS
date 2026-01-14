@@ -1,7 +1,7 @@
 @php
     use App\Models\Logo;
 
-    $logo = Logo::where('is_active', true)->first()->path ?? asset('logo-modified.png');
+    $logo = Logo::where('is_active', true)->first()->path ?? asset('/logo-modified.png');
 
 @endphp
 
@@ -76,7 +76,7 @@
             </div>
             <div>
                 <!-- Using a placeholder for the logo -->
-                <img src="{{ $logo }}" alt="School Logo" class="w-24 h-24">
+                <img src="{{ asset('storage/' . $logo) }}" alt="School Logo" class="w-24 h-24">
             </div>
         </div>
 
@@ -257,6 +257,46 @@
             </div>
         </div>
 
+        <!-- Guardian Info Section (Only show if guardian information exists) -->
+        @if ($student->guardian_name || $student->guardian_last_name || $student->guardian_middle_name)
+            <div class="p-6 border-t">
+                <p class="mb-4 font-semibold text-lg text-gray-700">Guardian Information</p>
+                <p class="mb-4 text-sm text-gray-600 italic">(If different from parents)</p>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-3 print:grid print:grid-cols-3">
+                        <div>
+                            <p class="form-data">{{ $student->guardian_last_name ?? 'N\A' }}</p>
+                            <p class="sub-label">Last Name</p>
+                        </div>
+                        <div>
+                            <p class="form-data">{{ $student->guardian_name ?? 'N\A' }}</p>
+                            <p class="sub-label">First Name</p>
+                        </div>
+                        <div>
+                            <p class="form-data">{{ $student->guardian_middle_name ?? 'N\A' }}</p>
+                            <p class="sub-label">Middle Name</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-y-4 gap-x-6 md:grid-cols-3 print:grid print:grid-cols-3">
+                        <div>
+                            <p class="field-label">Relationship to Student:</p>
+                            <p class="form-data">{{ $student->guardian_relationship ?? 'N\A' }}</p>
+                        </div>
+                        <div>
+                            <p class="field-label">Contact Number:</p>
+                            <p class="form-data">{{ $student->guardian_contact_number ?? 'N\A' }}</p>
+                        </div>
+                        <div>
+                            <p class="field-label">Occupation:</p>
+                            <p class="form-data">{{ $student->guardian_occupation ?? 'N\A' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Agreement Section -->
         <div class="p-6 text-sm border-t">
             <p class="mb-4">
@@ -291,9 +331,22 @@
                 <div class="flex flex-col justify-end">
                     <p class="text-center form-data">
                         {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : 'N\A' }}
-                        </s_p>
+                    </p>
                     <p class="mt-1 text-center sub-label">Date signed</p>
                 </div>
+
+                @if ($student->guardian_name || $student->guardian_last_name)
+                    <div>
+                        <div class="w-full h-10 border-b-2 border-black"></div>
+                        <p class="mt-1 text-center">Signature of Guardian</p>
+                    </div>
+                    <div class="flex flex-col justify-end">
+                        <p class="text-center form-data">
+                            {{ isset($student->date_signed) ? date('F j, Y', strtotime($student->date_signed)) : 'N\A' }}
+                        </p>
+                        <p class="mt-1 text-center sub-label">Date signed</p>
+                    </div>
+                @endif
             </div>
         </div>
 

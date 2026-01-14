@@ -3,6 +3,8 @@
     <x-dashboard.page-title :title="_('students')" :back_url="route('teacher.classrooms.show', ['classroom' => $id])" />
     <x-notification-message />
 
+
+
     <div class="panel min-h-96">
         <!-- Header with Add Students Button -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

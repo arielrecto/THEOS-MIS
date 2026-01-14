@@ -112,6 +112,14 @@ class EnrollmentController extends Controller
             'mother_contact_number' => 'nullable|string|size:11',
             'mother_occupation' => 'nullable|string|max:255',
 
+
+            'guardian_name' => 'nullable|string|max:255',
+            'guardian_last_name' => 'nullable|string|max:255',
+            'guardian_middle_name' => 'nullable|string|max:255',
+            'guardian_relationship' => 'nullable|string|max:255',
+            'guardian_contact_number' => 'nullable|string|size:11',
+            'guardian_occupation' => 'nullable|string|max:255',
+
             // Academic Information
             'preferred_track' => 'nullable|string|max:255',
             'preferred_strand' => 'nullable|string|max:255',

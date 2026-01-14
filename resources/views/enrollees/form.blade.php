@@ -23,6 +23,7 @@
                     <input type="hidden" name="academic_year_id" value="{{ $academicYear->id }}">
                     <input type="hidden" name="enrollment_id" value="{{ $enrollmentID }}">
                     <input type="hidden" name="user_id" value="{{ auth()->id ?? null }}" />
+
                     <!-- Enrollment Form Card -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
                         <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800 uppercase">
@@ -66,7 +67,6 @@
                                     placeholder="Enter LRN if available">
                             </div>
                         </div>
-
 
                         <div class="flex flex-col gap-2 mt-5">
                             <p class="font-medium label-text">Balik Aral:</p>
@@ -189,15 +189,6 @@
                                     class="input input-bordered @error('street') input-error @enderror">
                             </div>
 
-                            {{-- <div class="form-control md:col-span-1">
-                                <label class="label">
-                                    <span class="font-medium label-text">Subdivision</span>
-                                </label>
-                                <input type="text" name="subdivision" value="{{ old('subdivision') }}"
-                                    placeholder="Subdivision"
-                                    class="input input-bordered @error('subdivision') input-error @enderror">
-                            </div> --}}
-
                             <div class="form-control md:col-span-1">
                                 <label class="label">
                                     <span class="font-medium label-text">Barangay</span>
@@ -252,10 +243,24 @@
                             <span>Parent/Guardian Information</span>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-y-6 gap-x-12 md:grid-cols-2">
+                        <!-- Info Note -->
+                        <div class="p-4 mb-6 bg-blue-50 rounded-lg border border-blue-200">
+                            <div class="flex items-start gap-3">
+                                <i class="fi fi-rr-info-circle text-blue-600 mt-0.5"></i>
+                                <p class="text-sm text-blue-800">
+                                    Please provide information for at least one parent or guardian. All fields marked
+                                    with <span class="text-error">*</span> are required.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-y-8 gap-x-12 md:grid-cols-2">
                             <!-- Father's Information -->
                             <div class="space-y-4">
-                                <h3 class="font-medium text-gray-700">Father's Name</h3>
+                                <h3 class="flex items-center gap-2 pb-2 font-medium text-gray-700 border-b">
+                                    <i class="fi fi-rr-user text-accent"></i>
+                                    Father's Information
+                                </h3>
                                 <div class="form-control">
                                     <label class="label">
                                         <span class="font-medium label-text">Last Name</span>
@@ -302,7 +307,10 @@
 
                             <!-- Mother's Information -->
                             <div class="space-y-4">
-                                <h3 class="font-medium text-gray-700">Mother's Name</h3>
+                                <h3 class="flex items-center gap-2 pb-2 font-medium text-gray-700 border-b">
+                                    <i class="fi fi-rr-user text-accent"></i>
+                                    Mother's Information
+                                </h3>
                                 <div class="form-control">
                                     <label class="label">
                                         <span class="font-medium label-text">Last Name</span>
@@ -345,6 +353,104 @@
                                         value="{{ old('mother_occupation') }}" placeholder="Occupation"
                                         class="input input-bordered @error('mother_occupation') input-error @enderror">
                                 </div>
+                            </div>
+
+                            <!-- Guardian Information -->
+                            <div class="space-y-4 md:col-span-2">
+                                <div class="pt-6 border-t">
+                                    <h3 class="flex items-center gap-2 pb-2 mb-4 font-medium text-gray-700 border-b">
+                                        <i class="fi fi-rr-shield-check text-accent"></i>
+                                        Guardian Information
+                                        <span class="text-xs text-gray-500 font-normal">(Optional - Fill if different
+                                            from parents)</span>
+                                    </h3>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="space-y-4">
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    <span class="font-medium label-text">Last Name</span>
+                                                </label>
+                                                <input type="text" name="guardian_last_name"
+                                                    value="{{ old('guardian_last_name') }}" placeholder="Last Name"
+                                                    class="input input-bordered @error('guardian_last_name') input-error @enderror">
+                                            </div>
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    <span class="font-medium label-text">First Name</span>
+                                                </label>
+                                                <input type="text" name="guardian_name"
+                                                    value="{{ old('guardian_name') }}" placeholder="First Name"
+                                                    class="input input-bordered @error('guardian_name') input-error @enderror">
+                                            </div>
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    <span class="font-medium label-text">Middle Name</span>
+                                                </label>
+                                                <input type="text" name="guardian_middle_name"
+                                                    value="{{ old('guardian_middle_name') }}"
+                                                    placeholder="Middle Name"
+                                                    class="input input-bordered @error('guardian_middle_name') input-error @enderror">
+                                            </div>
+                                        </div>
+
+                                        <div class="space-y-4">
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    <span class="font-medium label-text">Relationship to
+                                                        Student</span>
+                                                </label>
+                                                <select name="guardian_relationship" +
+                                                    class="select select-bordered @error('guardian_relationship') select-error @enderror">
+                                                    <option value="">Select Relationship</option>
+                                                    <option value="Grandparent"
+                                                        {{ old('guardian_relationship') == 'Grandparent' ? 'selected' : '' }}>
+                                                        Grandparent</option>
+                                                    <option value="Aunt"
+                                                        {{ old('guardian_relationship') == 'Aunt' ? 'selected' : '' }}>
+                                                        Aunt</option>
+                                                    <option value="Uncle"
+                                                        {{ old('guardian_relationship') == 'Uncle' ? 'selected' : '' }}>
+                                                        Uncle</option>
+                                                    <option value="Sibling"
+                                                        {{ old('guardian_relationship') == 'Sibling' ? 'selected' : '' }}>
+                                                        Sibling</option>
+                                                    <option value="Cousin"
+                                                        {{ old('guardian_relationship') == 'Cousin' ? 'selected' : '' }}>
+                                                        Cousin</option>
+                                                    <option value="Family Friend"
+                                                        {{ old('guardian_relationship') == 'Family Friend' ? 'selected' : '' }}>
+                                                        Family Friend</option>
+                                                    <option value="Other"
+                                                        {{ old('guardian_relationship') == 'Other' ? 'selected' : '' }}>
+                                                        Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    <span class="font-medium label-text">Contact Number</span>
+                                                </label>
+                                                <input type="text" name="guardian_contact_number"
+                                                    value="{{ old('guardian_contact_number') }}"
+                                                    placeholder="Contact Number" inputmode="numeric" minlength="11"
+                                                    maxlength="11" pattern="\d{11}"
+                                                    oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
+                                                    class="input input-bordered @error('guardian_contact_number') input-error @enderror">
+                                            </div>
+                                            <div class="form-control">
+                                                <label class="label">
+                                                    <span class="font-medium label-text">Occupation</span>
+                                                </label>
+                                                <input type="text" name="guardian_occupation"
+                                                    value="{{ old('guardian_occupation') }}" placeholder="Occupation"
+                                                    class="input input-bordered @error('guardian_occupation') input-error @enderror">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -421,7 +527,6 @@
                             <i class="fi fi-rr-file-contract"></i>
                             <span class="font-medium label-text">Email:</span>
 
-
                             @if (!(request()->query('type') == 'old'))
                                 <input type="email" name="email" value="{{ old('email') }}"
                                     class="input input-bordered @error('email') input-error @enderror"
@@ -434,39 +539,6 @@
                                     placeholder="Enter Email" readonly>
                             @endif
                         </div>
-                        {{-- <div class="max-w-none prose prose-sm">
-                            <p>
-                                I hereby certify that the above information given are true and correct to the best of my
-                                knowledge and I allow Theos Higher Ground Academe to use my child's details to create
-                                and/or update his/her learner profile in the Learner Information System. The
-                                information herein shall be treated as confidential in compliance with the Data Privacy
-                                Act of 2012.
-                            </p>
-                            <p>
-                                By signing, I also hereby certify that I have read and understand the informational
-                                materials furnished above and agree/s that our/my child submits to Theos Higher Ground
-                                Academe's program, academic and disciplinary regulations and all other requirements
-                                indicated by the Administration and carried out by the School Principal and Faculty.
-                            </p>
-                        </div> --}}
-
-                        {{-- <div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
-                            <div class="space-y-2">
-                                <span class="font-medium">Signature of Mother:</span>
-                                <div class="w-full h-12 bg-gray-100 rounded-md border border-dashed"></div>
-                                <span class="font-medium">Signature of Father:</span>
-                                <div class="w-full h-12 bg-gray-100 rounded-md border border-dashed"></div>
-                                <span class="font-medium">Signature of Guardian:</span>
-                                <div class="w-full h-12 bg-gray-100 rounded-md border border-dashed"></div>
-                            </div>
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="font-medium label-text">Date Signed</span>
-                                </label>
-                                <input type="date" name="date_signed" value="{{ old('date_signed', date('Y-m-d')) }}"
-                                    class="input input-bordered @error('date_signed') input-error @enderror" required>
-                            </div>
-                        </div> --}}
                     </div>
 
                     <!-- Form Actions -->
@@ -489,25 +561,27 @@
             const previewContainer = document.getElementById('filePreviewContainer');
             const fileList = document.getElementById('fileList');
 
-            additionalDocs.addEventListener('change', function() {
-                fileList.innerHTML = '';
+            if (additionalDocs) {
+                additionalDocs.addEventListener('change', function() {
+                    fileList.innerHTML = '';
 
-                if (this.files.length > 0) {
-                    previewContainer.classList.remove('hidden');
-                    Array.from(this.files).forEach(file => {
-                        const li = document.createElement('li');
-                        li.className = 'flex items-center gap-2';
-                        li.innerHTML = `
-                            <i class="fi fi-rr-document text-accent"></i>
-                            <span>${file.name}</span>
-                            <span class="text-xs text-gray-500">(${(file.size / (1024 * 1024)).toFixed(2)} MB)</span>
-                        `;
-                        fileList.appendChild(li);
-                    });
-                } else {
-                    previewContainer.classList.add('hidden');
-                }
-            });
+                    if (this.files.length > 0) {
+                        previewContainer.classList.remove('hidden');
+                        Array.from(this.files).forEach(file => {
+                            const li = document.createElement('li');
+                            li.className = 'flex items-center gap-2';
+                            li.innerHTML = `
+                                <i class="fi fi-rr-document text-accent"></i>
+                                <span>${file.name}</span>
+                                <span class="text-xs text-gray-500">(${(file.size / (1024 * 1024)).toFixed(2)} MB)</span>
+                            `;
+                            fileList.appendChild(li);
+                        });
+                    } else {
+                        previewContainer.classList.add('hidden');
+                    }
+                });
+            }
         });
     </script>
 </x-landing-page.base>
