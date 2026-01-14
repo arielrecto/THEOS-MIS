@@ -12,6 +12,9 @@ use App\Models\ClassroomStudent;
 use App\Enums\AcademicYearStatus;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\StudentProfile;
+use App\Models\AcademicRecord;
+use Illuminate\Support\Facades\DB;
 
 class ClassroomController extends Controller
 {
@@ -33,9 +36,6 @@ class ClassroomController extends Controller
 
         $classrooms = $query->latest()->paginate(10);
 
-
-
-
         return view('users.teacher.classroom.index', compact('classrooms', 'academicYears'));
     }
 
@@ -44,14 +44,9 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-
         $subjects = Subject::get();
-
         $strands = Strand::get();
-
-
         $academicYear = AcademicYear::where('status', AcademicYearStatus::Active->value)->latest()->first();
-
 
         if (!$academicYear) {
             return back()->with(['error' => 'Action rejected, no active academic year please contact the admin']);
@@ -73,12 +68,7 @@ class ClassroomController extends Controller
             'academic_year' => 'required'
         ]);
 
-
-
         $classroom_code = 'CLSSRM' . uniqid();
-
-
-
 
         $classroom = Classroom::create([
             'name' => $request->name,
@@ -90,7 +80,6 @@ class ClassroomController extends Controller
             'teacher_id' => Auth::user()->id
         ]);
 
-
         if ($request->has('image')) {
             $imageName = 'IMG-' . uniqid() . '.' . $request->image->extension();
             $dir = $request->image->storeAs('/classroom', $imageName, 'public');
@@ -99,7 +88,6 @@ class ClassroomController extends Controller
                 'image' => asset('/storage/' . $dir),
             ]);
         }
-
 
         return  back()->with(['success' => 'Classroom Added']);
     }
@@ -110,11 +98,7 @@ class ClassroomController extends Controller
     public function show(string $id)
     {
         $classroom = Classroom::find($id);
-
-
         $attendance = $classroom->attendances()->latest()->first();
-
-
 
         return view('users.teacher.classroom.show', compact(['classroom', 'attendance']));
     }
@@ -167,35 +151,135 @@ class ClassroomController extends Controller
     public function destroy(string $id)
     {
         $classroom = Classroom::find($id);
-
-
         $classroom->delete();
-
 
         return to_route('teacher.classrooms.index')->with(['message' => 'classroom deleted']);
     }
 
     public function students(string $id)
     {
+        $classroom = Classroom::with(['strand', 'academicYear'])->findOrFail($id);
+
+        $classroomStudents = $classroom->classroomStudents()
+            ->with(['student.studentProfile'])
+            ->paginate(10);
+
+        // Get enrolled students in the same strand and academic year who are NOT in this classroom
+        $existingStudentIds = $classroom->classroomStudents()->pluck('student_id')->toArray();
+
+        $availableStudents = StudentProfile::whereHas('academicRecords', function ($query) use ($classroom) {
+            $query->where('academic_year_id', $classroom->academic_year_id)
+                ->where('grade_level', $classroom->strand->name); // Assuming grade_level corresponds to strand name
+        })
+            ->whereHas('user')
+            ->whereNotIn('user_id', $existingStudentIds)
+            ->with('user')
+            ->get();
 
 
-        $classroomStudents = Classroom::whereId($id)->first()->classroomStudents;
 
+        return view('users.teacher.classroom.student.index', compact(
+            'classroomStudents',
+            'id',
+            'classroom',
+            'availableStudents'
+        ));
+    }
 
+    /**
+     * Add multiple students to classroom
+     */
+    public function addMultipleStudents(Request $request, string $id)
+    {
+        $request->validate([
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'required|exists:users,id'
+        ], [
+            'student_ids.required' => 'Please select at least one student',
+            'student_ids.min' => 'Please select at least one student'
+        ]);
 
-        return view('users.teacher.classroom.student.index', compact('classroomStudents', 'id'));
+        try {
+            DB::beginTransaction();
+
+            $classroom = Classroom::findOrFail($id);
+
+            // Verify classroom belongs to authenticated teacher
+            if ($classroom->teacher_id !== Auth::id()) {
+                return back()->with(['error' => 'Unauthorized action']);
+            }
+
+            $addedCount = 0;
+            $skippedCount = 0;
+            $errors = [];
+
+            foreach ($request->student_ids as $studentId) {
+                // Check if student is already in classroom
+                $exists = ClassroomStudent::where('classroom_id', $id)
+                    ->where('student_id', $studentId)
+                    ->exists();
+
+                if ($exists) {
+                    $skippedCount++;
+                    continue;
+                }
+
+                // Verify student is enrolled in same strand and academic year
+                $studentProfile = StudentProfile::where('user_id', $studentId)->first();
+
+                if (!$studentProfile) {
+                    $errors[] = "Student ID {$studentId} has no profile";
+                    continue;
+                }
+
+                $isEnrolled = AcademicRecord::where('student_profile_id', $studentProfile->id)
+                    ->where('academic_year_id', $classroom->academic_year_id)
+                    ->where('strand_id', $classroom->strand_id)
+                    ->where('status', 'enrolled')
+                    ->exists();
+
+                if (!$isEnrolled) {
+                    $errors[] = "Student {$studentProfile->first_name} {$studentProfile->last_name} is not enrolled in this strand/year";
+                    continue;
+                }
+
+                // Add student to classroom
+                ClassroomStudent::create([
+                    'classroom_id' => $id,
+                    'student_id' => $studentId
+                ]);
+
+                $addedCount++;
+            }
+
+            DB::commit();
+
+            // Prepare success message
+            $message = "{$addedCount} student(s) added successfully";
+
+            if ($skippedCount > 0) {
+                $message .= ". {$skippedCount} student(s) skipped (already in classroom)";
+            }
+
+            if (!empty($errors)) {
+                $message .= ". Some students could not be added: " . implode(', ', $errors);
+            }
+
+            return back()->with(['message' => $message]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            report($e);
+            return back()->with(['error' => 'Failed to add students: ' . $e->getMessage()]);
+        }
     }
 
     public function removeStudent(string $id)
     {
         $classroomStudent = ClassroomStudent::find($id);
-
         $classroomStudent->delete();
-
 
         return back()->with(['message' => 'Student Successfully Remove in Classroom']);
     }
-
 
     public function archive(Classroom $classroom)
     {
@@ -225,7 +309,6 @@ class ClassroomController extends Controller
 
     public function unarchive(Classroom $classroom)
     {
-
         // Check if the classroom belongs to the authenticated teacher
         if ($classroom->teacher_id !== auth()->id()) {
             return back()->with('error', 'Unauthorized action');

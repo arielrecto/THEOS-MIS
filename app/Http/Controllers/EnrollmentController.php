@@ -127,16 +127,16 @@ class EnrollmentController extends Controller
 
             // Attachments
             'attachments' => 'required|array',
-            'attachments.birth_certificate' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'attachments.form_138' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'attachments.good_moral' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'attachments.additional.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'attachments.birth_certificate' => 'required|file|mimes:pdf|max:5120',
+            'attachments.form_138' => 'required|file|mimes:pdf|max:5120',
+            'attachments.good_moral' => 'required|file|mimes:pdf|max:5120',
+            'attachments.additional.*' => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
 
-        if(User::where('email', $validated['email'])->exists()){
+        if (User::where('email', $validated['email'])->exists()) {
             return back()->withInput()->withErrors(['email' => 'The email has already been taken.
-            Please use a different email or log in if you already have an account and enroll as old student.'] );
+            Please use a different email or log in if you already have an account and enroll as old student.']);
         }
 
         $generatedPassword = Str::random(12);
@@ -144,7 +144,7 @@ class EnrollmentController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-          $user = User::create([
+            $user = User::create([
                 'name' => $validated['first_name'] . ' ' . $validated['last_name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($generatedPassword), // Generate a random password

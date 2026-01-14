@@ -7,6 +7,12 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                <a href="{{ route('admin.CMS.campus-content.index') }}"
+                   class="btn btn-info btn-sm sm:btn-md w-full sm:w-auto justify-center gap-2">
+                    <i class="fi fi-rr-settings"></i>
+                    <span class="text-xs sm:text-sm">Campus Content</span>
+                </a>
+
                 <a href="{{ route('admin.CMS.programs.index') }}"
                    class="btn btn-ghost btn-sm sm:btn-md w-full sm:w-auto justify-center gap-2">
                     <i class="fi fi-rr-arrow-left"></i>
@@ -18,6 +24,22 @@
                     <i class="fi fi-rr-plus"></i>
                     <span class="text-xs sm:text-sm">Add Campus</span>
                 </a>
+            </div>
+        </div>
+
+        <!-- Info Banner -->
+        <div class="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+                <i class="fi fi-rr-info-circle text-lg text-blue-600 mt-0.5"></i>
+                <div class="flex-1">
+                    <p class="text-sm text-blue-800">
+                        Manage the campus section title and description by clicking 
+                        <a href="{{ route('admin.CMS.campus-content.index') }}" 
+                           class="font-semibold underline hover:text-blue-900">
+                            Campus Content
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
 

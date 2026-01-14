@@ -42,6 +42,12 @@
             'icon' => '<i class="fi fi-rr-chart-histogram"></i>',
             'is_active' => true,
         ],
+        [
+            'url' => 'hr.employees.archived',
+            'name' => 'Employee Archive',
+            'icon' => '<i class="fi fi-rr-archive"></i>',
+            'is_active' => true,
+        ],
     ];
 
     $user = Auth::user();

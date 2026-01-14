@@ -6,7 +6,8 @@
         <!-- Enrollment Header (responsive) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
             <div class="col-span-1 md:col-span-2 flex items-center">
-                <div class="w-full h-40 md:h-32 lg:h-40 rounded-lg shadow-md bg-accent flex items-center justify-center p-4">
+                <div
+                    class="w-full h-40 md:h-32 lg:h-40 rounded-lg shadow-md bg-accent flex items-center justify-center p-4">
                     <h1 class="text-2xl sm:text-3xl font-semibold text-white text-center break-words">
                         {{ $enrollment->name }}
                     </h1>
@@ -16,17 +17,16 @@
             <!-- Actions block -->
             <div class="col-span-1 flex flex-col items-end gap-2">
                 <div class="w-full flex flex-col sm:flex-row sm:justify-end gap-2">
-                    <a href="{{route('registrar.enrollments.print', ['id' => $enrollment->id])}}"
-                       class="btn btn-ghost btn-sm w-full sm:w-auto gap-2 justify-center">
+                    <a href="{{ route('registrar.enrollments.print', ['id' => $enrollment->id]) }}"
+                        class="btn btn-ghost btn-sm w-full sm:w-auto gap-2 justify-center">
                         <i class="fi fi-rr-print"></i>
                         <span class="hidden sm:inline">Print</span>
                     </a>
 
                     @if ($enrollment->status !== 'closed')
                         <form action="{{ route('registrar.enrollments.close', ['enrollment' => $enrollment->id]) }}"
-                              method="POST"
-                              class="w-full sm:w-auto"
-                              onsubmit="return confirm('Are you sure you want to close this enrollment period?')">
+                            method="POST" class="w-full sm:w-auto"
+                            onsubmit="return confirm('Are you sure you want to close this enrollment period?')">
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="gap-2 btn btn-error w-full sm:w-auto">
@@ -51,7 +51,8 @@
             <div>
                 <h2 class="text-base sm:text-lg font-semibold">Status</h2>
                 <p class="mt-1">
-                    <span class="px-2 py-1 rounded text-white text-sm
+                    <span
+                        class="px-2 py-1 rounded text-white text-sm
                         {{ $enrollment->status === 'active' ? 'bg-green-500' : 'bg-gray-400' }}">
                         {{ ucfirst($enrollment->status) }}
                     </span>
@@ -73,18 +74,18 @@
         <div x-data="{ activeTab: 'overview' }" class="w-full">
             <div class="flex flex-wrap gap-2 border-b pb-2">
                 <button @click="activeTab = 'overview'"
-                        :class="activeTab === 'overview' ? 'text-accent border-b-2 border-accent' : 'text-gray-600'"
-                        class="px-3 py-2 text-sm">
+                    :class="activeTab === 'overview' ? 'text-accent border-b-2 border-accent' : 'text-gray-600'"
+                    class="px-3 py-2 text-sm">
                     Overview
                 </button>
                 <button @click="activeTab = 'description'"
-                        :class="activeTab === 'description' ? 'text-accent border-b-2 border-accent' : 'text-gray-600'"
-                        class="px-3 py-2 text-sm">
+                    :class="activeTab === 'description' ? 'text-accent border-b-2 border-accent' : 'text-gray-600'"
+                    class="px-3 py-2 text-sm">
                     Description
                 </button>
                 <button @click="activeTab = 'enrollees'"
-                        :class="activeTab === 'enrollees' ? 'text-accent border-b-2 border-accent' : 'text-gray-600'"
-                        class="px-3 py-2 text-sm">
+                    :class="activeTab === 'enrollees' ? 'text-accent border-b-2 border-accent' : 'text-gray-600'"
+                    class="px-3 py-2 text-sm">
                     Enrollees ({{ $enrollees->total() }})
                 </button>
             </div>
@@ -123,6 +124,7 @@
                                         <th>Email</th>
                                         <th>Name</th>
                                         <th>Grade Level</th>
+                                        <th>Status</th>
                                         <th class="text-right">Action</th>
                                     </tr>
                                 </thead>
@@ -131,11 +133,20 @@
                                         <tr>
                                             <td></td>
                                             <td class="max-w-xs truncate">{{ $enrollee->email ?? 'N/A' }}</td>
-                                            <td class="max-w-xs truncate">{{ $enrollee->last_name . ', ' . $enrollee->first_name . ' ' . $enrollee->middle_name }}</td>
+                                            <td class="max-w-xs truncate">
+                                                {{ $enrollee->last_name . ', ' . $enrollee->first_name . ' ' . $enrollee->middle_name }}
+                                            </td>
                                             <td class="max-w-[140px] truncate">{{ $enrollee->grade_level }}</td>
+                                            <td>
+                                                <span
+                                                    class="px-2 py-1 rounded text-white text-sm
+                                                    {{ $enrollee->status === 'enrolled' ? 'bg-green-500' : 'bg-gray-400' }}">
+                                                    {{ ucfirst($enrollee->status) }}
+                                                </span>
+                                            </td>
                                             <td class="text-right">
                                                 <a href="{{ route('registrar.enrollments.showEnrollee', ['id' => $enrollee->id]) }}"
-                                                   class="btn btn-xs btn-accent">
+                                                    class="btn btn-xs btn-accent">
                                                     <i class="fi fi-rr-eye"></i>
                                                 </a>
                                             </td>
@@ -157,16 +168,18 @@
                     <!-- Mobile: cards -->
                     <div class="space-y-3 md:hidden">
                         @forelse ($enrollees as $enrollee)
-                            <div class="bg-white shadow-sm rounded-md p-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                            <div
+                                class="bg-white shadow-sm rounded-md p-3 flex flex-col sm:flex-row sm:items-center gap-3">
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium truncate">{{ $enrollee->last_name . ', ' . $enrollee->first_name }}</p>
+                                    <p class="text-sm font-medium truncate">
+                                        {{ $enrollee->last_name . ', ' . $enrollee->first_name }}</p>
                                     <p class="text-xs text-gray-500 truncate">{{ $enrollee->email ?? 'N/A' }}</p>
                                     <p class="text-xs text-gray-400 mt-1">Grade: {{ $enrollee->grade_level }}</p>
                                 </div>
 
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('registrar.enrollments.showEnrollee', ['id' => $enrollee->id]) }}"
-                                       class="btn btn-xs btn-accent">
+                                        class="btn btn-xs btn-accent">
                                         <i class="fi fi-rr-eye"></i>
                                     </a>
                                 </div>

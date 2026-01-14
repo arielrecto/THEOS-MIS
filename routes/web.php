@@ -26,11 +26,13 @@ use App\Http\Controllers\HR\DepartmentController;
 use App\Http\Controllers\Teacher\GradeController;
 use App\Http\Controllers\HR\JobPositionController;
 use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\CoreValueController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Student\PaymentController;
 use App\Http\Controllers\Teacher\ClassroomController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Teacher\AttendanceController;
+use App\Http\Controllers\Admin\HeaderContentController;
 use App\Http\Controllers\Teacher\StudentTaskController;
 use App\Http\Controllers\Admin\PaymentAccountController;
 use App\Http\Controllers\Registrar\EnrollmentController;
@@ -180,6 +182,33 @@ Route::middleware(['auth'])->group(function () {
                 });
 
 
+                Route::prefix('header-contents')->as('header-contents.')->group(function () {
+                    Route::patch('{headerContent}/toggle', [HeaderContentController::class, 'toggleActive'])->name('toggle-active');
+                });
+
+
+
+                Route::prefix('core-values')->as('core-values.')->group(function () {
+                    Route::patch('{coreValue}/toggle', [CoreValueController::class, 'toggleActive'])->name('toggle-active');
+                });
+
+
+                Route::prefix('core-value-items')->as('core-value-items.')->group(function () {
+                    Route::patch('{coreValueItem}/toggle', [CoreValueController::class, 'toggleItemActive'])->name('toggle-active');
+                    Route::delete('{coreValueItem}', [CoreValueController::class, 'deleteItem'])->name('destroy');
+                });
+
+
+                Route::prefix('campus-content')->name('campus-content.')->group(function () {
+                    Route::get('/', [CampusController::class, 'indexContent'])->name('index');
+                    Route::get('/create', [CampusController::class, 'createContent'])->name('create');
+                    Route::post('/', [CampusController::class, 'storeContent'])->name('store');
+                    Route::get('/{campusContent}', [CampusController::class, 'showContent'])->name('show');
+                    Route::get('/{campusContent}/edit', [CampusController::class, 'editContent'])->name('edit');
+                    Route::put('/{campusContent}', [CampusController::class, 'updateContent'])->name('update');
+                    Route::delete('/{campusContent}', [CampusController::class, 'destroyContent'])->name('destroy');
+                });
+
 
                 Route::resource('programs', AcademicProgramController::class);
 
@@ -189,6 +218,9 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::resource('founders', FounderController::class);
 
+                Route::resource('header-contents', HeaderContentController::class);
+
+                Route::resource('core-values', CoreValueController::class);
             });
 
             Route::resource('payment-accounts', PaymentAccountController::class);
@@ -219,10 +251,11 @@ Route::middleware(['auth'])->group(function () {
                         Route::get('/attendances/{attendance}/scanner', [AttendanceController::class, 'scanner'])->name('attendances.scanner');
                         Route::post('/attendances/student', [AttendanceController::class, 'studentAttendance'])->name('attendances.students');
                         Route::get('/{classroom}/student', [ClassroomController::class, 'students'])->name('students');
+                        Route::post('{classroom}/students/add-multiple', [ClassroomController::class, 'addMultipleStudents'])->name('student.add-multiple');
                         Route::delete('/student/{classroom_student}', [ClassroomController::class, 'removeStudent'])->name('student.remove');
                         Route::post('/{classroom}/archive', [ClassroomController::class, 'archive'])->name('archive');
                         Route::get('/archived', [ClassroomController::class, 'archived'])->name('archived');
-                        Route::post('/{classroom}/unarchive', [ClassroomController::class, 'unarchive'])->name('unarchive');
+                        Route::put('/{classroom}/unarchive', [ClassroomController::class, 'unarchive'])->name('unarchive');
                     });
 
                 Route::prefix('student')
@@ -393,6 +426,8 @@ Route::middleware(['auth'])->group(function () {
             Route::prefix('employees')->as('employees.')->group(function () {
                 Route::get('', [EmployeeController::class, 'index'])->name('index');
                 Route::get('create', [EmployeeController::class, 'create'])->name('create');
+                Route::get('archived', [EmployeeController::class, 'archiveIndex'])->name('archived');
+
                 Route::post('', [EmployeeController::class, 'store'])->name('store');
                 Route::get('{employee}', [EmployeeController::class, 'show'])->name('show');
                 Route::get('{employee}/edit', [EmployeeController::class, 'edit'])->name('edit');
@@ -402,6 +437,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::patch('{employee}/toggle-teacher', [EmployeeController::class, 'toggleTeacher'])->name('toggle-teacher');
                 Route::patch('{employee}/toggle-registrar', [EmployeeController::class, 'toggleRegistrar'])->name('toggle-registrar');
                 Route::patch('{employee}/toggle-archive', [EmployeeController::class, 'toggleArchive'])->name('toggle-archive');
+                Route::patch('{employee}/restore', [EmployeeController::class, 'restoreArchive'])->name('restore');
             });
 
             Route::prefix('attendance')->as('attendance.')->group(function () {

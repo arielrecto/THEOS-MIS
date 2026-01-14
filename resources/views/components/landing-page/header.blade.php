@@ -11,6 +11,8 @@
     use App\Models\AboutUs;
     use App\Models\Campus;
     use App\Models\Founder;
+    use App\Models\HeaderContent;
+    use App\Models\CoreValue;
     use Illuminate\Support\Facades\Storage;
 
     $mainLogo = Logo::where('type', 'main')->where('is_active', true)->latest()->first();
@@ -22,11 +24,31 @@
     // Fetch campuses with their images
     $campuses = Campus::with('image')->get();
 
-    // NEW: founders (active only)
+    // Founders (active only)
     $founders = Founder::with('image')->where('is_active', true)->latest()->get();
+
+    // Get active header content
+    $headerContent = HeaderContent::where('is_active', true)->first();
+
+    // Get active core value with items
+    $activeCoreValue = CoreValue::with([
+        'items' => function ($query) {
+            $query->where('is_active', true);
+        },
+    ])
+        ->where('is_active', true)
+        ->first();
+
+    // Fallback values if no active header content
+    $heroTitle = $headerContent?->title ?? 'Excellence in Education,<br>Guided by Faith';
+    $heroSubtitle =
+        $headerContent?->subtitle ?? 'Nurturing young minds through quality Christian education since 1997.';
+    $showButton = $headerContent?->show_button ?? true;
+    $buttonText = $headerContent?->button_text ?? 'Enroll Now';
+    $buttonUrl = $headerContent?->button_url;
 @endphp
 
-<!-- Hero Section - Updated for better impact -->
+<!-- Hero Section - Dynamic content from HeaderContent model -->
 <section
     class="relative flex justify-center items-center min-h-screen text-white bg-gradient-to-br from-accent to-accent-focus overflow-hidden">
     <!-- Decorative background elements -->
@@ -42,25 +64,31 @@
                 onerror="this.src='{{ asset('logo.jpg') }}'">
 
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Excellence in Education,<br>Guided by Faith
+                {!! $heroTitle !!}
             </h1>
 
             <p class="max-w-2xl mx-auto text-lg md:text-xl mb-12 text-white/90">
-                Nurturing young minds through quality Christian education since 1997.
+                {{ $heroSubtitle }}
             </p>
 
-            @if ($activeEnrollment)
-                <a href="{{ route('enrollment.show', ['id' => $activeEnrollment->id]) }}"
-                    class="inline-flex items-center btn btn-lg btn-primary bg-white text-accent hover:bg-gray-100 hover:scale-105 transform transition-all duration-300 shadow-lg">
-                    <i class="fi fi-rr-graduation-cap mr-2"></i>
-                    Enroll Now
-                    {{-- <span class="ml-2 badge badge-accent">Open</span> --}}
-                </a>
-            @else
-                <button disabled class="btn btn-lg bg-gray-200/20 text-white/60 cursor-not-allowed backdrop-blur-sm">
-                    <i class="fi fi-rr-graduation-cap mr-2"></i>
-                    Enrollment Closed
-                </button>
+            @if ($showButton)
+                @if ($activeEnrollment)
+                    @php
+                        // Use custom button URL if provided, otherwise use enrollment route
+                        $finalButtonUrl = $buttonUrl ?: route('enrollment.show', ['id' => $activeEnrollment->id]);
+                    @endphp
+                    <a href="{{ $finalButtonUrl }}"
+                        class="inline-flex items-center btn btn-lg btn-primary bg-white text-accent hover:bg-gray-100 hover:scale-105 transform transition-all duration-300 shadow-lg">
+                        <i class="fi fi-rr-graduation-cap mr-2"></i>
+                        {{ $buttonText }}
+                    </a>
+                @else
+                    <button disabled
+                        class="btn btn-lg bg-gray-200/20 text-white/60 cursor-not-allowed backdrop-blur-sm">
+                        <i class="fi fi-rr-graduation-cap mr-2"></i>
+                        Enrollment Closed
+                    </button>
+                @endif
             @endif
         </div>
     </div>
@@ -69,43 +97,73 @@
 <!-- NEW: Founders Section (between Hero and Core Values) -->
 <x-landing-page.founder :founders="$founders" />
 
-<!-- Core Values Section - Updated for better visualization -->
+<!-- Core Values Section - Dynamic from Database -->
 <section class="container px-4 mx-auto py-20">
-    <div class="text-center max-w-4xl mx-auto">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Core Values</h2>
-        <p class="text-lg text-gray-700 mb-12 leading-relaxed">
-            The Theos Higher Ground Academe is dedicated to producing vibrant students who are
-            Spiritually, Physically, Intellectually, Emotionally and Socially committed to the fulfillment of
-            the Culture of Righteousness and Academic Excellence.
-        </p>
+    @if ($activeCoreValue)
+        <div class="text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{{ $activeCoreValue->title }}</h2>
+            <p class="text-lg text-gray-700 mb-12 leading-relaxed">
+                {{ $activeCoreValue->description }}
+            </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="group p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                <div class="mb-6 transform transition-transform group-hover:scale-110">
-                    <i class="fi fi-rr-book-open-cover text-5xl text-accent"></i>
+            @if ($activeCoreValue->items->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-{{ min($activeCoreValue->items->count(), 3) }} gap-8">
+                    @foreach ($activeCoreValue->items as $item)
+                        <div
+                            class="group p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                            <div class="mb-6 transform transition-transform group-hover:scale-110">
+                                <i class="fi fi-rr-star text-5xl text-accent"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4 text-gray-800">{{ $item->item_name }}</h3>
+                            <p class="text-gray-600 leading-relaxed">{{ $item->item_description }}</p>
+                        </div>
+                    @endforeach
                 </div>
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Academic Excellence</h3>
-                <p class="text-gray-600 leading-relaxed">Comprehensive curriculum focused on developing critical
-                    thinking and lifelong learning</p>
-            </div>
-            <div class="group p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                <div class="mb-6 transform transition-transform group-hover:scale-110">
-                    <i class="fi fi-rr-heart text-5xl text-accent"></i>
+            @else
+                <div class="text-center py-12 bg-gray-50 rounded-xl">
+                    <i class="fi fi-rr-info-circle text-4xl text-gray-400 mb-4 block"></i>
+                    <p class="text-gray-500">No core value items available at the moment</p>
                 </div>
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Christian Values</h3>
-                <p class="text-gray-600 leading-relaxed">Formation of character guided by Christian teachings and moral
-                    principles</p>
-            </div>
-            <div class="group p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                <div class="mb-6 transform transition-transform group-hover:scale-110">
-                    <i class="fi fi-rr-users text-5xl text-accent"></i>
+            @endif
+        </div>
+    @else
+        <!-- Fallback static content if no active core value -->
+        <div class="text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">Core Values</h2>
+            <p class="text-lg text-gray-700 mb-12 leading-relaxed">
+                The Theos Higher Ground Academe is dedicated to producing vibrant students who are
+                Spiritually, Physically, Intellectually, Emotionally and Socially committed to the fulfillment of
+                the Culture of Righteousness and Academic Excellence.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="mb-6 transform transition-transform group-hover:scale-110">
+                        <i class="fi fi-rr-book-open-cover text-5xl text-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Academic Excellence</h3>
+                    <p class="text-gray-600 leading-relaxed">Comprehensive curriculum focused on developing critical
+                        thinking and lifelong learning</p>
                 </div>
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Community Spirit</h3>
-                <p class="text-gray-600 leading-relaxed">Fostering a supportive environment where students grow together
-                    in faith and learning</p>
+                <div class="group p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="mb-6 transform transition-transform group-hover:scale-110">
+                        <i class="fi fi-rr-heart text-5xl text-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Christian Values</h3>
+                    <p class="text-gray-600 leading-relaxed">Formation of character guided by Christian teachings and
+                        moral principles</p>
+                </div>
+                <div class="group p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                    <div class="mb-6 transform transition-transform group-hover:scale-110">
+                        <i class="fi fi-rr-users text-5xl text-accent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">Community Spirit</h3>
+                    <p class="text-gray-600 leading-relaxed">Fostering a supportive environment where students grow
+                        together in faith and learning</p>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 </section>
 
 <!-- Academic Programs Section - Redesigned for better presentation -->
@@ -135,9 +193,6 @@
                             <a href="{{ route('academic-programs.show', $program->id) }}" class="text-accent">
 
                                 <span class="text-sm text-accent font-medium">See More</span></a>
-                            {{--
-                            <a href="{{ route('academic-programs.show', $program->id) }}" class="text-accent"><i
-                                    class="fi fi-rr-arrow-right text-accent"></i></a> --}}
                         </div>
                     </div>
                 </div>
@@ -152,15 +207,6 @@
         </div>
     </div>
 </section>
-
-<!-- Admission Section -->
-{{-- <section id="admission" class="container px-6 mx-auto my-16 text-center">
-    <h2 class="mb-6 text-3xl font-bold">Pendaftaran Siswa Baru</h2>
-    <p class="mx-auto max-w-2xl text-gray-700">Bergabunglah dengan kami dan jadilah bagian dari komunitas pendidikan
-        yang unggul.</p>
-    <a href="#" class="inline-block px-6 py-3 mt-6 font-bold text-white bg-blue-600 rounded-lg">DAFTAR
-        SEKARANG</a>
-</section> --}}
 
 <!-- Announcements Section -->
 <section id="announcement" class="container px-6 mx-auto my-16">
@@ -211,7 +257,7 @@
     </div>
 </section>
 
-<!-- Campuses Section - NEW -->
+<!-- Campuses Section -->
 <x-landing-page.campuses :campuses="$campuses" />
 
 <!-- Contact Section -->

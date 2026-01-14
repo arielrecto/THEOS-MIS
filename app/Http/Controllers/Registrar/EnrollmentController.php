@@ -316,8 +316,8 @@ class EnrollmentController extends Controller
 
         // Notify the student
         if ($enrollee->user_id) {
-            $this->notificationActions->notifyUser(
-                $enrollee->user_id,
+            $this->notificationActions->notifyUsers(
+                User::where('id', $enrollee->user_id)->get(),
                 $notificationData,
                 $enrollee
             );

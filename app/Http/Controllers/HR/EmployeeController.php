@@ -45,13 +45,69 @@ class EmployeeController extends Controller
 
         $employees = $query->latest()->paginate(10);
 
-        // Debug to verify relationships are loaded
-
-
         $departments = Department::all();
         $positions = JobPosition::all();
 
         return view('users.hr.employees.index', compact('employees', 'departments', 'positions'));
+    }
+
+    // Archive Index - Show all archived employees
+    public function archiveIndex(Request $request)
+    {
+        $query = EmployeeProfile::with([
+            'user',
+            'position',
+            'position.department'
+        ])->where('status', 'archived');
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('first_name', 'like', "%{$request->search}%")
+                    ->orWhere('last_name', 'like', "%{$request->search}%");
+            });
+        }
+
+        if ($request->filled('department')) {
+            $query->whereHas('position.department', function ($q) use ($request) {
+                $q->where('id', $request->department);
+            });
+        }
+
+        if ($request->filled('position')) {
+            $query->where('job_position_id', $request->position);
+        }
+
+        $employees = $query->latest('updated_at')->paginate(10);
+
+        $departments = Department::all();
+        $positions = JobPosition::all();
+
+        return view('users.hr.archive.index', compact('employees', 'departments', 'positions'));
+    }
+
+    // Restore archived employee
+    public function restoreArchive(EmployeeProfile $employee)
+    {
+        try {
+            if ($employee->status !== 'archived') {
+                return redirect()
+                    ->back()
+                    ->with('error', 'Employee is not archived');
+            }
+
+            $employee->update([
+                'status' => 'active'
+            ]);
+
+            return redirect()
+                ->route('hr.archive.index')
+                ->with('message', 'Employee restored successfully');
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to restore employee: ' . $e->getMessage());
+        }
     }
 
     public function create(Request $request)
@@ -83,7 +139,7 @@ class EmployeeController extends Controller
             'leave_credit' => 'required|numeric|min:0'
         ]);
 
-        $password = $validated['first_name'] . '123'; // You might want to generate a random password
+        $password = $validated['first_name'] . '123';
 
         // Create user account
         $user = User::create([
@@ -124,7 +180,7 @@ class EmployeeController extends Controller
             Mail::to($user->email)
                 ->send(new EmployeeCredentials($user, $password));
         } catch (\Exception $e) {
-            report($e); // Log the error but don't fail the request
+            report($e);
         }
 
         return redirect()
@@ -162,8 +218,6 @@ class EmployeeController extends Controller
             'leave_credit' => 'required|numeric|min:0',
             'status' => 'nullable'
         ]);
-
-
 
         // Update user
         $employee->user->update([
@@ -217,16 +271,11 @@ class EmployeeController extends Controller
             $user = $employee->user;
 
             if ($user->hasRole('teacher')) {
-                // Remove teacher role
                 $user->removeRole('teacher');
-
-
                 $message = 'Teacher role removed successfully';
             } else {
-                // Assign teacher role
                 $user->assignRole('teacher');
 
-                // Create teacher profile if doesn't exist
                 if (!$user->profile) {
                     Profile::create([
                         'user_id' => $user->id,
@@ -234,7 +283,7 @@ class EmployeeController extends Controller
                         'last_name' => $employee->last_name,
                         'address' => $employee->address,
                         'contact_no' => $employee->phone,
-                        'image' => $employee->photo // Use employee photo if available
+                        'image' => $employee->photo
                     ]);
                 }
 
@@ -258,14 +307,11 @@ class EmployeeController extends Controller
             $user = $employee->user;
 
             if ($user->hasRole('registrar')) {
-                // Remove registrar role
                 $user->removeRole('registrar');
                 $message = 'Registrar role removed successfully';
             } else {
-                // Assign registrar role
                 $user->assignRole('registrar');
 
-                // Create profile if doesn't exist
                 if (!$user->profile) {
                     Profile::create([
                         'user_id' => $user->id,
@@ -297,7 +343,6 @@ class EmployeeController extends Controller
             $employee->update([
                 'status' => 'archived'
             ]);
-
 
             $message = 'Employee archived successfully';
 

@@ -78,7 +78,7 @@
 
                         <div class="flex flex-col gap-2 mt-5">
                             <p class="font-medium label-text">Enrollment type:</p>
-                            <input type="text"  name="type" value="{{ request()->query('type') }}"
+                            <input type="text" name="type" value="{{ request()->query('type') }}"
                                 class="input input-bordered capitalize" readonly>
                         </div>
                     </div>
@@ -365,7 +365,7 @@
                                 </h4>
                                 <ul class="mt-2 ml-5 text-sm list-disc text-blue-700">
                                     <li>All documents must be clear and readable</li>
-                                    <li>Accepted formats: PDF, JPG, PNG (max 5MB per file)</li>
+                                    <li>Accepted formats: PDF(max 5MB per file)</li>
                                     <li>Make sure all pages are properly scanned</li>
                                 </ul>
                             </div>

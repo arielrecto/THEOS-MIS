@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Campus;
+use App\Models\CampusContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class CampusController extends Controller
 {
+    // ========== Campus CRUD ==========
     public function index()
     {
         $campuses = Campus::with('image')->latest()->paginate(10);
@@ -91,6 +94,85 @@ class CampusController extends Controller
             ->with('success', 'Campus deleted successfully.');
     }
 
+    // ========== Campus Content CRUD ==========
+    public function indexContent()
+    {
+        $campusContents = CampusContent::latest()->paginate(10);
+
+        return view('users.admin.cms.campus.index-campus', compact('campusContents'));
+    }
+
+    public function createContent()
+    {
+        return view('users.admin.cms.campus.create-campus');
+    }
+
+    public function storeContent(Request $request)
+    {
+        $validated = $this->validateCampusContent($request);
+
+        DB::transaction(function () use ($validated) {
+            // If setting this as active, deactivate others
+            if ($validated['is_active'] ?? false) {
+                CampusContent::where('is_active', true)->update(['is_active' => false]);
+            }
+
+            CampusContent::create([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'is_active' => $validated['is_active'] ?? false,
+            ]);
+        });
+
+        return redirect()
+            ->route('admin.CMS.campus-content.index')
+            ->with('success', 'Campus content created successfully.');
+    }
+
+    public function showContent(CampusContent $campusContent)
+    {
+        return view('users.admin.cms.campus.show-campus', compact('campusContent'));
+    }
+
+    public function editContent(CampusContent $campusContent)
+    {
+        return view('users.admin.cms.campus.edit-campus', compact('campusContent'));
+    }
+
+    public function updateContent(Request $request, CampusContent $campusContent)
+    {
+        $validated = $this->validateCampusContent($request);
+
+        DB::transaction(function () use ($validated, $campusContent) {
+            // If setting this as active, deactivate others
+            if ($validated['is_active'] ?? false) {
+                CampusContent::where('id', '!=', $campusContent->id)
+                    ->where('is_active', true)
+                    ->update(['is_active' => false]);
+            }
+
+            $campusContent->update([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'is_active' => $validated['is_active'] ?? false,
+            ]);
+        });
+
+        return redirect()
+            ->route('admin.CMS.campus-content.show', $campusContent)
+            ->with('success', 'Campus content updated successfully.');
+    }
+
+    public function destroyContent(CampusContent $campusContent)
+    {
+        $campusContent->delete();
+
+        return redirect()
+            ->route('admin.CMS.campus-content.index')
+            ->with('success', 'Campus content deleted successfully.');
+    }
+
+    // ========== Private Helper Methods ==========
     private function validateCampus(Request $request, ?int $campusId = null): array
     {
         return $request->validate([
@@ -101,6 +183,15 @@ class CampusController extends Controller
             'description' => ['nullable', 'string', 'max:5000'],
             'image' => ['nullable', 'image', 'max:5120'], // 5MB
             'remove_image' => ['nullable', 'boolean'],
+        ]);
+    }
+
+    private function validateCampusContent(Request $request): array
+    {
+        return $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:5000'],
+            'is_active' => ['nullable', 'boolean'],
         ]);
     }
 

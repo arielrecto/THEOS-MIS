@@ -37,9 +37,9 @@ class UserCreation extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->line($this->data['message'])
-                    ->line('Thank you for using our application!');
+            ->line('Welcome Account Creation Notification.')
+            ->line($this->data['message'])
+            ->line('Thank you for using our application!');
     }
 
     /**

@@ -2,25 +2,25 @@
     <div class="py-8">
         <div class="container px-4 sm:px-6 mx-auto">
             <div class="mx-auto max-w-5xl">
-                <x-dashboard.page-title :title="__('Enrollee Details')" :back_url="route('registrar.enrollments.index')">
+                <x-dashboard.page-title :title="__('Enrollee Details')" :back_url="route('registrar.enrollments.show', $enrollee->enrollment_id)">
                     <x-slot name="other">
-                        @if ($enrollee->status == 'pending')
+                        @if ($enrollee->status != 'enrolled')
                             <div class="dropdown dropdown-end">
                                 <button class="btn btn-ghost btn-xs">
                                     <i class="fi fi-rr-menu-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                    @foreach(['pending', 'review', 'interviewed'] as $status)
+                                    @foreach (['pending', 'review', 'interviewed'] as $status)
                                         <li>
-                                            <form action="{{ route('registrar.enrollments.update-status', $enrollee->id) }}"
-                                                  method="POST"
-                                                  class="w-full">
+                                            <form
+                                                action="{{ route('registrar.enrollments.update-status', $enrollee->id) }}"
+                                                method="POST" class="w-full">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="status" value="{{ $status }}">
                                                 <button type="button"
-                                                        onclick="updateStatus(this.form, '{{ $status }}')"
-                                                        class="w-full text-left {{ $enrollee->status === $status ? 'bg-accent/10 text-accent' : '' }}">
+                                                    onclick="updateStatus(this.form, '{{ $status }}')"
+                                                    class="w-full text-left {{ $enrollee->status === $status ? 'bg-accent/10 text-accent' : '' }}">
                                                     {{ ucfirst($status) }}
                                                 </button>
                                             </form>
@@ -29,14 +29,12 @@
 
                                     <li>
                                         <form action="{{ route('registrar.enrollments.enrolled', $enrollee->id) }}"
-                                              method="POST"
-                                              class="w-full">
+                                            method="POST" class="w-full">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="status" value="enrolled">
-                                            <button type="button"
-                                                    onclick="updateStatus(this.form, 'enrolled')"
-                                                    class="w-full text-left {{ $enrollee->status === 'enrolled' ? 'bg-accent/10 text-accent' : '' }}">
+                                            <button type="button" onclick="updateStatus(this.form, 'enrolled')"
+                                                class="w-full text-left {{ $enrollee->status === 'enrolled' ? 'bg-accent/10 text-accent' : '' }}">
                                                 {{ ucfirst('enrolled') }}
                                             </button>
                                         </form>
@@ -116,7 +114,8 @@
                     <div class="space-y-6">
                         <div>
                             <h3 class="mb-2 text-sm font-medium text-gray-600">Current Address</h3>
-                            <p class="break-words">{{ $enrollee->house_no }} {{ $enrollee->street }}, {{ $enrollee->barangay }},
+                            <p class="break-words">{{ $enrollee->house_no }} {{ $enrollee->street }},
+                                {{ $enrollee->barangay }},
                                 {{ $enrollee->city }}, {{ $enrollee->province }}, {{ $enrollee->zip_code }}</p>
                         </div>
                     </div>
@@ -318,7 +317,7 @@
                                             </div>
                                             <div class="flex items-center gap-2">
                                                 <a href="{{ Storage::url($doc->file_dir) }}" target="_blank"
-                                                   class="btn btn-ghost btn-xs">
+                                                    class="btn btn-ghost btn-xs">
                                                     <i class="fi fi-rr-eye text-xs"></i>
                                                 </a>
                                             </div>
@@ -342,28 +341,28 @@
     </div>
 
     @push('scripts')
-    <script>
-    function updateStatus(form, status) {
-        let remarks = '';
+        <script>
+            function updateStatus(form, status) {
+                let remarks = '';
 
-        if (['review', 'interviewed', 'enrolled'].includes(status)) {
-            remarks = prompt('Enter any additional remarks (optional):');
-        }
+                if (['review', 'interviewed', 'enrolled'].includes(status)) {
+                    remarks = prompt('Enter any additional remarks (optional):');
+                }
 
-        if (status === 'enrolled') {
-            if (!confirm('Are you sure you want to enroll this student?')) {
-                return;
+                if (status === 'enrolled') {
+                    if (!confirm('Are you sure you want to enroll this student?')) {
+                        return;
+                    }
+                }
+
+                const remarksInput = document.createElement('input');
+                remarksInput.type = 'hidden';
+                remarksInput.name = 'remarks';
+                remarksInput.value = remarks || '';
+
+                form.appendChild(remarksInput);
+                form.submit();
             }
-        }
-
-        const remarksInput = document.createElement('input');
-        remarksInput.type = 'hidden';
-        remarksInput.name = 'remarks';
-        remarksInput.value = remarks || '';
-
-        form.appendChild(remarksInput);
-        form.submit();
-    }
-    </script>
+        </script>
     @endpush
 </x-dashboard.registrar.base>
