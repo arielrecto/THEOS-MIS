@@ -14,6 +14,7 @@
     use App\Models\HeaderContent;
     use App\Models\CoreValue;
     use App\Models\AcademicProgramLabel;
+    use App\Models\ContactUs;
     use Illuminate\Support\Facades\Storage;
 
     $mainLogo = Logo::where('type', 'main')->where('is_active', true)->latest()->first();
@@ -50,6 +51,8 @@
     $showButton = $headerContent?->show_button ?? true;
     $buttonText = $headerContent?->button_text ?? 'Enroll Now';
     $buttonUrl = $headerContent?->button_url;
+
+    $contactUs = ContactUs::first();
 @endphp
 
 <!-- Hero Section - Dynamic content from HeaderContent model -->
@@ -274,7 +277,7 @@
 <!-- Contact Section -->
 <section class="bg-gray-50 py-16">
     <div class="container px-6 mx-auto text-center">
-        <h2 class="text-3xl font-bold mb-8">Contact Us</h2>
+        <h2 class="text-3xl font-bold mb-8">{{ $contactUs->content_label }}</h2>
         <div class="max-w-2xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="p-6 bg-white rounded-lg shadow-lg">

@@ -254,7 +254,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-y-8 gap-x-12 md:grid-cols-2">
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3">
                             <!-- Father's Information -->
                             <div class="space-y-4">
                                 <h3 class="flex items-center gap-2 pb-2 font-medium text-gray-700 border-b">
@@ -356,101 +356,84 @@
                             </div>
 
                             <!-- Guardian Information -->
-                            <div class="space-y-4 md:col-span-2">
-                                <div class="pt-6 border-t">
-                                    <h3 class="flex items-center gap-2 pb-2 mb-4 font-medium text-gray-700 border-b">
-                                        <i class="fi fi-rr-shield-check text-accent"></i>
-                                        Guardian Information
-                                        <span class="text-xs text-gray-500 font-normal">(Optional - Fill if different
-                                            from parents)</span>
-                                    </h3>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div class="space-y-4">
-                                            <div class="form-control">
-                                                <label class="label">
-                                                    <span class="font-medium label-text">Last Name</span>
-                                                </label>
-                                                <input type="text" name="guardian_last_name"
-                                                    value="{{ old('guardian_last_name') }}" placeholder="Last Name"
-                                                    class="input input-bordered @error('guardian_last_name') input-error @enderror">
-                                            </div>
-                                            <div class="form-control">
-                                                <label class="label">
-                                                    <span class="font-medium label-text">First Name</span>
-                                                </label>
-                                                <input type="text" name="guardian_name"
-                                                    value="{{ old('guardian_name') }}" placeholder="First Name"
-                                                    class="input input-bordered @error('guardian_name') input-error @enderror">
-                                            </div>
-                                            <div class="form-control">
-                                                <label class="label">
-                                                    <span class="font-medium label-text">Middle Name</span>
-                                                </label>
-                                                <input type="text" name="guardian_middle_name"
-                                                    value="{{ old('guardian_middle_name') }}"
-                                                    placeholder="Middle Name"
-                                                    class="input input-bordered @error('guardian_middle_name') input-error @enderror">
-                                            </div>
-                                        </div>
-
-                                        <div class="space-y-4">
-                                            <div class="form-control">
-                                                <label class="label">
-                                                    <span class="font-medium label-text">Relationship to
-                                                        Student</span>
-                                                </label>
-                                                <select name="guardian_relationship" +
-                                                    class="select select-bordered @error('guardian_relationship') select-error @enderror">
-                                                    <option value="">Select Relationship</option>
-                                                    <option value="Grandparent"
-                                                        {{ old('guardian_relationship') == 'Grandparent' ? 'selected' : '' }}>
-                                                        Grandparent</option>
-                                                    <option value="Aunt"
-                                                        {{ old('guardian_relationship') == 'Aunt' ? 'selected' : '' }}>
-                                                        Aunt</option>
-                                                    <option value="Uncle"
-                                                        {{ old('guardian_relationship') == 'Uncle' ? 'selected' : '' }}>
-                                                        Uncle</option>
-                                                    <option value="Sibling"
-                                                        {{ old('guardian_relationship') == 'Sibling' ? 'selected' : '' }}>
-                                                        Sibling</option>
-                                                    <option value="Cousin"
-                                                        {{ old('guardian_relationship') == 'Cousin' ? 'selected' : '' }}>
-                                                        Cousin</option>
-                                                    <option value="Family Friend"
-                                                        {{ old('guardian_relationship') == 'Family Friend' ? 'selected' : '' }}>
-                                                        Family Friend</option>
-                                                    <option value="Other"
-                                                        {{ old('guardian_relationship') == 'Other' ? 'selected' : '' }}>
-                                                        Other</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-control">
-                                                <label class="label">
-                                                    <span class="font-medium label-text">Contact Number</span>
-                                                </label>
-                                                <input type="text" name="guardian_contact_number"
-                                                    value="{{ old('guardian_contact_number') }}"
-                                                    placeholder="Contact Number" inputmode="numeric" minlength="11"
-                                                    maxlength="11" pattern="\d{11}"
-                                                    oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
-                                                    class="input input-bordered @error('guardian_contact_number') input-error @enderror">
-                                            </div>
-                                            <div class="form-control">
-                                                <label class="label">
-                                                    <span class="font-medium label-text">Occupation</span>
-                                                </label>
-                                                <input type="text" name="guardian_occupation"
-                                                    value="{{ old('guardian_occupation') }}" placeholder="Occupation"
-                                                    class="input input-bordered @error('guardian_occupation') input-error @enderror">
-                                            </div>
-                                        </div>
-
-                                    </div>
-
+                            <div class="space-y-4">
+                                <h3 class="flex items-center gap-2 pb-2 font-medium text-gray-700 border-b">
+                                    <i class="fi fi-rr-shield-check text-accent"></i>
+                                    <span>Guardian Information</span>
+                                    <span class="text-xs text-gray-500 font-normal">(Optional)</span>
+                                </h3>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Last Name</span>
+                                    </label>
+                                    <input type="text" name="guardian_last_name"
+                                        value="{{ old('guardian_last_name') }}" placeholder="Last Name"
+                                        class="input input-bordered @error('guardian_last_name') input-error @enderror">
                                 </div>
-
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">First Name</span>
+                                    </label>
+                                    <input type="text" name="guardian_name" value="{{ old('guardian_name') }}"
+                                        placeholder="First Name"
+                                        class="input input-bordered @error('guardian_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Middle Name</span>
+                                    </label>
+                                    <input type="text" name="guardian_middle_name"
+                                        value="{{ old('guardian_middle_name') }}" placeholder="Middle Name"
+                                        class="input input-bordered @error('guardian_middle_name') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Relationship</span>
+                                    </label>
+                                    <select name="guardian_relationship"
+                                        class="select select-bordered @error('guardian_relationship') select-error @enderror">
+                                        <option value="">Select Relationship</option>
+                                        <option value="Grandparent"
+                                            {{ old('guardian_relationship') == 'Grandparent' ? 'selected' : '' }}>
+                                            Grandparent</option>
+                                        <option value="Aunt"
+                                            {{ old('guardian_relationship') == 'Aunt' ? 'selected' : '' }}>
+                                            Aunt</option>
+                                        <option value="Uncle"
+                                            {{ old('guardian_relationship') == 'Uncle' ? 'selected' : '' }}>
+                                            Uncle</option>
+                                        <option value="Sibling"
+                                            {{ old('guardian_relationship') == 'Sibling' ? 'selected' : '' }}>
+                                            Sibling</option>
+                                        <option value="Cousin"
+                                            {{ old('guardian_relationship') == 'Cousin' ? 'selected' : '' }}>
+                                            Cousin</option>
+                                        <option value="Family Friend"
+                                            {{ old('guardian_relationship') == 'Family Friend' ? 'selected' : '' }}>
+                                            Family Friend</option>
+                                        <option value="Other"
+                                            {{ old('guardian_relationship') == 'Other' ? 'selected' : '' }}>
+                                            Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Contact Number</span>
+                                    </label>
+                                    <input type="text" name="guardian_contact_number"
+                                        value="{{ old('guardian_contact_number') }}" placeholder="Contact Number"
+                                        inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}"
+                                        oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
+                                        class="input input-bordered @error('guardian_contact_number') input-error @enderror">
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="font-medium label-text">Occupation</span>
+                                    </label>
+                                    <input type="text" name="guardian_occupation"
+                                        value="{{ old('guardian_occupation') }}" placeholder="Occupation"
+                                        class="input input-bordered @error('guardian_occupation') input-error @enderror">
+                                </div>
                             </div>
                         </div>
                     </div>

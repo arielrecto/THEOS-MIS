@@ -102,7 +102,7 @@
                     <i class="fi fi-rr-info-circle text-blue-600 mt-0.5"></i>
                     <div class="text-sm text-blue-800">
                         <p class="font-semibold mb-1">{{ $classroom->name }}</p>
-                        <p>Strand: <span class="font-medium">{{ $classroom->strand->name }}
+                        <p>Grade Level: <span class="font-medium">{{ $classroom->strand->name }}
                                 ({{ $classroom->strand->acronym }})</span></p>
                         <p>Academic Year: <span class="font-medium">{{ $classroom->academicYear->name }}</span></p>
                         <p class="mt-2 text-xs">Only showing enrolled students in this strand and academic year who are

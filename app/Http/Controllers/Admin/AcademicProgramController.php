@@ -6,6 +6,7 @@ use App\Models\AcademicProgram;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AcademicProgramController extends Controller
 {
@@ -49,6 +50,63 @@ class AcademicProgramController extends Controller
         return view('users.admin.cms.program.show', compact('program'));
     }
 
+    public function edit(AcademicProgram $program)
+    {
+        return view('users.admin.cms.program.edit', compact('program'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, AcademicProgram $program)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        try {
+            $data = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'category' => $request->category,
+                'is_active' => $request->has('is_active') ? true : false,
+            ];
+
+            // Handle image upload if new image is provided
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($program->path && Storage::disk('public')->exists($program->path)) {
+                    Storage::disk('public')->delete($program->path);
+                }
+
+                // Store new image
+                $path = $request->file('image')->store('programs', 'public');
+                $data['path'] = $path;
+            }
+
+            $program->update($data);
+
+            return redirect()
+                ->route('admin.CMS.programs.index')
+                ->with('success', 'Program updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update program: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
     public function toggleActive(AcademicProgram $program)
     {
         $program->update(['is_active' => !$program->is_active]);
@@ -57,11 +115,19 @@ class AcademicProgramController extends Controller
 
     public function destroy(AcademicProgram $program)
     {
-        if ($program->path) {
-            Storage::disk('public')->delete($program->path);
-        }
+        try {
+            // Delete image file
+            if ($program->path && Storage::disk('public')->exists($program->path)) {
+                Storage::disk('public')->delete($program->path);
+            }
 
-        $program->delete();
-        return back()->with('success', 'Program deleted successfully');
+            $program->delete();
+            
+            return redirect()
+                ->route('admin.CMS.programs.index')
+                ->with('success', 'Program deleted successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete program: ' . $e->getMessage());
+        }
     }
 }
