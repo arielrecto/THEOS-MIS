@@ -55,6 +55,12 @@
             'is_active' => true,
         ],
         [
+            'url' => 'admin.tuition-fee.index',
+            'name' => 'Tuition Fee Brackets',
+            'icon' => '<i class="fi fi-rr-price-tag"></i>',
+            'is_active' => true,
+        ],
+        [
             'url' => 'admin.payments.index',
             'name' => 'Payments',
             'icon' => '<i class="fi fi-rr-money-check"></i>',

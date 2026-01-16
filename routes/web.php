@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\CoreValueController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Student\PaymentController;
+use App\Http\Controllers\Admin\TuitionFeeController;
 use App\Http\Controllers\Teacher\ClassroomController;
 use App\Http\Controllers\Admin\AcademicYearController;
 use App\Http\Controllers\Teacher\AttendanceController;
@@ -141,6 +142,12 @@ Route::middleware(['auth'])->group(function () {
                     Route::resource('students', StudentController::class);
                     Route::resource('teacher', TeacherController::class);
                 });
+
+            Route::prefix('strands')->as('strands.')->group(function () {
+                Route::prefix('tuition-fees')->as('tuition-fees.')->group(function () {
+                    Route::put('{strand}/attach', [StrandController::class, 'updateTuitionFees'])->name('update');
+                });
+            });
             Route::resource('strands', StrandController::class);
             Route::resource('subjects', SubjectController::class);
             Route::resource('academic-year', AcademicYearController::class);
@@ -225,6 +232,24 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::resource('academic-program-label', AcademicProgramLabelController::class);
             });
+
+
+            Route::prefix('tuition-fee-brackets')
+                ->as('tuition-fee-brackets.')
+                ->group(function () {
+                    Route::put('{bracket}/toggle', [TuitionFeeController::class, 'toggleBracket'])->name('toggle-status');
+                    Route::post('store', [TuitionFeeController::class, 'storeBracket'])->name('store');
+                    Route::put('{bracket}/update', [TuitionFeeController::class, 'updateBracket'])->name('update');
+                    Route::delete('{bracket}', [TuitionFeeController::class, 'destroyBracket'])->name('delete');
+                });
+
+            Route::prefix('tuition-fees')
+                ->as('tuition-fees.')
+                ->group(function () {
+                    Route::put('{tuitionFee}/toggle', [TuitionFeeController::class, 'toggleFee'])->name('toggle-status');
+                });
+
+            Route::resource('tuition-fee', TuitionFeeController::class);
 
             Route::resource('payment-accounts', PaymentAccountController::class);
 

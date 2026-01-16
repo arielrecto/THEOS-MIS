@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Student;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\EnrollmentForm;
 use App\Models\PaymentAccount;
-use App\Http\Controllers\Controller;
+use App\Models\Strand;
+use Illuminate\Http\Request;
 
 class EnrollmentController extends Controller
 {
@@ -18,14 +19,27 @@ class EnrollmentController extends Controller
         return view('users.student.enrollment.index', compact('enrollments'));
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $enrollment = EnrollmentForm::where('user_id', auth()->id())
+        $enrollment = EnrollmentForm::with(['attachments', 'academicYear'])
+            ->where('user_id', auth()->id())
             ->findOrFail($id);
 
+        // Find strand based on grade_level
+        $strand = Strand::with(['tuitionFees.bracket'])
+            ->where('name', $enrollment->grade_level)
+            ->orWhere('acronym', $enrollment->grade_level)
+            ->first();
 
-        $paymentAccounts = PaymentAccount::all();
+        $paymentAccounts = PaymentAccount::get();
 
-        return view('users.student.enrollment.show', compact('enrollment', 'paymentAccounts'));
+        return view('users.student.enrollment.show', compact(
+            'enrollment',
+            'strand',
+            'paymentAccounts'
+        ));
     }
 }
