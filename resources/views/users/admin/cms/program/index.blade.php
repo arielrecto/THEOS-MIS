@@ -2,7 +2,7 @@
     <div class="container mx-auto p-6">
         <!-- Header -->
         <div class="mb-6">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">Academic Programs</h1>
                     <p class="text-gray-600">Manage school academic programs</p>

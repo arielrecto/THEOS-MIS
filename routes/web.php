@@ -32,6 +32,7 @@ use App\Http\Controllers\Student\PaymentController;
 use App\Http\Controllers\Admin\TuitionFeeController;
 use App\Http\Controllers\Teacher\ClassroomController;
 use App\Http\Controllers\Admin\AcademicYearController;
+use App\Http\Controllers\Admin\LoginContentController;
 use App\Http\Controllers\Teacher\AttendanceController;
 use App\Http\Controllers\Admin\HeaderContentController;
 use App\Http\Controllers\Teacher\StudentTaskController;
@@ -231,6 +232,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('core-values', CoreValueController::class);
 
                 Route::resource('academic-program-label', AcademicProgramLabelController::class);
+
+                Route::resource('login-contents', LoginContentController::class);
             });
 
 

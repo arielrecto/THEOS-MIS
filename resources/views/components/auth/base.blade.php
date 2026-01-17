@@ -1,11 +1,21 @@
+{{-- filepath: e:\Projects\Theos MIS\resources\views\components\auth\base.blade.php --}}
 <x-app-layout>
+    @php
+        $loginContent = \App\Models\LoginContent::where('is_active', true)->with('backgroundImage')->first();
+        $backgroundUrl = $loginContent?->backgroundImage?->file_dir
+            ? asset($loginContent->backgroundImage->file_dir)
+            : asset('Theos.png');
+        $loginTitle = $loginContent?->title ?? 'Login';
+        $loginDescription = $loginContent?->description ?? null;
+    @endphp
+
     <x-landing-page.navbar />
 
     <div class="flex flex-col justify-center items-center min-h-screen relative">
-        <!-- Background Image -->
+        <!-- Dynamic Background Image -->
         <div class="absolute inset-0 z-0">
-            <img src="{{ asset('Theos.png') }}" alt="Background" class="w-full h-full object-cover">
-            <div></div>
+            <img src="{{ $backgroundUrl }}" alt="Background" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/30"></div>
         </div>
 
         <!-- Login Card -->
@@ -13,7 +23,10 @@
             <!-- Logo and Title -->
             <div class="flex flex-col gap-3 items-center">
                 <img src="{{ asset('logo-modified.png') }}" alt="Logo" class="object-cover w-16 h-16">
-                <h1 class="text-3xl font-bold text-accent">Login</h1>
+                <h1 class="text-3xl font-bold text-accent">{{ $loginTitle }}</h1>
+                @if($loginDescription)
+                    <p class="text-xs text-center text-gray-600 mt-1">{{ $loginDescription }}</p>
+                @endif
             </div>
 
             <!-- Error Messages -->

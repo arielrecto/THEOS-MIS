@@ -57,7 +57,7 @@
         [
             'url' => 'admin.tuition-fee.index',
             'name' => 'Tuition Fee Brackets',
-            'icon' => '<i class="fi fi-rr-price-tag"></i>',
+            'icon' => '<i class="fi fi-rr-wallet"></i>',
             'is_active' => true,
         ],
         [

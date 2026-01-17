@@ -20,6 +20,8 @@
                 $activeHeaderContent = \App\Models\HeaderContent::where('is_active', true)->exists();
                 $coreValueCount = \App\Models\CoreValue::count();
                 $activeCoreValue = \App\Models\CoreValue::where('is_active', true)->exists();
+                $loginContentCount = \App\Models\LoginContent::count();
+                $activeLoginContent = \App\Models\LoginContent::where('is_active', true)->exists();
             @endphp
 
             <!-- Header Content (Mobile) -->
@@ -51,6 +53,23 @@
                 </div>
                 <div class="ml-auto text-xs text-gray-500">
                     @if ($activeCoreValue)
+                    <span class="text-success">Active</span>@else<span class="text-error">No Active</span>
+                    @endif
+                </div>
+            </a>
+
+            <!-- Login Content (Mobile) -->
+            <a href="{{ route('admin.CMS.login-contents.index') }}"
+                class="block bg-white rounded-lg shadow p-3 flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                    <i class="fi fi-rr-sign-in-alt text-xl text-blue-500"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="font-medium text-sm text-gray-900 truncate">Login Content</div>
+                    <div class="text-2xs text-gray-600 mt-0.5 break-words">Manage login backgrounds</div>
+                </div>
+                <div class="ml-auto text-xs text-gray-500">
+                    @if ($activeLoginContent)
                     <span class="text-success">Active</span>@else<span class="text-error">No Active</span>
                     @endif
                 </div>
@@ -264,6 +283,57 @@
                             style="background-color: rgb(99 102 241); color: white;">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage Core Values</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Content Card -->
+            <div class="bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md flex flex-col">
+                <div class="p-4 sm:p-6 flex-1 flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div class="flex items-start gap-3 min-w-0">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                <i class="fi fi-rr-sign-in-alt text-2xl text-blue-500"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate">Login Content</h3>
+                                <p class="text-2xs sm:text-xs text-gray-600 mt-1 whitespace-normal sm:truncate">Manage login page backgrounds</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold leading-none whitespace-nowrap bg-blue-500/10 text-blue-500">
+                                {{ \App\Models\LoginContent::count() }} Contents
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 text-sm text-gray-700 mt-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Active Content</span>
+                            @if ($activeContent = \App\Models\LoginContent::where('is_active', true)->first())
+                                <span class="text-success text-xs">{{ Str::limit($activeContent->title, 20) }}</span>
+                            @else
+                                <span class="text-error text-xs">None</span>
+                            @endif
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">With Background</span>
+                            <span class="text-info text-xs">{{ \App\Models\LoginContent::whereHas('backgroundImage')->count() }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600 truncate">Last Updated</span>
+                            <span class="text-gray-500 text-xs">
+                                {{ \App\Models\LoginContent::latest()->first()?->updated_at?->diffForHumans() ?? 'Never' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 sm:mt-auto">
+                        <a href="{{ route('admin.CMS.login-contents.index') }}" class="btn gap-2 w-full sm:w-auto text-sm"
+                           style="background-color: rgb(59 130 246); color: white;">
+                            <i class="fi fi-rr-edit"></i>
+                            <span class="truncate">Manage Login Content</span>
                         </a>
                     </div>
                 </div>

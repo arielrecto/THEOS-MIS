@@ -375,177 +375,187 @@
                         </div>
                     </div>
                 </div>
-            @endif
 
-            <!-- Payment Section -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-semibold text-gray-800">Payment Options</h2>
-                        @if ($strand && $strand->tuitionFees->count() > 0)
-                            <div class="text-right">
-                                <p class="text-sm text-gray-600">Select Payment Type</p>
-                                <div class="flex gap-2 mt-1">
-                                    @if ($fullPaymentFees->count() > 0)
-                                        <span class="badge badge-success">
-                                            Full: ₱{{ number_format($fullPaymentFees->sum('amount'), 2) }}
-                                        </span>
-                                    @endif
-                                    @if ($installmentFees->count() > 0)
-                                        <span class="badge badge-primary">
-                                            Inst: ₱{{ number_format($installmentFees->sum('amount'), 2) }}
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-
-
-
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        @foreach ($paymentAccounts as $account)
-                            <div class="p-6 bg-gray-50 rounded-lg border hover:border-accent transition-colors">
-                                <div class="flex items-start justify-between mb-4">
-                                    <div>
-                                        <h3 class="font-medium text-gray-900">{{ $account->provider }}</h3>
-                                        <p class="text-sm text-gray-600">{{ $account->account_name }}</p>
+                <!-- Payment Section -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-semibold text-gray-800">Payment Options</h2>
+                            @if ($strand && $strand->tuitionFees->count() > 0)
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-600">Select Payment Type</p>
+                                    <div class="flex gap-2 mt-1">
+                                        @if ($fullPaymentFees->count() > 0)
+                                            <span class="badge badge-success">
+                                                Full: ₱{{ number_format($fullPaymentFees->sum('amount'), 2) }}
+                                            </span>
+                                        @endif
+                                        @if ($installmentFees->count() > 0)
+                                            <span class="badge badge-primary">
+                                                Inst: ₱{{ number_format($installmentFees->sum('amount'), 2) }}
+                                            </span>
+                                        @endif
                                     </div>
-                                    <button onclick="showPaymentModal('{{ $account->id }}')"
-                                        class="btn btn-accent btn-sm">
-                                        <i class="fi fi-rr-plus"></i>
-                                    </button>
                                 </div>
+                            @endif
+                        </div>
 
-                                <div class="space-y-2">
-                                    <p class="text-sm">
-                                        <span class="text-gray-500">Account Number:</span>
-                                        <span class="font-medium">{{ $account->account_number }}</span>
-                                    </p>
-                                    @if ($account->qr_image_path)
-                                        <button onclick="showQRModal('{{ Storage::url($account->qr_image_path) }}')"
-                                            class="btn btn-ghost btn-sm gap-2">
-                                            <i class="fi fi-rr-qrcode"></i>
-                                            View QR Code
+
+
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach ($paymentAccounts as $account)
+                                <div class="p-6 bg-gray-50 rounded-lg border hover:border-accent transition-colors">
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div>
+                                            <h3 class="font-medium text-gray-900">{{ $account->provider }}</h3>
+                                            <p class="text-sm text-gray-600">{{ $account->account_name }}</p>
+                                        </div>
+                                        <button onclick="showPaymentModal('{{ $account->id }}')"
+                                            class="btn btn-accent btn-sm">
+                                            <i class="fi fi-rr-plus"></i>
                                         </button>
-                                    @endif
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <p class="text-sm">
+                                            <span class="text-gray-500">Account Number:</span>
+                                            <span class="font-medium">{{ $account->account_number }}</span>
+                                        </p>
+                                        @if ($account->qr_image_path)
+                                            <button
+                                                onclick="showQRModal('{{ Storage::url($account->qr_image_path) }}')"
+                                                class="btn btn-ghost btn-sm gap-2">
+                                                <i class="fi fi-rr-qrcode"></i>
+                                                View QR Code
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- Payment Modal -->
+                <dialog id="payment_modal" class="modal">
+                    <div class="modal-box max-w-lg">
+                        <h3 class="font-bold text-lg mb-4">Submit Payment</h3>
+                        <form action="{{ route('student.payments.store') }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="payment_account_id" id="payment_account_id">
+                            <input type="hidden" name="enrollment_form_id" value="{{ $enrollment->id }}">
+
+                            <!-- Payment Type Selection -->
+                            <div class="form-control mb-4">
+                                <label class="label">
+                                    <span class="label-text font-semibold">Select Payment Type</span>
+                                </label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    @if ($fullPaymentFees->count() > 0)
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="payment_type" value="full_payment"
+                                                class="peer sr-only" required
+                                                data-amount="{{ $fullPaymentFees->sum('amount') }}">
+                                            <div
+                                                class="p-4 border-2 border-gray-200 rounded-lg peer-checked:border-success peer-checked:bg-green-50 transition-all">
+                                                <div class="flex items-center gap-2 mb-2">
+                                                    <i class="fi fi-rr-money-bill-wave text-success"></i>
+                                                    <span class="font-semibold text-sm">Full Payment</span>
+                                                </div>
+                                                <p class="text-xl font-bold text-success">
+                                                    ₱{{ number_format($fullPaymentFees->sum('amount'), 2) }}
+                                                </p>
+                                                <p class="text-xs text-gray-600 mt-1">Pay all at once</p>
+                                            </div>
+                                        </label>
+                                    @endif
+
+                                    @if ($installmentFees->count() > 0)
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="payment_type" value="installment"
+                                                class="peer sr-only" required
+                                                data-amount="{{ $installmentFees->sum('amount') }}">
+                                            <div
+                                                class="p-4 border-2 border-gray-200 rounded-lg peer-checked:border-primary peer-checked:bg-blue-50 transition-all">
+                                                <div class="flex items-center gap-2 mb-2">
+                                                    <i class="fi fi-rr-calendar text-primary"></i>
+                                                    <span class="font-semibold text-sm">Installment</span>
+                                                </div>
+                                                <p class="text-xl font-bold text-primary">
+                                                    ₱{{ number_format($installmentFees->sum('amount'), 2) }}
+                                                </p>
+                                                <p class="text-xs text-gray-600 mt-1">Pay in parts</p>
+                                            </div>
+                                        </label>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Amount (Auto-filled based on selection) -->
+                            <div class="form-control mb-4">
+                                <label class="label">
+                                    <span class="label-text">Amount to Pay</span>
+                                    <span class="label-text-alt text-accent font-semibold" id="selected_amount">
+                                        Select payment type
+                                    </span>
+                                </label>
+                                <input type="number" name="amount" id="amount_input" class="input input-bordered"
+                                    required min="0" step="0.01" readonly>
+                            </div>
+
+                            <div class="form-control mb-4">
+                                <label class="label">
+                                    <span class="label-text">Payment Method</span>
+                                </label>
+                                <select name="payment_method" class="select select-bordered" required>
+                                    <option value="">Select Method</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                    <option value="gcash">GCash</option>
+                                    <option value="maya">Maya</option>
+                                    <option value="cash">Cash</option>
+                                </select>
+                            </div>
+
+                            <div class="form-control mb-4">
+                                <label class="label">
+                                    <span class="label-text">Payment Proof</span>
+                                </label>
+                                <input type="file" name="attachment" class="file-input file-input-bordered w-full"
+                                    accept="image/*,.pdf" required>
+                                <label class="label">
+                                    <span class="label-text-alt text-gray-500">Upload receipt or proof of
+                                        payment</span>
+                                </label>
+                            </div>
+
+                            <div class="form-control mb-6">
+                                <label class="label">
+                                    <span class="label-text">Note (Optional)</span>
+                                </label>
+                                <textarea name="note" class="textarea textarea-bordered" rows="2"
+                                    placeholder="Add any additional notes about this payment"></textarea>
+                            </div>
+
+                            <div class="modal-action">
+                                <button type="button" onclick="closePaymentModal()"
+                                    class="btn btn-ghost">Cancel</button>
+                                <button type="submit" class="btn btn-accent">Submit Payment</button>
+                            </div>
+                        </form>
+                    </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button>close</button>
+                    </form>
+                </dialog>
+
+            @endif
+
+
         </div>
     </div>
 
-    <!-- Payment Modal -->
-    <dialog id="payment_modal" class="modal">
-        <div class="modal-box max-w-lg">
-            <h3 class="font-bold text-lg mb-4">Submit Payment</h3>
-            <form action="{{ route('student.payments.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="payment_account_id" id="payment_account_id">
-                <input type="hidden" name="enrollment_form_id" value="{{ $enrollment->id }}">
-
-                <!-- Payment Type Selection -->
-                <div class="form-control mb-4">
-                    <label class="label">
-                        <span class="label-text font-semibold">Select Payment Type</span>
-                    </label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        @if ($fullPaymentFees->count() > 0)
-                            <label class="cursor-pointer">
-                                <input type="radio" name="payment_type" value="full_payment" class="peer sr-only"
-                                    required data-amount="{{ $fullPaymentFees->sum('amount') }}">
-                                <div
-                                    class="p-4 border-2 border-gray-200 rounded-lg peer-checked:border-success peer-checked:bg-green-50 transition-all">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <i class="fi fi-rr-money-bill-wave text-success"></i>
-                                        <span class="font-semibold text-sm">Full Payment</span>
-                                    </div>
-                                    <p class="text-xl font-bold text-success">
-                                        ₱{{ number_format($fullPaymentFees->sum('amount'), 2) }}
-                                    </p>
-                                    <p class="text-xs text-gray-600 mt-1">Pay all at once</p>
-                                </div>
-                            </label>
-                        @endif
-
-                        @if ($installmentFees->count() > 0)
-                            <label class="cursor-pointer">
-                                <input type="radio" name="payment_type" value="installment" class="peer sr-only"
-                                    required data-amount="{{ $installmentFees->sum('amount') }}">
-                                <div
-                                    class="p-4 border-2 border-gray-200 rounded-lg peer-checked:border-primary peer-checked:bg-blue-50 transition-all">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <i class="fi fi-rr-calendar text-primary"></i>
-                                        <span class="font-semibold text-sm">Installment</span>
-                                    </div>
-                                    <p class="text-xl font-bold text-primary">
-                                        ₱{{ number_format($installmentFees->sum('amount'), 2) }}
-                                    </p>
-                                    <p class="text-xs text-gray-600 mt-1">Pay in parts</p>
-                                </div>
-                            </label>
-                        @endif
-                    </div>
-                </div>
-
-                <!-- Amount (Auto-filled based on selection) -->
-                <div class="form-control mb-4">
-                    <label class="label">
-                        <span class="label-text">Amount to Pay</span>
-                        <span class="label-text-alt text-accent font-semibold" id="selected_amount">
-                            Select payment type
-                        </span>
-                    </label>
-                    <input type="number" name="amount" id="amount_input" class="input input-bordered" required
-                        min="0" step="0.01" readonly>
-                </div>
-
-                <div class="form-control mb-4">
-                    <label class="label">
-                        <span class="label-text">Payment Method</span>
-                    </label>
-                    <select name="payment_method" class="select select-bordered" required>
-                        <option value="">Select Method</option>
-                        <option value="bank_transfer">Bank Transfer</option>
-                        <option value="gcash">GCash</option>
-                        <option value="maya">Maya</option>
-                        <option value="cash">Cash</option>
-                    </select>
-                </div>
-
-                <div class="form-control mb-4">
-                    <label class="label">
-                        <span class="label-text">Payment Proof</span>
-                    </label>
-                    <input type="file" name="attachment" class="file-input file-input-bordered w-full"
-                        accept="image/*,.pdf" required>
-                    <label class="label">
-                        <span class="label-text-alt text-gray-500">Upload receipt or proof of payment</span>
-                    </label>
-                </div>
-
-                <div class="form-control mb-6">
-                    <label class="label">
-                        <span class="label-text">Note (Optional)</span>
-                    </label>
-                    <textarea name="note" class="textarea textarea-bordered" rows="2"
-                        placeholder="Add any additional notes about this payment"></textarea>
-                </div>
-
-                <div class="modal-action">
-                    <button type="button" onclick="closePaymentModal()" class="btn btn-ghost">Cancel</button>
-                    <button type="submit" class="btn btn-accent">Submit Payment</button>
-                </div>
-            </form>
-        </div>
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
 
     <!-- QR Code Modal -->
     <dialog id="qr_modal" class="modal">

@@ -79,7 +79,7 @@
                             </div>
 
                             <!-- Teacher Avatar (responsive sizes) -->
-                            <div class="absolute right-3 -bottom-6">
+                            <div class="absolute right-3 bottom-3">
                                 <div class="overflow-hidden w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full ring-4 ring-white">
                                     <img src="{{ $myClassroom->teacher->profile->image }}"
                                          alt="{{ $myClassroom->teacher->name }}"
@@ -127,7 +127,7 @@
                             </div>
 
                             <!-- Teacher Avatar -->
-                            <div class="absolute right-3 -bottom-6">
+                            <div class="absolute right-3 bottom-3">
                                 <div class="overflow-hidden w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full ring-4 ring-white">
                                     <img src="{{ $classroom->teacher->profile->image }}"
                                          alt="{{ $classroom->teacher->name }}"
