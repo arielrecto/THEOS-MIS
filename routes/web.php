@@ -63,6 +63,7 @@ use App\Http\Controllers\Student\EnrollmentController as StudentEnrollmentContro
 use App\Http\Controllers\Employee\AttendanceController as EmployeeAttendanceController;
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
+use App\Http\Controllers\Teacher\BulkStudentImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -287,6 +288,9 @@ Route::middleware(['auth'])->group(function () {
                         Route::post('/{classroom}/archive', [ClassroomController::class, 'archive'])->name('archive');
                         Route::get('/archived', [ClassroomController::class, 'archived'])->name('archived');
                         Route::put('/{classroom}/unarchive', [ClassroomController::class, 'unarchive'])->name('unarchive');
+                        Route::get('/{classroom}/students/import', [BulkStudentImportController::class, 'showImportForm'])->name('students.import');
+                        Route::post('/{classroom}/students/import', [BulkStudentImportController::class, 'import'])->name('students.import.process');
+                        Route::get('/students/download-template', [BulkStudentImportController::class, 'downloadTemplate'])->name('students.import.template');
                     });
 
                 Route::prefix('student')

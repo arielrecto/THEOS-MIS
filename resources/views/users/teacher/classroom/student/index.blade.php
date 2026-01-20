@@ -9,10 +9,17 @@
         <!-- Header with Add Students Button -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h1 class="text-lg text-accent font-bold">Students</h1>
-            <button onclick="add_students_modal.showModal()" class="btn btn-primary gap-2">
-                <i class="fi fi-rr-user-add"></i>
-                <span>Add Students</span>
-            </button>
+            <div class="flex gap-3">
+                <button onclick="add_students_modal.showModal()" class="btn btn-primary gap-2">
+                    <i class="fi fi-rr-user-add"></i>
+                    <span>Add Students</span>
+                </button>
+
+                <a href="{{ route('teacher.classrooms.students.import', $id) }}" class="btn btn-accent gap-2">
+                    <i class="fi fi-rr-upload"></i>
+                    Bulk Import
+                </a>
+            </div>
         </div>
 
         <div class="overflow-x-auto">
