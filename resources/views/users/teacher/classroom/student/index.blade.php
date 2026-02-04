@@ -30,7 +30,7 @@
                         <th>#</th>
                         <th>LRN</th>
                         <th>Name</th>
-                        <th>Strand</th>
+                        <th>Grade Level</th>
                         <th>Date Joined</th>
                         <th>Action</th>
                     </tr>

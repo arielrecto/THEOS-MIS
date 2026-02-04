@@ -10,7 +10,7 @@
                             <th></th>
                             <th>Name</th>
                             <th>Subject Code</th>
-                            <th>Assigned Strands</th>
+                            <th>Assigned Grade Level</th>
                             <th>Action</th>
                         </tr>
                     </thead>
