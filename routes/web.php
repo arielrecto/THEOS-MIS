@@ -219,6 +219,10 @@ Route::middleware(['auth'])->group(function () {
                     Route::delete('/{campusContent}', [CampusController::class, 'destroyContent'])->name('destroy');
                 });
 
+                Route::prefix('founders')->as('founders.')->group(function () {
+                    Route::put('{founder}/toggle', [FounderController::class, 'toggleActive'])->name('toggle');
+                });
+
 
                 Route::resource('programs', AcademicProgramController::class);
 

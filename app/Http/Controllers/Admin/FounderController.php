@@ -78,6 +78,15 @@ class FounderController extends Controller
             ->with('success', 'Founder updated successfully.');
     }
 
+    public function toggleActive(Founder $founder)
+    {
+        $founder->update([
+            'is_active' => !$founder->is_active,
+        ]);
+
+        return back()->with('success', 'Founder status updated to ' . ($founder->is_active ? 'active' : 'inactive') . '.');
+    }
+
     public function destroy(Founder $founder)
     {
         $this->deleteFounderImage($founder);
@@ -103,10 +112,9 @@ class FounderController extends Controller
     {
         $this->deleteFounderImage($founder);
 
-        $storedPath = $file->store('founders', 'public'); // founders/abc.jpg
+        $storedPath = $file->store('founders', 'public');
         $publicPath = 'storage/' . $storedPath;
 
-        // Attachment fillable: file_dir, file_name, file_type, file_size, attachable_id, attachable_type
         $founder->image()->create([
             'file_dir'  => $publicPath,
             'file_name' => $file->getClientOriginalName(),
@@ -121,9 +129,9 @@ class FounderController extends Controller
 
         if (!$founder->image) return;
 
-        $fileDir = $founder->image->file_dir; // storage/founders/abc.jpg
+        $fileDir = $founder->image->file_dir;
         if (is_string($fileDir) && str_starts_with($fileDir, 'storage/')) {
-            $diskPath = substr($fileDir, strlen('storage/')); // founders/abc.jpg
+            $diskPath = substr($fileDir, strlen('storage/'));
             Storage::disk('public')->delete($diskPath);
         }
 

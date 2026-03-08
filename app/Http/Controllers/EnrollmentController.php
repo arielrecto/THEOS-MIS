@@ -189,9 +189,14 @@ class EnrollmentController extends Controller
             'url' => route('registrar.enrollments.showEnrollee', $enrollment->id),
         ];
 
-        $notificationNewUser = [
-            'message' => "Your account has been created. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in.",
+        // $notificationNewUser = [
+        //     'message' => "Your account has been created. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in.",
+        // ];
+
+         $notificationNewUser = [
+            'message' => "Hello, Good Day, Welcome {$user->name}. your account has been created for the {$enrollment->grade_level}. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in. thank you for using our application.",
         ];
+
 
         $user->notify(new UserCreation($notificationNewUser));
 

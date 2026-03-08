@@ -36,11 +36,15 @@
                             <p class="text-xs text-gray-500 mt-1 break-words line-clamp-2">{{ $coreValue->description }}
                             </p>
                         </div>
-                        @if ($coreValue->is_active)
-                            <span class="badge badge-success badge-sm flex-shrink-0">Active</span>
-                        @else
-                            <span class="badge badge-ghost badge-sm flex-shrink-0">Inactive</span>
-                        @endif
+                        <form action="{{ route('admin.CMS.core-values.toggle-active', $coreValue) }}" method="POST" class="flex-shrink-0">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" 
+                                    title="Click to toggle status"
+                                    class="text-xs px-2 py-1 rounded-full cursor-pointer transition-colors {{ $coreValue->is_active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                {{ $coreValue->is_active ? 'Active' : 'Inactive' }}
+                            </button>
+                        </form>
                     </div>
 
                     <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3">
@@ -63,14 +67,6 @@
                             class="btn btn-primary btn-xs flex-1 sm:flex-none">
                             <i class="fi fi-rr-edit"></i> Edit
                         </a>
-                        <form action="{{ route('admin.CMS.core-values.toggle-active', $coreValue) }}" method="POST"
-                            class="flex-1 sm:flex-none">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="btn btn-warning btn-xs w-full">
-                                <i class="fi fi-rr-refresh"></i> Toggle
-                            </button>
-                        </form>
                         <form action="{{ route('admin.CMS.core-values.destroy', $coreValue) }}" method="POST"
                             class="flex-1 sm:flex-none"
                             onsubmit="return confirm('Are you sure? This will delete all items too.')">
@@ -122,11 +118,15 @@
                                     <span class="badge badge-info badge-sm">{{ $coreValue->items_count }}</span>
                                 </td>
                                 <td>
-                                    @if ($coreValue->is_active)
-                                        <span class="badge badge-success">Active</span>
-                                    @else
-                                        <span class="badge badge-ghost">Inactive</span>
-                                    @endif
+                                    <form action="{{ route('admin.CMS.core-values.toggle-active', $coreValue) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" 
+                                                title="Click to toggle status"
+                                                class="text-xs px-2 py-1 rounded-full cursor-pointer transition-colors {{ $coreValue->is_active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                            {{ $coreValue->is_active ? 'Active' : 'Inactive' }}
+                                        </button>
+                                    </form>
                                 </td>
                                 <td class="text-sm text-gray-600">
                                     {{ $coreValue->created_at->format('M d, Y') }}
@@ -141,15 +141,6 @@
                                             class="btn btn-primary btn-xs" aria-label="Edit">
                                             <i class="fi fi-rr-edit"></i>
                                         </a>
-                                        <form action="{{ route('admin.CMS.core-values.toggle-active', $coreValue) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-warning btn-xs"
-                                                aria-label="Toggle status">
-                                                <i class="fi fi-rr-refresh"></i>
-                                            </button>
-                                        </form>
                                         <form action="{{ route('admin.CMS.core-values.destroy', $coreValue) }}"
                                             method="POST"
                                             onsubmit="return confirm('Are you sure? This will delete all items too.')">

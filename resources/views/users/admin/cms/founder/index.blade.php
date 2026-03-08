@@ -44,9 +44,15 @@
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-2">
                                         <div class="font-semibold text-gray-800 truncate">{{ $founder->name }}</div>
-                                        <span class="text-xs px-2 py-0.5 rounded-full {{ $founder->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700' }}">
-                                            {{ $founder->is_active ? 'Active' : 'Inactive' }}
-                                        </span>
+                                        <form action="{{ route('admin.CMS.founders.toggle', $founder) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" 
+                                                    title="Click to toggle status"
+                                                    class="text-xs px-2 py-0.5 rounded-full cursor-pointer transition-colors {{ $founder->is_active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                                {{ $founder->is_active ? 'Active' : 'Inactive' }}
+                                            </button>
+                                        </form>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-1 line-clamp-2 break-words">{{ $founder->bio ?? '—' }}</div>
                                 </div>
@@ -95,9 +101,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="text-xs px-2 py-1 rounded-full {{ $founder->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700' }}">
-                                            {{ $founder->is_active ? 'Active' : 'Inactive' }}
-                                        </span>
+                                        <form action="{{ route('admin.CMS.founders.toggle', $founder) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" 
+                                                    title="Click to toggle status"
+                                                    class="text-xs px-2 py-1 rounded-full cursor-pointer transition-colors {{ $founder->is_active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                                {{ $founder->is_active ? 'Active' : 'Inactive' }}
+                                            </button>
+                                        </form>
                                     </td>
                                     <td class="max-w-[420px]">
                                         <div class="truncate text-gray-700">{{ $founder->bio ?? '—' }}</div>
