@@ -15,6 +15,7 @@ class Enrollment extends Model
         'academic_year_id',
         'start_date',
         'end_date',
+        'semester',
         'status',
         'description',
     ];

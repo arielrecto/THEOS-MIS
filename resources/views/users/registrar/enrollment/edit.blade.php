@@ -31,28 +31,49 @@
                     @enderror
                 </div>
 
-                <!-- Academic Year -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text font-medium">Academic Year</span>
-                        <span class="label-text-alt text-error">*</span>
-                    </label>
-                    <select name="academic_year_id"
-                            class="select select-bordered w-full @error('academic_year_id') select-error @enderror"
-                            required>
-                        <option value="">Select Academic Year</option>
-                        @foreach(\App\Models\AcademicYear::where('status', \App\Enums\AcademicYearStatus::Active)->get() as $academicYear)
-                            <option value="{{ $academicYear->id }}"
-                                {{ old('academic_year_id', $enrollment->academic_year_id) == $academicYear->id ? 'selected' : '' }}>
-                                {{ $academicYear->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('academic_year_id')
+                <!-- Academic Year and Semester -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="form-control">
                         <label class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
+                            <span class="label-text font-medium">Academic Year</span>
+                            <span class="label-text-alt text-error">*</span>
                         </label>
-                    @enderror
+                        <select name="academic_year_id"
+                                class="select select-bordered w-full @error('academic_year_id') select-error @enderror"
+                                required>
+                            <option value="">Select Academic Year</option>
+                            @foreach(\App\Models\AcademicYear::where('status', \App\Enums\AcademicYearStatus::Active)->get() as $academicYear)
+                                <option value="{{ $academicYear->id }}"
+                                    {{ old('academic_year_id', $enrollment->academic_year_id) == $academicYear->id ? 'selected' : '' }}>
+                                    {{ $academicYear->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('academic_year_id')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">Semester</span>
+                            <span class="label-text-alt text-error">*</span>
+                        </label>
+                        <select name="semester"
+                                class="select select-bordered w-full @error('semester') select-error @enderror"
+                                required>
+                            <option value="">Select Semester</option>
+                            <option value="1st Semester" {{ old('semester', $enrollment->semester) == '1st Semester' ? 'selected' : '' }}>1st Semester</option>
+                            <option value="2nd Semester" {{ old('semester', $enrollment->semester) == '2nd Semester' ? 'selected' : '' }}>2nd Semester</option>
+                        </select>
+                        @error('semester')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Date Range -->

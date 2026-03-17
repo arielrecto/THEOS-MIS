@@ -58,6 +58,8 @@
                         <th></th>
                         <th>Name</th>
                         <th>Academic Year</th>
+                        <th>Semester</th>
+
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Status</th>
@@ -70,6 +72,7 @@
                             <th></th>
                             <td class="max-w-xs truncate">{{ $enrollment->name }}</td>
                             <td class="max-w-xs truncate">{{ $enrollment->academicYear->name }}</td>
+                             <td class="max-w-xs truncate">{{ $enrollment->semester ?? 'N\A' }}</td>
                             <td>{{ date('F d, Y', strtotime($enrollment->start_date)) }}</td>
                             <td>{{ date('F d, Y', strtotime($enrollment->end_date)) }}</td>
                             <td>{{ $enrollment->status }}</td>

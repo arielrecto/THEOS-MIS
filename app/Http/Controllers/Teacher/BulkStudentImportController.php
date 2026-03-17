@@ -73,7 +73,7 @@ class BulkStudentImportController extends Controller
             'contact_number',
             'occupation',
             'preferred_track',
-            'preferred_strand',
+            'preferred_grade_level',
             'modality',
 
             // Enrollment Form fields
@@ -129,7 +129,7 @@ class BulkStudentImportController extends Controller
                 '09123456789', // contact_number
                 'Engineer', // occupation
                 'ACADEMIC', // preferred_track
-                'STEM', // preferred_strand
+                'Grade 11', // preferred_grade_level
                 'Face-to-Face', // modality (Face-to-Face, Online, Blended)
                 '2024-2025', // school_year (YYYY-YYYY format)
                 'Grade 11', // grade_level
@@ -219,7 +219,7 @@ class BulkStudentImportController extends Controller
                 'contact_number',
                 'occupation',
                 'preferred_track',
-                'preferred_strand',
+                'preferred_grade_level',
                 'modality',
                 'school_year',
                 'grade_level',
@@ -468,7 +468,7 @@ class BulkStudentImportController extends Controller
                         'guardian_contact_number' => trim($rowData['guardian_contact_number'] ?? ''),
                         'guardian_occupation' => trim($rowData['guardian_occupation'] ?? ''),
                         'preferred_track' => trim($rowData['preferred_track']),
-                        'preferred_strand' => trim($rowData['preferred_strand']),
+                        'preferred_strand' => trim($rowData['preferred_grade_level']),
                         'modality' => [trim($rowData['modality'])],
                         'email' => trim($rowData['email']),
                         'status' => 'enrolled',

@@ -38,8 +38,8 @@ class UserCreation extends Notification
     {
         return (new MailMessage)
             ->line('Welcome Account Creation Notification.')
-            ->line($this->data['message'])
-            ->line('Thank you for using our application!');
+            ->line($this->data['message']);
+            // ->line('Thank you for using our application!');
     }
 
     /**

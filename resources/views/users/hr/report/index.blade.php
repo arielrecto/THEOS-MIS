@@ -87,7 +87,7 @@
             </div>
 
             <!-- (Optional) Additional report card placeholder to keep grid balanced on larger screens -->
-            <div class="flex flex-col p-4 sm:p-6 bg-white rounded-lg shadow-sm h-full">
+            {{-- <div class="flex flex-col p-4 sm:p-6 bg-white rounded-lg shadow-sm h-full">
                 <div class="flex items-start sm:items-center gap-4">
                     <div class="p-3 rounded-lg bg-primary/10 flex-none">
                         <i class="text-2xl sm:text-3xl fi fi-rr-analytics text-primary"></i>
@@ -117,7 +117,7 @@
                         <span class="ml-1">Generate</span>
                     </a>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </x-dashboard.hr.base>

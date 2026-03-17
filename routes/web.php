@@ -437,7 +437,9 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('enrollment')->as('enrollment.')->group(function () {
                 Route::get('', [StudentEnrollmentController::class, 'index'])->name('index');
+                Route::get('/create', [StudentEnrollmentController::class, 'create'])->name('create');
                 Route::get('{enrollment}', [StudentEnrollmentController::class, 'show'])->name('show');
+                Route::post('', [StudentEnrollmentController::class, 'store'])->name('store');
             });
 
             Route::prefix('payments')->as('payments.')->group(function () {
