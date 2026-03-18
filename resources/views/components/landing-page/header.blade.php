@@ -277,7 +277,7 @@
 <!-- Contact Section -->
 <section class="bg-gray-50 py-16">
     <div class="container px-6 mx-auto text-center">
-        <h2 class="text-3xl font-bold mb-8">{{ $contactUs->content_label }}</h2>
+        <h2 class="text-3xl font-bold mb-8">{{ $contactUs->content_label ?? 'Contact Us' }}</h2>
         <div class="max-w-2xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="p-6 bg-white rounded-lg shadow-lg">
