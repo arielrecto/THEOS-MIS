@@ -78,6 +78,109 @@
                             <p class="mt-1">{{ $enrollee->balik_aral ? 'Yes' : 'No' }}</p>
                         </div>
                     </div>
+
+                    <!-- Section Assignment -->
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fi fi-rr-users-alt"></i>
+                            Section Assignment
+                        </h3>
+
+                        @if($enrollee->status === 'enrolled')
+                            <!-- Show assigned section if already enrolled -->
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm text-gray-600">Assigned Section:</span>
+                                <span class="badge badge-lg badge-accent">
+                                    {{ $enrollee->section ?? 'Not Assigned' }}
+                                </span>
+                            </div>
+                        @else
+                            <!-- Section selection form -->
+                            <form action="{{ route('registrar.enrollments.update-section', $enrollee->id) }}" 
+                                  method="POST" 
+                                  id="sectionForm">
+                                @csrf
+                                @method('PUT')
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                                    <div class="form-control">
+                                        <label class="label">
+                                            <span class="label-text font-medium">Select Section</span>
+                                            @if($availableSections->isEmpty())
+                                                <span class="label-text-alt text-error">No sections available</span>
+                                            @endif
+                                        </label>
+                                        <select name="section" 
+                                                class="select select-bordered" 
+                                                required
+                                                {{ $availableSections->isEmpty() ? 'disabled' : '' }}>
+                                            <option value="" disabled {{ !$enrollee->section ? 'selected' : '' }}>
+                                                Choose a section
+                                            </option>
+                                            @foreach($availableSections as $section)
+                                                <option value="{{ $section->name }}"
+                                                        {{ $enrollee->section === $section->name ? 'selected' : '' }}
+                                                        {{ $section->student_count >= $section->capacity ? 'disabled' : '' }}>
+                                                    {{ $section->name }} 
+                                                    ({{ $section->student_count }}/{{ $section->capacity }} students)
+                                                    {{ $section->student_count >= $section->capacity ? '- FULL' : '' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <label class="label">
+                                            <span class="label-text-alt">
+                                                Sections for {{ $enrollee->grade_level }}
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-control">
+                                        <button type="submit" 
+                                                class="btn btn-primary"
+                                                {{ $availableSections->isEmpty() ? 'disabled' : '' }}>
+                                            <i class="fi fi-rr-check mr-2"></i>
+                                            {{ $enrollee->section ? 'Update Section' : 'Assign Section' }}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                @if($enrollee->section)
+                                    <div class="mt-3 flex items-center gap-2 text-sm">
+                                        <i class="fi fi-rr-info text-accent"></i>
+                                        <span class="text-gray-600">
+                                            Current section: <strong>{{ $enrollee->section }}</strong>
+                                        </span>
+                                    </div>
+                                @endif
+                            </form>
+
+                            <!-- Section availability info -->
+                            @if($availableSections->isNotEmpty())
+                                <div class="mt-4 divider"></div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    @foreach($availableSections as $section)
+                                        <div class="p-3 bg-white rounded-lg border">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <span class="font-semibold">{{ $section->name }}</span>
+                                                <span class="badge badge-sm {{ $section->student_count >= $section->capacity ? 'badge-error' : 'badge-success' }}">
+                                                    {{ $section->student_count >= $section->capacity ? 'Full' : 'Available' }}
+                                                </span>
+                                            </div>
+                                            <div class="text-xs text-gray-600">
+                                                <p>Capacity: {{ $section->student_count }}/{{ $section->capacity }}</p>
+                                                @if($section->description)
+                                                    <p class="mt-1">{{ $section->description }}</p>
+                                                @endif
+                                            </div>
+                                            <progress class="progress progress-accent w-full mt-2" 
+                                                      value="{{ $section->student_count }}" 
+                                                      max="{{ $section->capacity }}"></progress>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        @endif
+                    </div>
                 </div>
 
                 <!-- Student Information Card -->
@@ -387,6 +490,13 @@
                 }
 
                 if (status === 'enrolled') {
+                    // Check if section is assigned before enrolling
+                    const sectionSelect = document.querySelector('select[name="section"]');
+                    if (sectionSelect && !sectionSelect.value && sectionSelect.options.length > 1) {
+                        alert('Please assign a section before enrolling the student.');
+                        return;
+                    }
+
                     if (!confirm('Are you sure you want to enroll this student?')) {
                         return;
                     }

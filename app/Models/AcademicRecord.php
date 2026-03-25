@@ -15,8 +15,8 @@ class AcademicRecord extends Model
         'enrollment_id',
         'academic_year_id',
         'student_profile_id',
+        'section_id', // Added
     ];
-
 
     public function enrollment()
     {
@@ -33,10 +33,16 @@ class AcademicRecord extends Model
         return $this->belongsTo(StudentProfile::class);
     }
 
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
     public function grades()
     {
         return $this->hasMany(Grade::class);
     }
+
     public function getAverageAttribute()
     {
         return $this->grades->avg('grade');

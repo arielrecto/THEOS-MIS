@@ -9,20 +9,16 @@ class Strand extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'name',
         'acronym',
         'descriptions'
     ];
 
-
-
     public function classrooms()
     {
         return $this->hasMany(Classroom::class);
     }
-
 
     public function subjects()
     {
@@ -32,5 +28,10 @@ class Strand extends Model
     public function tuitionFees()
     {
         return $this->belongsToMany(TuitionFee::class, 'strand_tuition_fees');
+    }
+
+    public function sections()
+    {
+        return $this->hasMany(Section::class);
     }
 }

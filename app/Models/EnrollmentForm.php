@@ -9,10 +9,10 @@ class EnrollmentForm extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'school_year',
         'grade_level',
+        'section', // Added
         'balik_aral',
         'last_name',
         'first_name',
@@ -66,7 +66,6 @@ class EnrollmentForm extends Model
         'modality' => 'array',
     ];
 
-
     public function academicYear()
     {
         return $this->belongsTo(AcademicYear::class);
@@ -76,8 +75,21 @@ class EnrollmentForm extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    /**
+     * Get available sections based on grade level
+     */
+    public function getAvailableSectionsAttribute()
+    {
+        return Section::whereHas('strand', function($query) {
+            $query->where('name', $this->grade_level);
+        })
+        ->where('is_active', true)
+        ->get();
     }
 }

@@ -409,7 +409,7 @@ class BulkStudentImportController extends Controller
                         'contact_number' => trim($rowData['contact_number']),
                         'occupation' => trim($rowData['occupation']),
                         'preferred_track' => trim($rowData['preferred_track']),
-                        'preferred_strand' => trim($rowData['preferred_strand']),
+                        'preferred_strand' => trim($rowData['preferred_grade_level']),
                         'modality' => [trim($rowData['modality'])],
                         'email' => trim($rowData['email']),
                     ]);
@@ -567,7 +567,7 @@ class BulkStudentImportController extends Controller
             'contact_number' => 'required|string|max:20',
             'occupation' => 'required|string|max:255',
             'preferred_track' => 'required|string|max:255',
-            'preferred_strand' => 'required|string|max:255',
+            'preferred_grade_level' => 'required|string|max:255',
             'modality' => 'required|string|in:Face-to-Face,Online,Blended',
             'school_year' => 'required|string|regex:/^\d{4}-\d{4}$/',
             'grade_level' => 'required|string|max:50',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Registrar;
 
 use App\Models\User;
+use App\Models\Section;
 use App\Models\Enrollment;
 use App\Models\AcademicYear;
 use Illuminate\Http\Request;
@@ -34,7 +35,6 @@ class EnrollmentController extends Controller
         $enrollments = Enrollment::paginate(10);
         return view('users.registrar.enrollment.index', compact('enrollments'));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -68,7 +68,6 @@ class EnrollmentController extends Controller
                 date('M d, Y', strtotime($enrollment->start_date)) .
                 " to " . date('M d, Y', strtotime($enrollment->end_date)),
             'type' => 'enrollment',
-            // 'url' => route('enrollees.form')
         ];
 
         // Notify all students
@@ -87,13 +86,10 @@ class EnrollmentController extends Controller
         $enrollment = Enrollment::findOrFail($id);
         $enrollees = $enrollment->enrollees()->paginate(10);
 
-
         return view('users.registrar.enrollment.show', compact('enrollment', 'enrollees'));
     }
 
     /**
-
-
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
@@ -151,14 +147,65 @@ class EnrollmentController extends Controller
     public function showEnrollee(string $id)
     {
         $enrollee = EnrollmentForm::findOrFail($id);
-        return view('users.registrar.enrollment.enrollee-form', compact('enrollee'));
+
+        // Get available sections based on grade level
+        $availableSections = Section::whereHas('strand', function($query) use ($enrollee) {
+            $query->where('name', $enrollee->grade_level);
+        })
+        ->where('is_active', true)
+        ->with('strand')
+        ->get();
+
+        return view('users.registrar.enrollment.enrollee-form', compact('enrollee', 'availableSections'));
+    }
+
+    /**
+     * Update enrollee section
+     */
+    public function updateSection(Request $request, string $id)
+    {
+        $request->validate([
+            'section' => 'required|string'
+        ]);
+
+        $enrollee = EnrollmentForm::findOrFail($id);
+
+        // Verify section exists and matches grade level
+        $section = Section::whereHas('strand', function($query) use ($enrollee) {
+            $query->where('name', $enrollee->grade_level);
+        })
+        ->where('name', $request->section)
+        ->first();
+
+        if (!$section) {
+            return back()->with('error', 'Invalid section selected for this grade level');
+        }
+
+        // Check section capacity
+        $currentEnrollees = EnrollmentForm::where('section', $request->section)
+            ->where('grade_level', $enrollee->grade_level)
+            ->where('status', 'enrolled')
+            ->count();
+
+        if ($currentEnrollees >= $section->capacity) {
+            return back()->with('error', 'Section is already at full capacity');
+        }
+
+        $enrollee->update([
+            'section' => $request->section
+        ]);
+
+        return back()->with('success', 'Section assigned successfully');
     }
 
     public function enrolled(Request $request, string $id)
     {
-
         $enrollee = EnrollmentForm::findOrFail($id);
 
+        // Validate section is assigned
+        if (!$enrollee->section) {
+            return back()->with('error', 'Please assign a section before enrolling the student');
+        }
 
         if ($enrollee->type === 'old') {
             $enrollee->update([
@@ -168,11 +215,7 @@ class EnrollmentController extends Controller
             return back()->with('success', 'Enrollee enrolled successfully');
         }
 
-
         $user = User::find($enrollee->user_id);
-
-
-
 
         $studentProfile = StudentProfile::create([
             'lrn' => $enrollee->lrn,
@@ -205,6 +248,12 @@ class EnrollmentController extends Controller
             'user_id' => $user->id,
         ]);
 
+        // Get section_id for academic record
+        $section = Section::whereHas('strand', function($query) use ($enrollee) {
+            $query->where('name', $enrollee->grade_level);
+        })
+        ->where('name', $enrollee->section)
+        ->first();
 
         $academicRecord = AcademicRecord::create([
             'student_profile_id' => $studentProfile->id,
@@ -212,8 +261,8 @@ class EnrollmentController extends Controller
             'academic_year_id' => $enrollee->academic_year_id,
             'school_year' => $enrollee->school_year,
             'grade_level' => $enrollee->grade_level,
+            'section_id' => $section ? $section->id : null,
         ]);
-
 
         $enrollee->update([
             'status' => 'Enrolled',
@@ -241,7 +290,6 @@ class EnrollmentController extends Controller
             'header' => 'Enrollment Period Closed',
             'message' => "The enrollment period '{$enrollment->name}' has been closed.",
             'type' => 'enrollment',
-            // 'url' => route('enrollees.form')
         ];
 
         // Notify students and teachers
@@ -277,14 +325,11 @@ class EnrollmentController extends Controller
             'academicYear'
         ])->first();
 
-
         return view('users.registrar.enrollment.print', compact('enrollment'));
     }
 
     public function updateStatus(Request $request, string $id)
     {
-
-
         $request->validate([
             'status' => 'required|in:pending,review,interviewed,enrolled',
             'remarks' => 'nullable|string|max:500'
@@ -311,7 +356,6 @@ class EnrollmentController extends Controller
             'header' => 'Enrollment Status Update',
             'message' => "Your enrollment status has been updated to " . ucfirst($request->status),
             'type' => 'enrollment_status',
-            // 'url' => route('enrollment.status', $enrollee->id)
         ];
 
         // Notify the student
@@ -333,6 +377,11 @@ class EnrollmentController extends Controller
 
     private function processEnrollment(EnrollmentForm $enrollee)
     {
+        // Validate section is assigned
+        if (!$enrollee->section) {
+            return;
+        }
+
         // Create or update student profile
         $studentProfile = StudentProfile::updateOrCreate(
             ['user_id' => $enrollee->user_id],
@@ -346,6 +395,13 @@ class EnrollmentController extends Controller
             ]
         );
 
+        // Get section_id
+        $section = Section::whereHas('strand', function($query) use ($enrollee) {
+            $query->where('name', $enrollee->grade_level);
+        })
+        ->where('name', $enrollee->section)
+        ->first();
+
         // Create academic record
         AcademicRecord::create([
             'student_profile_id' => $studentProfile->id,
@@ -353,6 +409,7 @@ class EnrollmentController extends Controller
             'academic_year_id' => $enrollee->academic_year_id,
             'school_year' => $enrollee->school_year,
             'grade_level' => $enrollee->grade_level,
+            'section_id' => $section ? $section->id : null,
         ]);
     }
 }

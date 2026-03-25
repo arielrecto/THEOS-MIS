@@ -149,6 +149,13 @@ Route::middleware(['auth'])->group(function () {
                 Route::prefix('tuition-fees')->as('tuition-fees.')->group(function () {
                     Route::put('{strand}/attach', [StrandController::class, 'updateTuitionFees'])->name('update');
                 });
+
+                Route::prefix('sections')->as('sections.')->group(function () {
+                   Route::post('/store', [StrandController::class, 'storeSection'])->name('store');
+                   Route::delete('/destroy', [StrandController::class, 'destroySection'])->name('destroy');
+                   Route::put('/update', [StrandController::class, 'updateSection'])->name('update');
+
+                });
             });
             Route::resource('strands', StrandController::class);
             Route::resource('subjects', SubjectController::class);
@@ -357,6 +364,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::patch('{enrollment}/close', [EnrollmentController::class, 'close'])->name('close');
                     Route::get('/print/{id}', [EnrollmentController::class, 'print'])->name('print');
                     Route::put('{id}/status', [EnrollmentController::class, 'updateStatus'])->name('update-status');
+                    Route::put('{id}/update-section', [EnrollmentController::class, 'updateSection'])->name('update-section');
                 });
 
             Route::prefix('students')
@@ -367,6 +375,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('{student}/records/{record}/print', [RegistrarStudentController::class, 'print'])->name('print');
                     Route::get('{student}/good-moral', [RegistrarStudentController::class, 'printGoodMoral'])->name('good-moral');
                     Route::get('{student}/form-137', [RegistrarStudentController::class, 'printForm137'])->name('form-137');
+                    Route::get('{id}/data-report', [RegistrarStudentController::class, 'studentDataReport'])->name('data-report');
                 });
 
             Route::prefix('grades')
