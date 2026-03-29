@@ -54,8 +54,8 @@
                                 class="select select-bordered w-full text-sm">
                             <option value="">All Grade Levels</option>
                             @foreach($gradeLevels as $level)
-                                <option value="{{ $level }}"
-                                        {{ request('grade_level') == $level ? 'selected' : '' }}>
+                                <option value="{{ 'Grade '.  $level }}"
+                                        {{ request('grade_level') == 'Grade '. $level ? 'selected' : '' }}>
                                     Grade {{ $level }}
                                 </option>
                             @endforeach
@@ -233,7 +233,7 @@
                         <th class="text-white bg-accent">Student</th>
                         <th class="text-white bg-accent">LRN</th>
                         <th class="text-white bg-accent">Grade Level</th>
-                        <th class="text-white bg-accent">Strand</th>
+                        {{-- <th class="text-white bg-accent">Strand</th> --}}
                         <th class="text-white bg-accent">Academic Year</th>
                         <th class="text-center text-white bg-accent">Actions</th>
                     </tr>
@@ -269,12 +269,12 @@
                             <td class="text-sm">{{ $student->studentProfile?->lrn ?? 'N/A' }}</td>
                             <td class="text-sm">
                                 @if($latestRecord)
-                                    <span class="badge badge-ghost badge-sm">Grade {{ $latestRecord->grade_level }}</span>
+                                    <span class="badge badge-ghost badge-sm">{{ $latestRecord->grade_level }}</span>
                                 @else
                                     <span class="text-gray-400">N/A</span>
                                 @endif
                             </td>
-                            <td class="text-sm">
+                            {{-- <td class="text-sm">
                                 @if($latestRecord && $latestRecord->strand_id)
                                     <span class="badge badge-accent badge-sm">
                                         {{ $strands->find($latestRecord->strand_id)?->acronym ?? 'N/A' }}
@@ -282,7 +282,7 @@
                                 @else
                                     <span class="text-gray-400">—</span>
                                 @endif
-                            </td>
+                            </td> --}}
                             <td class="text-sm">{{ $latestRecord?->academicYear?->name ?? 'N/A' }}</td>
                             <td class="text-center">
                                 <a href="{{ route('registrar.students.show', $student->id) }}"

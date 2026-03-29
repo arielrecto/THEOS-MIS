@@ -18,13 +18,13 @@ class StudentController extends Controller
         // Load filter options
         $academicYears = AcademicYear::orderBy('name', 'desc')->get();
         $strands = Strand::orderBy('acronym')->get();
-        $gradeLevels = [7, 8, 9, 10, 11, 12];
+        $gradeLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         // Build the query
         $query = User::role('student')
             ->with([
                 'studentProfile.academicRecords' => function ($query) use ($request) {
-                    $query->with(['academicYear']) // 'strand' commented out
+                    $query->with(['academicYear', 'section'])
                         ->when($request->filled('academic_year'), function ($q) use ($request) {
                             $q->where('academic_year_id', $request->academic_year);
                         })
@@ -43,7 +43,8 @@ class StudentController extends Controller
                         $sq->where('lrn', 'like', "%{$search}%")
                             ->orWhere('first_name', 'like', "%{$search}%")
                             ->orWhere('last_name', 'like', "%{$search}%")
-                            ->orWhere(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%{$search}%");
+                            // Use database-specific concatenation
+                            ->orWhereRaw($this->getConcatExpression() . " like ?", ["%{$search}%"]);
                     });
             });
         }
@@ -58,18 +59,18 @@ class StudentController extends Controller
             });
         }
 
-        // Apply strand filter (commented out)
-        // if ($request->filled('strand')) {
-        //     $query->whereHas('studentProfile.academicRecords', function ($q) use ($request) {
-        //         $q->where('strand_id', $request->strand);
-        //         if ($request->filled('academic_year')) {
-        //             $q->where('academic_year_id', $request->academic_year);
-        //         }
-        //     });
-        // }
+        // Apply section filter
+        if ($request->filled('section')) {
+            $query->whereHas('studentProfile.academicRecords', function ($q) use ($request) {
+                $q->where('section_id', $request->section);
+                if ($request->filled('academic_year')) {
+                    $q->where('academic_year_id', $request->academic_year);
+                }
+            });
+        }
 
         // Apply academic year filter
-        if ($request->filled('academic_year') && !$request->filled('grade_level')) { // && !$request->filled('strand')
+        if ($request->filled('academic_year') && !$request->filled('grade_level') && !$request->filled('section')) {
             $query->whereHas('studentProfile.academicRecords', function ($q) use ($request) {
                 $q->where('academic_year_id', $request->academic_year);
             });
@@ -140,19 +141,37 @@ class StudentController extends Controller
         ));
     }
 
+    /**
+     * Get database-specific concatenation expression
+     */
+    private function getConcatExpression()
+    {
+        $driver = DB::connection()->getDriverName();
+
+        switch ($driver) {
+            case 'sqlite':
+                return "first_name || ' ' || last_name";
+            case 'pgsql':
+                return "first_name || ' ' || last_name";
+            case 'mysql':
+            case 'mariadb':
+            default:
+                return "CONCAT(first_name, ' ', last_name)";
+        }
+    }
+
     public function show(Request $request, string $id)
     {
         $student = User::role('student')
             ->with([
                 'studentProfile',
                 'studentProfile.academicRecords' => function ($query) use ($request) {
-                    $query->when($request->academic_year, function ($q) use ($request) {
-                        $q->where('academic_year_id', $request->academic_year);
-                    })
-                    ->orderBy('grade_level', 'desc');
+                    $query->with(['academicYear', 'section'])
+                        ->when($request->academic_year, function ($q) use ($request) {
+                            $q->where('academic_year_id', $request->academic_year);
+                        })
+                        ->orderBy('grade_level', 'desc');
                 },
-                'studentProfile.academicRecords.academicYear',
-                // 'studentProfile.academicRecords.strand', // Commented out
                 'studentProfile.academicRecords.grades',
                 'profilePicture',
                 'asStudentClassrooms.classroom.subject'
@@ -206,10 +225,9 @@ class StudentController extends Controller
             ->with([
                 'studentProfile',
                 'studentProfile.academicRecords' => function ($query) {
-                    $query->orderBy('grade_level', 'desc');
+                    $query->with(['academicYear', 'section'])
+                        ->orderBy('grade_level', 'desc');
                 },
-                'studentProfile.academicRecords.academicYear',
-                // 'studentProfile.academicRecords.strand', // Commented out
                 'studentProfile.academicRecords.grades',
                 'profilePicture',
                 'asStudentClassrooms.classroom.subject'
@@ -287,7 +305,7 @@ class StudentController extends Controller
 
         $academicRecord = AcademicRecord::with([
             'academicYear',
-            // 'strand', // Commented out
+            'section',
             'grades' => function ($query) {
                 $query->orderBy('subject')->orderBy('quarter');
             }
@@ -312,7 +330,7 @@ class StudentController extends Controller
                     'academicRecords' => function ($q) {
                         $q->with([
                             'academicYear',
-                            // 'strand', // Commented out
+                            'section',
                             'grades' => function ($query) {
                                 $query->orderBy('subject')->orderBy('quarter');
                             }

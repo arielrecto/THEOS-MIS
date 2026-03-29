@@ -54,7 +54,7 @@
             </div>
 
             <!-- Today's Attendance -->
-            <div class="bg-white rounded-lg shadow-md p-6">
+            {{-- <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Present Today</p>
@@ -67,7 +67,7 @@
                 <div class="mt-4 text-xs text-gray-500">
                     {{ $attendanceAnalytics['late'] }} came late
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <!-- Department Overview -->
