@@ -42,7 +42,7 @@
                                         {{ $classroom->subject->name ?? 'N/A' }}
                                     </h3>
                                     <p class="text-sm text-gray-600 mt-1">
-                                        {{ $classroom->section->name ?? 'N/A' }}
+                                        {{-- {{ $classroom->section->name ?? 'N/A' }} --}}
                                         @if($classroom->section && $classroom->section->strand)
                                             <span class="badge badge-xs badge-ghost ml-1">
                                                 {{ $classroom->section->strand->acronym }}
@@ -64,10 +64,10 @@
                             </div>
 
                             <div class="flex gap-2 mt-3">
-                                <span class="btn btn-xs btn-primary" onclick="event.preventDefault();">
+                                <a href="{{ route('teacher.classrooms.show', ['classroom' => $classroom->id]) }}" class="btn btn-xs btn-primary">
                                     <i class="fi fi-rr-eye"></i>
                                     View Details
-                                </span>
+                                </a >
                                 <a href="{{ route('teacher.classrooms.students', $classroom->id) }}"
                                    class="btn btn-xs btn-ghost"
                                    onclick="event.stopPropagation();">

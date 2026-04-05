@@ -194,7 +194,7 @@ class EnrollmentController extends Controller
         // ];
 
          $notificationNewUser = [
-            'message' => "Hello, Good Day, Welcome {$user->name}. your account has been created for the {$enrollment->grade_level}. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in. thank you for using our application.",
+            'message' => "Good Day, Welcome {$user->name}. your account has been created for the {$enrollment->grade_level}. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in. thank you for using our application.",
         ];
 
 

@@ -128,8 +128,8 @@
                         </label>
                     @enderror
                 </div>
-                <div class="flex justify-end mt-4">
-                    <button type="submit" class="btn btn-accent">
+                <div class="flex mt-4">
+                    <button type="submit" class="btn w-full btn-accent">
                         <i class="mr-2 fi fi-rr-comment"></i>
                         Post Comment
                     </button>

@@ -38,23 +38,24 @@
                 </div>
             </div>
 
-            <div class="md:col-span-2 flex flex-col items-start md:items-end gap-2">
-                <div class="w-full flex gap-2">
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <!-- Mobile: Stack buttons vertically -->
+                <div class="flex flex-col md:flex-row gap-2">
                     <a href="{{ route('registrar.students.data-report', $student->id) }}"
                        target="_blank"
-                       class="btn btn-outline btn-accent btn-sm w-full justify-center">
+                       class="btn btn-outline btn-accent btn-sm w-full">
                         <i class="fi fi-rr-document mr-2"></i>
                         Data Report
                     </a>
                     <a href="{{ route('registrar.students.good-moral', $student->id) }}"
                        target="_blank"
-                       class="btn btn-outline btn-accent btn-sm w-full justify-center">
+                       class="btn btn-outline btn-accent btn-sm w-full">
                         <i class="fi fi-rr-diploma mr-2"></i>
                         Good Moral
                     </a>
                     <a href="{{ route('registrar.students.form-137', $student->id) }}"
                        target="_blank"
-                       class="btn btn-outline btn-accent btn-sm w-full justify-center">
+                       class="btn btn-outline btn-accent btn-sm w-full">
                         <i class="fi fi-rr-document mr-2"></i>
                         Form 137
                     </a>

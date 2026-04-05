@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classroom;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -70,16 +71,23 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
+        $teacher = User::with(['profile', 'roles'])
+        ->whereHas('profile', function($q) use ($id){
+            $q->where('id', $id);
+        })->firstOrFail();
 
-        $teacher = User::whereHas('profile', function($q) use($id){
-            $q->whereId($id);
-        })->first();
+        // Get teacher's classrooms
+        $classrooms = Classroom::whereHas('teacher', function ($query) use ($teacher) {
+            $query->where('user_id', $teacher->id);
+        })->with([
+            'subject',
+            'section.strand',
+            'students'
+        ])->withCount('classroomStudents')->latest()->get();
 
-
-
-        return view('users.teacher.profile.show', compact(['teacher']));
+        return view('users.teacher.profile.show', compact('teacher', 'classrooms'));
     }
 
     /**

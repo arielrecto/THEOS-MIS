@@ -29,7 +29,7 @@
                                         {{ ucfirst($enrollment->status) }}
                                     </span>
                                 </div>
-                                
+
                                 <div class="text-xs text-gray-500 mb-3">
                                     <i class="fi fi-rr-calendar"></i>
                                     {{ $enrollment->created_at->format('M d, Y') }}
@@ -43,7 +43,8 @@
                                     @if($enrollment->status === 'enrolled')
                                         <a href="{{ route('student.enrollment.create', ['previous' => $enrollment->id]) }}"
                                            class="btn btn-accent btn-sm flex-1">
-                                            <i class="fi fi-rr-arrow-up"></i> Enroll Next
+                                            <i class="fi fi-rr-arrow-up hidden"></i>
+                                            <span class="">Enroll Next</span>
                                         </a>
                                     @endif
                                 </div>

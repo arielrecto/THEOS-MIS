@@ -40,7 +40,7 @@
 </aside>
 
 {{-- Mobile Bottom Navigation --}}
-<nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-neutral border-t shadow-inner">
+<nav class="md:hidden capitalize fixed bottom-0 left-0 right-0 z-40 bg-neutral border-t shadow-inner">
     <!-- make this container horizontally scrollable when items overflow -->
     <div class="flex items-center gap-2 px-2 py-1 overflow-x-auto whitespace-nowrap">
         @foreach ($links as $link)

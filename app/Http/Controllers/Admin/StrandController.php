@@ -47,7 +47,7 @@ class StrandController extends Controller
         ]);
 
         return back()->with([
-            'message' => 'Strand Added'
+            'message' => 'Grade Level Added'
         ]);
     }
 
@@ -87,7 +87,7 @@ class StrandController extends Controller
             'descriptions' => $request->description ?? $strand->descriptions
         ]);
 
-        return back()->with(['message' => 'Strand Data Updated']);
+        return back()->with(['message' => 'Grade Level Data Updated']);
     }
 
     /**
@@ -194,6 +194,6 @@ class StrandController extends Controller
 
         $strand->delete();
 
-        return back()->with(['message' => 'Strand Deleted Successfully']);
+        return back()->with(['message' => 'Grade Level Deleted Successfully']);
     }
 }

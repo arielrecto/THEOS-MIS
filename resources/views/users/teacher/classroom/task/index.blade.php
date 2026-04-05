@@ -1,6 +1,6 @@
 <x-dashboard.teacher.base>
 
-    <x-dashboard.page-title :back_url="route('teacher.classrooms.show', ['classroom' => $classroom_id])" :title="_('tasks')" :create_url="route('teacher.tasks.create', ['classroom_id' => $classroom_id])" />
+    <x-dashboard.page-title :back_url="$classroom_id ? route('teacher.classrooms.show', ['classroom' => $classroom_id]) :  URL::previous()" :title="_('tasks')" :create_url="route('teacher.tasks.create', ['classroom_id' => $classroom_id])" />
     <x-notification-message />
     <div class="panel min-h-96">
 

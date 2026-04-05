@@ -77,7 +77,7 @@
                                 </a>
 
                                 <div class="mt-1 text-xs text-gray-500 flex flex-col sm:flex-row sm:items-center gap-1">
-                                    <span class="truncate">Code: <span class="font-medium text-gray-700">{{ $department->code }}</span></span>
+                                    {{-- <span class="truncate">Code: <span class="font-medium text-gray-700">{{ $department->code }}</span></span> --}}
                                     <span class="truncate">Head: <span class="font-medium">{{ $department->head ?: 'No head assigned' }}</span></span>
                                 </div>
 
