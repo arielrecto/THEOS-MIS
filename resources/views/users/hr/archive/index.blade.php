@@ -242,7 +242,7 @@
                     <i class="fi fi-rr-box-open text-4xl text-gray-400 mb-4 block"></i>
                     <p class="text-gray-500 mb-4">No archived employees found</p>
                     @if (request()->hasAny(['search', 'department', 'position']))
-                        <a href="{{ route('hr.archive.index') }}" class="btn btn-ghost">
+                        <a href="{{ route('hr.employees.archived') }}" class="btn btn-ghost">
                             Clear Filters
                         </a>
                     @endif

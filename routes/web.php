@@ -371,7 +371,7 @@ Route::middleware(['auth'])->group(function () {
                 ->as('students.')
                 ->group(function () {
                     Route::get('', [RegistrarStudentController::class, 'index'])->name('index');
-                    Route::get('{student}', [RegistrarStudentController::class, 'show'])->name('show');
+                    Route::get('/print-list', [RegistrarStudentController::class, 'printList'])->name('print-list');                    Route::get('{student}', [RegistrarStudentController::class, 'show'])->name('show');
                     Route::get('{student}/records/{record}/print', [RegistrarStudentController::class, 'print'])->name('print');
                     Route::get('{student}/good-moral', [RegistrarStudentController::class, 'printGoodMoral'])->name('good-moral');
                     Route::get('{student}/form-137', [RegistrarStudentController::class, 'printForm137'])->name('form-137');

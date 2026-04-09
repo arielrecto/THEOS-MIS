@@ -62,24 +62,6 @@
                         </select>
                     </div>
 
-                    <!-- Strand Filter -->
-                        {{-- <div class="form-control">
-                            <label class="label">
-                                <span class="font-medium label-text text-sm">Strand</span>
-                            </label>
-                            <select name="strand"
-                                    onchange="this.form.submit()"
-                                    class="select select-bordered w-full text-sm">
-                                <option value="">All Strands</option>
-                                @foreach($strands as $strand)
-                                    <option value="{{ $strand->id }}"
-                                            {{ request('strand') == $strand->id ? 'selected' : '' }}>
-                                        {{ $strand->acronym }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-
                     <!-- Sort By -->
                     <div class="form-control">
                         <label class="label">
@@ -101,11 +83,21 @@
 
                 <!-- Active Filters & Actions -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-3 border-t">
-                    <!-- Results Summary -->
-                    <div class="text-xs sm:text-sm text-gray-500">
-                        Showing <strong class="text-gray-700">{{ $students->firstItem() ?? 0 }}</strong>
-                        to <strong class="text-gray-700">{{ $students->lastItem() ?? 0 }}</strong>
-                        of <strong class="text-gray-700">{{ $students->total() }}</strong> students
+                    <!-- Results Summary & Print Button -->
+                    <div class="flex items-center gap-3">
+                        <div class="text-xs sm:text-sm text-gray-500">
+                            Showing <strong class="text-gray-700">{{ $students->firstItem() ?? 0 }}</strong>
+                            to <strong class="text-gray-700">{{ $students->lastItem() ?? 0 }}</strong>
+                            of <strong class="text-gray-700">{{ $students->total() }}</strong> students
+                        </div>
+
+                        <!-- Print Button -->
+                        <a href="{{ route('registrar.students.print-list', request()->query()) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-ghost gap-2">
+                            <i class="fi fi-rr-print"></i>
+                            Print List
+                        </a>
                     </div>
 
                     <!-- Active Filter Badges & Clear Button -->
@@ -131,7 +123,7 @@
                                 @if(request('grade_level'))
                                     <span class="badge badge-sm badge-ghost gap-1">
                                         <i class="fi fi-rr-diploma text-xs"></i>
-                                        Grade {{ request('grade_level') }}
+                                        {{ request('grade_level') }}
                                         <a href="{{ route('registrar.students.index', array_filter(request()->except('grade_level'))) }}"
                                            class="text-error hover:text-error-focus">×</a>
                                     </span>
@@ -194,7 +186,7 @@
                                 @if($latestRecord)
                                     <div class="flex items-center gap-2 mt-1 text-xs text-gray-600">
                                         <span class="badge badge-sm badge-outline">
-                                            Grade {{ $latestRecord->grade_level }}
+                                            {{ $latestRecord->grade_level }}
                                         </span>
                                         @if($latestRecord->strand_id)
                                             <span class="badge badge-sm badge-accent badge-outline">
@@ -233,7 +225,6 @@
                         <th class="text-white bg-accent">Student</th>
                         <th class="text-white bg-accent">LRN</th>
                         <th class="text-white bg-accent">Grade Level</th>
-                        {{-- <th class="text-white bg-accent">Strand</th> --}}
                         <th class="text-white bg-accent">Academic Year</th>
                         <th class="text-center text-white bg-accent">Actions</th>
                     </tr>
@@ -274,15 +265,6 @@
                                     <span class="text-gray-400">N/A</span>
                                 @endif
                             </td>
-                            {{-- <td class="text-sm">
-                                @if($latestRecord && $latestRecord->strand_id)
-                                    <span class="badge badge-accent badge-sm">
-                                        {{ $strands->find($latestRecord->strand_id)?->acronym ?? 'N/A' }}
-                                    </span>
-                                @else
-                                    <span class="text-gray-400">—</span>
-                                @endif
-                            </td> --}}
                             <td class="text-sm">{{ $latestRecord?->academicYear?->name ?? 'N/A' }}</td>
                             <td class="text-center">
                                 <a href="{{ route('registrar.students.show', $student->id) }}"
@@ -294,7 +276,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-12 text-center text-gray-500">
+                            <td colspan="5" class="py-12 text-center text-gray-500">
                                 <div class="flex flex-col items-center">
                                     <i class="fi fi-rr-search text-5xl mb-3"></i>
                                     <p class="text-base font-medium mb-1">No students found</p>

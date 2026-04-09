@@ -43,7 +43,6 @@ class StudentController extends Controller
                         $sq->where('lrn', 'like', "%{$search}%")
                             ->orWhere('first_name', 'like', "%{$search}%")
                             ->orWhere('last_name', 'like', "%{$search}%")
-                            // Use database-specific concatenation
                             ->orWhereRaw($this->getConcatExpression() . " like ?", ["%{$search}%"]);
                     });
             });
@@ -139,6 +138,116 @@ class StudentController extends Controller
             'strands',
             'gradeLevels'
         ));
+    }
+
+    /**
+     * Print student list with filters
+     */
+    public function printList(Request $request)
+    {
+        $academicYears = AcademicYear::orderBy('name', 'desc')->get();
+
+        // Build the same query as index but without pagination
+        $query = User::role('student')
+            ->with([
+                'studentProfile.academicRecords' => function ($query) use ($request) {
+                    $query->with(['academicYear', 'section'])
+                        ->when($request->filled('academic_year'), function ($q) use ($request) {
+                            $q->where('academic_year_id', $request->academic_year);
+                        })
+                        ->orderBy('grade_level', 'desc');
+                },
+            ]);
+
+        // Apply search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhereHas('studentProfile', function ($sq) use ($search) {
+                        $sq->where('lrn', 'like', "%{$search}%")
+                            ->orWhere('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%")
+                            ->orWhereRaw($this->getConcatExpression() . " like ?", ["%{$search}%"]);
+                    });
+            });
+        }
+
+        // Apply grade level filter
+        if ($request->filled('grade_level')) {
+            $query->whereHas('studentProfile.academicRecords', function ($q) use ($request) {
+                $q->where('grade_level', $request->grade_level);
+                if ($request->filled('academic_year')) {
+                    $q->where('academic_year_id', $request->academic_year);
+                }
+            });
+        }
+
+        // Apply academic year filter
+        if ($request->filled('academic_year') && !$request->filled('grade_level')) {
+            $query->whereHas('studentProfile.academicRecords', function ($q) use ($request) {
+                $q->where('academic_year_id', $request->academic_year);
+            });
+        }
+
+        // Apply sorting
+        $sort = $request->get('sort', 'name_asc');
+        switch ($sort) {
+            case 'name_desc':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'lrn_asc':
+                $query->leftJoin('student_profiles', 'users.id', '=', 'student_profiles.user_id')
+                    ->orderBy('student_profiles.lrn', 'asc')
+                    ->select('users.*');
+                break;
+            case 'lrn_desc':
+                $query->leftJoin('student_profiles', 'users.id', '=', 'student_profiles.user_id')
+                    ->orderBy('student_profiles.lrn', 'desc')
+                    ->select('users.*');
+                break;
+            case 'recent':
+                $query->latest('created_at');
+                break;
+            case 'name_asc':
+            default:
+                $query->orderBy('name', 'asc');
+                break;
+        }
+
+        // Get all students (no pagination for print)
+        $students = $query->get();
+
+        // Prepare filter information for display
+        $filterInfo = [
+            'academic_year' => $request->filled('academic_year')
+                ? $academicYears->find($request->academic_year)?->name
+                : null,
+            'grade_level' => $request->grade_level,
+            'search' => $request->search,
+            'sort' => $this->getSortLabel($sort),
+        ];
+
+        return view('users.registrar.student.print-list', compact('students', 'filterInfo'));
+    }
+
+    /**
+     * Get human-readable sort label
+     */
+    private function getSortLabel($sort)
+    {
+        $labels = [
+            'name_asc' => 'Name (A-Z)',
+            'name_desc' => 'Name (Z-A)',
+            'lrn_asc' => 'LRN (Low-High)',
+            'lrn_desc' => 'LRN (High-Low)',
+            'grade_asc' => 'Grade (Low-High)',
+            'grade_desc' => 'Grade (High-Low)',
+            'recent' => 'Recently Added',
+        ];
+
+        return $labels[$sort] ?? 'Name (A-Z)';
     }
 
     /**
