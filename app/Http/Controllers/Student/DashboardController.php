@@ -12,10 +12,16 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $student = User::find(auth()->user()->id);
+        // Get the authenticated student with their academic records and grades
+        $student = User::with([
+            'studentProfile.academicRecords' => function($query) {
+                $query->with(['academicYear', 'grades', 'section.strand'])
+                      ->orderBy('created_at', 'desc');
+            }
+        ])->find(auth()->id());
 
-        // Get upcoming tasks for the student
-        $tasks = StudentTask::with(['task', 'grade'])
+        // Get upcoming tasks for the authenticated student
+        $tasks = StudentTask::with(['task.classroom.subject', 'grade'])
             ->where('user_id', auth()->id())
             ->whereHas('task', function($query) {
                 $query->where('due_date', '>=', now())
@@ -24,6 +30,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Get latest announcements
         $announcements = GeneralAnnouncement::with(['postedBy', 'attachments'])
             ->withCount('attachments')
             ->where(function($query) {

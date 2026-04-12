@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Registrar;
 
-use App\Models\User;
-use App\Models\Strand;
-use App\Models\Payment;
-use App\Models\AcademicYear;
-use Illuminate\Http\Request;
-use App\Models\AcademicRecord;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\AcademicRecord;
+use App\Models\AcademicYear;
+use App\Models\CertificateTemplate;
+use App\Models\Payment;
+use App\Models\Strand;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -425,10 +426,13 @@ class StudentController extends Controller
 
     public function printGoodMoral(string $id)
     {
-        $student = User::with(['studentProfile'])->findOrFail($id);
-        $currentDate = now()->format('F d, Y');
 
-        return view('users.registrar.student.good-moral', compact('student', 'currentDate'));
+        $student = User::with('studentProfile')->findOrFail($id);
+        $template = CertificateTemplate::where('type', 'good_moral')
+        ->where('is_active', true)
+        ->firstOrFail();
+
+    return view('users.registrar.student.good-moral', compact('student', 'template'));
     }
 
     public function printForm137(string $id)
@@ -449,7 +453,13 @@ class StudentController extends Controller
             },
         ])->findOrFail($id);
 
-        return view('users.registrar.student.form-137', compact('student'));
+         $template = CertificateTemplate::where('type', 'form_137')
+        ->where('is_active', true)
+        ->firstOrFail();
+
+        return view('users.registrar.student.form-137', compact('student', 'template'));
+
+
     }
 
     /**

@@ -57,7 +57,7 @@ class GradeController extends Controller
 
                 });
             })
-            ->orderBy('name')
+            ->orderBy('name', $request->sort_order ?? 'asc')
             ->paginate(12)
             ->withQueryString();
 

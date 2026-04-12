@@ -23,6 +23,12 @@
             'name' => 'grades',
             'icon' => '<i class="fi fi-rr-users"></i>',
             'is_active' => true,
+        ],
+        [
+            'url' => 'registrar.certificate-templates.index',
+            'name' => 'certificate templates',
+            'icon' => '<i class="fi fi-rr-certificate"></i>',
+            'is_active' => true,
         ]
     ];
 

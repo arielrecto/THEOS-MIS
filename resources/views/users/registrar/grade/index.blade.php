@@ -10,21 +10,21 @@
                 <input type="hidden" name="academic_year" value="{{ request('academic_year') }}">
                 <input type="hidden" name="grade_level" value="{{ request('grade_level') }}">
                 <input type="hidden" name="strand" value="{{ request('strand') }}">
-                
+
                 <div class="form-control w-full">
                     <label class="label">
                         <span class="label-text font-medium text-xs sm:text-sm">Search Student</span>
                     </label>
                     <div class="relative">
-                        <input type="text" 
-                               name="search" 
+                        <input type="text"
+                               name="search"
                                value="{{ request('search') }}"
-                               placeholder="Search by student name or LRN..." 
+                               placeholder="Search by student name or LRN..."
                                class="input input-bordered input-sm sm:input-md w-full pr-20" />
-                        
+
                         <div class="absolute right-1 top-1/2 -translate-y-1/2 flex gap-1">
                             @if(request('search'))
-                                <a href="{{ route('registrar.grades.index', request()->except('search')) }}" 
+                                <a href="{{ route('registrar.grades.index', request()->except('search')) }}"
                                    class="btn btn-ghost btn-xs sm:btn-sm btn-circle">
                                     <i class="fi fi-rr-cross-small"></i>
                                 </a>
@@ -43,7 +43,7 @@
             <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Preserve search value -->
                 <input type="hidden" name="search" value="{{ request('search') }}">
-                
+
                 <!-- Academic Year Filter -->
                 <div class="form-control w-full">
                     <label class="label">
@@ -79,7 +79,7 @@
                 </div>
 
                 <!-- Strand Filter (For Senior High) -->
-                <div class="form-control w-full">
+                {{-- <div class="form-control w-full">
                     <label class="label">
                         <span class="label-text font-medium text-xs sm:text-sm">Strand (SHS)</span>
                     </label>
@@ -93,7 +93,24 @@
                             </option>
                         @endforeach
                     </select>
+                </div> --}}
+
+                 <!-- Sort Direction Filter -->
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text font-medium text-xs sm:text-sm">Sort By</span>
+                    </label>
+                    <select name="sort_order" onchange="this.form.submit()"
+                        class="select select-bordered select-sm sm:select-md w-full">
+                        <option value="asc" {{ request('sort_order', 'asc') == 'asc' ? 'selected' : '' }}>
+                            A to Z
+                        </option>
+                        <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>
+                            Z to A
+                        </option>
+                    </select>
                 </div>
+
 
                 <!-- Clear Filters -->
                 <div class="form-control w-full flex items-end">
@@ -114,7 +131,7 @@
         @if (request()->hasAny(['academic_year', 'grade_level', 'strand', 'search']))
             <div class="mb-4 flex flex-wrap gap-2">
                 <span class="text-xs sm:text-sm font-medium text-gray-600">Active Filters:</span>
-                
+
                 @if (request('search'))
                     <span class="badge badge-info badge-sm sm:badge-md gap-2">
                         Search: "{{ request('search') }}"
@@ -122,7 +139,7 @@
                            class="hover:text-error">✕</a>
                     </span>
                 @endif
-                
+
                 @if (request('academic_year'))
                     <span class="badge badge-accent badge-sm sm:badge-md gap-2">
                         {{ $academicYears->find(request('academic_year'))->name ?? 'N/A' }}
@@ -152,22 +169,22 @@
         <!-- View Toggle & Results Count -->
         <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div class="text-xs sm:text-sm text-gray-600">
-                Showing {{ $students->firstItem() ?? 0 }} to {{ $students->lastItem() ?? 0 }} 
+                Showing {{ $students->firstItem() ?? 0 }} to {{ $students->lastItem() ?? 0 }}
                 of {{ $students->total() }} student(s)
                 @if(request('search'))
                     <span class="font-medium">for "{{ request('search') }}"</span>
                 @endif
             </div>
-            
+
             <!-- View Toggle Buttons -->
             <div class="join">
-                <button onclick="toggleView('grid')" 
+                <button onclick="toggleView('grid')"
                         id="gridViewBtn"
                         class="join-item btn btn-sm sm:btn-md btn-active">
                     <i class="fi fi-rr-apps mr-1"></i>
                     Grid
                 </button>
-                <button onclick="toggleView('table')" 
+                <button onclick="toggleView('table')"
                         id="tableViewBtn"
                         class="join-item btn btn-sm sm:btn-md">
                     <i class="fi fi-rr-list mr-1"></i>
@@ -245,7 +262,7 @@
                                         <form method="dialog">
                                             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                                         </form>
-                                        
+
                                         <div class="mb-4">
                                             @if($record->section && $record->section->strand)
                                                 <h3 class="font-bold text-base sm:text-lg">
@@ -321,7 +338,7 @@
 
                         <!-- View Full Profile -->
                         <div class="mt-4 pt-4 border-t">
-                            <a href="{{ route('registrar.students.show', $student->id) }}" 
+                            <a href="{{ route('registrar.students.show', $student->id) }}"
                                class="btn btn-xs sm:btn-sm btn-outline btn-accent w-full">
                                 <i class="fi fi-rr-user mr-2"></i>
                                 View Full Profile
@@ -343,7 +360,7 @@
                         @endif
                     </p>
                     @if (request()->hasAny(['academic_year', 'grade_level', 'strand', 'search']))
-                        <a href="{{ route('registrar.grades.index') }}" 
+                        <a href="{{ route('registrar.grades.index') }}"
                            class="btn btn-sm btn-accent mt-4">
                             <i class="fi fi-rr-refresh mr-2"></i>
                             Clear All Filters

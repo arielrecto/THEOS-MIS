@@ -149,7 +149,7 @@
 
         <!-- Certificate Title -->
         <div class="certificate-title">
-            <h2>Certificate of Good Moral Character</h2>
+            <h2>{{ $template->title }}</h2>
         </div>
 
         <!-- Content -->
@@ -158,25 +158,23 @@
         </div>
 
         <div class="content">
-            <p>This is to certify that <strong>{{ strtoupper($student->name) }}</strong>, with LRN: <strong>{{ $student->studentProfile?->lrn ?? 'N/A' }}</strong> was a bonafide student of THEOS HIGHER GROUND ACADEME INC., school year <strong>{{ $student->studentProfile?->academicRecords->first()?->academicYear?->name ?? '________' }}</strong>. This further certifies that he/she is a law abiding pupil with good moral character and has been seen as record of misconduct.</p>
-
-            <p>This certification is issued for whatever legal purposes it may serve him/her.</p>
-
-            <p>Given on this 15th day of April 2024 at Theos Higher Ground Academe.</p>
+            {!! nl2br($template->render($student)) !!}
         </div>
 
         <!-- Signature Section -->
         <div class="signature-section">
             <div class="signature-line">
-                <p class="name">Ms. Esther Fe O. Rendal, LPT, MAED</p>
-                <p class="title">School Principal</p>
+                <p class="name">{{ $template->signatory_name }}</p>
+                <p class="title">{{ $template->signatory_title }}</p>
             </div>
         </div>
 
         <!-- Footer Note -->
+        @if($template->footer)
         <div class="footer-note">
-            Not valid without school seal
+            {{ $template->footer }}
         </div>
+        @endif
     </div>
 </body>
 

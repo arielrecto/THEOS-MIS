@@ -350,27 +350,31 @@
 
         <!-- Certification Section -->
         <div class="certification-section">
-            <p>I hereby certify that this is a true and accurate record of <strong>{{ strtoupper($student->name) }}</strong>.</p>
+            <p>{!! $template->render($student) !!}</p>
 
             <div class="signature-section">
+                @if($template->signatory_name_2)
                 <div class="signature-box">
                     <div class="signature-line">
-                        <p class="name">_______________________</p>
-                        <p class="title">Class Adviser</p>
+                        <p class="name">{{ $template->signatory_name_2 ?: '_______________________' }}</p>
+                        <p class="title">{{ $template->signatory_title_2 ?: 'Class Adviser' }}</p>
                     </div>
                 </div>
+                @endif
+
+                @if($template->signatory_name_3)
+                <div class="signature-box">
+                    <div class="signature-line">
+                        <p class="name">{{ $template->signatory_name_3 ?: '_______________________' }}</p>
+                        <p class="title">{{ $template->signatory_title_3 ?: 'School Registrar' }}</p>
+                    </div>
+                </div>
+                @endif
 
                 <div class="signature-box">
                     <div class="signature-line">
-                        <p class="name">_______________________</p>
-                        <p class="title">School Registrar</p>
-                    </div>
-                </div>
-
-                <div class="signature-box">
-                    <div class="signature-line">
-                        <p class="name">Jun Rendal</p>
-                        <p class="title">School Head</p>
+                        <p class="name">{{ $template->signatory_name }}</p>
+                        <p class="title">{{ $template->signatory_title }}</p>
                     </div>
                 </div>
             </div>
@@ -378,7 +382,9 @@
 
         <!-- Footer Note -->
         <div class="footer-note">
-            <p>Not valid without school seal</p>
+            @if($template->footer)
+                <p>{{ $template->footer }}</p>
+            @endif
             <p>Generated on {{ now()->format('F d, Y - h:i A') }}</p>
         </div>
     </div>
