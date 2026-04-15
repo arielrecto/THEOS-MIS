@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    /**
+     * Show login type selection page
+     */
+    public function loginType()
+    {
+        return view('auth.login-type');
+    }
+
+    /**
+     * Redirect to appropriate dashboard based on user role
+     */
     public function index()
     {
         $role = Auth::user()->roles()->first()->name;

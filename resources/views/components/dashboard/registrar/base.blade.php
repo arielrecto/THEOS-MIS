@@ -27,7 +27,7 @@
         [
             'url' => 'registrar.certificate-templates.index',
             'name' => 'certificate templates',
-            'icon' => '<i class="fi fi-rr-certificate"></i>',
+            'icon' => '<i class="fi fi-rr-diploma"></i>',
             'is_active' => true,
         ]
     ];

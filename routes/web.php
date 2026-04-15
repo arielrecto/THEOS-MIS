@@ -87,6 +87,7 @@ Route::get('job-opportunities', [LandingPageController::class, 'jobOpportunities
 Route::get('/job-opportunities/{position}', [LandingPageController::class, 'showJob'])->name('job-opportunities.show');
 Route::post('/job-opportunities/{position}/apply', [LandingPageController::class, 'applyJob'])->name('job-opportunities.apply');
 Route::get('general-announcements/{id}', [LandingPageController::class, 'generalAnnouncementShow'])->name('general-announcements.show');
+Route::get('login-type', [HomeController::class, 'loginType'])->name('login.type');
 Route::get('/home', [HomeController::class, 'index'])
     ->name('home')
     ->middleware(['auth']);

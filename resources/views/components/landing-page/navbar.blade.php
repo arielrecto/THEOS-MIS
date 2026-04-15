@@ -118,7 +118,7 @@
 
                 <div class="pt-4 border-t">
                     @if (!auth()->check())
-                        <a href="{{ route('login') }}" @click="isDrawerOpen = false"
+                        <a href="{{ route('login.type') }}" @click="isDrawerOpen = false"
                            class="flex items-center gap-3 p-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
                             <i class="fi fi-rr-sign-in"></i>
                             <span>Login</span>

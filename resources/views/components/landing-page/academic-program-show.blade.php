@@ -57,7 +57,7 @@
                 <!-- Sidebar -->
                 <div class="space-y-6">
                     <!-- Program Status -->
-                    <div class="p-6 bg-white rounded-xl shadow-sm">
+                    {{-- <div class="p-6 bg-white rounded-xl shadow-sm">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Program Status</h3>
                         <div class="flex items-center">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $program->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
@@ -65,7 +65,7 @@
                                 {{ $program->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Quick Actions -->
                     <div class="p-6 bg-white rounded-xl shadow-sm">

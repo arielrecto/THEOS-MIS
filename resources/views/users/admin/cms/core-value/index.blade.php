@@ -3,7 +3,12 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <a href="{{ route('admin.CMS.index') }}" class="btn btn-xs btn-accent">
+                <i class="fi fi-rr-arrow-left"></i>
+            </a>
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Core Values Management</h1>
+                </div>
                 <p class="text-sm text-gray-600 mt-1">Manage core values and their items</p>
             </div>
             <a href="{{ route('admin.CMS.core-values.create') }}" class="btn btn-primary btn-sm sm:btn-md">
@@ -39,7 +44,7 @@
                         <form action="{{ route('admin.CMS.core-values.toggle-active', $coreValue) }}" method="POST" class="flex-shrink-0">
                             @csrf
                             @method('PATCH')
-                            <button type="submit" 
+                            <button type="submit"
                                     title="Click to toggle status"
                                     class="text-xs px-2 py-1 rounded-full cursor-pointer transition-colors {{ $coreValue->is_active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                                 {{ $coreValue->is_active ? 'Active' : 'Inactive' }}
@@ -121,7 +126,7 @@
                                     <form action="{{ route('admin.CMS.core-values.toggle-active', $coreValue) }}" method="POST" class="inline">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" 
+                                        <button type="submit"
                                                 title="Click to toggle status"
                                                 class="text-xs px-2 py-1 rounded-full cursor-pointer transition-colors {{ $coreValue->is_active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                                             {{ $coreValue->is_active ? 'Active' : 'Inactive' }}

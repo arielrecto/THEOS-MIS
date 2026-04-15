@@ -81,48 +81,47 @@ class EnrollmentController extends Controller
             'lrn' => 'nullable',
 
             // Student Information
-            'last_name' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'extension_name' => 'nullable|string|max:255',
+            'last_name' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'first_name' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'middle_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'extension_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
             'birthdate' => 'required|date',
-            'birthplace' => 'required|string|max:255',
+            'birthplace' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
 
             // Address Information
-            'house_no' => 'required|string|max:255',
-            'street' => 'required|string|max:255',
-            'barangay' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'province' => 'required|string|max:255',
-            'zip_code' => 'required|string|max:10',
+            'house_no' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'street' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'barangay' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'city' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'province' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'zip_code' => ['required', 'string', 'max:10', 'not_regex:/^n\/?a$/i'],
 
             // Parent Information
-            'parent_name' => 'required|string|max:255',
-            'parent_last_name' => 'nullable|string|max:255',
-            'parent_middle_name' => 'nullable|string|max:255',
-            'relationship' => 'nullable|string|max:255',
-            'contact_number' => 'required|string|size:11',
-            'occupation' => 'required|string|max:255',
+            'parent_name' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'parent_last_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'parent_middle_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'relationship' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'contact_number' => ['required', 'string', 'size:11', 'not_regex:/^n\/?a$/i'],
+            'occupation' => ['required', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
 
             // Mother's Information (if needed)
-            'mother_name' => 'nullable|string|max:255',
-            'mother_last_name' => 'nullable|string|max:255',
-            'mother_middle_name' => 'nullable|string|max:255',
-            'mother_relationship' => 'nullable|string|max:255',
-            'mother_contact_number' => 'nullable|string|size:11',
-            'mother_occupation' => 'nullable|string|max:255',
+            'mother_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'mother_last_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'mother_middle_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'mother_relationship' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'mother_contact_number' => ['nullable', 'string', 'size:11', 'not_regex:/^n\/?a$/i'],
+            'mother_occupation' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
 
-
-            'guardian_name' => 'nullable|string|max:255',
-            'guardian_last_name' => 'nullable|string|max:255',
-            'guardian_middle_name' => 'nullable|string|max:255',
-            'guardian_relationship' => 'nullable|string|max:255',
-            'guardian_contact_number' => 'nullable|string|size:11',
-            'guardian_occupation' => 'nullable|string|max:255',
+            'guardian_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'guardian_last_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'guardian_middle_name' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'guardian_relationship' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'guardian_contact_number' => ['nullable', 'string', 'size:11', 'not_regex:/^n\/?a$/i'],
+            'guardian_occupation' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
 
             // Academic Information
-            'preferred_track' => 'nullable|string|max:255',
-            'preferred_strand' => 'nullable|string|max:255',
+            'preferred_track' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
+            'preferred_strand' => ['nullable', 'string', 'max:255', 'not_regex:/^n\/?a$/i'],
             'modality' => 'nullable|array',
 
             // Required IDs
@@ -139,8 +138,10 @@ class EnrollmentController extends Controller
             'attachments.form_138' => 'required|file|mimes:pdf|max:5120',
             'attachments.good_moral' => 'required|file|mimes:pdf|max:5120',
             'attachments.additional.*' => 'nullable|file|mimes:pdf|max:5120',
+        ], [
+            // Custom error messages for N/A validation
+            '*.not_regex' => 'The :attribute field cannot contain "N/A". Please provide valid information.',
         ]);
-
 
         if (User::where('email', $validated['email'])->exists()) {
             return back()->withInput()->withErrors(['email' => 'The email has already been taken.
@@ -155,7 +156,7 @@ class EnrollmentController extends Controller
             $user = User::create([
                 'name' => $validated['first_name'] . ' ' . $validated['last_name'],
                 'email' => $validated['email'],
-                'password' => Hash::make($generatedPassword), // Generate a random password
+                'password' => Hash::make($generatedPassword),
             ]);
         }
 
@@ -163,25 +164,20 @@ class EnrollmentController extends Controller
 
         $user->assignRole($role);
 
-        // Create enrollment form
         $enrollment = EnrollmentForm::create([...$validated, 'status' => 'pending', 'type' => $request->type, 'user_id' => $user->id]);
 
-        // Handle file uploads
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $type => $files) {
                 if (is_array($files)) {
-                    // Handle multiple files (additional documents)
                     foreach ($files as $file) {
                         $this->createAttachment($file, $enrollment, $type);
                     }
                 } else {
-                    // Handle single files (required documents)
                     $this->createAttachment($files, $enrollment, $type);
                 }
             }
         }
 
-        // Notification logic
         $notificationData = [
             'header' => 'New Enrollment Application',
             'message' => "New {$request->type} student enrollment application from {$enrollment->first_name} {$enrollment->last_name} for Grade {$enrollment->grade_level}",
@@ -189,18 +185,12 @@ class EnrollmentController extends Controller
             'url' => route('registrar.enrollments.showEnrollee', $enrollment->id),
         ];
 
-        // $notificationNewUser = [
-        //     'message' => "Your account has been created. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in.",
-        // ];
-
-         $notificationNewUser = [
+        $notificationNewUser = [
             'message' => "Good Day, Welcome {$user->name}. your account has been created for the {$enrollment->grade_level}. Your login email is {$user->email} and your password is {$generatedPassword}. Please change your password after logging in. thank you for using our application.",
         ];
 
-
         $user->notify(new UserCreation($notificationNewUser));
 
-        // Get registrars and notify them
         $registrars = User::role('registrar')->get();
         $this->notificationActions->notifyUsers($registrars, $notificationData, $enrollment);
 

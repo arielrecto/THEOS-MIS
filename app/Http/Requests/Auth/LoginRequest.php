@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Enums\UserRoles;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +50,45 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Validate login type based on user role
+        $this->validateLoginType();
+
         RateLimiter::clear($this->throttleKey());
+    }
+
+    /**
+     * Validate that the user is logging in with the correct login type
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLoginType(): void
+    {
+        $user = Auth::user();
+        $loginType = $this->input('type');
+        
+        // Get user's role
+        $userRole = $user->roles()->first()?->name;
+
+        // If user is a student
+        if ($userRole === UserRoles::STUDENT->value) {
+            // Student must use student login
+            if ($loginType !== 'student') {
+                Auth::logout();
+                
+                throw ValidationException::withMessages([
+                    'email' => 'You need to login using the Student Login. Please go back and select Student Login.',
+                ]);
+            }
+        } else {
+            // All other roles (employee, admin, teacher, etc.) must use employee login
+            if ($loginType === 'student') {
+                Auth::logout();
+                
+                throw ValidationException::withMessages([
+                    'email' => 'You need to login using the Employee Login. Please go back and select Employee Login.',
+                ]);
+            }
+        }
     }
 
     /**

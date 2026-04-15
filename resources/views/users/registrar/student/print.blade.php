@@ -79,12 +79,15 @@
     <div class="report-card">
         <!-- School Header -->
         <div class="school-header">
-            <img src="{{ asset('logo-modified.png') }}"
+               <img src="{{ asset('Gemini_Generated_Image_lovq03lovq03lovq.png') }}"
+                 alt="Theos Higher Ground Academe Header"
+                 class="header-image">
+            {{-- <img src="{{ asset('logo-modified.png') }}"
                  alt="Theos Higher Ground Academe Logo"
-                 class="school-logo">
-            <h1 class="text-xl font-bold">Theos Higher Ground Academe</h1>
+                 class="school-logo"> --}}
+            {{-- <h1 class="text-xl font-bold">Theos Higher Ground Academe</h1>
             <p>Fairgrounds, Imus City,
-Cavite.</p>
+Cavite.</p> --}}
             <h2 class="text-lg font-bold mt-4">STUDENT REPORT CARD</h2>
             <p class="text-sm">Academic Year {{ $academicRecord->academicYear->name }}</p>
         </div>

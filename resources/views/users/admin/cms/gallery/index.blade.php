@@ -4,7 +4,13 @@
         <div class="mb-6">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
+                    <div class="flex items-center gap-2 mb-1">
+                         <a href="{{ route('admin.CMS.index') }}" class="btn btn-xs btn-accent">
+                <i class="fi fi-rr-arrow-left"></i>
+            </a>
                     <h1 class="text-lg sm:text-2xl font-bold text-gray-800">Gallery Management</h1>
+                    </div>
+
                     <p class="text-sm sm:text-gray-600 mt-1">Manage website gallery images</p>
                 </div>
 

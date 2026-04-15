@@ -210,7 +210,7 @@
         <div class="header-section">
             <!-- Left Logo - Department of Education -->
             <div class="header-left">
-                <img src="{{ asset('department_of_education.svg') }}"
+                <img src="{{ asset('Department_of_Education.svg') }}"
                      alt="Department of Education Logo"
                      class="header-logo">
             </div>
