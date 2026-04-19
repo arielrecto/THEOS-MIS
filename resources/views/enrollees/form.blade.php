@@ -231,6 +231,9 @@
                                 </label>
                                 <input type="text" name="zip_code" value="{{ old('zip_code') }}"
                                     placeholder="Zip Code"
+                                    maxlength="5"
+                                    inputmode="numeric"
+                                    pattern="\d{1,5}"
                                     class="input input-bordered @error('zip_code') input-error @enderror">
                             </div>
                         </div>
