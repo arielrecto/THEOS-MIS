@@ -6,7 +6,7 @@
                     <x-slot name="other">
                         @if ($enrollee->status != 'enrolled')
                             <div class="dropdown dropdown-end">
-                                <button class="btn btn-ghost btn-xs">
+                                <button class="btn btn-accent text-white btn-xs">
                                     <i class="fi fi-rr-menu-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
@@ -96,8 +96,8 @@
                             </div>
                         @else
                             <!-- Section selection form -->
-                            <form action="{{ route('registrar.enrollments.update-section', $enrollee->id) }}" 
-                                  method="POST" 
+                            <form action="{{ route('registrar.enrollments.update-section', $enrollee->id) }}"
+                                  method="POST"
                                   id="sectionForm">
                                 @csrf
                                 @method('PUT')
@@ -110,8 +110,8 @@
                                                 <span class="label-text-alt text-error">No sections available</span>
                                             @endif
                                         </label>
-                                        <select name="section" 
-                                                class="select select-bordered" 
+                                        <select name="section"
+                                                class="select select-bordered"
                                                 required
                                                 {{ $availableSections->isEmpty() ? 'disabled' : '' }}>
                                             <option value="" disabled {{ !$enrollee->section ? 'selected' : '' }}>
@@ -121,7 +121,7 @@
                                                 <option value="{{ $section->name }}"
                                                         {{ $enrollee->section === $section->name ? 'selected' : '' }}
                                                         {{ $section->student_count >= $section->capacity ? 'disabled' : '' }}>
-                                                    {{ $section->name }} 
+                                                    {{ $section->name }}
                                                     ({{ $section->student_count }}/{{ $section->capacity }} students)
                                                     {{ $section->student_count >= $section->capacity ? '- FULL' : '' }}
                                                 </option>
@@ -135,7 +135,7 @@
                                     </div>
 
                                     <div class="form-control">
-                                        <button type="submit" 
+                                        <button type="submit"
                                                 class="btn btn-primary"
                                                 {{ $availableSections->isEmpty() ? 'disabled' : '' }}>
                                             <i class="fi fi-rr-check mr-2"></i>
@@ -172,8 +172,8 @@
                                                     <p class="mt-1">{{ $section->description }}</p>
                                                 @endif
                                             </div>
-                                            <progress class="progress progress-accent w-full mt-2" 
-                                                      value="{{ $section->student_count }}" 
+                                            <progress class="progress progress-accent w-full mt-2"
+                                                      value="{{ $section->student_count }}"
                                                       max="{{ $section->capacity }}"></progress>
                                         </div>
                                     @endforeach

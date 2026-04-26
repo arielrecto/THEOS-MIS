@@ -93,7 +93,7 @@
                                     <td>
                                         <!-- Add Process Grade Button -->
                                         <div class="mb-4 flex justify-end">
-                                            <button class="btn btn-accent"
+                                            <button class="btn btn-accent text-white"
                                                 onclick="document.getElementById('grade_modal_{{ $c_student->student->id }}').showModal()">
                                                 <i class="fi fi-rr-file-check mr-2"></i>
                                                 Process Grades

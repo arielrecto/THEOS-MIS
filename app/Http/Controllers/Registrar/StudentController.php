@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Registrar;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicRecord;
 use App\Models\AcademicYear;
+use App\Models\AttendanceStudent;
 use App\Models\CertificateTemplate;
+use App\Models\LearnerObservedValue;
 use App\Models\Payment;
 use App\Models\Strand;
 use App\Models\User;
@@ -421,7 +423,41 @@ class StudentController extends Controller
             }
         ])->findOrFail($academicRecordId);
 
-        return view('users.registrar.student.print', compact('student', 'academicRecord'));
+         // Fetch attendance records for this student and academic year
+    $months = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'];
+
+    $attendance = AttendanceStudent::where('user_id', $student->user_id ?? $student->id)
+        ->where('academic_year_id', $academicRecord->academic_year_id)
+        ->whereIn('month', $months)
+        ->get()
+        ->keyBy('month');
+
+    // Prepare arrays for the view
+    $daysOfSchool = [];
+    $daysPresent = [];
+    $totalSchool = 0;
+    $totalPresent = 0;
+
+    foreach ($months as $month) {
+        $record = $attendance->get($month);
+        $school = $record->days_of_school ?? '-';
+        $present = $record->days_present ?? '-';
+        $daysOfSchool[] = $school;
+        $daysPresent[] = $present;
+        $totalSchool += is_numeric($school) ? $school : 0;
+        $totalPresent += is_numeric($present) ? $present : 0;
+    }
+
+    $coreValues = []; // same as above
+$records = LearnerObservedValue::where('student_id', $student->id)
+    ->where('academic_year_id', $academicRecord->academic_year_id)
+    ->get();
+$coreValueRecords = [];
+foreach ($records as $rec) {
+    $coreValueRecords[$rec->core_value][$rec->behavior_statement] = $rec;
+}
+
+        return view('users.registrar.student.print', compact('student', 'academicRecord', 'daysOfSchool', 'daysPresent', 'totalSchool', 'totalPresent', 'coreValueRecords'));
     }
 
     public function printGoodMoral(string $id)

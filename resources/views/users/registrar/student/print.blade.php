@@ -79,10 +79,10 @@
     <div class="report-card">
         <!-- School Header -->
         <div class="school-header">
-               <img src="{{ asset('Gemini_Generated_Image_lovq03lovq03lovq.png') }}"
+               <img src="{{ asset('Gemini_Generated_Image_lovq03lovq03lovq.png') }}
                  alt="Theos Higher Ground Academe Header"
                  class="header-image">
-            {{-- <img src="{{ asset('logo-modified.png') }}"
+            {{-- <img src="{{ asset('logo-modified.png') }}
                  alt="Theos Higher Ground Academe Logo"
                  class="school-logo"> --}}
             {{-- <h1 class="text-xl font-bold">Theos Higher Ground Academe</h1>
@@ -187,15 +187,17 @@ Cavite.</p> --}}
                 <tbody>
                     <tr>
                         <td>Days of School</td>
-                        @for($i = 0; $i < 13; $i++)
-                            <td class="text-center">-</td>
-                        @endfor
+                        @foreach($daysOfSchool as $school)
+                            <td class="text-center">{{ $school }}</td>
+                        @endforeach
+                        <td class="text-center font-bold">{{ $totalSchool }}</td>
                     </tr>
                     <tr>
                         <td>Days Present</td>
-                        @for($i = 0; $i < 13; $i++)
-                            <td class="text-center">-</td>
-                        @endfor
+                        @foreach($daysPresent as $present)
+                            <td class="text-center">{{ $present }}</td>
+                        @endforeach
+                        <td class="text-center font-bold">{{ $totalPresent }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -212,6 +214,43 @@ Cavite.</p> --}}
                 <div class="signature-line">
                     <p class="font-bold">Principal</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Core Values Table -->
+        <div class="mt-8">
+            <h3 class="font-bold mb-2">REPORT ON LEARNER'S OBSERVED VALUES</h3>
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>Core Value</th>
+                        <th>Behavior Statement</th>
+                        <th>Q1</th>
+                        <th>Q2</th>
+                        <th>Q3</th>
+                        <th>Q4</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($coreValues as $core => $statements)
+                        @foreach($statements as $statement)
+                            @php
+                                $record = $coreValueRecords[$core][$statement] ?? null;
+                            @endphp
+                            <tr>
+                                <td>{{ $core }}</td>
+                                <td>{{ $statement }}</td>
+                                <td class="text-center">{{ $record->quarter_1 ?? '-' }}</td>
+                                <td class="text-center">{{ $record->quarter_2 ?? '-' }}</td>
+                                <td class="text-center">{{ $record->quarter_3 ?? '-' }}</td>
+                                <td class="text-center">{{ $record->quarter_4 ?? '-' }}</td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table>
+            <div class="text-xs mt-2">
+                <strong>Marking:</strong> AO - Always Observed, SO - Sometimes Observed, RO - Rarely Observed, NO - Not Observed
             </div>
         </div>
     </div>

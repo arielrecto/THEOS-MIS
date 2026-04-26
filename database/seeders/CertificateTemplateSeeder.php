@@ -14,7 +14,10 @@ class CertificateTemplateSeeder extends Seeder
             'name' => 'Good Moral Certificate',
             'type' => 'good_moral',
             'title' => 'Certificate of Good Moral Character',
-            'content' => 'This is to certify that <strong>{{student_name}}</strong>, with LRN: <strong>{{lrn}}</strong> was a bonafide student of THEOS HIGHER GROUND ACADEME INC., school year <strong>{{academic_year}}</strong>. This further certifies that he/she is a law abiding pupil with good moral character and has been seen as record of misconduct.
+            'content' => '
+            <strong>TO WHOM IT MAY CONCERN:</strong>
+
+            This is to certify that <strong>{{student_name}}</strong>, with LRN: <strong>{{lrn}}</strong> was a bonafide student of THEOS HIGHER GROUND ACADEME INC., school year <strong>{{academic_year}}</strong>. This further certifies that he/she is a law abiding pupil with good moral character and has been seen as record of misconduct.
 
 This certification is issued for whatever legal purposes it may serve him/her.
 

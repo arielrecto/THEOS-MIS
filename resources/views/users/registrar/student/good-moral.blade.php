@@ -153,9 +153,9 @@
         </div>
 
         <!-- Content -->
-        <div class="to-whom">
+        {{-- <div class="to-whom">
             TO WHOM IT MAY CONCERN:
-        </div>
+        </div> --}}
 
         <div class="content">
             {!! nl2br($template->render($student)) !!}

@@ -306,11 +306,17 @@ Route::middleware(['auth'])->group(function () {
                         Route::get('/students/download-template', [BulkStudentImportController::class, 'downloadTemplate'])->name('students.import.template');
                     });
 
+                Route::prefix('attendance')->as('attendance.')->group(function () {
+                    Route::get('upload', [TeacherStudentController::class, 'uploadAttendance'])->name('upload');
+
+                });
+
                 Route::prefix('student')
                     ->as('student.')
                     ->group(function () {
                         Route::get('/{student}', [TeacherStudentController::class, 'show'])->name('show');
                         Route::get('', [TeacherStudentController::class, 'index'])->name('index');
+                        Route::post('{student}/core-values/{academicYear}', [TeacherStudentController::class, 'saveCoreValues'])->name('core_values.save');
                     });
 
                 Route::prefix('grades')

@@ -1,5 +1,5 @@
 <x-dashboard.registrar.base>
-    <x-dashboard.page-title :title="_('Edit Certificate Template')" />
+    <x-dashboard.page-title :title="_('Edit Certificate Template')" :back_url="route('registrar.certificate-templates.index')" />
 
     <div class="p-6 bg-white rounded-lg shadow-lg">
         <form method="POST" action="{{ route('registrar.certificate-templates.update', $template) }}">

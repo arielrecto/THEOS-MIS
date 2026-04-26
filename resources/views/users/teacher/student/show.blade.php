@@ -164,7 +164,112 @@
                     </div>
                 </div>
 
+                <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+                    <h3 class="text-lg font-semibold mb-2 flex items-center gap-2">
+                        <i class="fi fi-rr-clipboard-list text-accent"></i>
+                        Report on Learner's Observed Values
+                    </h3>
+                    <img src="{{ asset('core_values_sample.png') }}" alt="Core Values Reference" class="mb-4 w-full max-w-lg">
+                    <form action="{{ route('teacher.student.core_values.save', [$student->id, $academicYear->id]) }}" method="POST">
+                        @csrf
+                        @php
+                            $coreValues = [
+                                'Makadiyos' => [
+                                    "Express one's spiritual beliefs while respecting the spiritual beliefs of others",
+                                    "Show adherence to ethical principles by upholding truth"
+                                ],
+                                'Makatao' => [
+                                    "Is sensitive to individual, social, cultural differences",
+                                    "Demonstrate contributions toward solidarity"
+                                ],
+                                'Makakalikasan' => [
+                                    "Cares for the environment and utilizes resources wisely, judiciously, and economically"
+                                ],
+                                'Makabansa' => [
+                                    "Demonstrates pride in being a Filipino, exercises the rights and responsibilities of a Filipino citizen",
+                                    "Demonstrates appropriate behavior in carrying out activities in the school, community and country"
+                                ]
+                            ];
+                            $ratings = ['AO' => 'Always Observed', 'SO' => 'Sometimes Observed', 'RO' => 'Rarely Observed', 'NO' => 'Not Observed'];
+                        @endphp
+                        <div class="overflow-x-auto">
+                            <table class="table w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Core Value</th>
+                                        <th>Behavior Statement</th>
+                                        <th>Q1</th>
+                                        <th>Q2</th>
+                                        <th>Q3</th>
+                                        <th>Q4</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($coreValues as $core => $statements)
+                                        @foreach($statements as $statement)
+                                            <tr>
+                                                <td>{{ $core }}</td>
+                                                <td>{{ $statement }}</td>
+                                              @for($q=1; $q<=4; $q++)
+    <td>
+        <select name="values[{{ $core }}][{{ $statement }}][quarter_{{ $q }}]" class="select select-bordered select-sm" required>
+            <option value="">-</option>
+            @foreach($ratings as $code => $desc)
+                <option value="{{ $code }}"
+                    @if(optional($existingValues[$core][$statement] ?? null)['quarter_'.$q] ?? '' == $code) selected @endif>
+                    {{ $code }}
+                </option>
+            @endforeach
+        </select>
+    </td>
+@endfor
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-accent mt-4">Save Core Values</button>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+                    <h3 class="text-lg font-semibold mb-2 flex items-center gap-2">
+                        <i class="fi fi-rr-clipboard-list text-accent"></i>
+                        Upload Attendance Record
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-4">
+                        Upload a CSV file with monthly attendance for your students.
+                        <a href="{{ asset('attendance_template.csv') }}" class="link link-primary ml-1">Download template</a>
+                    </p>
+                    <form action="{{ route('teacher.attendance.upload') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                            <div>
+                                <label class="label font-medium">Classroom</label>
+                                <select name="classroom_id" class="select select-bordered w-full" required>
+                                    <option value="">Select Classroom</option>
+                                    @foreach($classrooms as $classroom)
+                                        <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="label font-medium">Attendance CSV</label>
+                                <input type="file" name="attendance_csv" accept=".csv" class="file-input file-input-bordered w-full" required>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" class="btn btn-accent w-full md:w-auto">Upload</button>
+                            </div>
+                        </div>
+                        @error('attendance_csv')
+                            <div class="text-error mt-2">{{ $message }}</div>
+                        @enderror
+                    </form>
+                </div>
+
             </main>
         </div>
     </div>
 </x-dashboard.teacher.base>
+

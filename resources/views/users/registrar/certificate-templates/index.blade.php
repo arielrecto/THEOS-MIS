@@ -40,7 +40,7 @@
 
                             <div class="flex gap-2">
                                 <a href="{{ route('registrar.certificate-templates.edit', $template) }}"
-                                   class="btn btn-sm btn-accent">
+                                   class="btn btn-sm btn-accent text-white">
                                     <i class="fi fi-rr-edit"></i>
                                     <span class="hidden sm:inline ml-1">Edit</span>
                                 </a>
