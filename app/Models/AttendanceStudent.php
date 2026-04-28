@@ -13,7 +13,9 @@ class AttendanceStudent extends Model
         'attendance_id',
         'user_id',
         'classroom_id',
-        'status'
+        'status',
+        'month',
+        'days_present',
     ];
 
     public function attendance (){

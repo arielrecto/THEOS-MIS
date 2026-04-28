@@ -307,7 +307,7 @@ Route::middleware(['auth'])->group(function () {
                     });
 
                 Route::prefix('attendance')->as('attendance.')->group(function () {
-                    Route::get('upload', [TeacherStudentController::class, 'uploadAttendance'])->name('upload');
+                    Route::post('upload', [TeacherStudentController::class, 'uploadAttendance'])->name('upload');
 
                 });
 

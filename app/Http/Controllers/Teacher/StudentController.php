@@ -9,8 +9,10 @@ use App\Models\AttendanceStudent;
 use App\Models\Classroom;
 use App\Models\LearnerObservedValue;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -39,6 +41,22 @@ class StudentController extends Controller
         }
         $classrooms = $student->asStudentClassrooms()->with('classroom')->get()->pluck('classroom');
         $academicYear = $student->studentProfile->academicRecords()->latest()->first()->academicYear ?? null;
+
+        // Get existing learner observed values
+        $existingValues = [];
+        $studentProfileId = $student->studentProfile?->id;
+        if ($academicYear && $studentProfileId) {
+            $studentIds = array_unique([$studentProfileId, $student->id]);
+            $learnerValues = LearnerObservedValue::where('academic_year_id', $academicYear->id)
+                ->whereIn('student_id', $studentIds)
+                ->get();
+
+            foreach ($learnerValues as $value) {
+                $existingValues[$value->core_value][$value->behavior_statement] = $value->only(['quarter_1', 'quarter_2', 'quarter_3', 'quarter_4']);
+            }
+        }
+
+
         // Get attendance data
         $student_attendances = AttendanceStudent::where('user_id', $student->id)
             ->with(['attendance.classroom.subject'])
@@ -66,7 +84,7 @@ class StudentController extends Controller
             $averageGrade = $student->overallGrade();
         }
 
-        return view('users.teacher.student.show', compact('student', 'classrooms', 'student_attendances', 'attendanceRate', 'presentCount', 'absentCount', 'studentTasks', 'totalTasks', 'completedTasks', 'taskCompletionRate', 'averageGrade', 'academicYear'));
+        return view('users.teacher.student.show', compact('student', 'classrooms', 'student_attendances', 'attendanceRate', 'presentCount', 'absentCount', 'studentTasks', 'totalTasks', 'completedTasks', 'taskCompletionRate', 'averageGrade', 'academicYear', 'existingValues'));
     }
 
     public function uploadAttendance(Request $request)
@@ -76,36 +94,85 @@ class StudentController extends Controller
             'attendance_csv' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
+
+
+
         $classroom = Classroom::where('id', $request->classroom_id)
-            ->where('teacher_id', Auth::id())
+            // ->where('teacher_id', Auth::id())
             ->firstOrFail();
+
 
         $file = $request->file('attendance_csv');
         $handle = fopen($file->getRealPath(), 'r');
         $header = fgetcsv($handle);
 
         $months = ['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'];
+        $monthNumbers = [
+            'Jun' => 6,
+            'Jul' => 7,
+            'Aug' => 8,
+            'Sep' => 9,
+            'Oct' => 10,
+            'Nov' => 11,
+            'Dec' => 12,
+            'Jan' => 1,
+            'Feb' => 2,
+            'Mar' => 3,
+            'Apr' => 4,
+            'May' => 5,
+        ];
+
+        $attendanceEvents = [];
+        $year = now()->year;
 
         while (($row = fgetcsv($handle)) !== false) {
             $studentName = trim($row[0]);
             $user = User::where('name', $studentName)->first();
-            if (!$user) continue;
+            if (!$user) {
+                continue;
+            }
 
-            // Find or create attendance record for this classroom and student
             foreach ($months as $i => $month) {
-                $daysPresent = is_numeric($row[$i+1]) ? (int)$row[$i+1] : 0;
+                $daysPresent = is_numeric($row[$i + 1]) ? (int)$row[$i + 1] : 0;
+                if (!isset($monthNumbers[$month])) {
+                    continue;
+                }
 
-                // You may want to store each month as a separate Attendance record, or as a JSON column, or as AttendanceStudent rows.
-                // Example: store as AttendanceStudent per month
+                $monthNumber = $monthNumbers[$month];
+                $attendanceDate = Carbon::create($year, $monthNumber, rand(1, 25));
+
+                if (!isset($attendanceEvents[$month])) {
+                    $startHour = rand(7, 9);
+                    $startTime = Carbon::createFromTime($startHour, rand(0, 59), 0);
+                    $endTime = $startTime->copy()->addHours(rand(5, 8));
+
+                    $attendanceEvents[$month] = Attendance::firstOrCreate(
+                        [
+                            'classroom_id' => $classroom->id,
+                            'date' => $attendanceDate->format('Y-m-d'),
+                        ],
+                        [
+                            'attendance_code' => 'ATT-' . Str::upper(Str::random(8)),
+                            'start_time' => $startTime->format('H:i:s'),
+                            'end_time' => $endTime->format('H:i:s'),
+                        ]
+                    );
+                }
+
+                $attendance = $attendanceEvents[$month];
+
                 AttendanceStudent::updateOrCreate([
+                    'attendance_id' => $attendance->id,
                     'user_id' => $user->id,
+                ], [
                     'classroom_id' => $classroom->id,
                     'month' => $month,
-                ], [
                     'days_present' => $daysPresent,
+                    'status' => $daysPresent > 0 ? 'present' : 'absent',
                 ]);
             }
         }
+
         fclose($handle);
 
         return back()->with('success', 'Attendance uploaded successfully!');

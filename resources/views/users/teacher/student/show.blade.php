@@ -170,7 +170,7 @@
                         Report on Learner's Observed Values
                     </h3>
                     <img src="{{ asset('core_values_sample.png') }}" alt="Core Values Reference" class="mb-4 w-full max-w-lg">
-                    <form action="{{ route('teacher.student.core_values.save', [$student->id, $academicYear->id]) }}" method="POST">
+                    <form action="{{ route('teacher.student.core_values.save', [$student->studentProfile->id, $academicYear->id]) }}" method="POST">
                         @csrf
                         @php
                             $coreValues = [
@@ -214,9 +214,11 @@
     <td>
         <select name="values[{{ $core }}][{{ $statement }}][quarter_{{ $q }}]" class="select select-bordered select-sm" required>
             <option value="">-</option>
+            @php
+                $selected = data_get($existingValues, [$core, $statement, 'quarter_'.$q]) ?? '';
+            @endphp
             @foreach($ratings as $code => $desc)
-                <option value="{{ $code }}"
-                    @if(optional($existingValues[$core][$statement] ?? null)['quarter_'.$q] ?? '' == $code) selected @endif>
+                <option value="{{ $code }}" {{ $selected === $code ? 'selected' : '' }}>
                     {{ $code }}
                 </option>
             @endforeach

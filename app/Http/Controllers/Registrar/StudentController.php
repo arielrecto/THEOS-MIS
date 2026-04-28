@@ -448,16 +448,33 @@ class StudentController extends Controller
         $totalPresent += is_numeric($present) ? $present : 0;
     }
 
-    $coreValues = []; // same as above
-$records = LearnerObservedValue::where('student_id', $student->id)
-    ->where('academic_year_id', $academicRecord->academic_year_id)
-    ->get();
-$coreValueRecords = [];
-foreach ($records as $rec) {
-    $coreValueRecords[$rec->core_value][$rec->behavior_statement] = $rec;
-}
+    $coreValues = [
+        'Makadiyos' => [
+            "Express one's spiritual beliefs while respecting the spiritual beliefs of others",
+            'Show adherence to ethical principles by upholding truth',
+        ],
+        'Makatao' => [
+            'Is sensitive to individual, social, cultural differences',
+            'Demonstrate contributions toward solidarity',
+        ],
+        'Makakalikasan' => [
+            'Cares for the environment and utilizes resources wisely, judiciously, and economically',
+        ],
+        'Makabansa' => [
+            'Demonstrates pride in being a Filipino, exercises the rights and responsibilities of a Filipino citizen',
+            'Demonstrates appropriate behavior in carrying out activities in the school, community and country',
+        ],
+    ];
 
-        return view('users.registrar.student.print', compact('student', 'academicRecord', 'daysOfSchool', 'daysPresent', 'totalSchool', 'totalPresent', 'coreValueRecords'));
+    $records = LearnerObservedValue::where('student_id', $student->id)
+        ->where('academic_year_id', $academicRecord->academic_year_id)
+        ->get();
+    $coreValueRecords = [];
+    foreach ($records as $rec) {
+        $coreValueRecords[$rec->core_value][$rec->behavior_statement] = $rec;
+    }
+
+        return view('users.registrar.student.print', compact('student', 'academicRecord', 'daysOfSchool', 'daysPresent', 'totalSchool', 'totalPresent', 'coreValueRecords', 'coreValues'));
     }
 
     public function printGoodMoral(string $id)

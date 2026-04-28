@@ -43,4 +43,9 @@ class AcademicYear extends Model
             default => "Academic Year {$academicYear->name} notification."
         };
     }
+
+    public function learnerObservedValues()
+    {
+        return $this->hasMany(LearnerObservedValue::class);
+    }
 }

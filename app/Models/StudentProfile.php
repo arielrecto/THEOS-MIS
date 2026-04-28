@@ -53,4 +53,9 @@ class StudentProfile extends Model
     {
         return $this->hasMany(AcademicRecord::class);
     }
+
+    public function learnerObservedValues()
+    {
+        return $this->hasMany(LearnerObservedValue::class, 'student_id');
+    }
 }
