@@ -169,7 +169,7 @@
                         <i class="fi fi-rr-clipboard-list text-accent"></i>
                         Report on Learner's Observed Values
                     </h3>
-                    <img src="{{ asset('core_values_sample.png') }}" alt="Core Values Reference" class="mb-4 w-full max-w-lg">
+                    {{-- <img src="{{ asset('core_values_sample.png') }}" alt="Core Values Reference" class="mb-4 w-full max-w-lg"> --}}
                     <form action="{{ route('teacher.student.core_values.save', [$student->studentProfile->id, $academicYear->id]) }}" method="POST">
                         @csrf
                         @php
@@ -212,7 +212,7 @@
                                                 <td>{{ $statement }}</td>
                                               @for($q=1; $q<=4; $q++)
     <td>
-        <select name="values[{{ $core }}][{{ $statement }}][quarter_{{ $q }}]" class="select select-bordered select-sm" required>
+        <select name="values[{{ $core }}][{{ $statement }}][quarter_{{ $q }}]" class="select select-bordered text-xs select-sm" required>
             <option value="">-</option>
             @php
                 $selected = data_get($existingValues, [$core, $statement, 'quarter_'.$q]) ?? '';
@@ -242,7 +242,7 @@
                     </h3>
                     <p class="text-sm text-gray-500 mb-4">
                         Upload a CSV file with monthly attendance for your students.
-                        <a href="{{ asset('attendance_template.csv') }}" class="link link-primary ml-1">Download template</a>
+                        <a href="{{ asset('attendance_template.csv') }}" class="link link-accent ml-1" download>Download template</a>
                     </p>
                     <form action="{{ route('teacher.attendance.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
