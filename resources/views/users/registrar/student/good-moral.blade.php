@@ -117,7 +117,7 @@
 
         .footer-note {
             margin-top: 2rem;
-            text-align: left;
+            text-align: center;
             font-size: 10px;
             font-style: italic;
         }
@@ -142,7 +142,7 @@
     <div class="certificate">
         <!-- Header Image -->
         <div>
-            <img src="{{ asset('Gemini_Generated_Image_lovq03lovq03lovq.png') }}"
+            <img src="/logo-3.png"
                  alt="Theos Higher Ground Academe Header"
                  class="header-image">
         </div>

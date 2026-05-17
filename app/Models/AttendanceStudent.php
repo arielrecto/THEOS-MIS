@@ -13,8 +13,10 @@ class AttendanceStudent extends Model
         'attendance_id',
         'user_id',
         'classroom_id',
+        'academic_year_id',
         'status',
         'month',
+        'days_of_school',
         'days_present',
     ];
 
@@ -25,7 +27,12 @@ class AttendanceStudent extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
     public function classroom() {
         return $this->belongsTo(Classroom::class);
+    }
+
+    public function academicYear() {
+        return $this->belongsTo(AcademicYear::class);
     }
 }

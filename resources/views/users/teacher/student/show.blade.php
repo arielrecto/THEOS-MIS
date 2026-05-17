@@ -1,5 +1,5 @@
 <x-dashboard.teacher.base>
-    <x-dashboard.page-title :title="_('Student Profile')" :back_url="url()->previous()" />
+    <x-dashboard.page-title :title="'Student Profile'" :back_url="url()->previous()" />
     <x-notification-message />
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
@@ -211,25 +211,30 @@
                                                 <td>{{ $core }}</td>
                                                 <td>{{ $statement }}</td>
                                               @for($q=1; $q<=4; $q++)
-    <td>
-        <select name="values[{{ $core }}][{{ $statement }}][quarter_{{ $q }}]" class="select select-bordered text-xs select-sm" required>
-            <option value="">-</option>
-            @php
-                $selected = data_get($existingValues, [$core, $statement, 'quarter_'.$q]) ?? '';
-            @endphp
-            @foreach($ratings as $code => $desc)
-                <option value="{{ $code }}" {{ $selected === $code ? 'selected' : '' }}>
-                    {{ $code }}
-                </option>
-            @endforeach
-        </select>
-    </td>
-@endfor
+                                                <td>
+                                                    <select name="values[{{ $core }}][{{ $statement }}][quarter_{{ $q }}]" class="select select-bordered text-xs select-sm" required>
+                                                        <option value="">-</option>
+                                                        @php
+                                                            $selected = data_get($existingValues, [$core, $statement, 'quarter_'.$q]) ?? '';
+                                                        @endphp
+                                                        @foreach($ratings as $code => $desc)
+                                                            <option value="{{ $code }}" {{ $selected === $code ? 'selected' : '' }}>
+                                                                {{ $code }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                @endfor
                                             </tr>
                                         @endforeach
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        <div>
+                            <p class="text-xs mt-2">
+                                <strong>Marking:</strong> AO - Always Observed, SO - Sometimes Observed, RO - Rarely Observed, NO - Not Observed
+                            </p>
                         </div>
                         <button type="submit" class="btn btn-accent mt-4">Save Core Values</button>
                     </form>
@@ -241,7 +246,7 @@
                         Upload Attendance Record
                     </h3>
                     <p class="text-sm text-gray-500 mb-4">
-                        Upload a CSV file with monthly attendance for your students.
+                        Upload a CSV file with monthly attendance for your students. Each month requires two values: Days of School and Days Present.
                         <a href="{{ asset('attendance_template.csv') }}" class="link link-accent ml-1" download>Download template</a>
                     </p>
                     <form action="{{ route('teacher.attendance.upload') }}" method="POST" enctype="multipart/form-data">

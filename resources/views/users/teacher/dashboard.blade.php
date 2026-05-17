@@ -58,10 +58,10 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-2 text-xs text-gray-500 mt-2">
+                            {{-- <div class="flex items-center gap-2 text-xs text-gray-500 mt-2">
                                 <i class="fi fi-rr-calendar"></i>
                                 <span>{{ $classroom->academicYear->name ?? 'N/A' }}</span>
-                            </div>
+                            </div> --}}
 
                             <div class="flex gap-2 mt-3">
                                 <a href="{{ route('teacher.classrooms.show', ['classroom' => $classroom->id]) }}" class="btn btn-xs btn-primary">
@@ -279,11 +279,11 @@
             <i class="fi fi-rr-chalkboard text-2xl"></i>
             <span class="text-xs sm:text-sm">View Classrooms</span>
         </a>
-        <a href="{{ route('teacher.tasks.index') }}"
+        {{-- <a href="{{ route('teacher.tasks.index') }}"
            class="btn btn-outline btn-secondary gap-2 flex-col h-auto py-4">
             <i class="fi fi-rr-list-check text-2xl"></i>
             <span class="text-xs sm:text-sm">Manage Tasks</span>
-        </a>
+        </a> --}}
         <a href="{{ route('teacher.student.index') }}"
            class="btn btn-outline btn-accent gap-2 flex-col h-auto py-4">
             <i class="fi fi-rr-users text-2xl"></i>

@@ -6,6 +6,7 @@ use App\Enums\UserRoles;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\AttendanceStudent;
+use App\Models\AcademicYear;
 use App\Models\Classroom;
 use App\Models\LearnerObservedValue;
 use App\Models\User;
@@ -94,13 +95,12 @@ class StudentController extends Controller
             'attendance_csv' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
-
-
-
         $classroom = Classroom::where('id', $request->classroom_id)
             // ->where('teacher_id', Auth::id())
             ->firstOrFail();
 
+        // Get the current academic year
+        $academicYear = AcademicYear::where('status', 'active')->firstOrFail();
 
         $file = $request->file('attendance_csv');
         $handle = fopen($file->getRealPath(), 'r');
@@ -133,7 +133,11 @@ class StudentController extends Controller
             }
 
             foreach ($months as $i => $month) {
-                $daysPresent = is_numeric($row[$i + 1]) ? (int)$row[$i + 1] : 0;
+                // Each month has two columns: days_of_school and days_present
+                $colIndex = ($i * 2) + 1;
+                $daysOfSchool = is_numeric($row[$colIndex]) ? (int)$row[$colIndex] : 0;
+                $daysPresent = is_numeric($row[$colIndex + 1]) ? (int)$row[$colIndex + 1] : 0;
+
                 if (!isset($monthNumbers[$month])) {
                     continue;
                 }
@@ -166,7 +170,9 @@ class StudentController extends Controller
                     'user_id' => $user->id,
                 ], [
                     'classroom_id' => $classroom->id,
+                    'academic_year_id' => $academicYear->id,
                     'month' => $month,
+                    'days_of_school' => $daysOfSchool,
                     'days_present' => $daysPresent,
                     'status' => $daysPresent > 0 ? 'present' : 'absent',
                 ]);

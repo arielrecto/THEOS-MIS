@@ -1,5 +1,5 @@
 <x-dashboard.registrar.base>
-    <x-dashboard.page-title :title="_('Student Record')" :back_url="route('registrar.students.index')" />
+    <x-dashboard.page-title :title="'Student Record'" :back_url="route('registrar.students.index')" />
     <x-notification-message />
 
     <!-- Student Profile Header -->
@@ -26,7 +26,7 @@
                 <p class="text-gray-600 mt-1 truncate">LRN: {{ $student?->studentProfile?->lrn ?? 'N/A' }}</p>
 
                 <div class="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
-                    <p class="text-sm text-gray-500">
+                    <p class="text-xs text-gray-500">
                         <span class="font-medium">Contact:</span>
                         <span class="ml-1">{{ $student?->studentProfile?->contact_number ?? 'N/A' }}</span>
                     </p>

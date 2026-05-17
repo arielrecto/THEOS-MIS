@@ -423,12 +423,13 @@ class StudentController extends Controller
             }
         ])->findOrFail($academicRecordId);
 
-         // Fetch attendance records for this student and academic year
+         // Fetch attendance records for this student and academic year through the attendance relationship
     $months = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'];
 
-    $attendance = AttendanceStudent::where('user_id', $student->user_id ?? $student->id)
+    $attendance = AttendanceStudent::where('user_id', $student->id)
         ->where('academic_year_id', $academicRecord->academic_year_id)
         ->whereIn('month', $months)
+        ->with('attendance')
         ->get()
         ->keyBy('month');
 
@@ -466,8 +467,10 @@ class StudentController extends Controller
         ],
     ];
 
-    $records = LearnerObservedValue::where('student_id', $student->id)
-        ->where('academic_year_id', $academicRecord->academic_year_id)
+    // Query both student ID and student profile ID since records can be saved with either
+    $studentIds = array_unique([$student->id, $student->studentProfile?->id]);
+    $records = LearnerObservedValue::where('academic_year_id', $academicRecord->academic_year_id)
+        ->whereIn('student_id', array_filter($studentIds))
         ->get();
     $coreValueRecords = [];
     foreach ($records as $rec) {

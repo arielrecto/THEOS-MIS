@@ -79,7 +79,7 @@
     <div class="report-card">
         <!-- School Header -->
         <div class="school-header">
-               <img src="{{ asset('Gemini_Generated_Image_lovq03lovq03lovq.png') }}
+               <img src="/logo-3.png"
                  alt="Theos Higher Ground Academe Header"
                  class="header-image">
             {{-- <img src="{{ asset('logo-modified.png') }}

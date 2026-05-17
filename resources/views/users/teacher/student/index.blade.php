@@ -4,7 +4,7 @@
     <!-- ...existing head (if any in base) ... -->
 </head>
 <x-dashboard.teacher.base>
-    <x-dashboard.page-title :title="_('Students')" />
+    <x-dashboard.page-title :title="'Students'" />
     <x-notification-message />
 
     <div class="p-4 md:p-6 max-w-full">

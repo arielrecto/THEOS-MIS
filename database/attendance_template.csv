@@ -1,3 +1,3 @@
-Student Name,Jun,Jul,Aug,Sep,Oct,Nov,Dec,Jan,Feb,Mar,Apr,May,Total
-Juan Dela Cruz,20,22,21,20,23,20,18,20,19,22,20,21,246
-Maria Santos,21,21,22,20,22,21,19,21,20,21,21,22,251
+Student Name,Jun_Days,Jun_Present,Jul_Days,Jul_Present,Aug_Days,Aug_Present,Sep_Days,Sep_Present,Oct_Days,Oct_Present,Nov_Days,Nov_Present,Dec_Days,Dec_Present,Jan_Days,Jan_Present,Feb_Days,Feb_Present,Mar_Days,Mar_Present,Apr_Days,Apr_Present,May_Days,May_Present
+Juan Dela Cruz,20,20,22,22,21,21,20,20,23,23,20,20,18,18,20,20,19,19,22,22,20,20,21,21
+Maria Santos,21,21,21,21,22,22,20,20,22,22,21,21,19,19,21,21,20,20,21,21,21,21,22,22

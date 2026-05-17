@@ -23,7 +23,7 @@
                             <span class="badge badge-sm">{{ $enrollment->status }}</span>
                         </div>
 
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 text-white">
                             <a href="{{ route('registrar.enrollments.show', ['enrollment' => $enrollment->id]) }}"
                                class="btn btn-xs btn-accent">
                                 <i class="fi fi-rr-eye"></i>
