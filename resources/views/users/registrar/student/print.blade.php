@@ -48,7 +48,9 @@
             background-color: #f5f5f5;
         }
         .signature-section {
-            margin-top: 2rem;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 4rem;
         }
         .signature-line {
             width: 200px;
@@ -203,20 +205,6 @@ Cavite.</p> --}}
             </table>
         </div>
 
-        <!-- Signature Section -->
-        <div class="signature-section grid grid-cols-2 gap-8 mt-16">
-            <div>
-                <div class="signature-line">
-                    <p class="font-bold">Class Adviser</p>
-                </div>
-            </div>
-            <div>
-                <div class="signature-line">
-                    <p class="font-bold">Principal</p>
-                </div>
-            </div>
-        </div>
-
         <!-- Core Values Table -->
         <div class="mt-8">
             <h3 class="font-bold mb-2">REPORT ON LEARNER'S OBSERVED VALUES</h3>
@@ -251,6 +239,20 @@ Cavite.</p> --}}
             </table>
             <div class="text-xs mt-2">
                 <strong>Marking:</strong> AO - Always Observed, SO - Sometimes Observed, RO - Rarely Observed, NO - Not Observed
+            </div>
+        </div>
+
+        <!-- Signature Section -->
+        <div class="signature-section flex justify-around mt-16">
+            <div class="text-center">
+                <div class="signature-line">
+                    <p class="font-bold">Class Adviser</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <div class="signature-line">
+                    <p class="font-bold">Principal</p>
+                </div>
             </div>
         </div>
     </div>

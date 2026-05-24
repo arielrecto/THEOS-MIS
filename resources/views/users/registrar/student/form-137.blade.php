@@ -221,7 +221,7 @@
                 <h3>Department of Education</h3>
                 <h3>Region IV-A CALABARZON</h3>
                 <h1>THEOS HIGHER GROUND ACADEME</h1>
-                <p>Brgy. Biga 1, Imus City, Cavite</p>
+                <p>{{ $template->school_address ?? 'Brgy. Biga 1, Imus City, Cavite' }}</p>
             </div>
 
             <!-- Right Logo - School Logo -->

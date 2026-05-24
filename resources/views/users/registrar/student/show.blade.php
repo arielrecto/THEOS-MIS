@@ -23,7 +23,7 @@
 
             <div class="md:col-span-5 flex flex-col justify-center">
                 <h2 class="text-2xl font-bold truncate">{{ $student->name }}</h2>
-                <p class="text-gray-600 mt-1 truncate">LRN: {{ $student?->studentProfile?->lrn ?? 'N/A' }}</p>
+                <p class="text-gray-600 mt-1 text-xs truncate">LRN: {{ $student?->studentProfile?->lrn ?? 'N/A' }}</p>
 
                 <div class="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
                     <p class="text-xs text-gray-500">

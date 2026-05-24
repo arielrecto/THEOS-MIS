@@ -118,7 +118,7 @@
         <div class="text-center mb-8">
             <img src="{{ asset('logo-modified.png') }}" alt="School Logo" class="header-logo mx-auto mb-4">
             <h1 class="text-2xl font-bold">Theos Higher Ground Academe</h1>
-            <p class="text-gray-600">Fairgrounds, Imus City, Cavite</p>
+            <p class="text-gray-600">{{ $schoolAddress }}</p>
             <h2 class="text-xl font-bold mt-6 mb-2">STUDENT DATA REPORT</h2>
             <p class="text-sm text-gray-500">Generated on {{ now()->format('F d, Y') }}</p>
         </div>

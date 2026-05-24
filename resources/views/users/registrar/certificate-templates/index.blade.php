@@ -1,5 +1,5 @@
 <x-dashboard.registrar.base>
-    <x-dashboard.page-title :title="_('Certificate Templates')" />
+    <x-dashboard.page-title :title="'Certificate Templates'" />
     <x-notification-message />
 
     <div class="p-4 sm:p-6 bg-white rounded-lg shadow-lg">

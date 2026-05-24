@@ -4,7 +4,7 @@
 
     <div class="flex flex-col gap-6 p-4 sm:p-6 bg-white rounded-lg shadow-lg panel">
         <!-- Enrollment Header (responsive) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 items-stretch">
             <div class="col-span-1 md:col-span-2 flex items-center">
                 <div
                     class="w-full h-40 md:h-32 lg:h-40 rounded-lg shadow-md bg-accent flex items-center justify-center p-4">

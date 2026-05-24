@@ -1,5 +1,5 @@
 <x-dashboard.registrar.base>
-    <x-dashboard.page-title :title="_('Edit Certificate Template')" :back_url="route('registrar.certificate-templates.index')" />
+    <x-dashboard.page-title :title="'Edit Certificate Template'" :back_url="route('registrar.certificate-templates.index')" />
 
     <div class="p-6 bg-white rounded-lg shadow-lg">
         <form method="POST" action="{{ route('registrar.certificate-templates.update', $template) }}">
@@ -111,6 +111,18 @@
                                value="{{ $template->signatory_title_3 ?? 'School Registrar' }}"
                                class="input input-bordered">
                     </div>
+                </div>
+
+                <!-- School Address -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">School Address</span>
+                        <span class="label-text-alt text-xs text-gray-400">Shown in document header</span>
+                    </label>
+                    <input type="text" name="school_address"
+                           value="{{ $template->school_address }}"
+                           placeholder="e.g. Brgy. Biga 1, Imus City, Cavite"
+                           class="input input-bordered">
                 </div>
 
                 <!-- Footer -->

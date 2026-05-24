@@ -41,6 +41,12 @@ $isEnrolled = $user->studentProfile !== null && $user->studentProfile->academicR
             'icon' => '<i class="fi fi-rr-credit-card"></i>',
             'is_active' => $isEnrolled || !$user->studentProfile,
         ],
+        [
+            'url' => 'student.report-card.index',
+            'name' => 'report card',
+            'icon' => '<i class="fi fi-rr-document"></i>',
+            'is_active' => $isEnrolled,
+        ],
         // [
         //     'url' => 'student.attendances.index',
         //     'name' => 'attendance',

@@ -136,7 +136,9 @@
 
                                                     <input type="text" name="grade"
                                                         value="{{ $c_student->student->overAllAverageTaskByClassroom($classroom->id) }}"
-                                                        class="input input-bordered w-full">
+                                                        class="input input-bordered w-full"
+                                                        maxlength="3"
+                                                        oninput="this.value=this.value.replace(/[^0-9.]/g,'').slice(0,3)">
 
                                                     <!-- Modal Actions -->
                                                     <div class="modal-action">

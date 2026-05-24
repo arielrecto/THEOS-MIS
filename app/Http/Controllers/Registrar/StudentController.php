@@ -232,7 +232,10 @@ class StudentController extends Controller
             'sort' => $this->getSortLabel($sort),
         ];
 
-        return view('users.registrar.student.print-list', compact('students', 'filterInfo'));
+        $schoolAddress = CertificateTemplate::where('is_active', true)->value('school_address')
+            ?? 'Fairgrounds, Imus City, Cavite';
+
+        return view('users.registrar.student.print-list', compact('students', 'filterInfo', 'schoolAddress'));
     }
 
     /**
@@ -370,10 +373,14 @@ class StudentController extends Controller
             $paymentStats['payment_rate'] = ($paymentStats['total_paid'] / $totalExpected) * 100;
         }
 
+        $schoolAddress = CertificateTemplate::where('is_active', true)->value('school_address')
+            ?? 'Fairgrounds, Imus City, Cavite';
+
         return view('users.registrar.student.student-data', compact(
             'student',
             'payments',
-            'paymentStats'
+            'paymentStats',
+            'schoolAddress'
         ));
     }
 

@@ -1,8 +1,8 @@
 <x-dashboard.teacher.base>
     <!-- Top stats: stack on mobile, 3 columns on small+ -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <x-card-v1 icon="fi fi-rr-chalkboard" label="Classrooms" :count="$totalClassrooms" icon_color="primary" />
-        <x-card-v1 icon="fi fi-rr-chalkboard-user" label="Students" :count="$totalStudents" icon_color="secondary" />
+        <x-card-v1 icon="fi fi-rr-chalkboard" label="Classrooms" :count="$totalClassrooms" icon_color="accent" />
+        <x-card-v1 icon="fi fi-rr-chalkboard-user" label="Students" :count="$totalStudents" icon_color="accent" />
         <x-card-v1 icon="fi fi-rr-books" label="Subjects" :count="$totalSubjects" icon_color="accent" />
     </div>
 
@@ -11,7 +11,7 @@
         <!-- My Classrooms Card -->
         <div class="p-6 rounded-lg shadow-lg bg-base-100">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl md:text-2xl font-bold text-primary flex items-center gap-2">
+                <h2 class="text-xl md:text-2xl font-bold text-accent flex items-center gap-2">
                     <i class="fi fi-rr-chalkboard"></i>
                     My Classrooms
                 </h2>
@@ -34,11 +34,10 @@
             @else
                 <div class="space-y-3 max-h-72 overflow-auto">
                     @foreach($classrooms->take(5) as $classroom)
-                        <a href="{{ route('teacher.classrooms.show', $classroom->id) }}"
-                           class="block border border-base-300 rounded-lg p-4 hover:shadow-md hover:border-primary transition-all bg-base-50">
+                        <div class="block border border-base-300 rounded-lg p-4 hover:shadow-md hover:border-primary transition-all bg-base-50">
                             <div class="flex items-start justify-between mb-2">
                                 <div class="flex-1 min-w-0">
-                                    <h3 class="font-semibold text-base text-primary truncate">
+                                    <h3 class="font-semibold text-base text-accent truncate">
                                         {{ $classroom->subject->name ?? 'N/A' }}
                                     </h3>
                                     <p class="text-sm text-gray-600 mt-1">
@@ -58,7 +57,7 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="flex items-center gap-2 text-xs text-gray-500 mt-2">
+                             {{-- <div class="flex items-center gap-2 text-xs text-gray-500 mt-2">
                                 <i class="fi fi-rr-calendar"></i>
                                 <span>{{ $classroom->academicYear->name ?? 'N/A' }}</span>
                             </div> --}}
@@ -67,19 +66,18 @@
                                 <a href="{{ route('teacher.classrooms.show', ['classroom' => $classroom->id]) }}" class="btn btn-xs btn-primary">
                                     <i class="fi fi-rr-eye"></i>
                                     View Details
-                                </a >
+                                </a>
                                 <a href="{{ route('teacher.classrooms.students', $classroom->id) }}"
-                                   class="btn btn-xs btn-ghost"
-                                   onclick="event.stopPropagation();">
+                                   class="btn btn-xs btn-ghost">
                                     <i class="fi fi-rr-users"></i>
                                     Students
                                 </a>
                             </div>
-                        </a>
+                        </div>
                     @endforeach
                 </div>
 
-                @if($classrooms->count() > 5)
+                {{-- @if($classrooms->count() > 5)
                     <div class="mt-4 text-center">
                         <a href="{{ route('teacher.classrooms.index') }}"
                            class="btn btn-sm btn-ghost btn-block">
@@ -87,14 +85,14 @@
                             View All {{ $classrooms->count() }} Classrooms
                         </a>
                     </div>
-                @endif
+                @endif --}}
             @endif
         </div>
 
         <!-- Classroom Tasks Card -->
         <div class="p-6 rounded-lg shadow-lg bg-base-100">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl md:text-2xl font-bold text-primary flex items-center gap-2">
+                <h2 class="text-xl md:text-2xl font-bold text-accent flex items-center gap-2">
                     <i class="fi fi-rr-list-check"></i>
                     Recent Tasks
                 </h2>
@@ -164,7 +162,7 @@
     <!-- Bottom section: Upcoming Deadlines -->
     <div class="grid grid-cols-1 gap-6 mt-6">
         <div class="p-6 rounded-lg shadow-lg bg-base-100">
-            <h2 class="mb-4 text-xl md:text-2xl font-bold text-primary flex items-center gap-2">
+            <h2 class="mb-4 text-xl md:text-2xl font-bold text-accent flex items-center gap-2">
                 <i class="fi fi-rr-time-fast"></i>
                 Upcoming Deadlines
             </h2>
@@ -179,7 +177,7 @@
                 <div class="lg:hidden space-y-3">
                     @foreach($upcomingDeadlines as $deadline)
                         <a href="{{ route('teacher.tasks.show', $deadline->id) }}"
-                           class="block card bg-base-50 border border-base-300 hover:shadow-md hover:border-primary transition-all">
+                           class="block card bg-base-50 border border-base-300 hover:shadow-md hover:border-accent transition-all">
                             <div class="card-body p-4">
                                 <div class="flex items-start justify-between gap-2 mb-2">
                                     <h4 class="font-semibold text-sm flex-1">{{ $deadline->title }}</h4>
@@ -273,24 +271,20 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
         <a href="{{ route('teacher.classrooms.index') }}"
-           class="btn btn-outline btn-primary gap-2 flex-col h-auto py-4">
+           class="btn btn-outline btn-accent gap-2 flex-col h-auto py-4">
             <i class="fi fi-rr-chalkboard text-2xl"></i>
             <span class="text-xs sm:text-sm">View Classrooms</span>
         </a>
-        {{-- <a href="{{ route('teacher.tasks.index') }}"
-           class="btn btn-outline btn-secondary gap-2 flex-col h-auto py-4">
-            <i class="fi fi-rr-list-check text-2xl"></i>
-            <span class="text-xs sm:text-sm">Manage Tasks</span>
-        </a> --}}
+        {{--c --}}
         <a href="{{ route('teacher.student.index') }}"
            class="btn btn-outline btn-accent gap-2 flex-col h-auto py-4">
             <i class="fi fi-rr-users text-2xl"></i>
             <span class="text-xs sm:text-sm">View Students</span>
         </a>
         <a href="{{ route('teacher.grades.index') }}"
-           class="btn btn-outline btn-info gap-2 flex-col h-auto py-4">
+           class="btn btn-outline btn-accent gap-2 flex-col h-auto py-4">
             <i class="fi fi-rr-diploma text-2xl"></i>
             <span class="text-xs sm:text-sm">Manage Grades</span>
         </a>

@@ -32,6 +32,11 @@ class CertificateTemplateController extends Controller
             'footer' => 'nullable|string',
             'signatory_name' => 'required|string|max:255',
             'signatory_title' => 'required|string|max:255',
+            'signatory_name_2' => 'nullable|string|max:255',
+            'signatory_title_2' => 'nullable|string|max:255',
+            'signatory_name_3' => 'nullable|string|max:255',
+            'signatory_title_3' => 'nullable|string|max:255',
+            'school_address' => 'nullable|string|max:500',
             'is_active' => 'boolean',
         ]);
 

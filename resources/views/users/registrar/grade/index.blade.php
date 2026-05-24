@@ -1,5 +1,5 @@
 <x-dashboard.registrar.base>
-    <x-dashboard.page-title :title="_('Student Grades')" />
+    <x-dashboard.page-title :title="'Student Grades'" />
     <x-notification-message />
 
     <div class="p-4 sm:p-6 bg-white rounded-lg shadow-lg">
@@ -412,10 +412,10 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="flex gap-1 justify-center">
-                                        <button class="btn btn-xs sm:btn-sm btn-ghost"
+                                        {{-- <button class="btn btn-xs sm:btn-sm btn-ghost"
                                             onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">
                                             <i class="fi fi-rr-eye"></i>
-                                        </button>
+                                        </button> --}}
                                         <a href="{{ route('registrar.students.print', ['student' => $student->id, 'record' => $record->id]) }}"
                                            target="_blank"
                                            class="btn btn-xs sm:btn-sm btn-ghost">

@@ -1,5 +1,5 @@
 <x-dashboard.registrar.base>
-    <x-dashboard.page-title :title="_('enrollments')" :create_url="route('registrar.enrollments.create')" />
+    <x-dashboard.page-title :title="'enrollments'" :create_url="route('registrar.enrollments.create')" />
 
     <div class="flex flex-col gap-2 panel min-h-96">
         <!-- Mobile: stacked cards -->

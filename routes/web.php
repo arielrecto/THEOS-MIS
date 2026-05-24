@@ -52,6 +52,7 @@ use App\Http\Controllers\Student\DashboardController as StudentDashboardControll
 use App\Http\Controllers\Student\EnrollmentController as StudentEnrollmentController;
 use App\Http\Controllers\Student\PaymentController;
 use App\Http\Controllers\Student\SettingsController as StudentSettingsController;
+use App\Http\Controllers\Student\ReportCardController as StudentReportCardController;
 use App\Http\Controllers\Student\TaskController as StudentTasksController;
 use App\Http\Controllers\Teacher\AnnouncementController;
 use App\Http\Controllers\Teacher\AttendanceController;
@@ -465,6 +466,11 @@ Route::middleware(['auth'])->group(function () {
             Route::prefix('payments')->as('payments.')->group(function () {
                 Route::post('', [PaymentController::class, 'store'])->name('store');
                 Route::get('', [PaymentController::class, 'index'])->name('index');
+            });
+
+            Route::prefix('report-card')->as('report-card.')->group(function () {
+                Route::get('', [StudentReportCardController::class, 'index'])->name('index');
+                Route::get('{academicRecord}/print', [StudentReportCardController::class, 'print'])->name('print');
             });
         });
     Route::middleware(['role:human-resource|admin', 'two_factor_authentication'])

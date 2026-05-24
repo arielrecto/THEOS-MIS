@@ -19,6 +19,7 @@ class CertificateTemplate extends Model
         'signatory_name_3',
         'signatory_title_3',
         'header_text',
+        'school_address',
         'is_active'
     ];
 

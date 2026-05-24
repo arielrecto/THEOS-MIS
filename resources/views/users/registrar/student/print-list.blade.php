@@ -106,7 +106,7 @@
                  alt="Theos Higher Ground Academe Logo"
                  class="school-logo">
             <h1 class="text-2xl font-bold">Theos Higher Ground Academe</h1>
-            <p class="text-sm">Fairgrounds, Imus City, Cavite</p>
+            <p class="text-sm">{{ $schoolAddress }}</p>
             <h2 class="text-xl font-bold mt-4">STUDENT LIST</h2>
             <p class="text-sm">Generated on {{ now()->format('F d, Y - h:i A') }}</p>
         </div>

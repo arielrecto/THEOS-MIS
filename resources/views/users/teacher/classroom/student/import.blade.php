@@ -56,7 +56,7 @@
             </div>
 
             <!-- Required Fields Info -->
-            <div class="collapse collapse-arrow bg-base-200 mb-6">
+            {{-- <div class="collapse collapse-arrow bg-base-200 mb-6">
                 <input type="checkbox" />
                 <div class="collapse-title text-lg font-medium">
                     <i class="fi fi-rr-list"></i>
@@ -124,7 +124,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Upload Form -->
             <div class="card bg-base-100 border">

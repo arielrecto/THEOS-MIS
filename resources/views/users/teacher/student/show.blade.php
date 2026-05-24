@@ -2,7 +2,7 @@
     <x-dashboard.page-title :title="'Student Profile'" :back_url="url()->previous()" />
     <x-notification-message />
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="px-4 sm:px-6">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
             <!-- Student Profile Card -->
             <aside class="col-span-12 md:col-span-4">
