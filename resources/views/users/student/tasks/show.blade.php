@@ -59,7 +59,7 @@
                 @if ($studentTask->task->attachments->count() > 0)
                     <div class="mb-6 sm:mb-8">
                         <h3 class="mb-3 text-xs sm:text-sm font-semibold text-gray-700">Task Materials</h3>
-                        <div class="grid grid-cols-1 gap-2 sm:gap-3">
+                        <div class="grid grid-cols-1 gap-2 sm:gap-3" x-data="generateThumbnail">
                             @foreach ($studentTask->task->attachments as $attachment)
                                 <div class="flex items-center p-2 sm:p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
                                     <div class="flex flex-1 gap-2 sm:gap-3 items-center min-w-0">
