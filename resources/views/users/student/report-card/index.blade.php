@@ -42,7 +42,7 @@
 
                 {{-- School Header --}}
                 <div class="text-center">
-                    <img src="/logo-3.png" alt="Theos Higher Ground Academe" class="mx-auto mb-2" style="max-height:80px;">
+                    <img src="/logo-3.png" alt="Theos Higher Ground Academe" class="mx-auto mb-2" style="max-height:200px;">
                     <h2 class="text-lg font-bold">STUDENT REPORT CARD</h2>
                     <p class="text-sm text-gray-500">Academic Year {{ $selectedRecord->academicYear->name }}</p>
                 </div>

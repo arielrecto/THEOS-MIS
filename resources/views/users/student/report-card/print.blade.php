@@ -31,8 +31,8 @@
     </div>
 
     <div class="report-card">
-        <div class="school-header">
-            <img src="/logo-3.png" alt="Theos Higher Ground Academe" style="max-height:80px;">
+        <div class="school-header" style="text-align:center;">
+            <img src="/logo-3.png" alt="Theos Higher Ground Academe" style="max-height:200px; display:block; margin:0 auto;">
             <h2 class="text-lg font-bold mt-4">STUDENT REPORT CARD</h2>
             <p class="text-sm">Academic Year {{ $academicRecord->academicYear->name }}</p>
         </div>
@@ -137,9 +137,17 @@
             </table>
         </div>
 
-        <div class="signature-section grid grid-cols-2 gap-8 mt-16">
-            <div><div class="signature-line"><p class="font-bold">Class Adviser</p></div></div>
-            <div><div class="signature-line"><p class="font-bold">Principal</p></div></div>
+        <div style="display:flex; justify-content:center; gap:5rem; margin-top:4rem;">
+            <div style="text-align:center;">
+                <div style="width:200px; border-top:1px solid #000; padding-top:0.5rem;">
+                    <p class="font-bold">Class Adviser</p>
+                </div>
+            </div>
+            <div style="text-align:center;">
+                <div style="width:200px; border-top:1px solid #000; padding-top:0.5rem;">
+                    <p class="font-bold">Principal</p>
+                </div>
+            </div>
         </div>
 
         <div class="mt-8">

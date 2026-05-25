@@ -102,7 +102,7 @@
                                 @csrf
                                 @method('PUT')
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                                     <div class="form-control">
                                         <label class="label">
                                             <span class="label-text font-medium">Select Section</span>
@@ -470,12 +470,12 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 justify-end mt-6">
+                {{-- <div class="flex flex-col sm:flex-row gap-3 justify-end mt-6">
                     <a href="{{ route('registrar.enrollments.index') }}" class="btn btn-ghost w-full sm:w-auto">
                         <i class="fi fi-rr-arrow-left"></i>
                         <span class="hidden sm:inline">Back to List</span>
                     </a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

@@ -124,7 +124,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 gap-2 sm:gap-3">
+                        <div class="grid grid-cols-1 gap-2 sm:gap-3" x-data="generateThumbnail">
                             @foreach ($studentTask->attachments as $attachment)
                                 <div class="flex items-center p-2 sm:p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100">
                                     <div class="flex flex-1 gap-2 sm:gap-3 items-center min-w-0">

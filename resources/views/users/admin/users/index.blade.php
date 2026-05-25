@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <x-dashboard.page-title :title="_('Users')" />
+    <x-dashboard.page-title :title="'Users'" />
 
     <div class="panel p-4 sm:p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
