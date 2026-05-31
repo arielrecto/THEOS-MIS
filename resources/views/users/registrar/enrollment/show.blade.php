@@ -71,7 +71,7 @@
         </div>
 
         <!-- Tabs -->
-        <div x-data="{ activeTab: 'overview' }" class="w-full">
+        <div x-data="{ activeTab: '{{ request('tab', 'overview') }}' }" class="w-full">
             <div class="flex flex-wrap gap-2 border-b pb-2">
                 <button @click="activeTab = 'overview'"
                     :class="activeTab === 'overview' ? 'text-accent border-b-2 border-accent' : 'text-gray-600'"
@@ -114,6 +114,43 @@
             <!-- Enrollees -->
             <div x-show="activeTab === 'enrollees'" class="mt-4">
                 <div class="p-0">
+
+                    {{-- Filters --}}
+                    <form method="GET" action="{{ route('registrar.enrollments.show', $enrollment->id) }}"
+                          class="flex flex-wrap gap-3 items-end mb-4 bg-base-100 p-3 rounded-lg border border-base-300">
+                        <input type="hidden" name="tab" value="enrollees">
+
+                        <div class="form-control">
+                            <label class="label py-0"><span class="label-text text-xs">Grade Level</span></label>
+                            <select name="grade_level" class="select select-bordered select-sm text-xs min-w-[140px]">
+                                <option value="">All Grade Levels</option>
+                                @foreach($gradeLevels as $gl)
+                                    <option value="{{ $gl }}" @selected(request('grade_level') === $gl)>
+                                        {{ $gl }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label py-0"><span class="label-text text-xs">Sort by Name</span></label>
+                            <select name="sort" class="select select-bordered select-sm text-xs">
+                                <option value="asc" @selected(request('sort', 'asc') === 'asc')>A → Z</option>
+                                <option value="desc" @selected(request('sort') === 'desc')>Z → A</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-2 pb-0.5">
+                            <button type="submit" class="btn btn-accent btn-sm">
+                                <i class="fi fi-rr-filter"></i> Filter
+                            </button>
+                            @if(request('grade_level') || request('sort'))
+                                <a href="{{ route('registrar.enrollments.show', $enrollment->id) }}"
+                                   class="btn btn-ghost btn-sm">Clear</a>
+                            @endif
+                        </div>
+                    </form>
+
                     <!-- Desktop / Tablet: table -->
                     <div class="hidden md:block">
                         <div class="overflow-x-auto bg-white rounded-md shadow-sm">

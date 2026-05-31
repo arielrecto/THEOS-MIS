@@ -81,12 +81,27 @@ class EnrollmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         $enrollment = Enrollment::findOrFail($id);
-        $enrollees = $enrollment->enrollees()->paginate(10);
 
-        return view('users.registrar.enrollment.show', compact('enrollment', 'enrollees'));
+        $query = $enrollment->enrollees();
+
+        if ($request->filled('grade_level')) {
+            $query->where('grade_level', $request->grade_level);
+        }
+
+        $sort = $request->get('sort', 'asc');
+        $query->orderBy('last_name', $sort)->orderBy('first_name', $sort);
+
+        $enrollees = $query->paginate(10)->withQueryString();
+
+        $gradeLevels = $enrollment->enrollees()
+            ->distinct()
+            ->orderBy('grade_level')
+            ->pluck('grade_level');
+
+        return view('users.registrar.enrollment.show', compact('enrollment', 'enrollees', 'gradeLevels'));
     }
 
     /**

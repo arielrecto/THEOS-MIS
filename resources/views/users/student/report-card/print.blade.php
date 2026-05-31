@@ -137,19 +137,6 @@
             </table>
         </div>
 
-        <div style="display:flex; justify-content:center; gap:5rem; margin-top:4rem;">
-            <div style="text-align:center;">
-                <div style="width:200px; border-top:1px solid #000; padding-top:0.5rem;">
-                    <p class="font-bold">Class Adviser</p>
-                </div>
-            </div>
-            <div style="text-align:center;">
-                <div style="width:200px; border-top:1px solid #000; padding-top:0.5rem;">
-                    <p class="font-bold">Principal</p>
-                </div>
-            </div>
-        </div>
-
         <div class="mt-8">
             <h3 class="font-bold mb-2">REPORT ON LEARNER'S OBSERVED VALUES</h3>
             <table class="grades-table">
@@ -178,6 +165,19 @@
             </table>
             <div class="text-xs mt-2">
                 <strong>Marking:</strong> AO - Always Observed, SO - Sometimes Observed, RO - Rarely Observed, NO - Not Observed
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:5rem; margin-top:4rem;">
+            <div style="text-align:center;">
+                <div style="width:200px; border-top:1px solid #000; padding-top:0.5rem;">
+                    <p class="font-bold">Class Adviser</p>
+                </div>
+            </div>
+            <div style="text-align:center;">
+                <div style="width:200px; border-top:1px solid #000; padding-top:0.5rem;">
+                    <p class="font-bold">Principal</p>
+                </div>
             </div>
         </div>
     </div>

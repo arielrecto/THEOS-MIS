@@ -36,6 +36,100 @@
                 <i class="fi fi-rr-document text-4xl text-gray-300"></i>
                 <p class="mt-4 text-gray-500">No academic records found. Please contact the registrar.</p>
             </div>
+        @elseif(!$isFullyPaid)
+            {{-- Payment Gate --}}
+            <div class="space-y-4">
+
+                {{-- Alert --}}
+                <div class="alert alert-warning shadow-sm">
+                    <i class="fi fi-rr-lock text-xl"></i>
+                    <div>
+                        <h3 class="font-bold">Report Card Locked</h3>
+                        <p class="text-sm">Your report card is only available once your tuition fee is fully settled.</p>
+                    </div>
+                </div>
+
+                {{-- Payment Summary --}}
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-base font-bold text-gray-700 mb-4 flex items-center gap-2">
+                        <i class="fi fi-rr-receipt"></i> Payment Summary
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-base-100 border border-base-300 rounded-lg p-4 text-center">
+                            <p class="text-xs text-gray-500 mb-1">Total Due</p>
+                            <p class="text-xl font-bold text-gray-800">₱{{ number_format($totalDue, 2) }}</p>
+                        </div>
+                        <div class="bg-success/10 border border-success/30 rounded-lg p-4 text-center">
+                            <p class="text-xs text-gray-500 mb-1">Total Paid</p>
+                            <p class="text-xl font-bold text-success">₱{{ number_format($totalPaid, 2) }}</p>
+                        </div>
+                        <div class="bg-error/10 border border-error/30 rounded-lg p-4 text-center">
+                            <p class="text-xs text-gray-500 mb-1">Remaining Balance</p>
+                            <p class="text-xl font-bold text-error">₱{{ number_format($balance, 2) }}</p>
+                        </div>
+                    </div>
+
+                    @if($totalPending > 0)
+                        <div class="alert alert-info alert-sm text-sm mb-4">
+                            <i class="fi fi-rr-clock"></i>
+                            <span>You have <strong>₱{{ number_format($totalPending, 2) }}</strong> in pending payments awaiting approval.</span>
+                        </div>
+                    @endif
+
+                    {{-- Tuition Fee Breakdown --}}
+                    @if($tuitionFees->count() > 0)
+                        <h3 class="text-sm font-semibold text-gray-600 mb-3">Fee Breakdown</h3>
+                        <div class="overflow-x-auto mb-6">
+                            <table class="table table-xs w-full border border-base-300 text-sm">
+                                <thead>
+                                    <tr class="bg-base-200">
+                                        <th class="border border-base-300">Fee Name</th>
+                                        <th class="border border-base-300">Type</th>
+                                        <th class="border border-base-300 text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($tuitionFees as $fee)
+                                        <tr>
+                                            <td class="border border-base-300">{{ $fee->name }}</td>
+                                            <td class="border border-base-300">
+                                                <span class="badge badge-xs badge-ghost">
+                                                    {{ $fee->is_monthly ? 'Monthly' : ($fee->is_onetime_fee ? 'One-time' : $fee->type) }}
+                                                </span>
+                                            </td>
+                                            <td class="border border-base-300 text-right font-medium">₱{{ number_format($fee->amount, 2) }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+
+                    {{-- Payment Accounts --}}
+                    @if($paymentAccounts->count() > 0)
+                        <h3 class="text-sm font-semibold text-gray-600 mb-3">How to Pay</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach($paymentAccounts as $account)
+                                <div class="border border-base-300 rounded-lg p-4 flex items-start gap-3">
+                                    @if($account->qr_image_path)
+                                        <img src="{{ asset($account->qr_image_path) }}" alt="QR Code" class="w-16 h-16 object-contain rounded">
+                                    @else
+                                        <div class="w-16 h-16 bg-base-200 rounded flex items-center justify-center">
+                                            <i class="fi fi-rr-credit-card text-2xl text-gray-400"></i>
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <p class="font-semibold text-sm">{{ $account->provider }}</p>
+                                        <p class="text-sm text-gray-600">{{ $account->account_name }}</p>
+                                        <p class="text-xs text-gray-500 font-mono mt-1">{{ $account->account_number }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <p class="text-xs text-gray-400 mt-4">After payment, go to <a href="{{ route('student.payments.index') }}" class="text-accent underline">Payments</a> to submit your proof of payment.</p>
+                    @endif
+                </div>
+            </div>
         @else
             {{-- Report Card --}}
             <div class="bg-white rounded-lg shadow-sm p-6 space-y-8">
@@ -48,12 +142,12 @@
                 </div>
 
                 {{-- Student Info --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div class="flex justify-between items-start gap-4 text-sm">
                     <div class="space-y-1">
                         <p><span class="font-semibold">Student Name:</span> {{ $student->name }}</p>
                         <p><span class="font-semibold">LRN:</span> {{ $student->studentProfile->lrn }}</p>
                     </div>
-                    <div class="space-y-1">
+                    <div class="space-y-1 text-right">
                         <p><span class="font-semibold">Grade Level:</span> {{ $selectedRecord->grade_level }}</p>
                         <p><span class="font-semibold">School Year:</span> {{ $selectedRecord->school_year ?? $selectedRecord->academicYear->name }}</p>
                     </div>

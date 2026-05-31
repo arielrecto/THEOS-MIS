@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <x-dashboard.page-title :title="_('Grade Levels')" :create_url="route('admin.strands.create')" />
+    <x-dashboard.page-title :title="'Grade Levels'" :create_url="route('admin.strands.create')" />
 
     <div class="container max-w-7xl p-4 sm:p-6 mx-auto">
         <x-notification-message />
