@@ -53,12 +53,9 @@
                                     <label class="label"><span class="label-text">Grade Level <span class="text-error">*</span></span></label>
                                     <select name="grade_level" class="select select-bordered" required>
                                         <option value="">Select Grade Level</option>
-                                        <option value="Grade 7" {{ old('grade_level', $nextGradeLevel ?? '') == 'Grade 7' ? 'selected' : '' }}>Grade 7</option>
-                                        <option value="Grade 8" {{ old('grade_level', $nextGradeLevel ?? '') == 'Grade 8' ? 'selected' : '' }}>Grade 8</option>
-                                        <option value="Grade 9" {{ old('grade_level', $nextGradeLevel ?? '') == 'Grade 9' ? 'selected' : '' }}>Grade 9</option>
-                                        <option value="Grade 10" {{ old('grade_level', $nextGradeLevel ?? '') == 'Grade 10' ? 'selected' : '' }}>Grade 10</option>
-                                        <option value="Grade 11" {{ old('grade_level', $nextGradeLevel ?? '') == 'Grade 11' ? 'selected' : '' }}>Grade 11</option>
-                                        <option value="Grade 12" {{ old('grade_level', $nextGradeLevel ?? '') == 'Grade 12' ? 'selected' : '' }}>Grade 12</option>
+                                        @foreach(['Kinder', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'] as $level)
+                                            <option value="{{ $level }}" {{ old('grade_level', $nextGradeLevel ?? '') == $level ? 'selected' : '' }}>{{ $level }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
 

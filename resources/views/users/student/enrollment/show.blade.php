@@ -513,7 +513,7 @@
                                     <option value="">Select Method</option>
                                     <option value="bank_transfer">Bank Transfer</option>
                                     <option value="gcash">GCash</option>
-                                    <option value="maya">Maya</option>
+                                    {{-- <option value="maya">Maya</option> --}}
                                     <option value="cash">Cash</option>
                                 </select>
                             </div>

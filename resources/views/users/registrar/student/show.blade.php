@@ -41,6 +41,16 @@
             <div class="md:col-span-6 flex flex-col gap-2">
                 <!-- Mobile: Stack buttons vertically -->
                 <div class="flex flex-col md:flex-row gap-2 md:justify-end">
+                    @php $gradesReleased = $student->studentProfile?->grades_released ?? false; @endphp
+                    <form method="POST" action="{{ route('registrar.students.toggle-grades-release', $student->id) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit"
+                                class="btn btn-sm w-full md:w-48 {{ $gradesReleased ? 'btn-success' : 'btn-warning' }}">
+                            <i class="fi fi-rr-{{ $gradesReleased ? 'eye' : 'eye-crossed' }} mr-2"></i>
+                            {{ $gradesReleased ? 'Hide Grades' : 'Release Grades' }}
+                        </button>
+                    </form>
                     <a href="{{ route('registrar.students.data-report', $student->id) }}"
                        target="_blank"
                        class="btn btn-outline btn-accent btn-sm w-full md:w-40">

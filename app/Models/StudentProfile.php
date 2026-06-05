@@ -39,10 +39,12 @@ class StudentProfile extends Model
         'modality',
         'email',
         'user_id',
+        'grades_released',
     ];
 
     protected $casts = [
         'modality' => 'array',
+        'grades_released' => 'boolean',
     ];
 
     public function user()

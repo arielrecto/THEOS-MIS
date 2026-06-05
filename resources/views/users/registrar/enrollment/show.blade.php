@@ -9,7 +9,7 @@
                 <div
                     class="w-full h-40 md:h-32 lg:h-40 rounded-lg shadow-md bg-accent flex items-center justify-center p-4">
                     <h1 class="text-2xl sm:text-3xl font-semibold text-white text-center break-words">
-                        {{ $enrollment->name }}
+                      Academic Year -  {{ $enrollment->name }}
                     </h1>
                 </div>
             </div>
@@ -42,11 +42,11 @@
         </div>
 
         <!-- Enrollment Details (responsive grid) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {{-- <div>
                 <h2 class="text-base sm:text-lg font-semibold">Academic Year</h2>
                 <p class="text-sm text-accent">{{ $enrollment->academicYear->year }}</p>
-            </div>
+            </div> --}}
 
             <div>
                 <h2 class="text-base sm:text-lg font-semibold">Status</h2>

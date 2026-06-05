@@ -221,7 +221,7 @@
             @forelse($student->studentProfile?->academicRecords ?? [] as $record)
                 <div class="mb-6">
                     <h3 class="font-bold text-lg mb-3">
-                        Grade {{ $record->grade_level }} - {{ $record->academicYear?->name ?? 'N/A' }}
+                       {{ $record->grade_level }} - {{ $record->academicYear?->name ?? 'N/A' }}
                     </h3>
 
                     <div class="grades-summary">

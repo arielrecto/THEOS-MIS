@@ -525,6 +525,19 @@ class StudentController extends Controller
 
     }
 
+    public function toggleGradesRelease(User $student)
+    {
+        $profile = $student->studentProfile;
+
+        abort_if(!$profile, 404);
+
+        $profile->update(['grades_released' => !$profile->grades_released]);
+
+        $status = $profile->grades_released ? 'released' : 'hidden';
+
+        return back()->with('success', "Grades have been {$status} for this student.");
+    }
+
     /**
      * Export filtered students
      */

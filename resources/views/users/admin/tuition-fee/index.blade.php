@@ -171,9 +171,9 @@
                                                                 </label>
                                                                 <select name="type" class="select select-bordered"
                                                                     required>
-                                                                    <option value="Tuition"
-                                                                        {{ $fee->type == 'Tuition' ? 'selected' : '' }}>
-                                                                        Tuition</option>
+                                                                    <option value="Enrollment"
+                                                                        {{ $fee->type == 'Enrollment' ? 'selected' : '' }}>
+                                                                        Enrollment</option>
                                                                     <option value="Miscellaneous"
                                                                         {{ $fee->type == 'Miscellaneous' ? 'selected' : '' }}>
                                                                         Miscellaneous</option>
@@ -316,9 +316,9 @@
                                         </label>
                                         <select name="type" class="select select-bordered" required>
                                             <option value="">Select Type</option>
-                                            <option value="Tuition">Tuition</option>
                                             <option value="Miscellaneous">Miscellaneous</option>
                                             <option value="Other">Other</option>
+                                            <option value="Enrollment">Enrollment</option>
                                         </select>
                                     </div>
 

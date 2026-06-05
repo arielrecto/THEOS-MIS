@@ -34,6 +34,11 @@ class EnrollmentController extends Controller
                 return back()->with('error', 'No previous enrollment found. Please start a new enrollment.');
             }
 
+            if($previousEnrollment->grade_level === 'Grade 10'){
+                return redirect()->route('student.enrollment.index')
+                    ->with('error', 'You have completed Grade 10, which is the highest level offered by Theos Higher Ground Academe.');
+            }
+
             // Calculate next school year
             $currentYear = (int) substr($previousEnrollment->school_year, 0, 4);
             $nextSchoolYear = ($currentYear + 1) . '-' . ($currentYear + 2);
@@ -143,14 +148,18 @@ class EnrollmentController extends Controller
     private function getNextGradeLevel(string $currentGrade): string
     {
         $gradeLevels = [
+            'Kinder' => 'Grade 1',
+            'Grade 1' => 'Grade 2',
+            'Grade 2' => 'Grade 3',
+            'Grade 3' => 'Grade 4',
+            'Grade 4' => 'Grade 5',
+            'Grade 5' => 'Grade 6',
+            'Grade 6' => 'Grade 7',
             'Grade 7' => 'Grade 8',
             'Grade 8' => 'Grade 9',
             'Grade 9' => 'Grade 10',
-            'Grade 10' => 'Grade 11',
-            'Grade 11' => 'Grade 12',
-            'Grade 12' => 'Graduate',
         ];
 
-        return $gradeLevels[$currentGrade] ?? 'Grade 7';
+        return $gradeLevels[$currentGrade] ?? 'Kinder';
     }
 }

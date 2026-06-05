@@ -122,7 +122,7 @@ class TuitionFeeController extends Controller
     /**
      * Update the specified fee.
      */
-    public function update(Request $request, TuitionFee $fee)
+    public function update(Request $request, TuitionFee $tuitionFee)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -133,7 +133,7 @@ class TuitionFeeController extends Controller
             'is_onetime_fee' => 'nullable|boolean',
         ]);
 
-        $fee->update([
+        $tuitionFee->update([
             'name' => $validated['name'],
             'type' => $validated['type'],
             'amount' => $validated['amount'],
@@ -150,7 +150,7 @@ class TuitionFeeController extends Controller
     /**
      * Toggle fee active status.
      */
-    public function toggle(TuitionFee $fee)
+    public function toggleFee(TuitionFee $fee)
     {
         $fee->update(['is_active' => !$fee->is_active]);
 

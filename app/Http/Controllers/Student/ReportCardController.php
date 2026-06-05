@@ -30,6 +30,8 @@ class ReportCardController extends Controller
         $coreValues = [];
         $coreValueRecords = [];
         $isFullyPaid = false;
+        $isPaid = false;
+        $gradesReleased = false;
         $totalDue = 0;
         $totalPaid = 0;
         $totalPending = 0;
@@ -38,6 +40,7 @@ class ReportCardController extends Controller
         $paymentAccounts = collect();
 
         $academicRecordId = $request->get('academic_record_id', $academicRecords->first()?->id);
+        $selectedQuarter = $request->get('quarter');
 
 
         if ($academicRecordId) {
@@ -67,7 +70,9 @@ class ReportCardController extends Controller
                 ->sum('amount');
 
             $balance = max(0, $totalDue - $totalPaid);
-            $isFullyPaid = $totalDue <= 0 || $totalPaid >= $totalDue;
+            $isPaid = $totalDue <= 0 || $totalPaid >= $totalDue;
+            $gradesReleased = $student->studentProfile?->grades_released ?? false;
+            $isFullyPaid = $isPaid && $gradesReleased;
 
             $paymentAccounts = PaymentAccount::all();
 
@@ -126,7 +131,10 @@ class ReportCardController extends Controller
             'student',
             'academicRecords',
             'selectedRecord',
+            'selectedQuarter',
             'isFullyPaid',
+            'isPaid',
+            'gradesReleased',
             'totalDue',
             'totalPaid',
             'totalPending',
@@ -168,6 +176,7 @@ class ReportCardController extends Controller
             ->sum('amount');
 
         abort_if($totalDue > 0 && $totalPaid < $totalDue, 403, 'Report card is only available for fully paid students.');
+        abort_if(!($student->studentProfile?->grades_released ?? false), 403, 'Your report card has not been released yet.');
 
         $months = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'];
 

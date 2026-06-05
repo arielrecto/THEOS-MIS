@@ -385,6 +385,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('{student}/good-moral', [RegistrarStudentController::class, 'printGoodMoral'])->name('good-moral');
                     Route::get('{student}/form-137', [RegistrarStudentController::class, 'printForm137'])->name('form-137');
                     Route::get('{id}/data-report', [RegistrarStudentController::class, 'studentDataReport'])->name('data-report');
+                    Route::patch('{student}/toggle-grades-release', [RegistrarStudentController::class, 'toggleGradesRelease'])->name('toggle-grades-release');
                 });
 
             Route::prefix('grades')

@@ -40,7 +40,7 @@
                                        class="btn btn-ghost btn-sm flex-1">
                                         <i class="fi fi-rr-eye"></i> View
                                     </a>
-                                    @if($enrollment->status === 'enrolled')
+                                    @if($enrollment->status === 'enrolled' && $enrollment->grade_level !== 'Grade 10')
                                         <a href="{{ route('student.enrollment.create', ['previous' => $enrollment->id]) }}"
                                            class="btn btn-accent btn-sm flex-1">
                                             <i class="fi fi-rr-arrow-up hidden"></i>
@@ -93,7 +93,7 @@
                                                    class="btn btn-ghost btn-sm">
                                                     <i class="fi fi-rr-eye"></i>
                                                 </a>
-                                                @if($enrollment->status === 'enrolled')
+                                                @if($enrollment->status === 'enrolled' && $enrollment->grade_level !== 'Grade 10')
                                                     <a href="{{ route('student.enrollment.create', ['previous' => $enrollment->id]) }}"
                                                        class="btn btn-accent btn-sm"
                                                        title="Enroll for next grade level">
