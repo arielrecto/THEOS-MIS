@@ -469,6 +469,109 @@
                     @endif
                 </div>
 
+                <!-- Payment History Card -->
+                <div class="p-6 mb-6 bg-white rounded-lg shadow-lg">
+                    <div class="flex gap-2 items-center mb-6 text-lg font-semibold text-gray-800">
+                        <i class="fi fi-rr-receipt"></i>
+                        <span>Payment History</span>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-success/10 rounded-lg p-4 text-center">
+                            <p class="text-xs text-gray-600 mb-1">Total Paid</p>
+                            <p class="text-xl font-bold text-success">₱{{ number_format($paymentStats['total_paid'], 2) }}</p>
+                        </div>
+                        <div class="bg-warning/10 rounded-lg p-4 text-center">
+                            <p class="text-xs text-gray-600 mb-1">Pending</p>
+                            <p class="text-xl font-bold text-warning">₱{{ number_format($paymentStats['total_pending'], 2) }}</p>
+                        </div>
+                        <div class="bg-base-200 rounded-lg p-4 text-center">
+                            <p class="text-xs text-gray-600 mb-1">Total Transactions</p>
+                            <p class="text-xl font-bold text-gray-700">{{ $paymentStats['total_count'] }}</p>
+                        </div>
+                    </div>
+
+                    @if($payments->count() > 0)
+                        <!-- Desktop Table -->
+                        <div class="hidden md:block overflow-x-auto">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Account</th>
+                                        <th>Method</th>
+                                        <th class="text-right">Amount</th>
+                                        <th class="text-center">Status</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($payments as $payment)
+                                        <tr>
+                                            <td class="text-sm">{{ $payment->created_at->format('M d, Y') }}</td>
+                                            <td class="text-sm">{{ $payment->paymentAccount?->account_name ?? 'N/A' }}</td>
+                                            <td>
+                                                <span class="badge badge-sm badge-ghost">
+                                                    {{ $payment->payment_method ?? 'N/A' }}
+                                                </span>
+                                            </td>
+                                            <td class="text-right font-semibold">₱{{ number_format($payment->amount, 2) }}</td>
+                                            <td class="text-center">
+                                                @if($payment->status === 'approved')
+                                                    <span class="badge badge-success badge-sm">Approved</span>
+                                                @elseif($payment->status === 'pending')
+                                                    <span class="badge badge-warning badge-sm">Pending</span>
+                                                @elseif($payment->status === 'rejected')
+                                                    <span class="badge badge-error badge-sm">Rejected</span>
+                                                @else
+                                                    <span class="badge badge-ghost badge-sm">{{ ucfirst($payment->status) }}</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-sm text-gray-600 max-w-xs truncate">
+                                                {{ $payment->note ?? '—' }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Mobile Cards -->
+                        <div class="md:hidden space-y-3">
+                            @foreach($payments as $payment)
+                                <div class="bg-gray-50 rounded-lg border p-4">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <p class="font-medium text-sm">{{ $payment->paymentAccount?->account_name ?? 'N/A' }}</p>
+                                            <p class="text-xs text-gray-500">{{ $payment->created_at->format('M d, Y') }}</p>
+                                        </div>
+                                        @if($payment->status === 'approved')
+                                            <span class="badge badge-success badge-sm">Approved</span>
+                                        @elseif($payment->status === 'pending')
+                                            <span class="badge badge-warning badge-sm">Pending</span>
+                                        @else
+                                            <span class="badge badge-error badge-sm">Rejected</span>
+                                        @endif
+                                    </div>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <span class="badge badge-ghost badge-sm">{{ $payment->payment_method ?? 'N/A' }}</span>
+                                        <span class="text-lg font-bold">₱{{ number_format($payment->amount, 2) }}</span>
+                                    </div>
+                                    @if($payment->note)
+                                        <p class="text-xs text-gray-500 mt-2">{{ $payment->note }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fi fi-rr-receipt text-3xl mb-2 block"></i>
+                            <p>No payment records found for this student.</p>
+                        </div>
+                    @endif
+                </div>
+
                 <!-- Action Buttons -->
                 {{-- <div class="flex flex-col sm:flex-row gap-3 justify-end mt-6">
                     <a href="{{ route('registrar.enrollments.index') }}" class="btn btn-ghost w-full sm:w-auto">

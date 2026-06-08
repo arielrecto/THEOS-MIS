@@ -16,6 +16,7 @@ use Spatie\Permission\Models\Role;
 use App\Actions\NotificationActions;
 use App\Http\Controllers\Controller;
 use App\Mail\EnrollmentStatusUpdate;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Mail;
 
 class EnrollmentController extends Controller
@@ -171,7 +172,18 @@ class EnrollmentController extends Controller
         ->with('strand')
         ->get();
 
-        return view('users.registrar.enrollment.enrollee-form', compact('enrollee', 'availableSections'));
+        $payments = Payment::where('user_id', $enrollee->user_id)
+            ->with('paymentAccount')
+            ->latest()
+            ->get();
+
+        $paymentStats = [
+            'total_paid'    => $payments->where('status', 'approved')->sum('amount'),
+            'total_pending' => $payments->where('status', 'pending')->sum('amount'),
+            'total_count'   => $payments->count(),
+        ];
+
+        return view('users.registrar.enrollment.enrollee-form', compact('enrollee', 'availableSections', 'payments', 'paymentStats'));
     }
 
     /**
