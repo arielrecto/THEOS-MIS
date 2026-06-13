@@ -8,107 +8,129 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('users.teacher.profile.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'last_name' => 'required',
+            'last_name'  => 'required',
             'first_name' => 'required',
-            'sex' => 'required',
-            'address' => 'required'
+            'sex'        => 'required',
+            'address'    => 'required',
         ]);
-
 
         $user = Auth::user();
 
         $profile = Profile::create([
-            'last_name' => $request->last_name,
+            'last_name'  => $request->last_name,
             'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'sex' => $request->sex,
-            'address' => $request->address,
+            'middle_name'=> $request->middle_name,
+            'sex'        => $request->sex,
+            'address'    => $request->address,
             'contact_no' => $request->contact_no,
-            'user_id' => $user->id
+            'user_id'    => $user->id,
         ]);
-
 
         if ($request->hasFile('image')) {
             $imageName = 'PRFL-' . uniqid() . '.' . $request->image->extension();
             $dir = $request->image->storeAs('/teacher/', $imageName, 'public');
-
-            $profile->update([
-                'image' => asset('/storage/' . $dir),
-            ]);
+            $profile->update(['image' => asset('/storage/' . $dir)]);
         }
-
-
-
 
         return to_route('teacher.profile.show', ['profile' => $profile->id]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $teacher = User::with(['profile', 'roles'])
-        ->whereHas('profile', function($q) use ($id){
-            $q->where('id', $id);
-        })->firstOrFail();
+            ->whereHas('profile', fn($q) => $q->where('id', $id))
+            ->firstOrFail();
 
-        // Get teacher's classrooms
-        $classrooms = Classroom::whereHas('teacher', function ($query) use ($teacher) {
-            $query->where('user_id', $teacher->id);
-        })->with([
-            'subject',
-            'section.strand',
-            'students'
-        ])->withCount('classroomStudents')->latest()->get();
+        $classrooms = Classroom::where('teacher_id', $teacher->id)
+            ->with(['subject', 'strand', 'academicYear'])
+            ->withCount('classroomStudents')
+            ->latest()
+            ->get();
 
         return view('users.teacher.profile.show', compact('teacher', 'classrooms'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $profile = Profile::with('user')->findOrFail($id);
+        $teacher = $profile->user;
+
+        $classrooms = Classroom::where('teacher_id', $teacher->id)
+            ->with(['subject', 'strand', 'academicYear'])
+            ->withCount('classroomStudents')
+            ->latest()
+            ->get();
+
+        return view('users.teacher.profile.edit', compact('teacher', 'profile', 'classrooms'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $profile = Profile::with('user')->findOrFail($id);
+        $teacher = $profile->user;
+
+        $request->validate([
+            'first_name'  => 'required|string|max:255',
+            'last_name'   => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'sex'         => 'required|in:male,female',
+            'address'     => 'required|string|max:500',
+            'contact_no'  => 'nullable|string|max:11',
+            'name'        => 'required|string|max:255',
+            'email'       => 'required|email|unique:users,email,' . $teacher->id,
+            'password'    => 'nullable|confirmed|min:8',
+            'image'       => 'nullable|image|max:2048',
+        ]);
+
+        // Update profile
+        $profile->update([
+            'first_name'  => $request->first_name,
+            'last_name'   => $request->last_name,
+            'middle_name' => $request->middle_name,
+            'sex'         => $request->sex,
+            'address'     => $request->address,
+            'contact_no'  => $request->contact_no,
+        ]);
+
+        // Update profile picture
+        if ($request->hasFile('image')) {
+            $imageName = 'PRFL-' . uniqid() . '.' . $request->image->extension();
+            $dir = $request->image->storeAs('/teacher/', $imageName, 'public');
+            $profile->update(['image' => asset('/storage/' . $dir)]);
+        }
+
+        // Update account info
+        $accountData = [
+            'name'  => $request->name,
+            'email' => $request->email,
+        ];
+        if ($request->filled('password')) {
+            $accountData['password'] = Hash::make($request->password);
+        }
+        $teacher->update($accountData);
+
+        return redirect()
+            ->route('teacher.profile.show', ['profile' => $profile->id])
+            ->with('success', 'Profile updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //

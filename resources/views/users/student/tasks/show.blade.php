@@ -1,5 +1,14 @@
 <x-dashboard.student.base>
     <div class="w-full px-2 sm:px-0">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a href="{{ url()->previous() }}"
+               class="btn btn-accent btn-sm gap-2 text-white">
+                <i class="fi fi-rr-arrow-left text-white"></i>
+                Back
+            </a>
+        </div>
+
         <!-- Task Header -->
         <div class="overflow-hidden bg-white rounded-xl shadow-lg">
             <div class="p-4 sm:p-6 border-b">
@@ -147,6 +156,15 @@
                                            download>
                                             <i class="fi fi-rr-download text-accent text-sm sm:text-base"></i>
                                         </a>
+                                        <form action="{{ route('student.tasks.attachment.delete', $attachment->id) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Remove this attachment?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-ghost btn-xs sm:btn-sm text-error">
+                                                <i class="fi fi-rr-cross text-sm sm:text-base"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             @endforeach

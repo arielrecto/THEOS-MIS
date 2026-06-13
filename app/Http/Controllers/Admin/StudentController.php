@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -16,12 +17,38 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $gradeLevels = ['Kinder', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
+                        'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
 
-        $students = User::role(UserRoles::STUDENT->value)->latest()->paginate(10);
+        $query = User::role(UserRoles::STUDENT->value)
+            ->with([
+                'studentProfile.academicRecords' => fn($q) => $q->orderByDesc('id'),
+            ]);
 
-        return view('users.admin.users.student.index', compact(['students']));
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhereHas('studentProfile', fn($sq) =>
+                      $sq->where('lrn', 'like', "%{$search}%")
+                         ->orWhere('first_name', 'like', "%{$search}%")
+                         ->orWhere('last_name', 'like', "%{$search}%")
+                  );
+            });
+        }
+
+        if ($request->filled('grade_level')) {
+            $query->whereHas('studentProfile.academicRecords', fn($q) =>
+                $q->where('grade_level', $request->grade_level)
+            );
+        }
+
+        $students = $query->latest()->paginate(15)->withQueryString();
+
+        return view('users.admin.users.student.index', compact('students', 'gradeLevels'));
     }
 
     /**
@@ -45,10 +72,16 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        $student = User::find($id);
+        $student = User::with([
+            'studentProfile.academicRecords.academicYear',
+            'profilePicture',
+            'asStudentClassrooms.classroom.subject',
+            'asStudentClassrooms.classroom.teacher',
+            'asStudentClassrooms.classroom.academicYear',
+            'asStudentClassrooms.classroom.strand',
+        ])->findOrFail($id);
 
-
-        return view('users.admin.users.student.show', compact(['student']));
+        return view('users.admin.users.student.show', compact('student'));
     }
 
     /**

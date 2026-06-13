@@ -44,6 +44,7 @@ use App\Http\Controllers\Registrar\CertificateTemplateController;
 use App\Http\Controllers\Registrar\DashboardController as RegistrarDashboardController;
 use App\Http\Controllers\Registrar\EnrollmentController;
 use App\Http\Controllers\Registrar\GradeController as RegistrarGradeController;
+use App\Http\Controllers\Registrar\ReportController as RegistrarReportController;
 use App\Http\Controllers\Registrar\StudentController as RegistrarStudentController;
 use App\Http\Controllers\Student\AnnouncementController as StudentAnnouncementController;
 use App\Http\Controllers\Student\AttendanceController as StudentAttendanceController;
@@ -146,6 +147,8 @@ Route::middleware(['auth'])->group(function () {
                     });
                     Route::resource('students', StudentController::class);
                     Route::resource('teacher', TeacherController::class);
+                    Route::post('teacher/{id}/assign-classroom', [TeacherController::class, 'assignClassroom'])->name('teacher.assign-classroom');
+                    Route::delete('teacher/{id}/classroom/{classroom}', [TeacherController::class, 'removeClassroom'])->name('teacher.remove-classroom');
                 });
 
             Route::prefix('strands')->as('strands.')->group(function () {
@@ -398,6 +401,12 @@ Route::middleware(['auth'])->group(function () {
 
             Route::resource('certificate-templates', CertificateTemplateController::class)
     ->only(['index', 'edit', 'update']);
+
+            Route::prefix('reports')->as('reports.')->group(function () {
+                Route::get('', [RegistrarReportController::class, 'index'])->name('index');
+                Route::get('enrollment', [RegistrarReportController::class, 'enrollment'])->name('enrollment');
+                Route::get('payment', [RegistrarReportController::class, 'payment'])->name('payment');
+            });
         });
 
     Route::middleware(['role:student', 'two_factor_authentication'])
@@ -427,6 +436,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('{id}', action: [StudentTasksController::class, 'show'])->name('show');
                     Route::post('{id}/submit', action: [StudentTasksController::class, 'submitTask'])->name('submit');
                     Route::post('{id}/unsubmit', action: [StudentTasksController::class, 'unsubmitTask'])->name('unsubmit');
+                    Route::delete('attachments/{attachment}', action: [StudentTasksController::class, 'deleteAttachment'])->name('attachment.delete');
                     Route::prefix('comments')->as('comments.')->group(function () {
                         Route::post('', action: [StudentTasksController::class, 'comment'])->name('store');
                         Route::delete('{comment}', action: [StudentTasksController::class, 'commentDelete'])->name('delete');

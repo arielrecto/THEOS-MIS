@@ -7,7 +7,7 @@
 <div class="flex justify-between items-center py-5 w-full">
     <div class="flex gap-5 items-center">
         @if ($back_url)
-            <a href="{{ $back_url }}" class="btn btn-xs btn-accent">
+            <a href="{{ $back_url }}" class="btn btn-xs btn-accent text-white">
                 <i class="fi fi-rr-arrow-left"></i>
             </a>
         @endif
@@ -19,7 +19,7 @@
 
     <div>
         @if ($create_url)
-            <a href="{{ $create_url }}" class="btn btn-sm btn-accent text-white">create</a>
+            <a href="{{ $create_url }}" class="btn btn-sm btn-accent text-white">Create</a>
         @endif
 
         @if (isset($other))

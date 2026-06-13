@@ -105,6 +105,17 @@ class TaskController extends Controller
             ->with('success', 'Task unsubmitted successfully');
     }
 
+    public function deleteAttachment(string $attachmentId)
+    {
+        $user = Auth::user();
+        $attachment = AttachmentStudent::whereHas('studentTask', fn($q) => $q->where('user_id', $user->id))
+            ->findOrFail($attachmentId);
+
+        $attachment->delete();
+
+        return back()->with('success', 'Attachment removed.');
+    }
+
 
     public function comment(Request $request){
         $studentTask = StudentTask::find($request->student_task_id);

@@ -95,7 +95,7 @@ class TuitionFeeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|in:Tuition,Miscellaneous,Other',
+            'type' => 'required|string|in:Enrollment,Miscellaneous,Other',
             'amount' => 'required|numeric|min:0',
             'payment_agreement' => 'required|string|in:full,installment',
             'is_monthly' => 'nullable|boolean',
@@ -126,7 +126,7 @@ class TuitionFeeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|in:Tuition,Miscellaneous,Other',
+            'type' => 'required|string|in:Enrollment,Miscellaneous,Other',
             'amount' => 'required|numeric|min:0',
             'payment_agreement' => 'required|string|in:full,installment',
             'is_monthly' => 'nullable|boolean',

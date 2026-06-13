@@ -38,7 +38,7 @@
         ],
         [
             'url' => 'admin.CMS.index',
-            'name' => 'CMS',
+            'name' => 'Content Management System',
             'icon' => '<i class="fi fi-rr-browser"></i>',
             'is_active' => true,
         ],

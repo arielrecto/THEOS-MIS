@@ -29,6 +29,12 @@
             'name' => 'certificate templates',
             'icon' => '<i class="fi fi-rr-diploma"></i>',
             'is_active' => true,
+        ],
+        [
+            'url' => 'registrar.reports.index',
+            'name' => 'reports',
+            'icon' => '<i class="fi fi-rr-file-chart-line"></i>',
+            'is_active' => true,
         ]
     ];
 

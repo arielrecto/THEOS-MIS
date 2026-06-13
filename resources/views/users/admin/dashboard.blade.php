@@ -5,11 +5,11 @@
             <!-- Users Card -->
             <div class="flex items-center p-4 sm:p-6 rounded-lg shadow-lg transition-transform duration-300 bg-base-100 hover:scale-105">
                 <div class="flex justify-center items-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10">
-                    <i class="text-2xl sm:text-4xl fi fi-rr-users text-primary"></i>
+                    <i class="text-2xl sm:text-4xl fi fi-rr-users text-accent"></i>
                 </div>
                 <div class="ml-3 sm:ml-4">
                     <h1 class="text-sm sm:text-lg font-semibold text-gray-600">Total Users</h1>
-                    <p class="text-2xl sm:text-4xl font-bold text-primary">{{ $total_users }}</p>
+                    <p class="text-2xl sm:text-4xl font-bold text-accent">{{ $total_users }}</p>
                 </div>
             </div>
 

@@ -20,6 +20,7 @@ class DashboardController extends Controller
         $classrooms = Classroom::where('teacher_id', $teacher->id)
         ->with([
             'subject',
+            'strand',
             'classroomStudents',
             'academicYear'
         ])
@@ -33,6 +34,19 @@ class DashboardController extends Controller
 
         // Get unique subjects count
         $totalSubjects = $classrooms->pluck('subject_id')->unique()->count();
+
+        // Grade levels & subjects breakdown for the summary panel
+        $gradeLevelSummary = $classrooms
+            ->filter(fn($c) => $c->strand)
+            ->groupBy(fn($c) => $c->strand->name)
+            ->map(fn($group, $grade) => [
+                'grade'     => $grade,
+                'subjects'  => $group->pluck('subject.name')->filter()->unique()->values(),
+                'classrooms'=> $group->count(),
+                'students'  => $group->sum(fn($c) => $c->classroomStudents->count()),
+            ])
+            ->sortKeys()
+            ->values();
 
         // Get recent/upcoming tasks from teacher's classrooms
         $recentTasks = Task::whereIn('classroom_id', $classrooms->pluck('id'))
@@ -56,7 +70,8 @@ class DashboardController extends Controller
             'totalStudents',
             'totalSubjects',
             'recentTasks',
-            'upcomingDeadlines'
+            'upcomingDeadlines',
+            'gradeLevelSummary'
         ));
     }
 }

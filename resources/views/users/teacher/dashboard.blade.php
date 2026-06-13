@@ -6,6 +6,58 @@
         <x-card-v1 icon="fi fi-rr-books" label="Subjects" :count="$totalSubjects" icon_color="accent" />
     </div>
 
+    {{-- Grade Level & Subject Assignment Panel --}}
+    <div class="mt-6 bg-base-100 rounded-lg shadow-lg p-6">
+        <div class="flex items-center gap-2 mb-5">
+            <i class="fi fi-rr-chalkboard-user text-accent text-lg"></i>
+            <h2 class="font-bold text-accent text-lg">My Grade Levels &amp; Subjects</h2>
+            <span class="badge badge-ghost badge-sm ml-auto">{{ $gradeLevelSummary->count() }} grade level(s)</span>
+        </div>
+
+        @if($gradeLevelSummary->isEmpty())
+            <div class="text-center py-10 text-gray-400">
+                <i class="fi fi-rr-chalkboard block text-3xl mb-2"></i>
+                <p class="text-sm">No grade levels assigned yet. Contact admin to assign classrooms.</p>
+            </div>
+        @else
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($gradeLevelSummary as $item)
+                    <div class="border border-base-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="badge badge-accent font-semibold text-sm px-3 py-2">
+                                {{ $item['grade'] }}
+                            </span>
+                            <div class="flex gap-2 text-xs text-gray-500">
+                                <span class="flex items-center gap-1">
+                                    <i class="fi fi-rr-chalkboard"></i>
+                                    {{ $item['classrooms'] }} {{ Str::plural('class', $item['classrooms']) }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i class="fi fi-rr-users"></i>
+                                    {{ $item['students'] }}
+                                </span>
+                            </div>
+                        </div>
+
+                        @if($item['subjects']->count())
+                            <div class="space-y-1.5">
+                                <p class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">Subjects</p>
+                                @foreach($item['subjects'] as $subject)
+                                    <div class="flex items-center gap-2 text-sm text-gray-700">
+                                        <i class="fi fi-rr-book text-accent text-xs shrink-0"></i>
+                                        <span>{{ $subject }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-xs text-gray-400 italic">No subjects assigned</p>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+
     <!-- Two column section: stack on mobile -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <!-- My Classrooms Card -->

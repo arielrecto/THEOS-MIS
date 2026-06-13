@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 p-4 sm:p-6">
         <!-- Header -->
         <div class="mb-4 sm:mb-6">
-            <h1 class="text-base sm:text-2xl md:text-3xl font-bold text-gray-800">Content Management</h1>
+            <h1 class="text-base sm:text-2xl md:text-3xl font-bold text-gray-800">Content Management System</h1>
             <p class="text-xs sm:text-sm text-gray-600 mt-1">Manage your website content and appearance</p>
         </div>
 
