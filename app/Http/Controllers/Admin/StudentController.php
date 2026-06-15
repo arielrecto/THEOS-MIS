@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Strand;
+use App\Models\Classroom;
+use App\Models\ClassroomStudent;
 use App\Enums\UserRoles;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -79,9 +82,59 @@ class StudentController extends Controller
             'asStudentClassrooms.classroom.teacher',
             'asStudentClassrooms.classroom.academicYear',
             'asStudentClassrooms.classroom.strand',
+            'payments.paymentAccount',
+            'enrollmentForms' => fn($q) => $q->latest(),
         ])->findOrFail($id);
 
-        return view('users.admin.users.student.show', compact('student'));
+        $gradeLevel = $student->studentProfile?->academicRecords->sortByDesc('id')->first()?->grade_level;
+        $strand = $gradeLevel ? Strand::where('name', $gradeLevel)->first() : null;
+
+        $enrolledClassroomIds = $student->asStudentClassrooms->pluck('classroom_id')->toArray();
+
+        $availableClassrooms = $strand
+            ? Classroom::where('strand_id', $strand->id)
+                ->where('is_archived', false)
+                ->whereNotIn('id', $enrolledClassroomIds)
+                ->with(['subject', 'teacher', 'academicYear'])
+                ->get()
+            : collect();
+
+        return view('users.admin.users.student.show', compact('student', 'availableClassrooms', 'gradeLevel'));
+    }
+
+    public function assignClassroom(Request $request, string $id)
+    {
+        $request->validate(['classroom_ids' => 'required|array', 'classroom_ids.*' => 'exists:classrooms,id']);
+
+        $student = User::findOrFail($id);
+        $already = $student->asStudentClassrooms->pluck('classroom_id')->toArray();
+
+        foreach ($request->classroom_ids as $classroomId) {
+            if (!in_array($classroomId, $already)) {
+                ClassroomStudent::create(['student_id' => $student->id, 'classroom_id' => $classroomId]);
+            }
+        }
+
+        return back()->with('success', 'Classroom(s) assigned successfully.');
+    }
+
+    public function removeClassroom(string $id, string $classroomId)
+    {
+        ClassroomStudent::where('student_id', $id)->where('classroom_id', $classroomId)->delete();
+        return back()->with('success', 'Classroom removed.');
+    }
+
+    public function printClassrooms(string $id)
+    {
+        $student = User::with([
+            'studentProfile',
+            'asStudentClassrooms.classroom.subject',
+            'asStudentClassrooms.classroom.teacher',
+            'asStudentClassrooms.classroom.academicYear',
+            'asStudentClassrooms.classroom.strand',
+        ])->findOrFail($id);
+
+        return view('users.admin.users.student.classrooms-print', compact('student'));
     }
 
     /**

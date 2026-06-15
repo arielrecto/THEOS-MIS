@@ -148,7 +148,7 @@ class StrandController extends Controller
             'grade_level' => 'required|integer|min:7|max:12',
             'capacity' => 'required|integer|min:1|max:100',
             'description' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
+            'is_active' => 'nullable',
         ]);
 
         $section->update([

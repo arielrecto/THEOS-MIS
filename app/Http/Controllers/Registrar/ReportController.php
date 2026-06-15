@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Registrar;
 
 use App\Models\AcademicYear;
+use App\Models\CertificateTemplate;
 use App\Models\EnrollmentForm;
 use App\Models\Payment;
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Enums\UserRoles;
 
 class ReportController extends Controller
 {
@@ -32,20 +31,19 @@ class ReportController extends Controller
         $enrollees = $query->orderBy('last_name')->get();
 
         $summary = [
-            'total'    => $enrollees->count(),
-            'approved' => $enrollees->where('status', 'approved')->count(),
-            'pending'  => $enrollees->where('status', 'pending')->count(),
-            'rejected' => $enrollees->where('status', 'rejected')->count(),
+            'total'       => $enrollees->count(),
+            'enrolled'    => $enrollees->where('status', 'enrolled')->count(),
+            'pending'     => $enrollees->whereIn('status', ['pending', 'review', 'interviewed'])->count(),
+            'rejected'    => $enrollees->where('status', 'rejected')->count(),
         ];
 
         $gradeLevels = ['Kinder', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4',
                         'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
 
-        $registrar = User::role(UserRoles::REGISTRAR->value)->first();
-        $admin     = User::role(UserRoles::ADMIN->value)->first();
+        $schoolAddress = CertificateTemplate::where('is_active', true)->value('school_address') ?? '';
 
         return view('users.registrar.report.enrollment',
-            compact('enrollees', 'academicYears', 'selectedYear', 'summary', 'gradeLevels', 'registrar', 'admin'));
+            compact('enrollees', 'academicYears', 'selectedYear', 'summary', 'gradeLevels', 'schoolAddress'));
     }
 
     public function payment(Request $request)
@@ -66,8 +64,8 @@ class ReportController extends Controller
 
         $query = Payment::with(['user.studentProfile', 'paymentAccount'])
             ->when($selectedYear, fn($q) => $q->whereIn('user_id', $enrolleeIds))
-            ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
-            ->when($request->filled('method'), fn($q) => $q->where('payment_method', $request->method));
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->input('status')))
+            ->when($request->filled('method'), fn($q) => $q->where('payment_method', $request->input('method')));
 
         $payments = $query->orderBy('created_at', 'desc')->get();
 
@@ -78,10 +76,9 @@ class ReportController extends Controller
             'pending_count'  => $payments->where('status', 'pending')->count(),
         ];
 
-        $registrar = User::role(UserRoles::REGISTRAR->value)->first();
-        $admin     = User::role(UserRoles::ADMIN->value)->first();
+        $schoolAddress = CertificateTemplate::where('is_active', true)->value('school_address') ?? '';
 
         return view('users.registrar.report.payment',
-            compact('payments', 'academicYears', 'selectedYear', 'summary', 'registrar', 'admin'));
+            compact('payments', 'academicYears', 'selectedYear', 'summary', 'schoolAddress'));
     }
 }

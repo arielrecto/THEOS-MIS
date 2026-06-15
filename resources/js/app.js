@@ -118,6 +118,7 @@ Alpine.data("calendarInit", () => ({
 
         var calendar = new FullCalendar.Calendar(calendarElement, {
             initialView: "dayGridMonth",
+            buttonText: { today: 'Today' },
         });
         calendar.render();
     },

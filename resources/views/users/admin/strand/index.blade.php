@@ -42,35 +42,45 @@
                                     </span>
                                 </td>
                                 <td class="flex justify-end items-center gap-3">
-                                    <button onclick="sectionModal{{ $strand->id }}.showModal()"
-                                        class="btn btn-xs btn-primary" aria-label="Manage Sections">
-                                        <i class="fi fi-rr-users-alt"></i>
-                                    </button>
-
-                                    <button onclick="tuitionFeeModal{{ $strand->id }}.showModal()"
-                                        class="btn btn-xs btn-info" aria-label="Set Tuition">
-                                        <i class="fi fi-rr-money-bill-wave"></i>
-                                    </button>
-
-                                    <a href="{{ route('admin.strands.show', ['strand' => $strand->id]) }}"
-                                        class="btn btn-xs btn-accent" aria-label="View">
-                                        <i class="fi fi-rr-eye"></i>
-                                    </a>
-
-                                    <a href="{{ route('admin.strands.edit', ['strand' => $strand->id]) }}"
-                                        class="btn btn-xs btn-success" aria-label="Edit">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </a>
-
-                                    <form action="{{ route('admin.strands.destroy', ['strand' => $strand->id]) }}"
-                                        method="post"
-                                        onsubmit="return confirm('Are you sure you want to delete this strand?')">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-xs btn-error" aria-label="Delete">
-                                            <i class="fi fi-rr-trash"></i>
+                                    <div class="tooltip tooltip-left" data-tip="Manage Sections">
+                                        <button onclick="sectionModal{{ $strand->id }}.showModal()"
+                                            class="btn btn-xs btn-primary">
+                                            <i class="fi fi-rr-users-alt"></i>
                                         </button>
-                                    </form>
+                                    </div>
+
+                                    <div class="tooltip tooltip-left" data-tip="Set Tuition Fees">
+                                        <button onclick="tuitionFeeModal{{ $strand->id }}.showModal()"
+                                            class="btn btn-xs btn-info">
+                                            <i class="fi fi-rr-money-bill-wave"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="tooltip tooltip-left" data-tip="View Details">
+                                        <a href="{{ route('admin.strands.show', ['strand' => $strand->id]) }}"
+                                            class="btn btn-xs btn-accent">
+                                            <i class="fi fi-rr-eye"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="tooltip tooltip-left" data-tip="Edit">
+                                        <a href="{{ route('admin.strands.edit', ['strand' => $strand->id]) }}"
+                                            class="btn btn-xs btn-success">
+                                            <i class="fi fi-rr-edit"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="tooltip tooltip-left" data-tip="Delete">
+                                        <form action="{{ route('admin.strands.destroy', ['strand' => $strand->id]) }}"
+                                            method="post"
+                                            onsubmit="return confirm('Are you sure you want to delete this strand?')">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-xs btn-error">
+                                                <i class="fi fi-rr-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
 
@@ -198,7 +208,7 @@
                                                 <div class="modal-box">
                                                     <h3 class="font-bold text-lg mb-4">Edit Section: {{ $section->name }}</h3>
 
-                                                    <form action="{{ route('admin.strands.sections.update', [$strand->id, $section->id]) }}" method="POST">
+                                                    <form action="{{ route('admin.strands.sections.update', ['strandId' => $strand->id, 'sectionId' => $section->id]) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
 

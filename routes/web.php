@@ -144,6 +144,9 @@ Route::middleware(['auth'])->group(function () {
                         Route::put('update-profile/{id}', [StudentController::class, 'updateProfile'])->name('update-profile');
                         Route::put('update-email/{id}', [StudentController::class, 'updateEmail'])->name('update-email');
                         Route::put('update-password/{id}', [StudentController::class, 'updatePassword'])->name('update-password');
+                        Route::get('{id}/classrooms/print', [StudentController::class, 'printClassrooms'])->name('classrooms-print');
+                        Route::post('{id}/classrooms/assign', [StudentController::class, 'assignClassroom'])->name('classrooms-assign');
+                        Route::delete('{id}/classrooms/{classroomId}', [StudentController::class, 'removeClassroom'])->name('classrooms-remove');
                     });
                     Route::resource('students', StudentController::class);
                     Route::resource('teacher', TeacherController::class);
@@ -159,7 +162,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::prefix('sections')->as('sections.')->group(function () {
                    Route::post('/store', [StrandController::class, 'storeSection'])->name('store');
                    Route::delete('/destroy', [StrandController::class, 'destroySection'])->name('destroy');
-                   Route::put('/update', [StrandController::class, 'updateSection'])->name('update');
+                   Route::put('{strandId}/{sectionId}/update', [StrandController::class, 'updateSection'])->name('update');
 
                 });
             });
@@ -312,7 +315,11 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::prefix('attendance')->as('attendance.')->group(function () {
                     Route::post('upload', [TeacherStudentController::class, 'uploadAttendance'])->name('upload');
-
+                    Route::get('template', fn() => response()->download(
+                        public_path('attendance_template.csv'),
+                        'attendance_template.csv',
+                        ['Content-Type' => 'text/csv']
+                    ))->name('template');
                 });
 
                 Route::prefix('student')
@@ -505,6 +512,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('', [EmployeeController::class, 'index'])->name('index');
                 Route::get('create', [EmployeeController::class, 'create'])->name('create');
                 Route::get('archived', [EmployeeController::class, 'archiveIndex'])->name('archived');
+                Route::get('archived/print', [EmployeeController::class, 'printArchived'])->name('archived-print');
 
                 Route::post('', [EmployeeController::class, 'store'])->name('store');
                 Route::get('{employee}', [EmployeeController::class, 'show'])->name('show');

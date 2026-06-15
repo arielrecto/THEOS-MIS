@@ -1,3 +1,4 @@
+@php use App\Models\Logo; $reportLogo = Logo::where('is_active', true)->first()?->path ?? null; @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,6 +106,13 @@
         <div class="p-6 sm:p-8 bg-white rounded-lg shadow-sm print:p-0 print:shadow-none">
             <!-- Report Header -->
             <div class="mb-6 text-center">
+                <div class="flex justify-center mb-3">
+                    @if($reportLogo)
+                        <img src="{{ asset('storage/' . $reportLogo) }}" alt="School Logo" class="w-20 h-20 object-contain">
+                    @else
+                        <img src="{{ asset('logo-modified.png') }}" alt="School Logo" class="w-20 h-20 object-contain">
+                    @endif
+                </div>
                 <h1 class="mb-1 text-xl sm:text-2xl font-bold">LEAVE REPORT</h1>
                 <div class="space-y-1 text-xs sm:text-sm text-gray-600">
                     <p class="font-semibold">{{ config('app.name') }}</p>

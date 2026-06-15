@@ -85,6 +85,31 @@ class EmployeeController extends Controller
         return view('users.hr.archive.index', compact('employees', 'departments', 'positions'));
     }
 
+    public function printArchived(Request $request)
+    {
+        $query = EmployeeProfile::with(['user', 'position', 'position.department'])
+            ->where('status', 'archived');
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('first_name', 'like', "%{$request->search}%")
+                  ->orWhere('last_name', 'like', "%{$request->search}%");
+            });
+        }
+
+        if ($request->filled('department')) {
+            $query->whereHas('position.department', fn($q) => $q->where('id', $request->department));
+        }
+
+        if ($request->filled('position')) {
+            $query->where('job_position_id', $request->position);
+        }
+
+        $employees = $query->latest('updated_at')->get();
+
+        return view('users.hr.archive.print', compact('employees'));
+    }
+
     // Restore archived employee
     public function restoreArchive(EmployeeProfile $employee)
     {

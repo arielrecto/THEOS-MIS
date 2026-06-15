@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <div class="max-w-2xl mx-auto px-4 sm:px-6">
+    <div class=" px-4 sm:px-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
             <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Payment Account Details</h2>
 

@@ -1,6 +1,6 @@
 <x-dashboard.admin.base>
     <x-notification-message />
-    <x-dashboard.page-title :title="_('Create Announcement')" />
+    <x-dashboard.page-title :title="_('Create Announcement')" :back_url="route('admin.general-announcements.index')" />
 
     <form action="{{ route('admin.general-announcements.store') }}" enctype="multipart/form-data" method="POST">
         @csrf

@@ -1,9 +1,9 @@
 <x-dashboard.teacher.base>
     <!-- Top stats: stack on mobile, 3 columns on small+ -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <x-card-v1 icon="fi fi-rr-chalkboard" label="Classrooms" :count="$totalClassrooms" icon_color="accent" />
-        <x-card-v1 icon="fi fi-rr-chalkboard-user" label="Students" :count="$totalStudents" icon_color="accent" />
-        <x-card-v1 icon="fi fi-rr-books" label="Subjects" :count="$totalSubjects" icon_color="accent" />
+        <x-card-v1 icon="fi fi-rr-chalkboard" label="Classrooms" :count="$totalClassrooms" icon_color="accent" :link="route('teacher.classrooms.index')" />
+        <x-card-v1 icon="fi fi-rr-chalkboard-user" label="Students" :count="$totalStudents" icon_color="accent" :link="route('teacher.student.index')" />
+        <x-card-v1 icon="fi fi-rr-books" label="Subjects" :count="$totalSubjects" icon_color="accent" :link="route('teacher.classrooms.index')" />
     </div>
 
     {{-- Grade Level & Subject Assignment Panel --}}

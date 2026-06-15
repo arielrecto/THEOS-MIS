@@ -6,10 +6,19 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Archived Employees</h1>
                 <p class="text-sm text-gray-600 mt-1">View and manage archived employee records</p>
             </div>
-            <a href="{{ route('hr.employees.index') }}" class="btn btn-ghost gap-2 w-full sm:w-auto">
-                <i class="fi fi-rr-arrow-left"></i>
-                <span>Back to Employees</span>
-            </a>
+            <div class="flex gap-2 w-full sm:w-auto">
+                <a href="{{ route('hr.employees.archived-print') . (request()->getQueryString() ? '?' . request()->getQueryString() : '') }}"
+                   target="_blank"
+                   class="btn btn-sm gap-2 text-white"
+                   style="background-color:#3277C5;border-color:#3277C5;">
+                    <i class="fi fi-rr-print text-white"></i>
+                    <span class="hidden sm:inline">Generate PDF</span>
+                </a>
+                <a href="{{ route('hr.employees.index') }}" class="btn btn-ghost btn-sm gap-2">
+                    <i class="fi fi-rr-arrow-left"></i>
+                    <span>Back to Employees</span>
+                </a>
+            </div>
         </div>
 
         <!-- Success/Error Messages -->

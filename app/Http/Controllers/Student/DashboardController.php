@@ -17,7 +17,11 @@ class DashboardController extends Controller
             'studentProfile.academicRecords' => function($query) {
                 $query->with(['academicYear', 'grades', 'section.strand'])
                       ->orderBy('created_at', 'desc');
-            }
+            },
+            'asStudentClassrooms.classroom.subject',
+            'asStudentClassrooms.classroom.teacher',
+            'asStudentClassrooms.classroom.academicYear',
+            'asStudentClassrooms.classroom.strand',
         ])->find(auth()->id());
 
         // Get upcoming tasks for the authenticated student

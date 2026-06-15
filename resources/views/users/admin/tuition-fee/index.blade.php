@@ -114,32 +114,37 @@
                                                 </td>
                                                 <td class="text-right">
                                                     <div class="flex gap-2 justify-end">
-                                                        <button onclick="editFeeModal{{ $fee->id }}.showModal()"
-                                                            class="btn btn-xs btn-ghost">
-                                                            <i class="fi fi-rr-edit"></i>
-                                                        </button>
-                                                        <form
-                                                            action="{{ route('admin.tuition-fees.toggle-status', $fee->id) }}"
-                                                            method="POST" class="inline">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <button type="submit"
-                                                                class="btn btn-xs {{ $fee->is_active ? 'btn-warning' : 'btn-success' }}">
-                                                                <i
-                                                                    class="fi fi-rr-{{ $fee->is_active ? 'ban' : 'check' }}"></i>
+                                                        <div class="tooltip tooltip-left" data-tip="Edit">
+                                                            <button onclick="editFeeModal{{ $fee->id }}.showModal()"
+                                                                class="btn btn-xs btn-ghost">
+                                                                <i class="fi fi-rr-edit"></i>
                                                             </button>
-                                                        </form>
-                                                        <form
-                                                            action="{{ route('admin.tuition-fee.destroy', $fee->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Delete this fee?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                class="btn btn-xs btn-error btn-ghost">
-                                                                <i class="fi fi-rr-trash"></i>
-                                                            </button>
-                                                        </form>
+                                                        </div>
+                                                        <div class="tooltip tooltip-left" data-tip="{{ $fee->is_active ? 'Deactivate' : 'Activate' }}">
+                                                            <form
+                                                                action="{{ route('admin.tuition-fees.toggle-status', $fee->id) }}"
+                                                                method="POST" class="inline">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <button type="submit"
+                                                                    class="btn btn-xs {{ $fee->is_active ? 'btn-warning' : 'btn-success' }}">
+                                                                    <i class="fi fi-rr-{{ $fee->is_active ? 'ban' : 'check' }}"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="tooltip tooltip-left" data-tip="Delete">
+                                                            <form
+                                                                action="{{ route('admin.tuition-fee.destroy', $fee->id) }}"
+                                                                method="POST"
+                                                                onsubmit="return confirm('Delete this fee?')">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="btn btn-xs btn-error btn-ghost">
+                                                                    <i class="fi fi-rr-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>

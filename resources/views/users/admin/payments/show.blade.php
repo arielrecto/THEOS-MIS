@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <div class="max-w-full mx-auto p-4 sm:p-6">
+    <div class="max-w-full  p-4 sm:p-6">
         <!-- Header with Back Button -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
             <h2 class="text-lg sm:text-2xl font-bold text-gray-800">Payment Details</h2>

@@ -183,18 +183,20 @@
                                     </td>
                                     <td class="align-top">
                                         <div class="flex items-center gap-2">
-                                            <a href="{{ route('hr.departments.edit', ['department' => $department->id]) }}" class="btn btn-ghost btn-xs" aria-label="Edit">
-                                                <i class="fi fi-rr-edit"></i>
-                                                <span class="hidden lg:inline ml-1">Edit</span>
-                                            </a>
+                                            <div class="tooltip tooltip-left" data-tip="Edit">
+                                                <a href="{{ route('hr.departments.edit', ['department' => $department->id]) }}" class="btn btn-ghost btn-xs" aria-label="Edit">
+                                                    <i class="fi fi-rr-edit"></i>
+                                                </a>
+                                            </div>
 
                                             <form action="{{ route('hr.departments.destroy', ['department' => $department->id]) }}" method="post" onsubmit="return confirm('Delete department?')">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-ghost btn-xs text-error" aria-label="Delete">
-                                                    <i class="fi fi-rr-trash"></i>
-                                                    <span class="hidden lg:inline ml-1">Delete</span>
-                                                </button>
+                                                <div class="tooltip tooltip-left" data-tip="Delete">
+                                                    <button class="btn btn-ghost btn-xs text-error" aria-label="Delete">
+                                                        <i class="fi fi-rr-trash"></i>
+                                                    </button>
+                                                </div>
                                             </form>
                                         </div>
                                     </td>

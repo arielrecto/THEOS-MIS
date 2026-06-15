@@ -6,8 +6,36 @@
     <title>Enrollment Report – {{ $selectedYear?->name ?? 'All Years' }} – {{ config('app.name') }}</title>
     @vite(['resources/css/app.css'])
     <style>
+        .school-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .school-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 1rem;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+        .signature-section {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature-box {
+            width: 250px;
+            text-align: center;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 2rem;
+            padding-top: 0.5rem;
+        }
         @media print {
-            body { background: white; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .print\:hidden { display: none !important; }
             .print\:p-0 { padding: 0 !important; }
             .print\:shadow-none { box-shadow: none !important; }
@@ -18,7 +46,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
 <div class="container mx-auto p-6 print:p-0">
 
     {{-- Controls (hidden on print) --}}
@@ -49,9 +77,11 @@
             </select>
             <select name="status" class="text-xs select select-bordered select-sm">
                 <option value="">All Statuses</option>
-                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
-                <option value="pending"  {{ request('status') === 'pending'  ? 'selected' : '' }}>Pending</option>
-                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                <option value="enrolled"    {{ request('status') === 'enrolled'    ? 'selected' : '' }}>Enrolled</option>
+                <option value="pending"     {{ request('status') === 'pending'     ? 'selected' : '' }}>Pending</option>
+                <option value="review"      {{ request('status') === 'review'      ? 'selected' : '' }}>Review</option>
+                <option value="interviewed" {{ request('status') === 'interviewed' ? 'selected' : '' }}>Interviewed</option>
+                <option value="rejected"    {{ request('status') === 'rejected'    ? 'selected' : '' }}>Rejected</option>
             </select>
             <button type="submit" class="btn btn-sm btn-neutral gap-2">
                 <i class="fi fi-rr-search"></i> Generate
@@ -63,18 +93,22 @@
     </div>
 
     {{-- Printable Document --}}
-    <div class="bg-white rounded-lg shadow-sm p-8 print:p-0 print:shadow-none">
+    <div class="rounded-lg p-8 print:p-0">
 
         {{-- Header --}}
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold uppercase tracking-wide">Enrollment Report</h1>
-            <p class="font-semibold text-gray-700 mt-1">{{ config('app.name') }}</p>
-            <p class="text-sm text-gray-500">
+        <div class="school-header">
+            <img src="{{ asset('logo-modified.png') }}"
+                 alt="Theos Higher Ground Academe Logo"
+                 class="school-logo">
+            <h1 class="text-2xl font-bold">Theos Higher Ground Academe</h1>
+            <p class="text-sm">{{ $schoolAddress }}</p>
+            <h2 class="text-xl font-bold mt-4">ENROLLMENT REPORT</h2>
+            <p class="text-sm">
                 School Year: {{ $selectedYear?->name ?? 'All Years' }}
                 @if(request('grade_level')) &nbsp;|&nbsp; Grade Level: {{ request('grade_level') }} @endif
                 @if(request('status'))      &nbsp;|&nbsp; Status: {{ ucfirst(request('status')) }} @endif
             </p>
-            <p class="text-xs text-gray-400 mt-1">Generated: {{ now()->format('F d, Y h:i A') }}</p>
+            <p class="text-sm">Generated on {{ now()->format('F d, Y - h:i A') }}</p>
         </div>
 
         {{-- Summary Stats --}}
@@ -84,12 +118,12 @@
                 <p class="text-xs text-gray-500 mt-0.5">Total Enrollees</p>
             </div>
             <div class="border rounded-lg p-3">
-                <p class="text-2xl font-bold text-green-600">{{ $summary['approved'] }}</p>
-                <p class="text-xs text-gray-500 mt-0.5">Approved</p>
+                <p class="text-2xl font-bold text-green-600">{{ $summary['enrolled'] }}</p>
+                <p class="text-xs text-gray-500 mt-0.5">Enrolled</p>
             </div>
             <div class="border rounded-lg p-3">
                 <p class="text-2xl font-bold text-yellow-500">{{ $summary['pending'] }}</p>
-                <p class="text-xs text-gray-500 mt-0.5">Pending</p>
+                <p class="text-xs text-gray-500 mt-0.5">In Progress</p>
             </div>
             <div class="border rounded-lg p-3">
                 <p class="text-2xl font-bold text-red-500">{{ $summary['rejected'] }}</p>
@@ -125,9 +159,17 @@
                         <td class="py-2 pr-3 text-xs text-gray-500">{{ $enrollee->academicYear?->name ?? '—' }}</td>
                         <td class="py-2 pr-3 text-xs">{{ $enrollee->contact_number ?? '—' }}</td>
                         <td class="py-2">
-                            <span class="px-2 py-0.5 rounded text-xs font-semibold
-                                {{ $enrollee->status === 'approved' ? 'bg-green-100 text-green-700' :
-                                   ($enrollee->status === 'pending'  ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
+                            @php
+                                $statusClass = match($enrollee->status) {
+                                    'enrolled'    => 'bg-green-100 text-green-700',
+                                    'pending'     => 'bg-yellow-100 text-yellow-700',
+                                    'review'      => 'bg-blue-100 text-blue-700',
+                                    'interviewed' => 'bg-purple-100 text-purple-700',
+                                    'rejected'    => 'bg-red-100 text-red-700',
+                                    default       => 'bg-gray-100 text-gray-600',
+                                };
+                            @endphp
+                            <span class="px-2 py-0.5 rounded text-xs font-semibold {{ $statusClass }}">
                                 {{ ucfirst($enrollee->status) }}
                             </span>
                         </td>
@@ -141,19 +183,17 @@
         </table>
 
         {{-- Signatories --}}
-        <div class="grid grid-cols-2 gap-16 mt-16">
-            <div class="text-center">
-                <p class="font-bold text-gray-800 uppercase">{{ $registrar?->name ?? 'Registrar' }}</p>
-                <div class="border-t border-gray-400 mt-1 pt-2">
-                    <p class="text-sm font-medium text-gray-600">Registrar</p>
-                    <p class="text-xs text-gray-400">Prepared &amp; Certified by</p>
+        <div class="signature-section">
+            <div class="signature-box">
+                <div class="signature-line">
+                    <p class="font-bold text-sm">Prepared by</p>
+                    <p class="text-xs mt-1">Registrar</p>
                 </div>
             </div>
-            <div class="text-center">
-                <p class="font-bold text-gray-800 uppercase">{{ $admin?->name ?? 'School Administrator' }}</p>
-                <div class="border-t border-gray-400 mt-1 pt-2">
-                    <p class="text-sm font-medium text-gray-600">School Administrator</p>
-                    <p class="text-xs text-gray-400">Approved by</p>
+            <div class="signature-box">
+                <div class="signature-line">
+                    <p class="font-bold text-sm">Noted by</p>
+                    <p class="text-xs mt-1">Principal</p>
                 </div>
             </div>
         </div>

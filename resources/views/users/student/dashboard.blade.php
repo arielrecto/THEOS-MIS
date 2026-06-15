@@ -1,5 +1,5 @@
 <x-dashboard.student.base>
-    <div class="container max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+    <div class="container px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="mb-4 text-2xl sm:text-3xl font-bold text-gray-700 break-words">Student Dashboard</h1>
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -167,6 +167,99 @@
                 </div>
             </div>
 
+            <!-- My Subjects -->
+            <div class="p-4 bg-white rounded-lg shadow-md md:col-span-3">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fi fi-rr-book-alt text-accent"></i>
+                    <h2 class="text-lg font-bold text-gray-700">My Subjects</h2>
+                    @php $gradeLevel = $student->studentProfile?->academicRecords?->first()?->grade_level; @endphp
+                    @if($gradeLevel)
+                        <span class="badge badge-accent badge-sm ml-1">{{ $gradeLevel }}</span>
+                    @endif
+                    <span class="badge badge-ghost badge-sm ml-auto">
+                        {{ $student->asStudentClassrooms->count() }} subject(s)
+                    </span>
+                </div>
+
+                @if($student->asStudentClassrooms->count())
+                    {{-- Desktop Table --}}
+                    <div class="hidden sm:block overflow-x-auto rounded-lg border border-gray-100">
+                        <table class="table table-zebra w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 uppercase text-xs tracking-wide">
+                                    <th>#</th>
+                                    <th>Subject</th>
+                                    <th>Classroom</th>
+                                    <th>Teacher</th>
+                                    <th>Grade Level</th>
+                                    <th>School Year</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($student->asStudentClassrooms as $i => $cs)
+                                    @php $room = $cs->classroom; @endphp
+                                    <tr class="hover">
+                                        <td class="text-gray-400 text-xs">{{ $i + 1 }}</td>
+                                        <td>
+                                            <p class="font-semibold text-gray-800">{{ $room->subject?->name ?? '—' }}</p>
+                                            @if($room->subject?->subject_code)
+                                                <p class="text-xs text-gray-400">{{ $room->subject->subject_code }}</p>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <p class="text-gray-700">{{ $room->name ?? '—' }}</p>
+                                            <p class="text-xs text-gray-400">{{ $room->class_code ?? '' }}</p>
+                                        </td>
+                                        <td class="text-gray-700">{{ $room->teacher?->name ?? '—' }}</td>
+                                        <td>
+                                            @if($room->strand)
+                                                <span class="badge badge-ghost badge-sm">{{ $room->strand->name }}</span>
+                                            @else
+                                                <span class="text-gray-400">—</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-xs text-gray-500">{{ $room->academicYear?->name ?? '—' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{-- Mobile Cards --}}
+                    <div class="block sm:hidden space-y-3">
+                        @foreach($student->asStudentClassrooms as $cs)
+                            @php $room = $cs->classroom; @endphp
+                            <div class="rounded-lg border border-gray-100 p-4 bg-gray-50 space-y-2">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="font-semibold text-gray-800 text-sm">{{ $room->subject?->name ?? '—' }}</p>
+                                        <p class="text-xs text-gray-500">{{ $room->name ?? '' }}</p>
+                                    </div>
+                                    @if($room->strand)
+                                        <span class="badge badge-ghost badge-sm">{{ $room->strand->name }}</span>
+                                    @endif
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                                    <div>
+                                        <span class="text-gray-400">Teacher</span>
+                                        <p class="font-medium">{{ $room->teacher?->name ?? '—' }}</p>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-400">School Year</span>
+                                        <p class="font-medium">{{ $room->academicYear?->name ?? '—' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="p-8 text-center text-gray-400 bg-gray-50 rounded-lg">
+                        <i class="fi fi-rr-book-alt text-3xl block mb-2"></i>
+                        <p class="text-sm">No subjects assigned yet. Please contact your administrator.</p>
+                    </div>
+                @endif
+            </div>
+
             <!-- Profile Information -->
             <div class="p-4 bg-white rounded-lg shadow-md">
                 <h2 class="text-lg font-bold text-gray-700">Student Profile</h2>
@@ -181,12 +274,26 @@
             </div>
 
             <!-- Account Settings -->
-            <div class="p-4 bg-white rounded-lg shadow-md">
-                <h2 class="text-lg font-bold text-gray-700">Account Settings</h2>
-                <p class="mt-2 text-sm text-gray-600">
+            <div class="p-4 bg-white rounded-lg shadow-md md:col-span-2">
+                <h2 class="text-lg font-bold text-gray-700 mb-3">Account Settings</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <a href="{{ route('student.settings.index') }}"
-                        class="text-blue-600 hover:underline block sm:inline">Edit Profile</a>
-                </p>
+                       class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-accent/10 transition-colors">
+                        <i class="fi fi-rr-user-pen text-accent text-xl"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Edit Profile</p>
+                            <p class="text-xs text-gray-500">Update your personal information</p>
+                        </div>
+                    </a>
+                    <a href="{{ route('student.settings.index') }}"
+                       class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-accent/10 transition-colors">
+                        <i class="fi fi-rr-lock text-accent text-xl"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Change Password</p>
+                            <p class="text-xs text-gray-500">Update your account password</p>
+                        </div>
+                    </a>
+                </div>
             </div>
 
             <!-- Academic Grades Section -->

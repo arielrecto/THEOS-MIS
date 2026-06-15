@@ -14,7 +14,7 @@
                                 <th class="w-48 text-left">Title</th>
                                 <th class="max-w-lg text-left">Description</th>
                                 <th class="w-40 text-left">Posted By</th>
-                                <th class="w-28 text-center">Is Posted</th>
+                                <th class="w-28 text-center">Activate</th>
                                 <th class="w-40 text-right">Action</th>
                             </tr>
                         </thead>

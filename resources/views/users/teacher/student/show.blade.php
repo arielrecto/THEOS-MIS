@@ -247,7 +247,7 @@
                     </h3>
                     <p class="text-sm text-gray-500 mb-4">
                         Upload a CSV file with monthly attendance for your students. Each month requires two values: Days of School and Days Present.
-                        <a href="{{ asset('attendance_template.csv') }}" class="link link-accent ml-1" download>Download template</a>
+                        <a href="{{ route('teacher.attendance.template') }}" class="link link-accent ml-1">Download template</a>
                     </p>
                     <form action="{{ route('teacher.attendance.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
