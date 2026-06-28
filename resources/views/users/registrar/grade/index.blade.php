@@ -243,16 +243,20 @@
 
                                     <!-- View Grades Button -->
                                     <div class="mt-3 flex gap-2">
-                                        <button class="btn btn-xs sm:btn-sm btn-ghost flex-1"
-                                            onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">
-                                            <i class="fi fi-rr-eye mr-1"></i>
-                                            View Grades
-                                        </button>
-                                        <a href="{{ route('registrar.students.print', ['student' => $student->id, 'record' => $record->id]) }}"
-                                           target="_blank"
-                                           class="btn btn-xs sm:btn-sm btn-ghost">
-                                            <i class="fi fi-rr-print"></i>
-                                        </a>
+                                        <div class="tooltip tooltip-top flex-1" data-tip="View Grades">
+                                            <button class="btn btn-xs sm:btn-sm btn-ghost w-full"
+                                                onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">
+                                                <i class="fi fi-rr-eye mr-1"></i>
+                                                View Grades
+                                            </button>
+                                        </div>
+                                        <div class="tooltip tooltip-top" data-tip="Print">
+                                            <a href="{{ route('registrar.students.print', ['student' => $student->id, 'record' => $record->id]) }}"
+                                               target="_blank"
+                                               class="btn btn-xs sm:btn-sm btn-ghost">
+                                                <i class="fi fi-rr-print"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -338,11 +342,13 @@
 
                         <!-- View Full Profile -->
                         <div class="mt-4 pt-4 border-t">
-                            <a href="{{ route('registrar.students.show', $student->id) }}"
-                               class="btn btn-xs sm:btn-sm btn-outline btn-accent w-full">
-                                <i class="fi fi-rr-user mr-2"></i>
-                                View Full Profile
-                            </a>
+                            <div class="tooltip tooltip-top w-full" data-tip="View Full Profile">
+                                <a href="{{ route('registrar.students.show', $student->id) }}"
+                                   class="btn btn-xs sm:btn-sm btn-outline btn-accent w-full">
+                                    <i class="fi fi-rr-user mr-2"></i>
+                                    View Full Profile
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -412,19 +418,19 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="flex gap-1 justify-center">
-                                        {{-- <button class="btn btn-xs sm:btn-sm btn-ghost"
-                                            onclick="document.getElementById('grades_modal_{{ $record->id }}').showModal()">
-                                            <i class="fi fi-rr-eye"></i>
-                                        </button> --}}
-                                        <a href="{{ route('registrar.students.print', ['student' => $student->id, 'record' => $record->id]) }}"
-                                           target="_blank"
-                                           class="btn btn-xs sm:btn-sm btn-ghost">
-                                            <i class="fi fi-rr-print"></i>
-                                        </a>
-                                        <a href="{{ route('registrar.students.show', $student->id) }}"
-                                           class="btn btn-xs sm:btn-sm btn-ghost">
-                                            <i class="fi fi-rr-user"></i>
-                                        </a>
+                                        <div class="tooltip tooltip-left" data-tip="Print">
+                                            <a href="{{ route('registrar.students.print', ['student' => $student->id, 'record' => $record->id]) }}"
+                                               target="_blank"
+                                               class="btn btn-xs sm:btn-sm btn-ghost">
+                                                <i class="fi fi-rr-print"></i>
+                                            </a>
+                                        </div>
+                                        <div class="tooltip tooltip-left" data-tip="View Profile">
+                                            <a href="{{ route('registrar.students.show', $student->id) }}"
+                                               class="btn btn-xs sm:btn-sm btn-ghost">
+                                                <i class="fi fi-rr-user"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

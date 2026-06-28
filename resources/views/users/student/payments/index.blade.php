@@ -84,7 +84,7 @@
                                     <th>Payment Method</th>
                                     <th>Account</th>
                                     <th>Status</th>
-                                    <th class="text-right">Actions</th>
+                                    <th >Actions</th>
                                 </tr>
                             </thead>
                             <tbody>

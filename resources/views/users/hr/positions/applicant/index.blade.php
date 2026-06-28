@@ -404,6 +404,7 @@
                                 <div class="flex items-start justify-between gap-3 mb-3">
                                     <h4 class="font-semibold text-sm text-gray-900 truncate flex-1">
                                         {{ $applicant->name }}</h4>
+                                    <div class="tooltip tooltip-left" data-tip="View Details">
                                     <div class="dropdown dropdown-end flex-shrink-0">
                                         <button class="btn btn-ghost btn-xs btn-circle" tabindex="0">
                                             <i class="fi fi-rr-menu-dots-vertical"></i>
@@ -420,6 +421,7 @@
                                                     </div>
                                                 </a></li>
                                         </ul>
+                                    </div>
                                     </div>
                                 </div>
                                 <div class="space-y-2">

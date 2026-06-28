@@ -10,6 +10,40 @@
                 </div>
             @endforeach
         @endif
+        <!-- Filter Bar -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-2">
+            <form method="GET" action="{{ route('admin.strands.index') }}" class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                    <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none">
+                        <i class="fi fi-rr-search text-sm"></i>
+                    </span>
+                    <input type="text" name="search" value="{{ request('search') }}"
+                           placeholder="Search by name or acronym…"
+                           class="input input-bordered input-sm w-full pl-9">
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="submit" class="btn btn-accent btn-sm gap-2">
+                        <i class="fi fi-rr-search"></i>
+                        <span class="hidden sm:inline">Search</span>
+                    </button>
+                    @if(request('search'))
+                        <a href="{{ route('admin.strands.index') }}" class="btn btn-ghost btn-sm gap-2">
+                            <i class="fi fi-rr-refresh"></i>
+                            <span class="hidden sm:inline">Clear</span>
+                        </a>
+                    @endif
+                </div>
+            </form>
+
+            @if(request('search'))
+                <div class="mt-2 text-xs text-gray-500">
+                    Showing results for <span class="font-semibold text-accent">"{{ request('search') }}"</span>
+                    — {{ $strands->total() }} {{ Str::plural('result', $strands->total()) }} found
+                </div>
+            @endif
+        </div>
+
         <div class="panel flex flex-col gap-4 min-h-96">
 
             <!-- Desktop Table -->

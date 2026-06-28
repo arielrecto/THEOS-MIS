@@ -2,7 +2,8 @@
     <div class="flex flex-col gap-4 px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h1 class="text-xl sm:text-2xl font-bold text-accent">My Tasks</h1>
-            <p class="text-xs sm:text-sm text-gray-500">Tasks assigned to you are shown below. Tap a card to view details.</p>
+            <p class="text-xs sm:text-sm text-gray-500">Assigned tasks are displayed below. Select a card to view its
+details.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

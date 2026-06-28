@@ -42,7 +42,8 @@
             table { width: 100%; break-inside: auto; }
             tr { break-inside: avoid; }
             thead { display: table-header-group; }
-            @page { margin: 1cm; size: landscape; }
+            @page { margin: 0; size: landscape; }
+            body { padding: 1cm; }
         }
     </style>
 </head>

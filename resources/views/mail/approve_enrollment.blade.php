@@ -72,12 +72,11 @@
             </div>
 
             <p class="text-xs">
-                Now login using the following credentials:
+                You may now log in using the following credentials:
             </p>
             <div class="details">
                 <p><strong>Email:</strong> {{ $user->email }}</p>
-                <p><strong>Name:</strong> {{ $user->name }}</p>
-                <p><strong>Password:</strong>password</p>
+                <p><strong>Password:</strong> Use the password you set when you registered your account.</p>
             </div>
 
             <p>You may now proceed with the next steps of the enrollment process. If you have any questions, feel free to reach out to us.</p>

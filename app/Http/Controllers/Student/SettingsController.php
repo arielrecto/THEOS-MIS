@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ProfileUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 
 class SettingsController extends Controller
@@ -29,6 +31,8 @@ class SettingsController extends Controller
         ]);
 
         $student->studentProfile->update($validated);
+
+        Mail::to($student->email)->send(new ProfileUpdated($student->fresh()));
 
         return back()->with('success', 'Profile updated successfully');
     }

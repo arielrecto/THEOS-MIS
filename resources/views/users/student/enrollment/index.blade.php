@@ -36,16 +36,20 @@
                                 </div>
 
                                 <div class="flex gap-2">
-                                    <a href="{{ route('student.enrollment.show', $enrollment->id) }}"
-                                       class="btn btn-ghost btn-sm flex-1">
-                                        <i class="fi fi-rr-eye"></i> View
-                                    </a>
-                                    @if($enrollment->status === 'enrolled' && $enrollment->grade_level !== 'Grade 10')
-                                        <a href="{{ route('student.enrollment.create', ['previous' => $enrollment->id]) }}"
-                                           class="btn btn-accent btn-sm flex-1">
-                                            <i class="fi fi-rr-arrow-up hidden"></i>
-                                            <span class="">Enroll Next</span>
+                                    <div class="tooltip tooltip-top flex-1" data-tip="View Enrollment">
+                                        <a href="{{ route('student.enrollment.show', $enrollment->id) }}"
+                                           class="btn btn-ghost btn-sm w-full">
+                                            <i class="fi fi-rr-eye"></i> View
                                         </a>
+                                    </div>
+                                    @if($enrollment->status === 'enrolled' && $enrollment->grade_level !== 'Grade 10')
+                                        <div class="tooltip tooltip-top flex-1" data-tip="Enroll for Next Grade Level">
+                                            <a href="{{ route('student.enrollment.create', ['previous' => $enrollment->id]) }}"
+                                               class="btn btn-accent btn-sm w-full">
+                                                <i class="fi fi-rr-arrow-up hidden"></i>
+                                                <span class="">Enroll Next</span>
+                                            </a>
+                                        </div>
                                     @endif
                                 </div>
                             </article>
@@ -89,16 +93,19 @@
                                         <td>{{ $enrollment->created_at->format('M d, Y') }}</td>
                                         <td>
                                             <div class="flex gap-2 justify-end">
-                                                <a href="{{ route('student.enrollment.show', $enrollment->id) }}"
-                                                   class="btn btn-ghost btn-sm">
-                                                    <i class="fi fi-rr-eye"></i>
-                                                </a>
-                                                @if($enrollment->status === 'enrolled' && $enrollment->grade_level !== 'Grade 10')
-                                                    <a href="{{ route('student.enrollment.create', ['previous' => $enrollment->id]) }}"
-                                                       class="btn btn-accent btn-sm"
-                                                       title="Enroll for next grade level">
-                                                        <i class="fi fi-rr-arrow-up"></i>
+                                                <div class="tooltip tooltip-left" data-tip="View Enrollment">
+                                                    <a href="{{ route('student.enrollment.show', $enrollment->id) }}"
+                                                       class="btn btn-ghost btn-sm">
+                                                        <i class="fi fi-rr-eye"></i>
                                                     </a>
+                                                </div>
+                                                @if($enrollment->status === 'enrolled' && $enrollment->grade_level !== 'Grade 10')
+                                                    <div class="tooltip tooltip-left" data-tip="Enroll for Next Grade Level">
+                                                        <a href="{{ route('student.enrollment.create', ['previous' => $enrollment->id]) }}"
+                                                           class="btn btn-accent btn-sm">
+                                                            <i class="fi fi-rr-arrow-up"></i>
+                                                        </a>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </td>

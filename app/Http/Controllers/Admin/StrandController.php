@@ -13,9 +13,15 @@ class StrandController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $strands = Strand::with(['tuitionFees', 'sections'])->latest()->paginate(10);
+        $strands = Strand::with(['tuitionFees', 'sections'])
+            ->when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%")
+                ->orWhere('acronym', 'like', "%{$request->search}%"))
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         $brackets = TuitionFeeBracket::with('fees')->where('is_active', true)->get();
 
         return view('users.admin.strand.index', compact('strands', 'brackets'));

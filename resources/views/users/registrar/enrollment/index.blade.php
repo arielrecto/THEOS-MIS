@@ -23,25 +23,31 @@
                             <span class="badge badge-sm">{{ $enrollment->status }}</span>
                         </div>
 
-                        <div class="flex items-center gap-2 text-white">
-                            <a href="{{ route('registrar.enrollments.show', ['enrollment' => $enrollment->id]) }}"
-                               class="btn btn-xs btn-accent">
-                                <i class="fi fi-rr-eye"></i>
-                            </a>
+                        <div class="flex items-center gap-2">
+                            <div class="tooltip tooltip-left" data-tip="View">
+                                <a href="{{ route('registrar.enrollments.show', ['enrollment' => $enrollment->id]) }}"
+                                   class="btn btn-xs btn-accent text-white">
+                                    <i class="fi fi-rr-eye"></i>
+                                </a>
+                            </div>
 
-                            <a href="{{ route('registrar.enrollments.edit', ['enrollment' => $enrollment->id]) }}"
-                               class="btn btn-xs btn-primary">
-                                <i class="fi fi-rr-edit"></i>
-                            </a>
+                            <div class="tooltip tooltip-left" data-tip="Edit">
+                                <a href="{{ route('registrar.enrollments.edit', ['enrollment' => $enrollment->id]) }}"
+                                   class="btn btn-xs btn-secondary text-white">
+                                    <i class="fi fi-rr-edit"></i>
+                                </a>
+                            </div>
 
-                            <form action="{{ route('registrar.enrollments.destroy', ['enrollment' => $enrollment->id]) }}"
-                                  method="post" onsubmit="return confirm('Delete this enrollment?');">
-                                @csrf
-                                @method('delete')
-                                <button class="btn btn-xs btn-error">
-                                    <i class="fi fi-rr-trash"></i>
-                                </button>
-                            </form>
+                            <div class="tooltip tooltip-left" data-tip="Delete">
+                                <form action="{{ route('registrar.enrollments.destroy', ['enrollment' => $enrollment->id]) }}"
+                                      method="post" onsubmit="return confirm('Delete this enrollment?');">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-xs btn-error text-white">
+                                        <i class="fi fi-rr-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -77,25 +83,31 @@
                             <td>{{ date('F d, Y', strtotime($enrollment->end_date)) }}</td>
                             <td>{{ $enrollment->status }}</td>
                             <td class="flex gap-2 items-center justify-end">
-                                <a href="{{ route('registrar.enrollments.show', ['enrollment' => $enrollment->id]) }}"
-                                    class="btn btn-xs btn-accent">
-                                    <i class="fi fi-rr-eye"></i>
-                                </a>
+                                <div class="tooltip tooltip-left" data-tip="View">
+                                    <a href="{{ route('registrar.enrollments.show', ['enrollment' => $enrollment->id]) }}"
+                                        class="btn btn-xs btn-accent text-white">
+                                        <i class="fi fi-rr-eye"></i>
+                                    </a>
+                                </div>
 
-                                <a href="{{ route('registrar.enrollments.edit', ['enrollment' => $enrollment->id]) }}"
-                                    class="btn btn-xs btn-primary">
-                                    <i class="fi fi-rr-edit"></i>
-                                </a>
+                                <div class="tooltip tooltip-left" data-tip="Edit">
+                                    <a href="{{ route('registrar.enrollments.edit', ['enrollment' => $enrollment->id]) }}"
+                                        class="btn btn-xs btn-secondary text-white">
+                                        <i class="fi fi-rr-edit"></i>
+                                    </a>
+                                </div>
 
-                                <form
-                                    action="{{ route('registrar.enrollments.destroy', ['enrollment' => $enrollment->id]) }}"
-                                    method="post" onsubmit="return confirm('Delete this enrollment?');">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-xs btn-error">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="tooltip tooltip-left" data-tip="Delete">
+                                    <form
+                                        action="{{ route('registrar.enrollments.destroy', ['enrollment' => $enrollment->id]) }}"
+                                        method="post" onsubmit="return confirm('Delete this enrollment?');">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-xs btn-error text-white">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

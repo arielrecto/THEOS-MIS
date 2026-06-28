@@ -30,25 +30,31 @@
                                     </div>
                                 </td>
                                 <td class="flex items-center gap-3">
-                                    <a href="{{ route('admin.subjects.show', ['subject' => $subject->id]) }}"
-                                        class="btn btn-xs btn-accent" aria-label="View">
-                                        <i class="fi fi-rr-eye"></i>
-                                    </a>
+                                    <div class="tooltip tooltip-left" data-tip="View">
+                                        <a href="{{ route('admin.subjects.show', ['subject' => $subject->id]) }}"
+                                            class="btn btn-xs btn-accent text-white">
+                                            <i class="fi fi-rr-eye"></i>
+                                        </a>
+                                    </div>
 
-                                    <a href="{{ route('admin.subjects.edit', ['subject' => $subject->id]) }}"
-                                        class="btn btn-xs btn-primary" aria-label="Edit">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </a>
+                                    <div class="tooltip tooltip-left" data-tip="Edit">
+                                        <a href="{{ route('admin.subjects.edit', ['subject' => $subject->id]) }}"
+                                            class="btn btn-xs btn-secondary text-white">
+                                            <i class="fi fi-rr-edit"></i>
+                                        </a>
+                                    </div>
 
-                                    <form action="{{ route('admin.subjects.destroy', ['subject' => $subject->id]) }}"
-                                        method="post"
-                                        onsubmit="return confirm('Are you sure you want to delete this subject?')">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-xs btn-error" aria-label="Delete">
-                                            <i class="fi fi-rr-trash"></i>
-                                        </button>
-                                    </form>
+                                    <div class="tooltip tooltip-left" data-tip="Delete">
+                                        <form action="{{ route('admin.subjects.destroy', ['subject' => $subject->id]) }}"
+                                            method="post"
+                                            onsubmit="return confirm('Are you sure you want to delete this subject?')">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn btn-xs btn-error text-white">
+                                                <i class="fi fi-rr-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
