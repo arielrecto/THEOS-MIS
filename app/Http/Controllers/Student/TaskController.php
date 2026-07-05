@@ -55,18 +55,19 @@ class TaskController extends Controller
 
     public function submitTask(Request $request, string $id)
     {
-        $studentTask = StudentTask::find($id);
+        $studentTask = StudentTask::with('task')->findOrFail($id);
+
+        $request->validate([
+            'attachments' => ['nullable', 'array'],
+            'attachments.*' => ['file', 'max:10240'],
+        ]);
 
         if ($request->hasFile('attachments')) {
-            $attachments = $request->file('attachments');
-
-            foreach ($attachments as $attachment) {
+            foreach ($request->file('attachments') as $attachment) {
                 $fileContent = file_get_contents($attachment->getPathname());
-
-                $extension = $attachment->getClientOriginalExtension();
-                $fileName = "{$studentTask->task->name}-" . uniqid() . '.' . $extension;
-                $type = $attachment->getMimeType();
-
+                $extension   = $attachment->getClientOriginalExtension();
+                $fileName    = "{$studentTask->task->name}-" . uniqid() . '.' . $extension;
+                $type        = $attachment->getMimeType();
                 $storagePath = "public/students/attachment/" . $fileName;
 
                 if (!Storage::put($storagePath, $fileContent)) {
@@ -74,34 +75,29 @@ class TaskController extends Controller
                 }
 
                 AttachmentStudent::create([
-                    'file_dir' => asset('/storage/students/attachment/' . $fileName),
-                    'type' => $type,
-                    'extension' => $extension,
+                    'file_dir'        => asset('/storage/students/attachment/' . $fileName),
+                    'type'            => $type,
+                    'extension'       => $extension,
                     'student_task_id' => $studentTask->id,
                 ]);
             }
         }
 
-        // Update the student task status to submitted
-        $studentTask->update([
-            'status' => 'submitted'
-        ]);
+        $studentTask->update(['status' => 'submitted']);
 
         return redirect()
-            ->route('student.tasks.show', $id)
+            ->route('student.tasks.show', $studentTask->task_id)
             ->with('success', 'Task submitted successfully');
     }
 
     public function unsubmitTask(string $id)
     {
-        $studentTask = StudentTask::find($id);
+        $studentTask = StudentTask::findOrFail($id);
 
-        $studentTask->update([
-            'status' => 'unsubmitted'
-        ]);
+        $studentTask->update(['status' => 'unsubmitted']);
 
         return redirect()
-            ->route('student.tasks.show', $id)
+            ->route('student.tasks.show', $studentTask->task_id)
             ->with('success', 'Task unsubmitted successfully');
     }
 

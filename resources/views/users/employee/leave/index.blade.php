@@ -12,11 +12,13 @@
                 <p class="text-sm sm:text-base text-gray-600">File and track your leave requests</p>
             </div>
             <div class="flex items-center gap-3">
-                <button class="gap-2 btn btn-accent" onclick="document.getElementById('file-leave-modal').showModal()">
-                    <i class="fi fi-rr-plus"></i>
-                    <span class="hidden sm:inline">File Leave</span>
-                    <span class="sm:hidden">File</span>
-                </button>
+                <div class="tooltip tooltip-left" data-tip="File Leave">
+                    <button class="gap-2 btn btn-accent text-white" onclick="document.getElementById('file-leave-modal').showModal()">
+                        <i class="fi fi-rr-plus"></i>
+                        <span class="hidden sm:inline">File Leave</span>
+                        <span class="sm:hidden">File</span>
+                    </button>
+                </div>
             </div>
         </div>
 

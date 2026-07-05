@@ -152,6 +152,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::resource('teacher', TeacherController::class);
                     Route::post('teacher/{id}/assign-classroom', [TeacherController::class, 'assignClassroom'])->name('teacher.assign-classroom');
                     Route::delete('teacher/{id}/classroom/{classroom}', [TeacherController::class, 'removeClassroom'])->name('teacher.remove-classroom');
+                    Route::get('teacher/{id}/profile', [TeacherController::class, 'viewProfile'])->name('teacher.profile');
                 });
 
             Route::prefix('strands')->as('strands.')->group(function () {

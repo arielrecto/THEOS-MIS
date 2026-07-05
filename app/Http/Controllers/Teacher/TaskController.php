@@ -88,12 +88,8 @@ class TaskController extends Controller
 
             $user = User::find($studentId);
 
-            $message = [
-                'header' => "Task {$task->name}",
-                'message' => "Duration : {$task->start_date} - {$task->end_date}"
-            ];
-
-            $user->notify(new TaskNotification($message));
+            $task->load('classroom.subject');
+            $user->notify(new TaskNotification($task, $user));
         });
 
         if (count($attachments) !== 0) {

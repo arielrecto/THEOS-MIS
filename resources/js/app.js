@@ -112,15 +112,31 @@ Alpine.data("lineChart", () => ({
 }));
 
 Alpine.data("calendarInit", () => ({
-    calender: null,
+    calendar: null,
     init() {
         const calendarElement = this.$refs.calendar;
+        const events = JSON.parse(this.$el.dataset.events || '[]');
 
-        var calendar = new FullCalendar.Calendar(calendarElement, {
+        this.calendar = new FullCalendar.Calendar(calendarElement, {
             initialView: "dayGridMonth",
-            buttonText: { today: 'Today' },
+            buttonText: { today: 'Today', month: 'Month', week: 'Week' },
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek',
+            },
+            events: events,
+            eventClick: function(info) {
+                if (info.event.url) {
+                    info.jsEvent.preventDefault();
+                    window.location.href = info.event.url;
+                }
+            },
+            eventMouseEnter: function(info) {
+                info.el.style.cursor = 'pointer';
+            },
         });
-        calendar.render();
+        this.calendar.render();
     },
 }));
 
@@ -459,6 +475,11 @@ Alpine.data("leaveCalendar", () => ({
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,dayGridWeek'
+            },
+            buttonText: {
+                today: 'Today',
+                month: 'Month',
+                week: 'Week',
             },
             events: this.$el.dataset.events ? JSON.parse(this.$el.dataset.events) : [],
             eventClick: (info) => {

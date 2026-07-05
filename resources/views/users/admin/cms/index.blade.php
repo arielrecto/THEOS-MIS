@@ -445,7 +445,7 @@
 
                     <div class="mt-4 sm:mt-auto">
                         <a href="{{ route('admin.CMS.gallery.index') }}"
-                            class="btn btn-accent gap-2 w-full sm:w-auto text-sm">
+                            class="btn btn-accent gap-2 w-full sm:w-auto text-sm text-white">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage Gallery</span>
                         </a>
@@ -509,7 +509,7 @@
 
                     <div class="mt-4 sm:mt-auto">
                         <a href="{{ route('admin.CMS.about-us.index') }}"
-                            class="btn btn-secondary gap-2 w-full sm:w-auto text-sm">
+                            class="btn btn-secondary gap-2 w-full sm:w-auto text-sm text-white">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage About Us</span>
                         </a>
@@ -566,7 +566,7 @@
 
                     <div class="mt-4 sm:mt-auto">
                         <a href="{{ route('admin.CMS.programs.index') }}"
-                            class="btn btn-info gap-2 w-full sm:w-auto text-sm">
+                            class="btn btn-info gap-2 w-full sm:w-auto text-sm text-white">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage Programs</span>
                         </a>
@@ -620,7 +620,7 @@
 
                     <div class="mt-4 sm:mt-auto">
                         <a href="{{ route('admin.CMS.contact.index') }}"
-                            class="btn btn-success gap-2 w-full sm:w-auto text-sm">
+                            class="btn btn-success gap-2 w-full sm:w-auto text-sm text-white">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage Contact Info</span>
                         </a>
@@ -675,7 +675,7 @@
 
                     <div class="mt-4 sm:mt-auto">
                         <a href="{{ route('admin.CMS.campuses.index') }}"
-                            class="btn btn-warning gap-2 w-full sm:w-auto text-sm">
+                            class="btn btn-warning gap-2 w-full sm:w-auto text-sm text-white">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage Campuses</span>
                         </a>
@@ -728,7 +728,7 @@
 
                     <div class="mt-4 sm:mt-auto">
                         <a href="{{ route('admin.CMS.founders.index') }}"
-                            class="btn btn-secondary gap-2 w-full sm:w-auto text-sm">
+                            class="btn btn-secondary gap-2 w-full sm:w-auto text-sm text-white">
                             <i class="fi fi-rr-edit"></i>
                             <span class="truncate">Manage Founders</span>
                         </a>

@@ -10,17 +10,13 @@
                     <div class="avatar">
                         <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden">
 
-                            @if ($student->profile && $student->profile->image)
+                            @if($student->profilePicture?->file_dir)
                                 <img class="object-cover w-full h-full"
-                                    src="{{ $student->profile->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
-                                    alt="{{ $student->name }}">
-                            @elseif ($student->profilePicture)
-                                <img class="object-cover w-full h-full"
-                                    src="{{ $student->profilePicture->file_dir ?? 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
+                                    src="{{ Storage::url($student->profilePicture->file_dir) }}"
                                     alt="{{ $student->name }}">
                             @else
                                 <img class="object-cover w-full h-full"
-                                    src="{{ 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
+                                    src="https://ui-avatars.com/api/?name={{ urlencode($student->name) }}&background=00a89f&color=fff"
                                     alt="{{ $student->name }}">
                             @endif
                         </div>

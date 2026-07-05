@@ -55,9 +55,15 @@
                                 <div class="flex items-center space-x-3">
                                     <div class="avatar">
                                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden">
-                                            <img class="object-cover w-full h-full"
-                                                src="{{ $student->profile->image ?? 'https://ui-avatars.com/api/?name=' . urlencode($student->name) }}"
-                                                alt="Student Profile">
+                                            @if($student->profilePicture?->file_dir)
+                                                <img class="object-cover w-full h-full"
+                                                    src="{{ Storage::url($student->profilePicture->file_dir) }}"
+                                                    alt="Student Profile">
+                                            @else
+                                                <img class="object-cover w-full h-full"
+                                                    src="https://ui-avatars.com/api/?name={{ urlencode($student->name) }}&background=00a89f&color=fff"
+                                                    alt="Student Profile">
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="min-w-0">

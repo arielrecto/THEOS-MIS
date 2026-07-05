@@ -50,29 +50,35 @@
                     </div>
 
                     <div class="flex flex-wrap gap-2 mt-2">
-                        <a href="{{ route('admin.payment-accounts.show', $account) }}"
-                           class="btn btn-ghost btn-sm flex-1 min-w-[110px]">
-                            <i class="fi fi-rr-eye mr-2"></i>
-                            View
-                        </a>
+                        <div class="tooltip tooltip-top flex-1 min-w-[110px]" data-tip="View">
+                            <a href="{{ route('admin.payment-accounts.show', $account) }}"
+                               class="btn btn-ghost btn-sm w-full">
+                                <i class="fi fi-rr-eye mr-2"></i>
+                                View
+                            </a>
+                        </div>
 
-                        <a href="{{ route('admin.payment-accounts.edit', $account) }}"
-                           class="btn btn-ghost btn-sm flex-1 min-w-[110px]">
-                            <i class="fi fi-rr-edit mr-2"></i>
-                            Edit
-                        </a>
+                        <div class="tooltip tooltip-top flex-1 min-w-[110px]" data-tip="Edit">
+                            <a href="{{ route('admin.payment-accounts.edit', $account) }}"
+                               class="btn btn-ghost btn-sm w-full">
+                                <i class="fi fi-rr-edit mr-2"></i>
+                                Edit
+                            </a>
+                        </div>
 
-                        <form action="{{ route('admin.payment-accounts.destroy', $account) }}"
-                              method="POST"
-                              class="flex-1 min-w-[110px]"
-                              onsubmit="return confirm('Are you sure you want to delete this account?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-ghost btn-sm text-error w-full">
-                                <i class="fi fi-rr-trash mr-2"></i>
-                                Delete
-                            </button>
-                        </form>
+                        <div class="tooltip tooltip-top flex-1 min-w-[110px]" data-tip="Delete">
+                            <form action="{{ route('admin.payment-accounts.destroy', $account) }}"
+                                  method="POST"
+                                  class="w-full"
+                                  onsubmit="return confirm('Are you sure you want to delete this account?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-ghost btn-sm text-error w-full">
+                                    <i class="fi fi-rr-trash mr-2"></i>
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             @empty
@@ -112,23 +118,29 @@
                             </td>
                             <td class="align-middle text-right">
                                 <div class="inline-flex items-center gap-2">
-                                    <a href="{{ route('admin.payment-accounts.show', $account) }}"
-                                       class="btn btn-ghost btn-xs" title="View">
-                                        <i class="fi fi-rr-eye"></i>
-                                    </a>
-                                    <a href="{{ route('admin.payment-accounts.edit', $account) }}"
-                                       class="btn btn-ghost btn-xs" title="Edit">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </a>
-                                    <form action="{{ route('admin.payment-accounts.destroy', $account) }}"
-                                          method="POST"
-                                          onsubmit="return confirm('Are you sure you want to delete this account?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-ghost btn-xs text-error" title="Delete">
-                                            <i class="fi fi-rr-trash"></i>
-                                        </button>
-                                    </form>
+                                    <div class="tooltip tooltip-left" data-tip="View">
+                                        <a href="{{ route('admin.payment-accounts.show', $account) }}"
+                                           class="btn btn-ghost btn-xs">
+                                            <i class="fi fi-rr-eye"></i>
+                                        </a>
+                                    </div>
+                                    <div class="tooltip tooltip-left" data-tip="Edit">
+                                        <a href="{{ route('admin.payment-accounts.edit', $account) }}"
+                                           class="btn btn-ghost btn-xs">
+                                            <i class="fi fi-rr-edit"></i>
+                                        </a>
+                                    </div>
+                                    <div class="tooltip tooltip-left" data-tip="Delete">
+                                        <form action="{{ route('admin.payment-accounts.destroy', $account) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Are you sure you want to delete this account?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-ghost btn-xs text-error">
+                                                <i class="fi fi-rr-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

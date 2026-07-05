@@ -1,6 +1,11 @@
 <x-dashboard.admin.base>
     <x-dashboard.page-title :title="$teacher->name" :back_url="route('admin.users.teacher.index')">
         <x-slot name="other">
+            <a href="{{ route('admin.users.teacher.profile', $teacher->id) }}"
+               class="btn btn-ghost btn-sm gap-2">
+                <i class="fi fi-rr-id-badge"></i>
+                <span class="hidden sm:inline">View Profile</span>
+            </a>
             <a href="{{ route('admin.users.teacher.edit', $teacher->id) }}"
                class="btn btn-accent btn-sm gap-2 text-white">
                 <i class="fi fi-rr-edit"></i>

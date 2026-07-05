@@ -38,11 +38,11 @@
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <a href="{{ route('teacher.announcements.index', ['type' => request()->type ?? 'general']) }}"
+                            {{-- <a href="{{ route('teacher.announcements.index', ['type' => request()->type ?? 'general']) }}"
                                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border border-gray-200 bg-white hover:bg-gray-50">
                                 <i class="fi fi-rr-arrow-left"></i>
                                 <span class="hidden sm:inline">Back</span>
-                            </a>
+                            </a> --}}
 
                             @if ($announcement->file_dir || ($announcement instanceof \App\Models\GeneralAnnouncement && $announcement->attachments->count()))
                                 <button id="open-attachments" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm bg-accent text-white hover:opacity-95">

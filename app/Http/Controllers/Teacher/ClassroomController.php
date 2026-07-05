@@ -97,7 +97,7 @@ class ClassroomController extends Controller
      */
     public function show(string $id)
     {
-        $classroom = Classroom::find($id);
+        $classroom = Classroom::with('tasks')->find($id);
         $attendance = $classroom->attendances()->latest()->first();
 
         return view('users.teacher.classroom.show', compact(['classroom', 'attendance']));

@@ -103,11 +103,13 @@
                         </div>
 
                         <div class="mt-3 grid grid-cols-3 gap-2">
-                            <a href="{{ route('admin.payments.show', $payment) }}"
-                               class="btn btn-ghost btn-sm w-full text-xs flex items-center justify-center gap-2">
-                                <i class="fi fi-rr-eye"></i>
-                                View
-                            </a>
+                            <div class="tooltip tooltip-top" data-tip="View">
+                                <a href="{{ route('admin.payments.show', $payment) }}"
+                                   class="btn btn-ghost btn-sm w-full text-xs flex items-center justify-center gap-2">
+                                    <i class="fi fi-rr-eye"></i>
+                                    View
+                                </a>
+                            </div>
 
                             {{-- @if(method_exists($payment, 'canEdit') ? $payment->canEdit() : true)
                                 <a href="{{ route('admin.payments.edit', $payment) ?? '#' }}"
@@ -178,10 +180,12 @@
                                 </td>
                                 <td class="align-middle text-right">
                                     <div class="inline-flex items-center gap-2">
-                                        <a href="{{ route('admin.payments.show', $payment) }}"
-                                           class="btn btn-ghost btn-sm" title="View">
-                                            <i class="fi fi-rr-eye"></i>
-                                        </a>
+                                        <div class="tooltip tooltip-left" data-tip="View">
+                                            <a href="{{ route('admin.payments.show', $payment) }}"
+                                               class="btn btn-ghost btn-sm">
+                                                <i class="fi fi-rr-eye"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

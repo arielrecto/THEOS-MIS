@@ -22,7 +22,7 @@
                         <select name="academic_record_id" class="text-xs select select-bordered select-sm" onchange="this.form.submit()">
                             @foreach($academicRecords as $record)
                                 <option value="{{ $record->id }}" @selected($selectedRecord?->id === $record->id)>
-                                    {{ $record->academicYear->name }} — Grade {{ $record->grade_level }}
+                                    {{ $record->academicYear->name }} — {{ $record->grade_level }}
                                 </option>
                             @endforeach
                         </select>

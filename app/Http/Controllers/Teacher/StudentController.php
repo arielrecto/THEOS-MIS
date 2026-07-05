@@ -20,7 +20,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $classroom_id = $request->classroom_id;
-        $query = User::role(UserRoles::STUDENT->value)->with(['profile', 'asStudentClassrooms', 'asStudentClassrooms']);
+        $query = User::role(UserRoles::STUDENT->value)->with(['profile', 'profilePicture', 'asStudentClassrooms']);
 
         if ($classroom_id) {
             $query->whereHas('asStudentClassrooms', function ($query) use ($classroom_id) {

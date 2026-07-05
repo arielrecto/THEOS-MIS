@@ -7,10 +7,12 @@
                     <h1 class="text-2xl font-bold text-gray-800">Tuition Fee Management</h1>
                     <p class="text-gray-600">Manage tuition fee brackets and individual fees</p>
                 </div>
-                <button onclick="createBracketModal.showModal()" class="btn btn-accent gap-2">
-                    <i class="fi fi-rr-plus"></i>
-                    New Fee Bracket
-                </button>
+                <div class="tooltip tooltip-left" data-tip="Create a new fee bracket">
+                    <button onclick="createBracketModal.showModal()" class="btn btn-accent gap-2">
+                        <i class="fi fi-rr-plus"></i>
+                        New Fee Bracket
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -33,32 +35,40 @@
                                 </span>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="addFeeModal{{ $bracket->id }}.showModal()"
-                                    class="btn btn-sm btn-ghost gap-2">
-                                    <i class="fi fi-rr-plus"></i>
-                                    Add Fee
-                                </button>
-                                <button onclick="editBracketModal{{ $bracket->id }}.showModal()"
-                                    class="btn btn-sm btn-ghost">
-                                    <i class="fi fi-rr-edit"></i>
-                                </button>
-                                <form action="{{ route('admin.tuition-fee-brackets.toggle-status', $bracket->id) }}"
-                                    method="POST" class="inline">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit"
-                                        class="btn btn-sm {{ $bracket->is_active ? 'btn-warning' : 'btn-success' }}">
-                                        <i class="fi fi-rr-{{ $bracket->is_active ? 'ban' : 'check' }}"></i>
+                                <div class="tooltip tooltip-left" data-tip="Add Fee">
+                                    <button onclick="addFeeModal{{ $bracket->id }}.showModal()"
+                                        class="btn btn-sm btn-ghost gap-2">
+                                        <i class="fi fi-rr-plus"></i>
+                                        Add Fee
                                     </button>
-                                </form>
-                                <form action="{{ route('admin.tuition-fee-brackets.delete', $bracket->id) }}"
-                                    method="POST" onsubmit="return confirm('Delete this bracket and all its fees?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-error btn-ghost">
-                                        <i class="fi fi-rr-trash"></i>
+                                </div>
+                                <div class="tooltip tooltip-left" data-tip="Edit Bracket">
+                                    <button onclick="editBracketModal{{ $bracket->id }}.showModal()"
+                                        class="btn btn-sm btn-ghost">
+                                        <i class="fi fi-rr-edit"></i>
                                     </button>
-                                </form>
+                                </div>
+                                <div class="tooltip tooltip-left" data-tip="{{ $bracket->is_active ? 'Deactivate' : 'Activate' }}">
+                                    <form action="{{ route('admin.tuition-fee-brackets.toggle-status', $bracket->id) }}"
+                                        method="POST" class="inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit"
+                                            class="btn btn-sm {{ $bracket->is_active ? 'btn-warning' : 'btn-success' }}">
+                                            <i class="fi fi-rr-{{ $bracket->is_active ? 'ban' : 'check' }}"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="tooltip tooltip-left" data-tip="Delete Bracket">
+                                    <form action="{{ route('admin.tuition-fee-brackets.delete', $bracket->id) }}"
+                                        method="POST" onsubmit="return confirm('Delete this bracket and all its fees?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-error btn-ghost">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -444,10 +454,12 @@
                     <i class="fi fi-rr-money-bill-wave text-6xl text-gray-400 mb-4"></i>
                     <h3 class="text-xl font-medium text-gray-700 mb-2">No Fee Brackets Yet</h3>
                     <p class="text-gray-500 mb-6">Get started by creating your first tuition fee bracket</p>
-                    <button onclick="createBracketModal.showModal()" class="btn btn-accent gap-2">
-                        <i class="fi fi-rr-plus"></i>
-                        Create Fee Bracket
-                    </button>
+                    <div class="tooltip tooltip-top" data-tip="Create a new fee bracket">
+                        <button onclick="createBracketModal.showModal()" class="btn btn-accent gap-2">
+                            <i class="fi fi-rr-plus"></i>
+                            Create Fee Bracket
+                        </button>
+                    </div>
                 </div>
             @endforelse
         </div>

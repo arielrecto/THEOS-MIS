@@ -44,6 +44,7 @@
             <div class="flex gap-3 items-center">
                 <!-- Notifications -->
                 <div class="dropdown dropdown-end relative">
+                    <div class="tooltip tooltip-left" data-tip="Notifications">
                     <button class="btn btn-ghost btn-sm" aria-haspopup="true" aria-expanded="false">
                         <div class="indicator">
                             <i class="text-lg fi fi-rr-bell"></i>
@@ -52,6 +53,7 @@
                             @endif
                         </div>
                     </button>
+                    </div>
                     <div class="dropdown-content z-[1] card card-compact w-80 shadow bg-base-100 right-0">
                         <div class="card-body p-3">
                             <div class="flex justify-between items-center mb-2">

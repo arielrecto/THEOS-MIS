@@ -101,7 +101,7 @@
             <div class="space-y-6">
                 @forelse($studentTask->comments->sortByDesc('created_at') as $comment)
 
-                <x-commentThread :comment="$comment" :url="route('student.tasks.comments.reply', $comment->id)" />
+                <x-commentThread :comment="$comment" :url="route('teacher.studentTask.comments.reply', $comment->id)" />
                    
                 @empty
                     <div class="py-8 text-center text-gray-500">

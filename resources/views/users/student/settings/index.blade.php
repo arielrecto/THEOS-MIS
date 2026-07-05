@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="flex justify-end">
-                        <button type="submit" class="btn btn-accent w-full sm:w-auto">Update Profile</button>
+                        <button type="submit" class="btn btn-accent text-white w-full sm:w-auto">Update Profile</button>
                     </div>
                 </form>
             </div>
@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="flex justify-end">
-                        <button type="submit" class="btn btn-accent w-full sm:w-auto">Update Email</button>
+                        <button type="submit" class="btn btn-accent text-white w-full sm:w-auto">Update Email</button>
                     </div>
                 </form>
             </div>
@@ -132,7 +132,7 @@
                     </div>
 
                     <div class="flex justify-end">
-                        <button type="submit" class="btn btn-accent w-full sm:w-auto">Update Password</button>
+                        <button type="submit" class="btn btn-accent text-white w-full sm:w-auto">Update Password</button>
                     </div>
                 </form>
             </div>

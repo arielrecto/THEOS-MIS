@@ -38,19 +38,23 @@
                             ->where('status', 'submitted')->count() }}</th>
 
                             <td class="flex items-center gap-2">
-                                <a href="{{ route('teacher.tasks.show', ['task' => $task->id]) }}"
-                                    class="btn btn-xs btn-accent">
-                                    <i class="fi fi-rr-eye"></i>
-                                </a>
+                                <div class="tooltip tooltip-left" data-tip="View">
+                                    <a href="{{ route('teacher.tasks.show', ['task' => $task->id]) }}"
+                                        class="btn btn-xs btn-accent text-white">
+                                        <i class="fi fi-rr-eye"></i>
+                                    </a>
+                                </div>
 
-                                <form action="{{ route('teacher.tasks.destroy', ['task' => $task->id]) }}"
-                                    method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-xs btn-error ">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="tooltip tooltip-left" data-tip="Delete">
+                                    <form action="{{ route('teacher.tasks.destroy', ['task' => $task->id]) }}"
+                                        method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-xs btn-error text-white">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         @empty
                         <tr>

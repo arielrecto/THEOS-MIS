@@ -28,25 +28,31 @@
                         </span>
                     </td>
                     <td class="flex gap-3 items-center justify-end">
-                        <a href="{{route('admin.academic-year.show', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-accent">
-                            <i class="fi fi-rr-eye"></i>
-                        </a>
+                        <div class="tooltip tooltip-left" data-tip="View">
+                            <a href="{{route('admin.academic-year.show', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-accent text-white">
+                                <i class="fi fi-rr-eye"></i>
+                            </a>
+                        </div>
 
-                        <a href="{{route('admin.academic-year.edit', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-primary">
-                            <i class="fi fi-rr-edit"></i>
-                        </a>
+                        <div class="tooltip tooltip-left" data-tip="Edit">
+                            <a href="{{route('admin.academic-year.edit', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-primary text-white">
+                                <i class="fi fi-rr-edit"></i>
+                            </a>
+                        </div>
 
-                        <form action="{{route('admin.academic-year.destroy', ['academic_year' => $academicYear->id])}}"
-                              method="post"
-                              id="deleteForm{{$academicYear->id}}">
-                            @csrf
-                            @method('delete')
-                            <button type="button"
-                                    class="btn btn-xs btn-error"
-                                    onclick="document.getElementById('delete_modal_{{$academicYear->id}}').showModal()">
-                                <i class="fi fi-rr-trash"></i>
-                            </button>
-                        </form>
+                        <div class="tooltip tooltip-left" data-tip="Delete">
+                            <form action="{{route('admin.academic-year.destroy', ['academic_year' => $academicYear->id])}}"
+                                  method="post"
+                                  id="deleteForm{{$academicYear->id}}">
+                                @csrf
+                                @method('delete')
+                                <button type="button"
+                                        class="btn btn-xs btn-error text-white"
+                                        onclick="document.getElementById('delete_modal_{{$academicYear->id}}').showModal()">
+                                    <i class="fi fi-rr-trash"></i>
+                                </button>
+                            </form>
+                        </div>
 
                         {{-- Delete Confirmation Modal --}}
                         <dialog id="delete_modal_{{$academicYear->id}}" class="modal modal-bottom sm:modal-middle">
@@ -107,25 +113,31 @@
                         <div class="w-full">
 
                             <div class="flex flex-col gap-2 mt-3">
-                                <a href="{{route('admin.academic-year.show', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-accent w-full">
-                                    <i class="fi fi-rr-eye"></i> View
-                                </a>
+                                <div class="tooltip tooltip-top w-full" data-tip="View">
+                                    <a href="{{route('admin.academic-year.show', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-accent text-white w-full">
+                                        <i class="fi fi-rr-eye"></i> View
+                                    </a>
+                                </div>
 
-                                <a href="{{route('admin.academic-year.edit', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-primary w-full">
-                                    <i class="fi fi-rr-edit"></i> Edit
-                                </a>
+                                <div class="tooltip tooltip-top w-full" data-tip="Edit">
+                                    <a href="{{route('admin.academic-year.edit', ['academic_year' => $academicYear->id])}}" class="btn btn-xs btn-primary text-white w-full">
+                                        <i class="fi fi-rr-edit"></i> Edit
+                                    </a>
+                                </div>
 
-                                <form action="{{route('admin.academic-year.destroy', ['academic_year' => $academicYear->id])}}"
-                                      method="post"
-                                      class="w-full"
-                                      id="mobileDeleteForm{{$academicYear->id}}">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="button" class="btn btn-xs btn-error w-full"
-                                            onclick="document.getElementById('mobile_delete_modal_{{$academicYear->id}}').showModal()">
-                                        <i class="fi fi-rr-trash"></i> Delete
-                                    </button>
-                                </form>
+                                <div class="tooltip tooltip-top w-full" data-tip="Delete">
+                                    <form action="{{route('admin.academic-year.destroy', ['academic_year' => $academicYear->id])}}"
+                                          method="post"
+                                          class="w-full"
+                                          id="mobileDeleteForm{{$academicYear->id}}">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="button" class="btn btn-xs btn-error text-white w-full"
+                                                onclick="document.getElementById('mobile_delete_modal_{{$academicYear->id}}').showModal()">
+                                            <i class="fi fi-rr-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
 
                                 {{-- Mobile Delete Modal --}}
                                 <dialog id="mobile_delete_modal_{{$academicYear->id}}" class="modal">

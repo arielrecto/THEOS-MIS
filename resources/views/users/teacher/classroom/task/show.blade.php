@@ -69,17 +69,21 @@
                             <th>{{ $task->max_score }}</th>
                             <th>{{ count($task->assignStudents) }}</th>  --}}
                             <td class="flex items-center gap-2">
-                                <a href="{{route('teacher.studentTask.show', ['student_task' => $a_student->id])}}" class="btn btn-xs btn-accent">
-                                    <i class="fi fi-rr-eye"></i>
-                                </a>
+                                <div class="tooltip tooltip-left" data-tip="View">
+                                    <a href="{{route('teacher.studentTask.show', ['student_task' => $a_student->id])}}" class="btn btn-xs btn-accent text-white">
+                                        <i class="fi fi-rr-eye"></i>
+                                    </a>
+                                </div>
 
-                                <form action="#" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-xs btn-error ">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="tooltip tooltip-left" data-tip="Delete">
+                                    <form action="#" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-xs btn-error text-white">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         @empty
                         <tr>

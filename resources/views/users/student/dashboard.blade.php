@@ -92,7 +92,7 @@
                 </div>
 
                 <div class="mt-4 flex justify-end">
-                    <a href="{{ route('student.tasks.index') }}" class="btn btn-sm w-full sm:w-auto">
+                    <a href="{{ route('student.tasks.index') }}" class="btn btn-accent btn-sm text-white w-full sm:w-auto">
                         View All Tasks
                     </a>
                 </div>

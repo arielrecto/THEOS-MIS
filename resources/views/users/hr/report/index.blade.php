@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <a href="{{ route('hr.reports.leave') }}" class="gap-2 btn btn-accent w-full sm:w-auto text-center">
+                    <a href="{{ route('hr.reports.leave') }}" class="text-white gap-2 btn btn-accent w-full sm:w-auto text-center">
                         <i class="fi fi-rr-file-chart-line"></i>
                         <span class="ml-1">Generate Report</span>
                     </a>
@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <a href="{{ route('hr.reports.recruitment') }}" class="gap-2 btn btn-success w-full sm:w-auto text-center">
+                    <a href="{{ route('hr.reports.recruitment') }}" class="gap-2 text-white btn btn-success w-full sm:w-auto text-center">
                         <i class="fi fi-rr-file-chart-line"></i>
                         <span class="ml-1">Generate Report</span>
                     </a>

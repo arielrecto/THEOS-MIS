@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PasswordChanged;
 use App\Mail\ProfileUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -55,9 +56,13 @@ class SettingsController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        auth()->user()->update([
+        $student = auth()->user();
+
+        $student->update([
             'password' => Hash::make($validated['password']),
         ]);
+
+        Mail::to($student->email)->send(new PasswordChanged($student));
 
         return back()->with('success', 'Password updated successfully');
     }

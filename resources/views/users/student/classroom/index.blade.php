@@ -143,7 +143,7 @@
                                 <div class="mt-2 sm:mt-0 flex items-center gap-3 w-full sm:w-auto">
                                     @if (!$classroom->classroomStudents()->where('student_id', Auth::user()->id)->exists())
                                         <!-- full width on mobile -->
-                                        <button class="btn btn-sm btn-accent w-full sm:w-auto text-sm sm:text-base"
+                                        <button class="btn btn-sm btn-accent text-white w-full sm:w-auto text-sm sm:text-base"
                                                 onclick="document.getElementById('enroll_{{ $classroom->id }}').showModal()">
                                             <i class="mr-2 fi fi-rr-plus"></i>
                                             <span class="truncate">Join</span>

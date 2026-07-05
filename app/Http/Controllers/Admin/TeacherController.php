@@ -101,6 +101,18 @@ class TeacherController extends Controller
         return view('users.admin.users.teacher.show', compact('teacher', 'strands', 'subjects', 'academicYears'));
     }
 
+    public function viewProfile(string $id)
+    {
+        $teacher = User::with([
+            'profile',
+            'teacherClassrooms.strand',
+            'teacherClassrooms.subject',
+            'teacherClassrooms.academicYear',
+        ])->findOrFail($id);
+
+        return view('users.admin.users.teacher.profile', compact('teacher'));
+    }
+
     public function assignClassroom(Request $request, string $id)
     {
         $teacher = User::findOrFail($id);

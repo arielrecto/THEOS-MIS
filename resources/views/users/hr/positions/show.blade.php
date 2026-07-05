@@ -177,9 +177,11 @@
                                                     {{ ucfirst($applicant->status) }}
                                                 </span>
                                                 <div class="dropdown dropdown-end">
-                                                    <button class="btn btn-ghost btn-xs sm:btn-sm text-xs">
-                                                        <i class="fi fi-rr-menu-dots-vertical"></i>
-                                                    </button>
+                                                    <div class="tooltip tooltip-left" data-tip="View Details">
+                                                        <button class="btn btn-ghost btn-xs sm:btn-sm text-xs">
+                                                            <i class="fi fi-rr-menu-dots-vertical"></i>
+                                                        </button>
+                                                    </div>
                                                     <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-48 sm:w-52 text-xs sm:text-sm">
                                                         <li>
                                                             <a href="#">

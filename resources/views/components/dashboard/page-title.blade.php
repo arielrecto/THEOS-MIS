@@ -19,7 +19,7 @@
 
     <div>
         @if ($create_url)
-            <a href="{{ $create_url }}" class="btn btn-sm btn-accent text-white">Create</a>
+            <a href="{{ $create_url }}" class="btn btn-sm text-white btn-accent text-white">Create</a>
         @endif
 
         @if (isset($other))

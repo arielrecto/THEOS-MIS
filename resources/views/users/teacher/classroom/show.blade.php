@@ -26,17 +26,30 @@
 
         <!-- Cards grid: responsive columns -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <x-card-v1 :link="route('teacher.classrooms.students', ['classroom' => $classroom->id])" icon="fi fi-rr-student" label="Students" :count="count($classroom->classroomStudents)" />
-            {{-- <x-card-v1 :link="route('teacher.classrooms.attendances', ['classroom' => $classroom->id])" icon="fi fi-rr-calendar" label="Attendance" :count="count($classroom->attendances)" /> --}}
-            <x-card-v1 :link="route('teacher.announcements.index', ['classroom' => $classroom->id, 'type' => 'classroom'])" icon="fi fi-rr-bell" label="Announcements" :count="count($classroom->announcements)" />
-            <x-card-v1 :link="route('teacher.tasks.index', ['classroom_id' => $classroom->id])" icon="fi fi-rr-list-check" label="Tasks" :count="count($classroom->tasks)" />
+            <x-card-v1 :link="route('teacher.classrooms.students', ['classroom' => $classroom->id])" icon="fi fi-rr-student" label="Students" :count="count($classroom->classroomStudents)" icon_color="accent" />
+            {{-- <x-card-v1 :link="route('teacher.classrooms.attendances', ['classroom' => $classroom->id])" icon="fi fi-rr-calendar" label="Attendance" :count="count($classroom->attendances)" icon_color="accent" /> --}}
+            <x-card-v1 :link="route('teacher.announcements.index', ['classroom' => $classroom->id, 'type' => 'classroom'])" icon="fi fi-rr-bell" label="Announcements" :count="count($classroom->announcements)" icon_color="accent" />
+            <x-card-v1 :link="route('teacher.tasks.index', ['classroom_id' => $classroom->id])" icon="fi fi-rr-list-check" label="Tasks" :count="count($classroom->tasks)" icon_color="accent" />
         </div>
         <x-tab.tab :tabs="['Student']" :active="1" class="md:hidden" />
         <x-tab.tab :tabs="['Calendar', 'Student']" :active="0" class="hidden md:block" />
 
         @if (request()->get('activeTab') == 0)
-            <div class="p-4 hidden md:block bg-gray-50 rounded-lg shadow min-h-72" x-data="calendarInit">
-                <h2 class="text-lg font-semibold text-accent">Calendar</h2>
+            @php
+                $calendarEvents = $classroom->tasks->map(fn($task) => [
+                    'title' => $task->name,
+                    'start' => $task->start_date,
+                    'end'   => \Carbon\Carbon::parse($task->end_date)->addDay()->toDateString(),
+                    'url'   => route('teacher.tasks.show', ['task' => $task->id]),
+                    'backgroundColor' => '#00a89f',
+                    'borderColor'     => '#00a89f',
+                    'textColor'       => '#ffffff',
+                ])->values()->toJson();
+            @endphp
+            <div class="p-4 hidden md:block bg-gray-50 rounded-lg shadow min-h-72"
+                 x-data="calendarInit"
+                 data-events="{{ $calendarEvents }}">
+                <h2 class="text-lg font-semibold text-accent mb-3">Calendar</h2>
                 <div x-ref="calendar"></div>
             </div>
         @endif

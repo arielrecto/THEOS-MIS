@@ -47,14 +47,18 @@
                                     </td>
                                     <td>
                                         <div class="flex items-center gap-2">
-                                            <a href="{{ route('admin.inbox.show', $message->id) }}"
-                                                class="btn btn-sm btn-ghost text-accent">
-                                                <i class="fi fi-rr-eye"></i>
-                                            </a>
-                                            <button onclick="delete_modal_{{ $message->id }}.showModal()"
-                                                class="btn btn-sm btn-ghost text-error">
-                                                <i class="fi fi-rr-trash"></i>
-                                            </button>
+                                            <div class="tooltip tooltip-left" data-tip="View Message">
+                                                <a href="{{ route('admin.inbox.show', $message->id) }}"
+                                                    class="btn btn-sm btn-ghost text-accent">
+                                                    <i class="fi fi-rr-eye"></i>
+                                                </a>
+                                            </div>
+                                            <div class="tooltip tooltip-left" data-tip="Delete">
+                                                <button onclick="delete_modal_{{ $message->id }}.showModal()"
+                                                    class="btn btn-sm btn-ghost text-error">
+                                                    <i class="fi fi-rr-trash"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -88,14 +92,18 @@
                                     <span class="text-xs text-gray-600"
                                         title="{{ $message->created_at }}">{{ $message->created_at->diffForHumans() }}</span>
                                     <div class="flex flex-col items-end gap-2">
-                                        <a href="{{ route('admin.inbox.show', $message->id) }}"
-                                            class="btn btn-xs btn-ghost text-accent">
-                                            <i class="fi fi-rr-eye"></i>
-                                        </a>
-                                        <button onclick="delete_modal_{{ $message->id }}.showModal()"
-                                            class="btn btn-xs btn-ghost text-error">
-                                            <i class="fi fi-rr-trash"></i>
-                                        </button>
+                                        <div class="tooltip tooltip-left" data-tip="View Message">
+                                            <a href="{{ route('admin.inbox.show', $message->id) }}"
+                                                class="btn btn-xs btn-ghost text-accent">
+                                                <i class="fi fi-rr-eye"></i>
+                                            </a>
+                                        </div>
+                                        <div class="tooltip tooltip-left" data-tip="Delete">
+                                            <button onclick="delete_modal_{{ $message->id }}.showModal()"
+                                                class="btn btn-xs btn-ghost text-error">
+                                                <i class="fi fi-rr-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -184,7 +184,7 @@
 
         <!-- Comments Section -->
         <div class="mt-6 sm:mt-8 bg-white rounded-xl shadow-lg p-4 sm:p-6">
-            <form action="{{ route('student.tasks.comments.store', $studentTask->id) }}" method="POST">
+            <form action="{{ route('student.tasks.comments.store') }}" method="POST">
                 @csrf
                 <div class="form-control">
                     <label class="label">
