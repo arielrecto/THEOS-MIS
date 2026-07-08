@@ -34,9 +34,9 @@
                 </div>
 
                 <div class="flex-1 min-w-0">
-                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 leading-tight truncate">Teachers</h2>
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 leading-tight truncate">Employees</h2>
                     <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-accent mt-1">{{ count($teachers) }}</p>
-                    <p class="text-sm text-gray-500 mt-1">Total active teachers</p>
+                    <p class="text-sm text-gray-500 mt-1">Total active Employees</p>
                 </div>
 
                 <div class="mt-3 sm:mt-0 flex items-center">

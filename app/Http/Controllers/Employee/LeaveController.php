@@ -50,6 +50,29 @@ class LeaveController extends Controller
         ));
     }
 
+    public function printReport()
+    {
+        $employee = auth()->user()->employee;
+
+        $leaves = $employee->leaves()->latest()->get();
+
+        $totalDays    = $leaves->sum('days');
+        $pendingCount = $leaves->where('status', 'pending')->count();
+        $approvedCount = $leaves->where('status', 'approved')->count();
+        $rejectedCount = $leaves->where('status', 'rejected')->count();
+        $availableCredits = $employee->leave_credit;
+
+        return view('users.employee.leave.print', compact(
+            'employee',
+            'leaves',
+            'totalDays',
+            'pendingCount',
+            'approvedCount',
+            'rejectedCount',
+            'availableCredits',
+        ));
+    }
+
     public function create()
     {
         return view('users.employee.leave.create');

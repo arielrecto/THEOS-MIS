@@ -85,21 +85,21 @@
 
                                     <div class="tooltip tooltip-left" data-tip="Set Tuition Fees">
                                         <button onclick="tuitionFeeModal{{ $strand->id }}.showModal()"
-                                            class="btn btn-xs btn-info">
+                                            class="btn btn-xs btn-info text-white">
                                             <i class="fi fi-rr-money-bill-wave"></i>
                                         </button>
                                     </div>
 
                                     <div class="tooltip tooltip-left" data-tip="View Details">
                                         <a href="{{ route('admin.strands.show', ['strand' => $strand->id]) }}"
-                                            class="btn btn-xs btn-accent">
+                                            class="btn btn-xs btn-accent text-white">
                                             <i class="fi fi-rr-eye"></i>
                                         </a>
                                     </div>
 
                                     <div class="tooltip tooltip-left" data-tip="Edit">
                                         <a href="{{ route('admin.strands.edit', ['strand' => $strand->id]) }}"
-                                            class="btn btn-xs btn-success">
+                                            class="btn btn-xs btn-success text-white">
                                             <i class="fi fi-rr-edit"></i>
                                         </a>
                                     </div>
@@ -110,7 +110,7 @@
                                             onsubmit="return confirm('Are you sure you want to delete this strand?')">
                                             @csrf
                                             @method('delete')
-                                            <button class="btn btn-xs btn-error">
+                                            <button class="btn btn-xs btn-error text-white">
                                                 <i class="fi fi-rr-trash"></i>
                                             </button>
                                         </form>

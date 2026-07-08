@@ -155,7 +155,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        <p class="text-xs text-gray-400 mt-4">After payment, go to <a href="{{ route('student.payments.index') }}" class="text-accent underline">Payments</a> to submit your proof of payment.</p>
+                        <p class="text-xs text-gray-400 mt-4">After payment, go to <a href="{{ route('student.enrollment.index') }}" class="text-accent underline">Requirements</a> to submit your proof of payment.</p>
                     @endif
                 </div>
             </div>

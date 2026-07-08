@@ -184,15 +184,17 @@
                                                     </div>
                                                     <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-48 sm:w-52 text-xs sm:text-sm">
                                                         <li>
-                                                            <a href="#">
-                                                                View Application
+                                                            <a href="{{ route('hr.applicants.show', $applicant->id) }}">
+                                                                <i class="fi fi-rr-eye mr-1"></i> View Application
                                                             </a>
                                                         </li>
+                                                        @if($applicant->resume)
                                                         <li>
-                                                            <a href="#">
-                                                                Download Resume
+                                                            <a href="{{ route('hr.applicants.resume', $applicant->id) }}">
+                                                                <i class="fi fi-rr-download mr-1"></i> Download Resume
                                                             </a>
                                                         </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </div>

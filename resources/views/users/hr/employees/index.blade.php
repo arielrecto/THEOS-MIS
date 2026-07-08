@@ -139,6 +139,15 @@
                                     </button>
                                 </form>
 
+                                <form action="{{ route('hr.employees.toggle-hr', $employee) }}" method="POST">
+                                    @csrf @method('PATCH')
+                                    <button type="submit"
+                                            class="btn btn-xs {{ $employee->user->hasRole('hr') ? 'btn-warning' : 'btn-ghost' }}"
+                                            title="{{ $employee->user->hasRole('hr') ? 'Remove HR Role' : 'Add HR Role' }}">
+                                        <i class="fi fi-rr-briefcase"></i>
+                                    </button>
+                                </form>
+
                                 <form action="{{ route('hr.employees.toggle-archive', $employee) }}" method="POST">
                                     @csrf @method('PATCH')
                                     <button type="submit"
@@ -242,6 +251,15 @@
                                                         class="btn btn-sm {{ $employee->user->hasRole('registrar') ? 'btn-info' : 'btn-ghost' }}"
                                                         title="{{ $employee->user->hasRole('registrar') ? 'Remove Registrar Role' : 'Add Registrar Role' }}">
                                                     <i class="fi fi-rr-diploma"></i>
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ route('hr.employees.toggle-hr', $employee) }}" method="POST" class="inline">
+                                                @csrf @method('PATCH')
+                                                <button type="submit"
+                                                        class="btn btn-sm {{ $employee->user->hasRole('hr') ? 'btn-warning' : 'btn-ghost' }}"
+                                                        title="{{ $employee->user->hasRole('hr') ? 'Remove HR Role' : 'Add HR Role' }}">
+                                                    <i class="fi fi-rr-briefcase"></i>
                                                 </button>
                                             </form>
 

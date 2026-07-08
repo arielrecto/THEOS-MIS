@@ -507,6 +507,7 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('positions', JobPositionController::class);
             Route::get('applicants', [JobPositionController::class, 'applicants'])->name('applicants.index');
             Route::get('applicants/{applicant}', [JobPositionController::class, 'showApplicant'])->name('applicants.show');
+            Route::get('applicants/{applicant}/resume', [JobPositionController::class, 'downloadResume'])->name('applicants.resume');
             Route::put('applicants/{applicant}/status', [JobPositionController::class, 'updateApplicantStatus'])->name('applicants.update-status');
 
             Route::prefix('employees')->as('employees.')->group(function () {
@@ -524,6 +525,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::patch('{employee}/toggle-teacher', [EmployeeController::class, 'toggleTeacher'])->name('toggle-teacher');
                 Route::patch('{employee}/toggle-registrar', [EmployeeController::class, 'toggleRegistrar'])->name('toggle-registrar');
                 Route::patch('{employee}/toggle-archive', [EmployeeController::class, 'toggleArchive'])->name('toggle-archive');
+                Route::patch('{employee}/toggle-hr', [EmployeeController::class, 'toggleHR'])->name('toggle-hr');
                 Route::patch('{employee}/restore', [EmployeeController::class, 'restoreArchive'])->name('restore');
             });
 
@@ -561,6 +563,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('leaves')->as('leaves.')->group(function () {
             Route::get('', [EmployeeLeaveController::class, 'index'])->name('index');
             Route::post('', [EmployeeLeaveController::class, 'store'])->name('store');
+            Route::get('print', [EmployeeLeaveController::class, 'printReport'])->name('print');
         });
     });
 });

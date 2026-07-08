@@ -147,23 +147,20 @@
                                                         class="hover:bg-accent/10">View Full Profile</a></li>
                                                 @if ($key === 'new')
                                                     <li><a href="#"
-                                                            :class="isLoadingAction({{ $applicant->id }}, 'screening') ?
-                                                                'opacity-50 cursor-not-allowed' : ''"
-                                                            @click.prevent="moveApplicant({{ $applicant->id }}, 'screening')">Move
-                                                            to Screening</a></li>
+                                                            :class="isLoadingAction({{ $applicant->id }}, 'screening') ? 'opacity-50 cursor-not-allowed' : ''"
+                                                            @click.prevent="moveApplicant({{ $applicant->id }}, 'screening')">Move to Screening</a></li>
                                                 @elseif($key === 'screening')
                                                     <li><a href="#"
-                                                            :class="isLoadingAction({{ $applicant->id }}, 'interview') ?
-// ...existing code...
-                                                                'opacity-50 cursor-not-allowed' : ''"
-                                                            @click.prevent="moveApplicant({{ $applicant->id }}, 'hired')">Move
-                                                            to Hired</a></li>
+                                                            :class="isLoadingAction({{ $applicant->id }}, 'interview') ? 'opacity-50 cursor-not-allowed' : ''"
+                                                            @click.prevent="moveApplicant({{ $applicant->id }}, 'interview')">Move to Interview</a></li>
+                                                @elseif($key === 'interview')
+                                                    <li><a href="#"
+                                                            :class="isLoadingAction({{ $applicant->id }}, 'hired') ? 'opacity-50 cursor-not-allowed' : ''"
+                                                            @click.prevent="moveApplicant({{ $applicant->id }}, 'hired')">Move to Hired</a></li>
                                                 @endif
                                                 <li><a href="#" class="text-error hover:bg-error/10"
-                                                        :class="isLoadingAction({{ $applicant->id }}, 'rejected') ?
-                                                            'opacity-50 cursor-not-allowed' : ''"
-                                                        @click.prevent="rejectApplicant({{ $applicant->id }})">Reject</a>
-                                                </li>
+                                                        :class="isLoadingAction({{ $applicant->id }}, 'rejected') ? 'opacity-50 cursor-not-allowed' : ''"
+                                                        @click.prevent="rejectApplicant({{ $applicant->id }})">Reject</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -211,16 +208,11 @@
                                             <li><a href="{{ route('hr.applicants.show', $applicant) }}"
                                                     class="hover:bg-accent/10">View Full Profile</a></li>
                                             <li><a href="#"
-                                                    :class="isLoadingAction({{ $applicant->id }}, 'screening') ?
-// ...existing code...
-                                                        'opacity-50 cursor-not-allowed' : 'hover:bg-accent/10'"
-                                                    @click.prevent="moveApplicant({{ $applicant->id }}, 'screening'))">Move
-                                                    to Screening</a></li>
+                                                    :class="isLoadingAction({{ $applicant->id }}, 'screening') ? 'opacity-50 cursor-not-allowed' : 'hover:bg-accent/10'"
+                                                    @click.prevent="moveApplicant({{ $applicant->id }}, 'screening')">Move to Screening</a></li>
                                             <li><a href="#" class="text-error hover:bg-error/10"
-                                                    :class="isLoadingAction({{ $applicant->id }}, 'rejected') ?
-                                                        'opacity-50 cursor-not-allowed' : ''"
-                                                    @click.prevent="rejectApplicant({{ $applicant->id }})">Reject</a>
-                                            </li>
+                                                    :class="isLoadingAction({{ $applicant->id }}, 'rejected') ? 'opacity-50 cursor-not-allowed' : ''"
+                                                    @click.prevent="rejectApplicant({{ $applicant->id }})">Reject</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -272,8 +264,7 @@
                                             <li><a href="#"
                                                     :class="isLoadingAction({{ $applicant->id }}, 'interview') ?
                                                         'opacity-50 cursor-not-allowed' : 'hover:bg-accent/10'"
-                                                    @click.prevent="moveApplicant({{ $applicant->id }}, 'interview'))">Move
-                                                    to Interview</a></li>
+                                                    @click.prevent="moveApplicant({{ $applicant->id }}, 'interview')">Move to Interview</a></li>
                                             <li><a href="#" class="text-error hover:bg-error/10"
                                                     :class="isLoadingAction({{ $applicant->id }}, 'rejected') ?
                                                         'opacity-50 cursor-not-allowed' : ''"

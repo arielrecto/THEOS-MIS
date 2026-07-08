@@ -8,6 +8,7 @@ use App\Models\JobApplicant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Mail\ApplicationStatusChanged;
 
 class JobPositionController extends Controller
@@ -198,30 +199,49 @@ class JobPositionController extends Controller
             'status' => 'required|in:new,screening,interview,hired,rejected'
         ]);
 
-
-
         $oldStatus = $applicant->status;
 
         $applicant->update($validated);
 
+        try {
+            Mail::to($applicant->email)->send(
+                new ApplicationStatusChanged(
+                    $applicant,
+                    $oldStatus,
+                    $validated['status'],
+                )
+            );
+        } catch (\Exception $e) {
+            // mail failure should not block status update
+        }
 
-        Mail::to($applicant->email)->send(
-            new ApplicationStatusChanged(
-                $applicant,
-                $oldStatus,
-                $validated['status'],
-            )
-        );
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['success' => true]);
+        }
 
         return redirect()->back()->with('success', 'Applicant status updated successfully');
     }
 
     public function showApplicant($id)
     {
-
-        $applicant = JobApplicant::findOrFail($id);
+        $applicant = JobApplicant::with('resume')->findOrFail($id);
 
         return view('users.hr.positions.applicant.show', compact('applicant'));
+    }
+
+    public function downloadResume(JobApplicant $applicant)
+    {
+        $resume = $applicant->resume;
+
+        abort_if(!$resume, 404, 'No resume uploaded for this applicant.');
+
+        $path = str_replace('/storage/', 'public/', parse_url($resume->file_dir, PHP_URL_PATH));
+
+        abort_if(!Storage::exists($path), 404, 'Resume file not found.');
+
+        $fileName = $applicant->name . ' - Resume.' . ($resume->extension ?? 'pdf');
+
+        return Storage::download($path, $fileName);
     }
 
     public function toggleHiring($id)

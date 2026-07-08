@@ -382,6 +382,30 @@ class EmployeeController extends Controller
         }
     }
 
+    public function toggleHR(EmployeeProfile $employee)
+    {
+        try {
+            $user = $employee->user;
+
+            if ($user->hasRole('hr')) {
+                $user->removeRole('hr');
+                $message = 'HR role removed successfully';
+            } else {
+                $user->assignRole('hr');
+                $message = 'HR role assigned successfully';
+            }
+
+            return redirect()
+                ->back()
+                ->with('message', $message);
+        } catch (\Exception $e) {
+            report($e);
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to update HR role: ' . $e->getMessage());
+        }
+    }
+
     public function print($id)
     {
         $employee = EmployeeProfile::findOrFail($id);
