@@ -29,6 +29,12 @@ $isEnrolled = $user->studentProfile !== null && $user->studentProfile->academicR
             'icon' => '<i class="fi fi-rr-list"></i>',
             'is_active' => $isEnrolled,
         ],
+        [
+            'url' => 'student.classrooms.archived',
+            'name' => 'archived classrooms',
+            'icon' => '<i class="fi fi-rr-folder-download"></i>',
+            'is_active' => $isEnrolled,
+        ],
          [
             'url' => 'student.enrollment.index',
             'name' => 'requirements',

@@ -111,6 +111,21 @@ class ClassroomController extends Controller
         return view('users.student.classroom.show', compact('classroom', 'tasks'));
     }
 
+    public function archived()
+    {
+        $user = Auth::user();
+
+        $archivedClassrooms = Classroom::where('is_archived', true)
+            ->whereHas('classroomStudents', function ($q) use ($user) {
+                $q->where('student_id', $user->id);
+            })
+            ->with(['subject', 'strand', 'teacher.profile', 'academicYear'])
+            ->latest()
+            ->paginate(12);
+
+        return view('users.student.classroom.archived', compact('archivedClassrooms'));
+    }
+
     public function attendances(string $id)
     {
 

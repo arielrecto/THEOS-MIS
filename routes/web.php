@@ -432,6 +432,7 @@ Route::middleware(['auth'])->group(function () {
                 ->as('classrooms.')
                 ->group(function () {
                     Route::get('', [StudentClassroomController::class, 'index'])->name('index');
+                    Route::get('archived', [StudentClassroomController::class, 'archived'])->name('archived');
                     Route::get('{classroom}', [StudentClassroomController::class, 'show'])->name('show');
                     Route::get('{classroom}/attendances', [StudentClassroomController::class, 'attendances'])->name('attendances');
                     Route::post('{classroom}/join', [StudentClassroomController::class, 'join'])->name('join');
