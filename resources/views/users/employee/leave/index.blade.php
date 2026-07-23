@@ -13,7 +13,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <div class="tooltip tooltip-left" data-tip="Download Leave Report">
-                    <a href="{{ route('employee.leaves.print') }}" class="gap-2 btn btn-ghost btn-outline">
+                    <a href="{{ route('employee.leaves.print') }}" class="gap-2 btn btn-warning text-white">
                         <i class="fi fi-rr-print"></i>
                         <span class="hidden sm:inline">Print Report</span>
                         <span class="sm:hidden">Print</span>

@@ -29,7 +29,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2px solid #00a89f;
+            border-bottom: 2px solid #3B82F6;
             padding-bottom: 12px;
             margin-bottom: 20px;
         }
@@ -37,7 +37,7 @@
         .school-name {
             font-size: 18px;
             font-weight: 700;
-            color: #00a89f;
+            color: #3B82F6;
         }
 
         .report-title {
@@ -57,7 +57,7 @@
         .employee-card {
             background: #f9fafb;
             border: 1px solid #e5e7eb;
-            border-left: 4px solid #00a89f;
+            border-left: 4px solid #3B82F6;
             border-radius: 6px;
             padding: 12px 16px;
             margin-bottom: 20px;
@@ -79,7 +79,7 @@
         }
 
         .credits-badge {
-            background: #00a89f;
+            background: #3B82F6;
             color: #fff;
             border-radius: 6px;
             padding: 6px 14px;
@@ -151,7 +151,7 @@
         }
 
         thead tr {
-            background: #00a89f;
+            background: #3B82F6;
             color: #fff;
         }
 
@@ -213,7 +213,7 @@
         }
 
         .btn-print {
-            background: #00a89f;
+            background: #3B82F6;
             color: #fff;
             border: none;
             padding: 8px 20px;

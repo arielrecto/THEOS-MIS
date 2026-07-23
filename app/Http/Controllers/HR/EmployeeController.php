@@ -125,7 +125,7 @@ class EmployeeController extends Controller
             ]);
 
             return redirect()
-                ->route('hr.archive.index')
+                ->route('hr.employees.archived')
                 ->with('message', 'Employee restored successfully');
         } catch (\Exception $e) {
             report($e);

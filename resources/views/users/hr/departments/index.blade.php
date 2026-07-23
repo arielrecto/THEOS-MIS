@@ -13,10 +13,16 @@
 
             <div class="flex items-center gap-3 flex-wrap">
                 <div class="join">
-                    <button class="btn join-item btn-sm" title="List View" aria-label="List view">
+                    <button class="btn join-item btn-sm"
+                            :class="$store.deptView === 'list' ? 'btn-accent text-white' : ''"
+                            title="List View" aria-label="List view"
+                            @click="$store.deptView = 'list'">
                         <i class="fi fi-rr-list"></i>
                     </button>
-                    <button class="btn join-item btn-sm" title="Card View" aria-label="Card view">
+                    <button class="btn join-item btn-sm"
+                            :class="$store.deptView === 'card' ? 'btn-accent text-white' : ''"
+                            title="Card View" aria-label="Card view"
+                            @click="$store.deptView = 'card'">
                         <i class="fi fi-rr-apps"></i>
                     </button>
                 </div>
@@ -64,7 +70,7 @@
         </div>
 
         <!-- Departments (card list on mobile, table on md+) -->
-        <div class="space-y-4">
+        <div class="space-y-4" x-data="{ view: 'list' }">
             <!-- Mobile Cards -->
             <div class="md:hidden">
                 @forelse($departments as $department)
@@ -126,7 +132,7 @@
             </div>
 
             <!-- Desktop / Tablet Table -->
-            <div class="hidden md:block bg-white rounded-lg shadow-sm">
+            <div class="hidden md:block bg-white rounded-lg shadow-sm" x-show="$store.deptView === 'list'" x-cloak>
                 <div class="overflow-x-auto">
                     <table class="table w-full">
                         <thead>
@@ -220,11 +226,75 @@
                     {{ $departments->links() }}
                 </div>
             </div>
+
+            <!-- Desktop Card Grid -->
+            <div class="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                 x-show="$store.deptView === 'card'" x-cloak>
+                @forelse($departments as $department)
+                    <div class="bg-white rounded-lg shadow-sm p-5 flex flex-col gap-3 border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <a href="{{ route('hr.departments.show', $department->id) }}"
+                                   class="font-semibold text-sm text-gray-800 block truncate hover:text-accent">
+                                    {{ $department->name }}
+                                </a>
+                                @if($department->code)
+                                    <p class="text-xs text-gray-400 truncate mt-0.5">{{ $department->code }}</p>
+                                @endif
+                            </div>
+                            <button onclick="toggleDepartmentStatus({{ $department->id }})"
+                                    class="badge {{ $department->is_active ? 'badge-success' : 'badge-error' }} text-xs shrink-0 cursor-pointer hover:opacity-80"
+                                    id="status-badge-{{ $department->id }}-card">
+                                <span id="status-text-{{ $department->id }}-card">{{ $department->is_active ? 'Active' : 'Inactive' }}</span>
+                            </button>
+                        </div>
+
+                        <div class="text-xs text-gray-600 space-y-1">
+                            <div class="flex items-center gap-2">
+                                <i class="fi fi-rr-user text-gray-400"></i>
+                                <span class="truncate">{{ $department->head ?: 'No head assigned' }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fi fi-rr-users text-gray-400"></i>
+                                <span>{{ $department->employees_count }} members</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 pt-2 border-t border-gray-100">
+                            <a href="{{ route('hr.departments.edit', $department->id) }}"
+                               class="btn btn-ghost btn-xs flex-1 gap-1">
+                                <i class="fi fi-rr-edit"></i> Edit
+                            </a>
+                            <form action="{{ route('hr.departments.destroy', $department->id) }}"
+                                  method="post" onsubmit="return confirm('Delete department?')">
+                                @csrf @method('delete')
+                                <button class="btn btn-ghost btn-xs text-error gap-1">
+                                    <i class="fi fi-rr-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-full text-center py-10 text-gray-400">
+                        <i class="fi fi-rr-building text-3xl mb-2 block"></i>
+                        <p class="text-sm">No departments found</p>
+                    </div>
+                @endforelse
+
+                <!-- Card Grid pagination -->
+                <div class="col-span-full mt-2">
+                    {{ $departments->links() }}
+                </div>
+            </div>
         </div>
     </div>
 
     @push('scripts')
     <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('deptView', 'list');
+        });
+
         async function toggleDepartmentStatus(id) {
             try {
                 const response = await fetch(`/hr/departments/${id}/toggle-status`, {

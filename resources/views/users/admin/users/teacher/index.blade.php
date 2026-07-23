@@ -1,5 +1,5 @@
 <x-dashboard.admin.base>
-    <x-dashboard.page-title :back_url="route('admin.users.index')" :title="_('Teachers')" :create_url="route('admin.users.teacher.create')" />
+    <x-dashboard.page-title :back_url="route('admin.users.index')" :title="_('Employees')" :create_url="route('admin.users.teacher.create')" />
 
     <x-notification-message />
 

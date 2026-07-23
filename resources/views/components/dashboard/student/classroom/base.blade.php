@@ -10,11 +10,11 @@
         <!-- Header: stack on mobile, inline on sm+; use min-w-0 + truncate to prevent overflow -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-2">
             <div class="min-w-0">
-                <h1 class="text-2xl font-bold tracking-wider capitalize text-accent truncate">
-                    {{ $classroom->name ?? 'Classroom' }} - <span
+                <h1 class="text-2xl font-bold tracking-wider flex justify-center  capitalize text-accent truncate">
+                  <span>  {{ $classroom->name ?? 'Classroom' }} </span> - <span
                         class="inline-block truncate">{{ $classroom->strand->acronym ?? 'Strand' }}</span>
                 </h1>
-                <p class="text-sm tracking-wide capitalize text-primary mt-1 sm:mt-0 truncate">
+                <p class="text-sm tracking-wide capitalize text-accent mt-1 sm:mt-0 truncate">
                     {{ $classroom->academicYear->name ?? 'Academic Year' }}
                 </p>
             </div>
