@@ -12,11 +12,31 @@ class DepartmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $departments = Department::latest()->paginate(10);
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+            'status' => 'nullable|in:active,inactive',
+        ]);
 
-        return view('users.hr.departments.index', compact('departments'));
+        $search = $request->search;
+        $status = $request->status;
+
+        $departments = Department::with('headUser')
+            ->withCount('employees')
+            ->when($search, fn($query) => $query->where('name', 'like', "%{$search}%"))
+            ->when($status, fn($query) => $query->where('is_active', $status === 'active'))
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        // Summary cards cover every department, regardless of the table filters.
+        $stats = Department::selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active')
+            ->selectRaw('SUM(CASE WHEN head IS NOT NULL AND head != \'\' THEN 1 ELSE 0 END) as with_head')
+            ->first();
+
+        return view('users.hr.departments.index', compact('departments', 'stats', 'search', 'status'));
     }
 
     /**

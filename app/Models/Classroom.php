@@ -18,7 +18,13 @@ class Classroom extends Model
         'strand_id',
         'academic_year_id',
         'is_archived',
+        'archived_at',
         'teacher_id'
+    ];
+
+    protected $casts = [
+        'is_archived' => 'boolean',
+        'archived_at' => 'datetime',
     ];
 
 

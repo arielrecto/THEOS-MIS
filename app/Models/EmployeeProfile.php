@@ -34,6 +34,14 @@ class EmployeeProfile extends Model
         'salary' => 'decimal:2'
     ];
 
+    /**
+     * Employees on the roster, i.e. everyone except archived records.
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->where($this->qualifyColumn('status'), '!=', 'archived');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, foreignKey: 'user_id');

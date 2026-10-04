@@ -150,10 +150,15 @@ class ClassroomController extends Controller
      */
     public function destroy(string $id)
     {
-        $classroom = Classroom::find($id);
+        $classroom = Classroom::where('teacher_id', Auth::id())->findOrFail($id);
+
+        if ($classroom->classroomStudents()->exists()) {
+            return back()->with('error', 'Remove all students from this classroom before deleting it.');
+        }
+
         $classroom->delete();
 
-        return to_route('teacher.classrooms.index')->with(['message' => 'classroom deleted']);
+        return back()->with('success', 'Classroom deleted successfully');
     }
 
     public function students(string $id)
@@ -300,13 +305,24 @@ class ClassroomController extends Controller
 
     public function archived()
     {
-        $archivedClassrooms = Classroom::where('teacher_id', auth()->id())
-            ->where('is_archived', true)
+        $archived = Classroom::where('teacher_id', auth()->id())->where('is_archived', true);
+
+        $archivedClassrooms = (clone $archived)
             ->with(['subject', 'strand'])
+            ->withCount('classroomStudents')
             ->latest('archived_at')
             ->paginate(10);
 
-        return view('users.teacher.archived.index', compact('archivedClassrooms'));
+        // Summary cards cover every archived classroom, not just the current page.
+        $stats = [
+            'total_archived' => (clone $archived)->count(),
+            'total_students' => ClassroomStudent::whereIn('classroom_id', (clone $archived)->select('id'))
+                ->distinct('student_id')
+                ->count('student_id'),
+            'last_archived' => (clone $archived)->max('archived_at'),
+        ];
+
+        return view('users.teacher.archived.index', compact('archivedClassrooms', 'stats'));
     }
 
     public function unarchive(Classroom $classroom)

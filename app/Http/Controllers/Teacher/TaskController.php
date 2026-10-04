@@ -22,18 +22,35 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
+        // The teacher's active classrooms drive the subject tabs and scope every query,
+        // so a teacher only ever sees tasks from their own classrooms.
+        $classrooms = $this->ownedClassrooms()
+            ->where('is_archived', false)
+            ->with(['subject', 'strand'])
+            ->latest()
+            ->get();
 
         $classroom_id = $request->classroom_id;
+        $classroom = null;
 
-        $tasks = Task::latest()->paginate(10);
-
-
-        if (!$classroom_id) {
-            $tasks = Task::where('classroom_id', $classroom_id)->latest()->paginate(10);
+        if ($classroom_id) {
+            // Archived classrooms are still reachable directly, just not listed as tabs.
+            $classroom = $this->ownedClassrooms()
+                ->with('subject')
+                ->findOrFail($classroom_id);
         }
 
+        $tasks = Task::whereIn('classroom_id', $classroom ? [$classroom->id] : $classrooms->pluck('id'))
+            ->with('classroom.subject')
+            ->withCount([
+                'assignStudents',
+                'assignStudents as submitted_count' => fn($query) => $query->where('status', 'submitted'),
+            ])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('users.teacher.classroom.task.index', compact(['tasks', 'classroom_id']));
+        return view('users.teacher.classroom.task.index', compact(['tasks', 'classroom_id', 'classroom', 'classrooms']));
     }
 
     /**
@@ -43,7 +60,13 @@ class TaskController extends Controller
     {
         $classroom_id = $request->classroom_id;
 
-        $classroom = Classroom::find($classroom_id);
+        // A task always belongs to a classroom, so the teacher must pick a subject first.
+        if (!$classroom_id) {
+            return redirect()->route('teacher.tasks.index')
+                ->with('warning', 'Select a subject first, then click Create to add a task to it.');
+        }
+
+        $classroom = $this->ownedClassrooms()->findOrFail($classroom_id);
 
         $students =  json_encode($classroom->classroomStudents()->with(['student'])->get());
 
@@ -62,8 +85,10 @@ class TaskController extends Controller
             'start_date' => 'required',
             'end_date' => 'required',
             'description' => 'required',
-
+            'classroom_id' => 'required',
         ]);
+
+        $this->ownedClassrooms()->findOrFail($request->classroom_id);
 
         $attachments = json_decode($request->attachments);
 
@@ -125,9 +150,9 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        $task = Task::whereId($id)->with([
+        $task = $this->ownedTasks()->with([
             'attachments'
-        ])->first();
+        ])->findOrFail($id);
 
 
         return view('users.teacher.classroom.task.show', compact(['task']));
@@ -154,8 +179,7 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
-        $task = Task::find($id);
-
+        $task = $this->ownedTasks()->findOrFail($id);
 
         $task->delete();
 
@@ -204,6 +228,22 @@ class TaskController extends Controller
             ->with('success', 'Comment added successfully');
     }
 
+
+    /**
+     * Classrooms owned by the authenticated teacher.
+     */
+    private function ownedClassrooms()
+    {
+        return Classroom::where('teacher_id', Auth::id());
+    }
+
+    /**
+     * Tasks that belong to one of the authenticated teacher's classrooms.
+     */
+    private function ownedTasks()
+    {
+        return Task::whereHas('classroom', fn($query) => $query->where('teacher_id', Auth::id()));
+    }
 
     private function handleFileObject($fileObject, string $path, string $name)
     {

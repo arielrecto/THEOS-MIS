@@ -1,353 +1,296 @@
+@php
+    $total = (int) $stats->total;
+    $active = (int) $stats->active;
+    $withHead = (int) $stats->with_head;
+    $noHead = $total - $withHead;
+    $inactive = $total - $active;
+@endphp
+
 <x-dashboard.hr.base>
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <div class="min-w-0">
-                <h1 class="text-lg sm:text-2xl lg:text-3xl font-bold text-gray-800 truncate">
-                    Departments
-                </h1>
-                <p class="text-xs sm:text-sm text-gray-600 mt-1 truncate">
-                    Manage school departments and their details
-                </p>
+    <x-notification-message />
+
+    <div class="flex flex-col gap-6">
+        <!-- Summary cards -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div class="flex gap-4 items-center p-4 bg-white rounded-2xl border shadow-md border-slate-100">
+                <span class="flex justify-center items-center w-12 h-12 text-xl text-white bg-blue-500 rounded-full shrink-0">
+                    <i class="flex fi fi-rr-layers"></i>
+                </span>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-800">Total Departments</p>
+                    <p class="text-2xl font-bold leading-tight text-slate-900">{{ $total }}</p>
+                    <p class="text-xs text-slate-500">Across all units</p>
+                </div>
             </div>
 
-            <div class="flex items-center gap-3 flex-wrap">
-                <div class="join">
-                    <button class="btn join-item btn-sm"
-                            :class="$store.deptView === 'list' ? 'btn-accent text-white' : ''"
-                            title="List View" aria-label="List view"
-                            @click="$store.deptView = 'list'">
-                        <i class="fi fi-rr-list"></i>
-                    </button>
-                    <button class="btn join-item btn-sm"
-                            :class="$store.deptView === 'card' ? 'btn-accent text-white' : ''"
-                            title="Card View" aria-label="Card view"
-                            @click="$store.deptView = 'card'">
-                        <i class="fi fi-rr-apps"></i>
-                    </button>
+            <div class="flex gap-4 items-center p-4 bg-white rounded-2xl border shadow-md border-slate-100">
+                <span class="flex justify-center items-center w-12 h-12 text-xl text-white bg-emerald-500 rounded-full shrink-0">
+                    <i class="flex fi fi-rr-check"></i>
+                </span>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-800">Active</p>
+                    <p class="text-2xl font-bold leading-tight text-slate-900" data-active-count>{{ $active }}</p>
+                    <p class="text-xs text-slate-500" data-active-note>
+                        {{ $inactive === 0 ? 'All active' : $inactive . ' inactive' }}
+                    </p>
                 </div>
+            </div>
 
-                <a href="{{ route('hr.departments.create') }}" class="btn btn-accent btn-sm gap-2 whitespace-nowrap">
-                    <i class="fi fi-rr-plus"></i>
-                    <span class="hidden sm:inline">Add Department</span>
-                    <span class="sm:hidden">Add</span>
-                </a>
+            <div class="flex gap-4 items-center p-4 bg-white rounded-2xl border shadow-md border-slate-100">
+                <span class="flex justify-center items-center w-12 h-12 text-xl text-white bg-orange-400 rounded-full shrink-0">
+                    <i class="flex fi fi-rr-user"></i>
+                </span>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-800">With Head Assigned</p>
+                    <p class="text-2xl font-bold leading-tight text-slate-900">{{ $withHead }}</p>
+                    <p class="text-xs text-slate-500">{{ $withHead }} of {{ $total }} {{ Str::plural('department', $total) }}</p>
+                </div>
+            </div>
+
+            <div class="flex gap-4 items-center p-4 bg-white rounded-2xl border shadow-md border-slate-100">
+                <span class="flex justify-center items-center w-12 h-12 text-xl text-white rounded-full bg-slate-400 shrink-0">
+                    <i class="flex fi fi-rr-exclamation"></i>
+                </span>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-800">No Head Assigned</p>
+                    <p class="text-2xl font-bold leading-tight text-slate-900">{{ $noHead }}</p>
+                    <p class="text-xs {{ $noHead > 0 ? 'text-orange-600' : 'text-slate-500' }}">
+                        {{ $noHead > 0 ? 'Needs attention' : 'All departments covered' }}
+                    </p>
+                </div>
             </div>
         </div>
 
-        <!-- Filters & Search -->
-        <div class="bg-white rounded-lg shadow-sm mb-6">
-            <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b">
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
-                    <div class="form-control flex-1 min-w-0">
-                        <div class="input-group w-full">
-                            <input type="text" placeholder="Search departments..."
-                                   class="input input-bordered input-sm w-full sm:w-72 text-xs sm:text-sm"
-                                   aria-label="Search departments">
-                            <button class="btn btn-sm" aria-label="Search">
-                                <i class="fi fi-rr-search"></i>
+        <!-- Departments panel over background -->
+        <!-- bg6 shows through everywhere except the table / cards, which sit on white -->
+        <div class="overflow-hidden px-4 py-5 bg-center bg-no-repeat bg-cover rounded-2xl border shadow-lg sm:p-6 lg:p-8 border-slate-100"
+            style="background-image: url('{{ asset('bg6.JPEG') }}')">
+            <div>
+                <!-- Header -->
+                <div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start">
+                    <div class="min-w-0">
+                        <h1 class="text-2xl font-bold text-slate-800 sm:text-3xl">Departments</h1>
+                        <p class="mt-1 text-sm text-slate-600">Manage school departments and their details</p>
+                    </div>
+
+                    <div class="flex gap-2 items-center">
+                        <div class="hidden bg-white rounded-lg border md:flex border-slate-200">
+                            <button type="button" class="px-2.5 h-8 rounded-l-lg"
+                                :class="$store.deptView === 'list' ? 'bg-slate-100 text-slate-800' : 'text-slate-500'"
+                                title="List view" aria-label="List view" @click="$store.deptView = 'list'">
+                                <i class="flex fi fi-rr-list"></i>
+                            </button>
+                            <button type="button" class="px-2.5 h-8 rounded-r-lg border-l border-slate-200"
+                                :class="$store.deptView === 'card' ? 'bg-slate-100 text-slate-800' : 'text-slate-500'"
+                                title="Card view" aria-label="Card view" @click="$store.deptView = 'card'">
+                                <i class="flex fi fi-rr-apps"></i>
                             </button>
                         </div>
+
+                        <a href="{{ route('hr.departments.create') }}"
+                            class="flex-1 gap-2 h-9 min-h-0 text-white whitespace-nowrap btn btn-sm btn-accent sm:flex-none">
+                            <i class="flex fi fi-rr-plus"></i>
+                            Add Department
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Search & filter -->
+                <form method="GET" action="{{ route('hr.departments.index') }}"
+                    class="flex flex-col gap-3 mt-5 sm:flex-row sm:items-center">
+                    <div class="flex flex-1 items-center bg-white rounded-lg border sm:max-w-sm border-slate-200 focus-within:ring-2 focus-within:ring-accent/30">
+                        <input type="search" name="search" value="{{ $search }}" placeholder="Search departments..."
+                            class="flex-1 px-3 py-2 min-w-0 text-sm bg-transparent border-0 focus:ring-0"
+                            aria-label="Search departments">
+                        <button type="submit" class="px-3 text-slate-500 hover:text-slate-800" aria-label="Search">
+                            <i class="flex fi fi-rr-search"></i>
+                        </button>
                     </div>
 
-                    <div class="w-full sm:w-auto">
-                        <select class="select select-bordered select-sm text-xs sm:text-sm w-full sm:w-40" aria-label="Filter status">
-                            <option>All Status</option>
-                            <option>Active</option>
-                            <option>Inactive</option>
+                    <div class="flex gap-3 justify-between items-center sm:ml-auto">
+                        <select name="status" onchange="this.form.submit()"
+                            class="h-9 min-h-0 text-sm bg-white select select-bordered select-sm border-slate-200 sm:w-36"
+                            aria-label="Filter by status">
+                            <option value="" @selected(!$status)>All Status</option>
+                            <option value="active" @selected($status === 'active')>Active</option>
+                            <option value="inactive" @selected($status === 'inactive')>Inactive</option>
                         </select>
+                        <span class="text-sm whitespace-nowrap text-slate-500">
+                            Showing <span class="font-semibold text-slate-700">{{ $departments->count() }}</span>
+                            of <span class="font-semibold text-slate-700">{{ $departments->total() }}</span>
+                        </span>
                     </div>
-                </div>
+                </form>
 
-                <div class="flex items-center gap-3">
-                    <div class="text-xs sm:text-sm text-gray-500 truncate">
-                        Showing
-                        <span class="font-semibold text-gray-700">{{ $departments->count() }}</span>
-                        of <span class="font-semibold">{{ $departments->total() }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Departments (card list on mobile, table on md+) -->
-        <div class="space-y-4" x-data="{ view: 'list' }">
-            <!-- Mobile Cards -->
-            <div class="md:hidden">
-                @forelse($departments as $department)
-                    <article class="bg-white rounded-lg shadow-sm p-4 flex flex-col gap-3">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-1 min-w-0">
-                                <a href="{{ route('hr.departments.show', ['department' => $department->id]) }}"
-                                   class="font-medium text-sm sm:text-base text-gray-900 block break-words">
-                                    {{ $department->name }}
-                                </a>
-
-                                <div class="mt-1 text-xs text-gray-500 flex flex-col sm:flex-row sm:items-center gap-1">
-                                    {{-- <span class="truncate">Code: <span class="font-medium text-gray-700">{{ $department->code }}</span></span> --}}
-                                    <span class="truncate">Head: <span class="font-medium">{{ $department->head ?: 'No head assigned' }}</span></span>
-                                </div>
-
-                                <div class="mt-2">
-                                    <span class="badge badge-ghost text-xs">{{ $department->employees_count }} members</span>
-                                </div>
+                <!-- Mobile: cards -->
+                <div class="flex flex-col gap-3 mt-5 md:hidden">
+                    @forelse ($departments as $department)
+                        <article class="p-4 bg-white rounded-xl border shadow-sm border-slate-100">
+                            <div class="flex gap-3 justify-between items-start">
+                                <a href="{{ route('hr.departments.show', $department->id) }}"
+                                    class="font-semibold break-words text-slate-800 hover:text-accent">{{ $department->name }}</a>
+                                @include('users.hr.departments.partials.status-toggle', ['department' => $department])
                             </div>
-
-                            <div class="flex flex-col items-end gap-2 shrink-0">
-                                <button
-                                    onclick="toggleDepartmentStatus({{ $department->id }})"
-                                    class="badge {{ $department->is_active ? 'badge-success' : 'badge-error' }} text-xs whitespace-nowrap"
-                                    aria-pressed="{{ $department->is_active ? 'true' : 'false' }}">
-                                    {{ $department->is_active ? 'Active' : 'Inactive' }}
-                                </button>
-
-                                <div class="flex items-center gap-2">
-                                    <a href="{{ route('hr.departments.edit', ['department' => $department->id]) }}"
-                                       class="btn btn-ghost btn-xs" aria-label="Edit department">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </a>
-
-                                    <form action="{{ route('hr.departments.destroy', ['department' => $department->id]) }}"
-                                          method="post" onsubmit="return confirm('Delete department?')">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-ghost btn-xs text-error" aria-label="Delete department">
-                                            <i class="fi fi-rr-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                            <div class="flex flex-col gap-1.5 mt-2 text-sm text-slate-600">
+                                <span class="flex gap-2 items-center">
+                                    <i class="flex fi fi-rr-user text-slate-400"></i>
+                                    @if ($department->headUser)
+                                        <span class="font-medium capitalize text-slate-700">{{ $department->headUser->name }}</span>
+                                    @else
+                                        <span class="text-slate-400">No head assigned</span>
+                                    @endif
+                                </span>
+                                <span class="flex gap-2 items-center">
+                                    <i class="flex fi fi-rr-users text-slate-400"></i>
+                                    {{ $department->employees_count }} {{ Str::plural('member', $department->employees_count) }}
+                                </span>
                             </div>
-                        </div>
-                    </article>
-                @empty
-                    <div class="bg-gray-50 rounded-lg p-6 text-center">
-                        <i class="fi fi-rr-building text-3xl mb-2 text-gray-400"></i>
-                        <p class="text-sm text-gray-600">No departments found</p>
-                    </div>
-                @endforelse
-
-                <!-- Mobile pagination -->
-                <div class="mt-4 flex justify-center">
-                    {{ $departments->links() }}
+                            <div class="flex gap-2 justify-end pt-3 mt-3 border-t border-slate-100">
+                                @include('users.hr.departments.partials.actions', ['department' => $department, 'labels' => true])
+                            </div>
+                        </article>
+                    @empty
+                        @include('users.hr.departments.partials.empty')
+                    @endforelse
                 </div>
-            </div>
 
-            <!-- Desktop / Tablet Table -->
-            <div class="hidden md:block bg-white rounded-lg shadow-sm" x-show="$store.deptView === 'list'" x-cloak>
-                <div class="overflow-x-auto">
+                <!-- Desktop: table -->
+                <div class="hidden overflow-x-auto mt-5 bg-white rounded-xl border shadow-md md:block border-slate-100"
+                    x-show="$store.deptView === 'list'">
                     <table class="table w-full">
                         <thead>
-                            <tr>
-                                <th class="w-12">
-                                    <label>
-                                        <input type="checkbox" class="checkbox checkbox-sm">
-                                    </label>
-                                </th>
-                                <th class="text-sm md:text-base">Name</th>
-                                <th class="text-sm md:text-base">Head</th>
-                                <th class="text-sm md:text-base">Employees</th>
-                                <th class="text-sm md:text-base">Status</th>
-                                <th class="w-28 text-sm md:text-base">Actions</th>
+                            <tr class="text-sm border-b border-slate-100 text-slate-600">
+                                <th class="pl-5">Name</th>
+                                <th>Head</th>
+                                <th>Employees</th>
+                                <th>Status</th>
+                                <th class="pr-5 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($departments as $department)
-                                <tr class="hover">
+                            @forelse ($departments as $department)
+                                <tr class="border-slate-100 hover:bg-slate-50/70">
+                                    <td class="pl-5">
+                                        <a href="{{ route('hr.departments.show', $department->id) }}"
+                                            class="font-medium text-slate-800 hover:text-accent">{{ $department->name }}</a>
+                                    </td>
                                     <td>
-                                        <label>
-                                            <input type="checkbox" class="checkbox checkbox-sm">
-                                        </label>
-                                    </td>
-                                    <td class="align-top">
-                                        <div class="min-w-0">
-                                            <a href="{{ route('hr.departments.show', ['department' => $department->id]) }}"
-                                               class="font-medium text-sm md:text-base truncate block">{{ $department->name }}</a>
-                                            <div class="text-xs md:text-sm opacity-50 truncate">{{ $department->code }}</div>
-                                        </div>
-                                    </td>
-                                    <td class="align-top">
-                                        @if($department->head)
-                                            <div class="font-medium text-sm md:text-base capitalize truncate">{{ $department->head }}</div>
+                                        @if ($department->headUser)
+                                            <div class="flex gap-2 items-center">
+                                                <span class="flex justify-center items-center w-7 h-7 text-xs font-semibold text-blue-600 uppercase bg-blue-50 rounded-full shrink-0">
+                                                    {{ substr($department->headUser->name, 0, 1) }}
+                                                </span>
+                                                <span class="font-medium capitalize text-slate-700">{{ $department->headUser->name }}</span>
+                                            </div>
                                         @else
-                                            <span class="text-sm text-gray-500">No head assigned</span>
+                                            <span class="text-sm text-slate-400">No head assigned</span>
                                         @endif
                                     </td>
-                                    <td class="align-top">
-                                        <div class="badge badge-ghost text-xs md:text-sm">{{ $department->employees_count }} members</div>
+                                    <td>
+                                        <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-600">
+                                            {{ $department->employees_count }} {{ Str::plural('member', $department->employees_count) }}
+                                        </span>
                                     </td>
-                                    <td class="align-top">
-                                        <button
-                                            onclick="toggleDepartmentStatus({{ $department->id }})"
-                                            class="badge {{ $department->is_active ? 'badge-success' : 'badge-error' }} gap-1 cursor-pointer hover:opacity-80 text-xs md:text-sm"
-                                            id="status-badge-{{ $department->id }}"
-                                            aria-pressed="{{ $department->is_active ? 'true' : 'false' }}"
-                                        >
-                                            <div class="w-2 h-2 rounded-full bg-current"></div>
-                                            <span id="status-text-{{ $department->id }}" class="truncate">
-                                                {{ $department->is_active ? 'Active' : 'Inactive' }}
-                                            </span>
-                                        </button>
-                                    </td>
-                                    <td class="align-top">
-                                        <div class="flex items-center gap-2">
-                                            <div class="tooltip tooltip-left" data-tip="Edit">
-                                                <a href="{{ route('hr.departments.edit', ['department' => $department->id]) }}" class="btn btn-ghost btn-xs" aria-label="Edit">
-                                                    <i class="fi fi-rr-edit"></i>
-                                                </a>
-                                            </div>
-
-                                            <form action="{{ route('hr.departments.destroy', ['department' => $department->id]) }}" method="post" onsubmit="return confirm('Delete department?')">
-                                                @csrf
-                                                @method('delete')
-                                                <div class="tooltip tooltip-left" data-tip="Delete">
-                                                    <button class="btn btn-ghost btn-xs text-error" aria-label="Delete">
-                                                        <i class="fi fi-rr-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </form>
+                                    <td>@include('users.hr.departments.partials.status-toggle', ['department' => $department])</td>
+                                    <td class="pr-5">
+                                        <div class="flex gap-1 justify-end">
+                                            @include('users.hr.departments.partials.actions', ['department' => $department, 'labels' => false])
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4">
-                                        <div class="flex flex-col items-center justify-center text-gray-500">
-                                            <i class="fi fi-rr-building text-3xl mb-2"></i>
-                                            <p class="text-sm">No departments found</p>
-                                        </div>
-                                    </td>
+                                    <td colspan="5">@include('users.hr.departments.partials.empty')</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Desktop pagination -->
-                <div class="p-4 border-t">
-                    {{ $departments->links() }}
-                </div>
-            </div>
-
-            <!-- Desktop Card Grid -->
-            <div class="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                 x-show="$store.deptView === 'card'" x-cloak>
-                @forelse($departments as $department)
-                    <div class="bg-white rounded-lg shadow-sm p-5 flex flex-col gap-3 border border-gray-100 hover:shadow-md transition-shadow">
-                        <div class="flex items-start justify-between gap-2">
-                            <div class="min-w-0">
+                <!-- Desktop: card grid -->
+                <div class="hidden grid-cols-2 gap-4 mt-5 md:grid lg:grid-cols-3 xl:grid-cols-4"
+                    x-show="$store.deptView === 'card'" x-cloak>
+                    @forelse ($departments as $department)
+                        <div class="flex flex-col gap-3 p-5 bg-white rounded-xl border shadow-sm transition-shadow border-slate-100 hover:shadow-md">
+                            <div class="flex gap-2 justify-between items-start">
                                 <a href="{{ route('hr.departments.show', $department->id) }}"
-                                   class="font-semibold text-sm text-gray-800 block truncate hover:text-accent">
-                                    {{ $department->name }}
-                                </a>
-                                @if($department->code)
-                                    <p class="text-xs text-gray-400 truncate mt-0.5">{{ $department->code }}</p>
-                                @endif
+                                    class="font-semibold truncate text-slate-800 hover:text-accent">{{ $department->name }}</a>
+                                @include('users.hr.departments.partials.status-toggle', ['department' => $department])
                             </div>
-                            <button onclick="toggleDepartmentStatus({{ $department->id }})"
-                                    class="badge {{ $department->is_active ? 'badge-success' : 'badge-error' }} text-xs shrink-0 cursor-pointer hover:opacity-80"
-                                    id="status-badge-{{ $department->id }}-card">
-                                <span id="status-text-{{ $department->id }}-card">{{ $department->is_active ? 'Active' : 'Inactive' }}</span>
-                            </button>
-                        </div>
-
-                        <div class="text-xs text-gray-600 space-y-1">
-                            <div class="flex items-center gap-2">
-                                <i class="fi fi-rr-user text-gray-400"></i>
-                                <span class="truncate">{{ $department->head ?: 'No head assigned' }}</span>
+                            <div class="space-y-1.5 text-sm text-slate-600">
+                                <div class="flex gap-2 items-center">
+                                    <i class="flex fi fi-rr-user text-slate-400"></i>
+                                    <span class="truncate capitalize">{{ $department->headUser?->name ?? 'No head assigned' }}</span>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <i class="flex fi fi-rr-users text-slate-400"></i>
+                                    {{ $department->employees_count }} {{ Str::plural('member', $department->employees_count) }}
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <i class="fi fi-rr-users text-gray-400"></i>
-                                <span>{{ $department->employees_count }} members</span>
+                            <div class="flex gap-2 justify-end pt-3 mt-auto border-t border-slate-100">
+                                @include('users.hr.departments.partials.actions', ['department' => $department, 'labels' => true])
                             </div>
                         </div>
-
-                        <div class="flex items-center gap-2 pt-2 border-t border-gray-100">
-                            <a href="{{ route('hr.departments.edit', $department->id) }}"
-                               class="btn btn-ghost btn-xs flex-1 gap-1">
-                                <i class="fi fi-rr-edit"></i> Edit
-                            </a>
-                            <form action="{{ route('hr.departments.destroy', $department->id) }}"
-                                  method="post" onsubmit="return confirm('Delete department?')">
-                                @csrf @method('delete')
-                                <button class="btn btn-ghost btn-xs text-error gap-1">
-                                    <i class="fi fi-rr-trash"></i> Delete
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-full text-center py-10 text-gray-400">
-                        <i class="fi fi-rr-building text-3xl mb-2 block"></i>
-                        <p class="text-sm">No departments found</p>
-                    </div>
-                @endforelse
-
-                <!-- Card Grid pagination -->
-                <div class="col-span-full mt-2">
-                    {{ $departments->links() }}
+                    @empty
+                        <div class="col-span-full">@include('users.hr.departments.partials.empty')</div>
+                    @endforelse
                 </div>
+
+                @if ($departments->hasPages())
+                    <div class="mt-5">{{ $departments->links() }}</div>
+                @endif
             </div>
         </div>
     </div>
 
     @push('scripts')
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('deptView', 'list');
-        });
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.store('deptView', 'list');
+            });
 
-        async function toggleDepartmentStatus(id) {
-            try {
-                const response = await fetch(`/hr/departments/${id}/toggle-status`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
+            async function toggleDepartmentStatus(id) {
+                try {
+                    const response = await fetch(`{{ url('hr/departments') }}/${id}/toggle-status`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        },
+                    });
+                    const data = await response.json();
+                    if (!data.success) throw new Error(data.message);
 
-                const data = await response.json();
+                    // The same department appears in the mobile, table and card views.
+                    document.querySelectorAll(`[data-status-toggle="${id}"]`).forEach((badge) => {
+                        badge.classList.toggle('bg-emerald-100', data.is_active);
+                        badge.classList.toggle('text-emerald-700', data.is_active);
+                        badge.classList.toggle('bg-red-100', !data.is_active);
+                        badge.classList.toggle('text-red-700', !data.is_active);
+                        badge.querySelector('[data-status-label]').textContent = data.is_active ? 'Active' : 'Inactive';
+                    });
 
-                if (data.success) {
-                    const badge = document.getElementById(`status-badge-${id}`);
-                    const text = document.getElementById(`status-text-${id}`);
+                    const count = document.querySelector('[data-active-count]');
+                    const active = Number(count.textContent) + (data.is_active ? 1 : -1);
+                    const inactive = {{ $total }} - active;
+                    count.textContent = active;
+                    document.querySelector('[data-active-note]').textContent = inactive === 0 ? 'All active' : `${inactive} inactive`;
 
-                    if (data.is_active) {
-                        badge.classList.remove('badge-error');
-                        badge.classList.add('badge-success');
-                        text.textContent = 'Active';
-                    } else {
-                        badge.classList.remove('badge-success');
-                        badge.classList.add('badge-error');
-                        text.textContent = 'Inactive';
-                    }
-
-                    // optional toast
-                    const toast = document.createElement('div');
-                    toast.className = 'toast toast-end';
-                    toast.innerHTML = `
-                        <div class="alert alert-success">
-                            <i class="fi fi-rr-check"></i>
-                            <span>${data.message}</span>
-                        </div>
-                    `;
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 3000);
+                    showDepartmentToast(data.message, 'success');
+                } catch (error) {
+                    console.error(error);
+                    showDepartmentToast('Failed to update department status', 'error');
                 }
-            } catch (error) {
-                console.error('Error:', error);
+            }
+
+            function showDepartmentToast(message, type) {
                 const toast = document.createElement('div');
-                toast.className = 'toast toast-end';
-                toast.innerHTML = `
-                    <div class="alert alert-error">
-                        <i class="fi fi-rr-cross"></i>
-                        <span>Failed to update department status</span>
-                    </div>
-                `;
+                toast.className = 'toast toast-end z-50';
+                toast.innerHTML = `<div class="alert alert-${type}"><span></span></div>`;
+                toast.querySelector('span').textContent = message;
                 document.body.appendChild(toast);
                 setTimeout(() => toast.remove(), 3000);
             }
-        }
-    </script>
+        </script>
     @endpush
 </x-dashboard.hr.base>

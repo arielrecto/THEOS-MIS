@@ -1,5 +1,5 @@
 <x-dashboard.teacher.base>
-    <x-dashboard.page-title :title="_('Classrooms')" :create_url="route('teacher.classrooms.create')" />
+    <x-dashboard.page-title :title="'Classrooms'" :create_url="route('teacher.classrooms.create')" />
     <x-notification-message />
 
     <div class="px-4 sm:px-6 lg:px-8 py-6">

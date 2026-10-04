@@ -59,7 +59,7 @@
                         <select name="head" class="select select-bordered w-full @error('head') select-error @enderror" required>
                             <option value="" disabled selected>Select department head</option>
                             @foreach($employees as $employee)
-                                <option value="{{ $employee->name }}" {{ old('head') == $employee->id ? 'selected' : '' }}>
+                                <option value="{{ $employee->id }}" {{ old('head') == $employee->id ? 'selected' : '' }}>
                                     {{ $employee->name }} ({{ $employee->email }})
                                 </option>
                             @endforeach

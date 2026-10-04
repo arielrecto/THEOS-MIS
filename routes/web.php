@@ -486,6 +486,7 @@ Route::middleware(['auth'])->group(function () {
             Route::prefix('payments')->as('payments.')->group(function () {
                 Route::post('', [PaymentController::class, 'store'])->name('store');
                 Route::get('', [PaymentController::class, 'index'])->name('index');
+                Route::get('export', [PaymentController::class, 'export'])->name('export');
             });
 
             Route::prefix('report-card')->as('report-card.')->group(function () {
@@ -548,6 +549,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('attendance', [ReportController::class, 'attendance'])->name('attendance');
                 Route::get('leave', [ReportController::class, 'leave'])->name('leave');
                 Route::get('recruitment', [ReportController::class, 'recruitment'])->name('recruitment');
+                Route::get('payroll', [ReportController::class, 'payroll'])->name('payroll');
             });
         });
 

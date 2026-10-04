@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\HR;
 
 use App\Models\Leave;
-use Illuminate\Http\Request;
-use App\Models\AttendanceLog;
+use App\Enums\LeaveStatus;
 use Illuminate\Support\Carbon;
 use App\Models\EmployeeProfile;
 use Illuminate\Support\Facades\DB;
@@ -14,78 +13,88 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        // Total Employees
-        $totalEmployees = EmployeeProfile::count();
+        $today = Carbon::today();
+        $monthStart = $today->copy()->startOfMonth();
+        $monthEnd = $today->copy()->endOfMonth();
+        $openLeaveStatuses = [LeaveStatus::PENDING->value, LeaveStatus::APPROVED->value];
 
-        // New Hires (last 30 days)
-        $newHires = EmployeeProfile::where('created_at', '>=', now()->subDays(30))->count();
+        $totalEmployees = EmployeeProfile::current()->count();
 
-        // Pending Leave Requests
-        $pendingLeaves = Leave::where('status', 'pending')->count();
+        $newHires = EmployeeProfile::current()->where('created_at', '>=', now()->subDays(30))->count();
 
-        // Department Distribution
-        $departmentDistribution = EmployeeProfile::select('departments.name', DB::raw('count(*) as count'))
+        $pendingLeaves = Leave::where('status', LeaveStatus::PENDING->value)->count();
+
+        $departmentDistribution = EmployeeProfile::current()
+            ->select('departments.name', DB::raw('count(*) as count'))
             ->join('job_positions', 'employee_profiles.job_position_id', '=', 'job_positions.id')
             ->join('departments', 'job_positions.department_id', '=', 'departments.id')
             ->groupBy('departments.id', 'departments.name')
+            ->orderByDesc('count')
             ->get()
-            ->map(function ($item) use ($totalEmployees) {
-                return [
-                    'name' => $item->name,
-                    'count' => $item->count,
-                    'percentage' => round(($item->count / $totalEmployees) * 100)
-                ];
-            });
+            ->map(fn($item) => [
+                'name' => $item->name,
+                'count' => $item->count,
+                'percentage' => $totalEmployees > 0 ? round(($item->count / $totalEmployees) * 100) : 0,
+            ]);
 
-        // Attendance Analytics
-        $today = Carbon::today();
-        $attendanceAnalytics = [
-            'present' => AttendanceLog::whereDate('time_in', $today)->count(),
-            'late' => AttendanceLog::whereDate('time_in', $today)
-                ->whereTime('time_in', '>', '08:00:00')
-                ->count(),
-            'total_hours' => AttendanceLog::whereDate('time_in', $today)
-                ->whereNotNull('time_out')
-                ->get()
-                ->sum(function ($log) {
-                    return $log->time_out->diffInHours($log->time_in);
-                })
-        ];
-
-        // Recent Activities
-        $recentActivities = collect([])
-            ->merge(EmployeeProfile::with('position')
-                ->latest()
-                ->take(5)
-                ->get()
-                ->map(function ($employee) {
-                    return [
-                        'type' => 'new_hire',
-                        'message' => "{$employee->first_name} {$employee->last_name} joined as {$employee->position->name}",
-                        'date' => $employee->created_at
-                    ];
-                }))
-            ->merge(Leave::with('employee')
-                ->latest()
-                ->take(5)
-                ->get()
-                ->map(function ($leave) {
-                    return [
-                        'type' => 'leave_request',
-                        'message' => "{$leave->employee->first_name} {$leave->employee->last_name}'s leave request {$leave->status}",
-                        'date' => $leave->updated_at
-                    ];
-                }))
+        $recentActivities = collect()
+            ->merge(EmployeeProfile::with('position')->latest()->take(5)->get()->map(fn($employee) => [
+                'type' => 'new_hire',
+                'message' => trim("{$employee->first_name} {$employee->last_name} joined")
+                    . ($employee->position ? " as {$employee->position->name}" : ''),
+                'date' => $employee->created_at,
+            ]))
+            ->merge(Leave::with('employee')->whereHas('employee')->latest('updated_at')->take(5)->get()->map(fn($leave) => [
+                'type' => 'leave_request',
+                'message' => "{$leave->employee->first_name} {$leave->employee->last_name}'s leave request {$leave->status}",
+                'date' => $leave->updated_at,
+            ]))
             ->sortByDesc('date')
-            ->take(5);
+            ->take(5)
+            ->values();
+
+        $upcomingLeaves = Leave::with('employee')
+            ->whereHas('employee')
+            ->whereIn('status', $openLeaveStatuses)
+            ->whereDate('end_date', '>=', $today)
+            ->orderBy('start_date')
+            ->take(5)
+            ->get();
+
+        $birthdays = EmployeeProfile::current()
+            ->whereNotNull('date_of_birth')
+            ->whereMonth('date_of_birth', $today->month)
+            ->get()
+            ->sortBy(fn($employee) => $employee->date_of_birth->day)
+            ->values();
+
+        // Days of this month that have leave or a birthday, for the calendar markers.
+        $calendarMarks = [];
+        Leave::whereIn('status', $openLeaveStatuses)
+            ->whereDate('start_date', '<=', $monthEnd)
+            ->whereDate('end_date', '>=', $monthStart)
+            ->get(['start_date', 'end_date'])
+            ->each(function ($leave) use (&$calendarMarks, $monthStart, $monthEnd) {
+                $from = Carbon::parse($leave->start_date)->max($monthStart);
+                $to = Carbon::parse($leave->end_date)->min($monthEnd);
+                for ($day = $from->copy(); $day->lte($to); $day->addDay()) {
+                    $calendarMarks[$day->day]['leave'] = true;
+                }
+            });
+        foreach ($birthdays as $employee) {
+            $calendarMarks[$employee->date_of_birth->day]['birthday'] = true;
+        }
 
         return view('users.hr.dashboard', compact(
             'totalEmployees',
             'newHires',
             'pendingLeaves',
             'departmentDistribution',
-            'attendanceAnalytics',
-            'recentActivities'
+            'recentActivities',
+            'upcomingLeaves',
+            'birthdays',
+            'calendarMarks',
+            'today'
         ));
     }
 }

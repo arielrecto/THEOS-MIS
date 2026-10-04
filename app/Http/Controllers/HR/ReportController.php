@@ -4,6 +4,7 @@ namespace App\Http\Controllers\HR;
 
 use PDF;
 use Carbon\Carbon;
+use App\Enums\LeaveStatus;
 use App\Models\Leave;
 use App\Models\Department;
 use App\Models\JobPosition;
@@ -17,7 +18,62 @@ class ReportController extends Controller
 {
     public function index()
     {
-        return view('users.hr.report.index');
+        $today = now()->toDateString();
+
+        $hiringDays = JobApplicant::whereNotNull('hired_at')
+            ->get(['created_at', 'hired_at'])
+            ->map(fn($applicant) => $applicant->created_at->diffInDays($applicant->hired_at));
+
+        $stats = [
+            'total_employees' => EmployeeProfile::current()->count(),
+            'on_leave_today' => Leave::where('status', LeaveStatus::APPROVED->value)
+                ->whereDate('start_date', '<=', $today)
+                ->whereDate('end_date', '>=', $today)
+                ->distinct('employee_profile_id')
+                ->count('employee_profile_id'),
+            'open_roles' => JobPosition::where('is_hiring', true)->count(),
+            'avg_hiring_days' => $hiringDays->isNotEmpty() ? (int) round($hiringDays->avg()) : null,
+        ];
+
+        return view('users.hr.report.index', compact('stats'));
+    }
+
+    public function payroll(Request $request)
+    {
+        $request->validate(['department_id' => 'nullable|exists:departments,id']);
+
+        $employees = EmployeeProfile::with(['position.department'])
+            ->current()
+            ->when($request->filled('department_id'), fn($q) => $q->whereHas(
+                'position',
+                fn($position) => $position->where('department_id', $request->department_id)
+            ))
+            ->orderBy('last_name')
+            ->get();
+
+        $byDepartment = $employees
+            ->groupBy(fn($employee) => $employee->position?->department?->name ?? 'Unassigned')
+            ->map(fn($group, $name) => [
+                'department' => $name,
+                'employees' => $group->count(),
+                'total' => $group->sum('salary'),
+                'average' => $group->whereNotNull('salary')->avg('salary') ?? 0,
+            ])
+            ->sortKeys()
+            ->values();
+
+        $withSalary = $employees->filter(fn($employee) => (float) $employee->salary > 0);
+
+        $stats = [
+            'employees' => $employees->count(),
+            'total_salary' => $withSalary->sum('salary'),
+            'average_salary' => $withSalary->avg('salary') ?? 0,
+            'missing_salary' => $employees->count() - $withSalary->count(),
+        ];
+
+        $departments = Department::orderBy('name')->get();
+
+        return view('users.hr.report.payroll', compact('employees', 'byDepartment', 'stats', 'departments'));
     }
 
     public function attendance(Request $request)

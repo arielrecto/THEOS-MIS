@@ -1,6 +1,7 @@
 import Alpine from "alpinejs";
 import axios from "axios";
 import gallery from './components/gallery';
+import liveValidation from './components/live-validation';
 // import '@fullcalendar/core/main.css';
 // import '@fullcalendar/daygrid/main.css';
 import './bootstrap';
@@ -39,6 +40,7 @@ window.Alpine = Alpine;
 
 // Register gallery component
 Alpine.data('gallery', gallery);
+Alpine.data('liveValidation', liveValidation);
 
 Alpine.data("imageHandler", () => ({
     imageSrc: null,

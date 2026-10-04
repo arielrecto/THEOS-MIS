@@ -19,7 +19,24 @@ class JobApplicant extends Model
         'portfolio',
         'cover_letter',
         'status',
+        'hired_at',
     ];
+
+    protected $casts = [
+        'hired_at' => 'datetime',
+    ];
+
+    protected static function booted(): void
+    {
+        // Record when an applicant is hired, wherever the status change comes from.
+        static::saving(function (JobApplicant $applicant) {
+            if ($applicant->isDirty('status')) {
+                $applicant->hired_at = $applicant->status === 'hired'
+                    ? ($applicant->hired_at ?? now())
+                    : null;
+            }
+        });
+    }
 
 
     public function position()

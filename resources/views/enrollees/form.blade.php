@@ -18,7 +18,7 @@
                 @endif
 
                 <form action="{{ route('enrollment.store') }}" method="POST" class="space-y-8"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data" x-data="liveValidation">
                     @csrf
                     <input type="hidden" name="academic_year_id" value="{{ $academicYear->id }}">
                     <input type="hidden" name="enrollment_id" value="{{ $enrollmentID }}">
@@ -177,7 +177,7 @@
                                 </label>
                                 <input type="text" name="house_no" value="{{ old('house_no') }}"
                                     placeholder="Block and Lot"
-                                    class="input input-bordered @error('house_no') input-error @enderror">
+                                    class="input input-bordered @error('house_no') input-error @enderror" required>
                             </div>
 
                             <div class="form-control md:col-span-1">
@@ -186,7 +186,7 @@
                                 </label>
                                 <input type="text" name="street" value="{{ old('street') }}"
                                     placeholder="Street Name"
-                                    class="input input-bordered @error('street') input-error @enderror">
+                                    class="input input-bordered @error('street') input-error @enderror" required>
                             </div>
 
                             <div class="form-control md:col-span-1">
@@ -234,7 +234,8 @@
                                     maxlength="5"
                                     inputmode="numeric"
                                     pattern="\d{1,5}"
-                                    class="input input-bordered @error('zip_code') input-error @enderror">
+                                    data-error="Zip code must contain numbers only."
+                                    class="input input-bordered @error('zip_code') input-error @enderror" required>
                             </div>
                         </div>
                     </div>
@@ -278,7 +279,7 @@
                                     </label>
                                     <input type="text" name="parent_name" value="{{ old('parent_name') }}"
                                         placeholder="First Name"
-                                        class="input input-bordered @error('parent_name') input-error @enderror">
+                                        class="input input-bordered @error('parent_name') input-error @enderror" required>
                                 </div>
                                 <div class="form-control">
                                     <label class="label">
@@ -295,8 +296,9 @@
                                     <input type="text" name="contact_number" value="{{ old('contact_number') }}"
                                         placeholder="Contact Number" inputmode="numeric" minlength="11"
                                         maxlength="11" pattern="\d{11}"
+                                        data-error="Contact number must be exactly 11 digits."
                                         oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
-                                        class="input input-bordered @error('contact_number') input-error @enderror">
+                                        class="input input-bordered @error('contact_number') input-error @enderror" required>
                                 </div>
                                 <div class="form-control">
                                     <label class="label">
@@ -304,7 +306,7 @@
                                     </label>
                                     <input type="text" name="occupation" value="{{ old('occupation') }}"
                                         placeholder="Occupation"
-                                        class="input input-bordered @error('occupation') input-error @enderror">
+                                        class="input input-bordered @error('occupation') input-error @enderror" required>
                                 </div>
                             </div>
 
@@ -336,7 +338,7 @@
                                     </label>
                                     <input type="text" name="mother_middle_name"
                                         value="{{ old('mother_middle_name') }}" placeholder="Middle Name"
-                                        class="input input-bordered @error('mother_mddle_name') input-error @enderror">
+                                        class="input input-bordered @error('mother_middle_name') input-error @enderror">
                                 </div>
                                 <div class="form-control">
                                     <label class="label">
@@ -345,6 +347,7 @@
                                     <input type="text" name="mother_contact_number"
                                         value="{{ old('mother_contact_number') }}" placeholder="Contact Number"
                                         inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}"
+                                        data-error="Contact number must be exactly 11 digits."
                                         oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
                                         class="input input-bordered @error('mother_contact_number') input-error @enderror">
                                 </div>
@@ -426,6 +429,7 @@
                                     <input type="text" name="guardian_contact_number"
                                         value="{{ old('guardian_contact_number') }}" placeholder="Contact Number"
                                         inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}"
+                                        data-error="Contact number must be exactly 11 digits."
                                         oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);"
                                         class="input input-bordered @error('guardian_contact_number') input-error @enderror">
                                 </div>
@@ -471,7 +475,6 @@
                                         <div class="form-control">
                                             <label class="label">
                                                 <span class="font-medium label-text">{{ $label }}</span>
-                                                <span class="text-error label-text-alt">*</span>
                                             </label>
                                             <input type="file" name="attachments[{{ $key }}]"
                                                 accept=".pdf,.jpg,.jpeg,.png"
@@ -509,14 +512,16 @@
                     <!-- Email -->
                     <div class="p-6 bg-white rounded-lg shadow-lg">
                         <p class="font-medium label-text">Use for communication only</p>
-                        <div class="flex flex-col gap-2 mb-6 text-lg font-semibold text-gray-800 capitalize">
+                        <div class="flex flex-col gap-2 mb-6 text-lg font-semibold text-gray-800 capitalize form-control">
                             <i class="fi fi-rr-file-contract"></i>
-                            <span class="font-medium label-text">Email:</span>
+                            <label class="p-0 label">
+                                <span class="font-medium label-text">Email:</span>
+                            </label>
 
                             @if (!(request()->query('type') == 'old'))
                                 <input type="email" name="email" value="{{ old('email') }}"
                                     class="input input-bordered @error('email') input-error @enderror"
-                                    placeholder="Enter Email">
+                                    placeholder="Enter Email" required>
                             @else
                                 <p class="text-xs text-gray-500"> Already logged in as {{ Auth::user()->email }} you
                                     have already account</p>
