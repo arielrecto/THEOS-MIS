@@ -61,10 +61,8 @@
             </div>
         </div>
 
-        <!-- Departments panel over background -->
-        <!-- bg6 shows through everywhere except the table / cards, which sit on white -->
-        <div class="overflow-hidden px-4 py-5 bg-center bg-no-repeat bg-cover rounded-2xl border shadow-lg sm:p-6 lg:p-8 border-slate-100"
-            style="background-image: url('{{ asset('bg6.JPEG') }}')">
+        <!-- Departments panel: the layout wallpaper shows through except on the table / cards, which sit on white -->
+        <div>
             <div>
                 <!-- Header -->
                 <div class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-start">

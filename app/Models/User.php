@@ -110,6 +110,10 @@ class User extends Authenticatable
 
         $totalCount = count($studentTask);
 
+        // No submitted tasks in this classroom yet — nothing to average.
+        if ($totalCount === 0) {
+            return 0;
+        }
 
         foreach ($studentTask as $task) {
             $average += $task->getScorePercentageAttribute();

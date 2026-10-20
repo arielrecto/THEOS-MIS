@@ -20,26 +20,27 @@
             'button' => 'bg-emerald-500 hover:bg-emerald-600',
             'features' => ['Application statistics', 'Hiring progress tracking', 'Open vs. closed positions'],
         ],
-        [
-            'title' => 'Attendance Report',
-            'subtitle' => 'Daily attendance and punctuality',
-            'icon' => 'fi-rr-clock',
-            'route' => 'hr.reports.attendance',
-            'card' => 'bg-indigo-50/90',
-            'chip' => 'bg-indigo-100 text-indigo-600',
-            'button' => 'bg-indigo-500 hover:bg-indigo-600',
-            'features' => ['Attendance records by date range', 'Late arrivals tracking', 'On-time rate & average hours'],
-        ],
-        [
-            'title' => 'Payroll Report',
-            'subtitle' => 'Salary and payroll summary',
-            'icon' => 'fi-rr-usd-circle',
-            'route' => 'hr.reports.payroll',
-            'card' => 'bg-orange-50/90',
-            'chip' => 'bg-orange-100 text-orange-600',
-            'button' => 'bg-orange-500 hover:bg-orange-600',
-            'features' => ['Salary totals by department', 'Employee salary listing', 'Missing salary records'],
-        ],
+        // Attendance & Payroll reports are hidden — not part of the research scope.
+        // [
+        //     'title' => 'Attendance Report',
+        //     'subtitle' => 'Daily attendance and punctuality',
+        //     'icon' => 'fi-rr-clock',
+        //     'route' => 'hr.reports.attendance',
+        //     'card' => 'bg-indigo-50/90',
+        //     'chip' => 'bg-indigo-100 text-indigo-600',
+        //     'button' => 'bg-indigo-500 hover:bg-indigo-600',
+        //     'features' => ['Attendance records by date range', 'Late arrivals tracking', 'On-time rate & average hours'],
+        // ],
+        // [
+        //     'title' => 'Payroll Report',
+        //     'subtitle' => 'Salary and payroll summary',
+        //     'icon' => 'fi-rr-usd-circle',
+        //     'route' => 'hr.reports.payroll',
+        //     'card' => 'bg-orange-50/90',
+        //     'chip' => 'bg-orange-100 text-orange-600',
+        //     'button' => 'bg-orange-500 hover:bg-orange-600',
+        //     'features' => ['Salary totals by department', 'Employee salary listing', 'Missing salary records'],
+        // ],
     ];
 
     $summary = [

@@ -1,9 +1,8 @@
 <x-dashboard.teacher.base>
     <x-notification-message />
 
-    {{-- bg6 with a translucent blue wash on top, as in the reference design --}}
-    <div class="overflow-hidden px-4 py-6 bg-center bg-cover rounded-2xl sm:px-6 sm:py-8 lg:px-10"
-        style="background-image: linear-gradient(rgba(59, 110, 210, 0.22), rgba(59, 110, 210, 0.22)), url('{{ asset('bg6.JPEG') }}')">
+    {{-- Wallpaper and footer come from the shared dashboard layout --}}
+    <div>
 
         <!-- Summary cards -->
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:gap-6">
@@ -118,8 +117,6 @@
                 <div class="pt-4 mt-4 border-t border-slate-100">{{ $archivedClassrooms->links() }}</div>
             @endif
         </div>
-
-        <x-dashboard.footer class="mt-8 lg:mt-12" />
     </div>
 
     <!-- Delete Confirmation Modal -->

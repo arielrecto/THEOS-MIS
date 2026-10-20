@@ -76,12 +76,12 @@ $isEnrolled = $user->studentProfile !== null && $user->studentProfile->academicR
     <div class="flex justify-center w-full h-full bg-base-100">
         <div class="flex overflow-hidden w-full min-h-screen shadow-lg 4xl:rounded-lg 4xl:w-5/6">
             <x-dashboard.sidebar :links="$links" class="shadow-md bg-secondary text-primary"/>
-            <div class="flex flex-col gap-4 p-6 w-full h-full">
+            <div class="flex flex-col w-full min-w-0">
                 <x-dashboard.navbar :profile_url="$profile" class="rounded-lg shadow-md bg-primary text-neutral"/>
 
-                <div class="p-6 bg-white rounded-lg shadow-md main">
+                <x-dashboard.content>
                     {{$slot}}
-                </div>
+                </x-dashboard.content>
 
             </div>
         </div>
