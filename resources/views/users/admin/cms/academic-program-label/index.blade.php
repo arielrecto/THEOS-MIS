@@ -14,7 +14,8 @@
         <x-notification-message />
 
         <!-- Mobile Cards (visible on mobile only) -->
-        <div class="mt-6 space-y-3 md:hidden">
+        <div class="mt-6 content-card">
+        <div class="space-y-3 md:hidden">
             @forelse($labels as $label)
                 <div class="bg-white rounded-lg shadow p-4">
                     <div class="flex items-start justify-between gap-3 mb-3">
@@ -67,7 +68,7 @@
         </div>
 
         <!-- Desktop Table (hidden on mobile) -->
-        <div class="mt-6 bg-white rounded-lg shadow-lg hidden md:block">
+        <div class="hidden md:block">
             <div class="overflow-x-auto">
                 <table class="table w-full">
                     <thead>
@@ -126,6 +127,7 @@
                     {{ $labels->links() }}
                 </div>
             @endif
+        </div>
         </div>
     </div>
 </x-dashboard.admin.base>

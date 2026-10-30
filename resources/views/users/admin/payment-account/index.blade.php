@@ -10,6 +10,7 @@
             </a>
         </div>
 
+        <div class="content-card">
         <!-- Mobile: stacked list (visible on small screens) -->
         <div class="space-y-3 block sm:hidden">
             @forelse($accounts as $account)
@@ -90,7 +91,7 @@
         </div>
 
         <!-- Desktop / Tablet: table (hidden on xs) -->
-        <div class="hidden sm:block overflow-x-auto bg-white rounded-lg shadow">
+        <div class="hidden sm:block overflow-x-auto">
             <table class="table w-full">
                 <thead>
                     <tr>
@@ -161,6 +162,7 @@
         <!-- Pagination (visible for both views) -->
         <div class="mt-4">
             {{ $accounts->links() }}
+        </div>
         </div>
     </div>
 </x-dashboard.admin.base>

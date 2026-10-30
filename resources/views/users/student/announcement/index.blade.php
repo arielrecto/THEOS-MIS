@@ -2,7 +2,7 @@
     <x-notification-message />
     <x-dashboard.page-title :title="_('Announcements')" />
 
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto content-card">
         <div class="flex space-x-2 mb-6">
             <a href="{{ route('student.announcements.index', ['type' => 'general']) }}"
                 class="px-3 py-2 font-semibold rounded-lg {{ request()->type === 'general' || !request()->type ? 'bg-accent text-white' : 'bg-gray-200 text-gray-700' }}">

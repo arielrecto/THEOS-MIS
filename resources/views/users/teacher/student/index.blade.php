@@ -7,7 +7,8 @@
     <x-dashboard.page-title :title="'Students'" />
     <x-notification-message />
 
-    <div class="p-4 md:p-6 max-w-full">
+    <!-- White card so the table sits on white, not on the wallpaper -->
+    <div class="content-card">
         <!-- Classroom Filter -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">

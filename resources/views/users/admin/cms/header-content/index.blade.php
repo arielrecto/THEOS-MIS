@@ -19,6 +19,7 @@
             </div>
         @endif
 
+        <div class="content-card">
         <!-- Mobile Cards -->
         <div class="md:hidden space-y-4">
             @forelse($headerContents as $content)
@@ -89,7 +90,7 @@
         </div>
 
         <!-- Desktop Table -->
-        <div class="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="hidden md:block overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="table w-full">
                     <thead class="bg-gray-50">
@@ -179,5 +180,6 @@
                 {{ $headerContents->links() }}
             </div>
         @endif
+        </div>
     </div>
 </x-dashboard.admin.base>

@@ -2,7 +2,7 @@
     <x-notification-message />
     <x-dashboard.page-title :title="_('Inbox')" />
 
-    <div class="bg-base-100 shadow-xl">
+    <div class="content-card">
         <div class="flex flex-col gap-2">
             @if ($inboxs->count() > 0)
                 <!-- Table view for md and up -->

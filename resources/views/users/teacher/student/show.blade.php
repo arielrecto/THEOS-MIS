@@ -57,7 +57,7 @@
             <!-- Performance / Tasks -->
             <main class="col-span-12 md:col-span-8 space-y-6">
                 <!-- Mobile: Task Cards -->
-                <div class="md:hidden space-y-3">
+                <div class="md:hidden content-card space-y-3">
                     <h3 class="text-base font-semibold">Recent Tasks</h3>
                     @forelse($studentTasks as $task)
                         <article class="bg-white border rounded-lg p-3 shadow-sm">

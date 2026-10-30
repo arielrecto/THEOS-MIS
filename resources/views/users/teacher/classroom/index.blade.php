@@ -2,7 +2,7 @@
     <x-dashboard.page-title :title="'Classrooms'" :create_url="route('teacher.classrooms.create')" />
     <x-notification-message />
 
-    <div class="px-4 sm:px-6 lg:px-8 py-6">
+    <div class="content-card">
         <!-- Filters Section -->
         <div class="mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

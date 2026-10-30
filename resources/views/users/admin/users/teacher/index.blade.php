@@ -3,6 +3,7 @@
 
     <x-notification-message />
 
+    <div class="content-card">
     {{-- Filters --}}
     <form method="GET" action="{{ route('admin.users.teacher.index') }}"
           class="flex flex-wrap items-end gap-3 mb-4">
@@ -175,6 +176,7 @@
     {{-- Pagination --}}
     <div class="mt-4">
         {!! $teachers->links() !!}
+    </div>
     </div>
 
 </x-dashboard.admin.base>

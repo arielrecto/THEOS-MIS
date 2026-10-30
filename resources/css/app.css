@@ -13,6 +13,10 @@
     .panel {
         @apply h-auto w-full bg-white rounded-lg p-5 shadow-md shadow-secondary
     }
+    /* White surface for tables / lists sitting on the dashboard wallpaper */
+    .content-card {
+        @apply p-4 w-full max-w-full bg-white rounded-2xl shadow-xl sm:p-6
+    }
     .panel-title{
         @apply text-lg font-bold text-accent
     }

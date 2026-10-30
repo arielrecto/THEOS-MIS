@@ -2,7 +2,7 @@
     <x-notification-message />
     <x-dashboard.page-title :title="_('Announcements')" :create_url="route('admin.general-announcements.create')" />
 
-    <div class="mt-4">
+    <div class="mt-4 content-card">
         <x-tab.tab :tabs="['General Announcements', 'Classroom Announcements']" :active="request()->get('activeTab')">
             @if (request()->get('activeTab') == 0)
                 {{-- Desktop / Tablet Table --}}

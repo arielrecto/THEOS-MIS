@@ -28,11 +28,10 @@
 
         <div class="flex gap-4 items-center">
             <p class="text-xs text-center sm:text-right text-slate-600">
-                © {{ now()->year }}
                 @if ($activeYear)
-                    <span class="text-slate-400">·</span> {{ $activeYear->name }}
+                    {{ $activeYear->name }}
+                    <span class="text-slate-400">·</span>
                 @endif
-                <span class="text-slate-400">·</span>
                 <a href="{{ route('contact') }}" class="hover:text-blue-600 hover:underline">Support</a>
             </p>
             <x-illustrations.school-building class="hidden w-16 h-12 sm:block shrink-0" />
