@@ -18,6 +18,21 @@ class AcademicYear extends Model
     ];
 
 
+    /**
+     * Find by a "YYYY-YYYY" school year (e.g. from a CSV import).
+     * Matches on the start/end dates the name is generated from, so it
+     * doesn't depend on the display format ("Academic Year 2026 - 2027").
+     */
+    public function scopeForSchoolYear($query, string $schoolYear)
+    {
+        if (! preg_match('/^\s*(\d{4})\s*-\s*(\d{4})\s*$/', $schoolYear, $years)) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query->whereYear('start_date', $years[1])
+            ->whereYear('end_date', $years[2]);
+    }
+
     public function enrollments(){
         return $this->hasMany(Enrollment::class);
     }

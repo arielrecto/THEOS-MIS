@@ -8,6 +8,7 @@ use App\Models\Classroom;
 use App\Models\Enrollment;
 use Illuminate\Support\Str;
 use App\Models\AcademicYear;
+use App\Enums\AcademicYearStatus;
 use Illuminate\Http\Request;
 use App\Models\AcademicRecord;
 use App\Models\EnrollmentForm;
@@ -276,14 +277,19 @@ class BulkStudentImportController extends Controller
                     }
 
 
-                    $checkAcademicYear = AcademicYear::where('name', trim($rowData['school_year']))->first();
+                    $checkAcademicYear = AcademicYear::forSchoolYear(trim($rowData['school_year']))
+                        ->orderByRaw('status = ? desc', [AcademicYearStatus::Active->value])
+                        ->latest()
+                        ->first();
 
                     if (!$checkAcademicYear) {
                         $errors[] = "Row {$rowNumber}: Academic year does not exist - " . trim($rowData['school_year']);
+                        $errorCount++;
+                        continue;
+                    }
 
-                        if ($checkAcademicYear?->status !== 'active') {
-                            $errors[] = "Row {$rowNumber}: Academic year is not active - " . trim($rowData['school_year']);
-                        }
+                    if ($checkAcademicYear->status !== AcademicYearStatus::Active->value) {
+                        $errors[] = "Row {$rowNumber}: Academic year is not active - " . trim($rowData['school_year']);
                         $errorCount++;
                         continue;
                     }
