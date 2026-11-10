@@ -23,6 +23,27 @@ class TeacherController extends Controller
         $gradeLevels = ['Kinder', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
                         'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
 
+        $teachers = $this->filteredTeachers($request)->latest()->paginate(15)->withQueryString();
+
+        return view('users.admin.users.teacher.index', compact('teachers', 'gradeLevels'));
+    }
+
+    /**
+     * Printable / PDF report of the employees matching the current index filters.
+     */
+    public function printList(Request $request)
+    {
+        $teachers = $this->filteredTeachers($request)->latest()->get();
+
+        return view('users.admin.users.teacher.print-list', compact('teachers'));
+    }
+
+    /**
+     * Teacher query with the index page's search + grade level filters applied.
+     * Shared by the table and its PDF report so both always list the same employees.
+     */
+    private function filteredTeachers(Request $request)
+    {
         $query = User::whereHas('roles', function ($q) {
             $q->where('name', UserRoles::TEACHER->value);
         })->with(['teacherClassrooms.strand']);
@@ -41,9 +62,7 @@ class TeacherController extends Controller
             );
         }
 
-        $teachers = $query->latest()->paginate(15)->withQueryString();
-
-        return view('users.admin.users.teacher.index', compact('teachers', 'gradeLevels'));
+        return $query;
     }
 
     /**

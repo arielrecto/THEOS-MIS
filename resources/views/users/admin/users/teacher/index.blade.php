@@ -25,6 +25,12 @@
         <button type="submit" class="btn btn-accent btn-sm gap-2 text-white">
             <i class="fi fi-rr-search"></i> Filter
         </button>
+        <a href="{{ route('admin.users.teacher.print-list', request()->only(['search', 'grade_level'])) }}"
+           target="_blank"
+           class="btn btn-error btn-sm gap-2 text-white"
+           title="Generate a PDF report of the employees listed below">
+            <i class="fi fi-rr-file-pdf"></i> PDF
+        </a>
         @if(request()->hasAny(['search', 'grade_level']))
             <a href="{{ route('admin.users.teacher.index') }}" class="btn btn-ghost btn-sm gap-2">
                 <i class="fi fi-rr-cross-small"></i> Clear

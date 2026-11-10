@@ -141,6 +141,7 @@ Route::middleware(['auth'])->group(function () {
                 ->group(function () {
                     Route::get('', [UserController::class, 'index'])->name('index');
                     Route::prefix('students')->as('students.')->group(function () {
+                        Route::get('print', [StudentController::class, 'printList'])->name('print-list');
                         Route::put('update-profile/{id}', [StudentController::class, 'updateProfile'])->name('update-profile');
                         Route::put('update-email/{id}', [StudentController::class, 'updateEmail'])->name('update-email');
                         Route::put('update-password/{id}', [StudentController::class, 'updatePassword'])->name('update-password');
@@ -149,6 +150,7 @@ Route::middleware(['auth'])->group(function () {
                         Route::delete('{id}/classrooms/{classroomId}', [StudentController::class, 'removeClassroom'])->name('classrooms-remove');
                     });
                     Route::resource('students', StudentController::class);
+                    Route::get('teacher/print', [TeacherController::class, 'printList'])->name('teacher.print-list');
                     Route::resource('teacher', TeacherController::class);
                     Route::post('teacher/{id}/assign-classroom', [TeacherController::class, 'assignClassroom'])->name('teacher.assign-classroom');
                     Route::delete('teacher/{id}/classroom/{classroom}', [TeacherController::class, 'removeClassroom'])->name('teacher.remove-classroom');
@@ -280,6 +282,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('payments')->as('payments.')->group(function () {
                 Route::get('', [AdminPaymentController::class, 'index'])->name('index');
+                Route::get('print', [AdminPaymentController::class, 'printList'])->name('print-list');
                 Route::get('{payment}', [AdminPaymentController::class, 'show'])->name('show');
                 Route::post('/payments/{payment}/status', [AdminPaymentController::class, 'updateStatus'])->name('update-status');
             });
@@ -517,6 +520,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('create', [EmployeeController::class, 'create'])->name('create');
                 Route::get('archived', [EmployeeController::class, 'archiveIndex'])->name('archived');
                 Route::get('archived/print', [EmployeeController::class, 'printArchived'])->name('archived-print');
+                Route::get('print', [EmployeeController::class, 'printList'])->name('print-list');
 
                 Route::post('', [EmployeeController::class, 'store'])->name('store');
                 Route::get('{employee}', [EmployeeController::class, 'show'])->name('show');

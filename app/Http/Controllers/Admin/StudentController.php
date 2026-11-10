@@ -25,6 +25,30 @@ class StudentController extends Controller
         $gradeLevels = ['Kinder', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5',
                         'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
 
+        $students = $this->filteredStudents($request)->latest()->paginate(15)->withQueryString();
+
+        return view('users.admin.users.student.index', compact('students', 'gradeLevels'));
+    }
+
+    /**
+     * Printable / PDF report of the students matching the current index filters.
+     */
+    public function printList(Request $request)
+    {
+        $students = $this->filteredStudents($request)
+            ->withCount('asStudentClassrooms')
+            ->latest()
+            ->get();
+
+        return view('users.admin.users.student.print-list', compact('students'));
+    }
+
+    /**
+     * Student query with the index page's search + grade level filters applied.
+     * Shared by the table and its PDF report so both always list the same students.
+     */
+    private function filteredStudents(Request $request)
+    {
         $query = User::role(UserRoles::STUDENT->value)
             ->with([
                 'studentProfile.academicRecords' => fn($q) => $q->orderByDesc('id'),
@@ -49,9 +73,7 @@ class StudentController extends Controller
             );
         }
 
-        $students = $query->latest()->paginate(15)->withQueryString();
-
-        return view('users.admin.users.student.index', compact('students', 'gradeLevels'));
+        return $query;
     }
 
     /**

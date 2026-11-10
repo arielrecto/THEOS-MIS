@@ -20,30 +20,7 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        $query = EmployeeProfile::with([
-            'user',
-            'position',
-            'position.department'
-        ])->where('status', '!=', 'archived');
-
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('first_name', 'like', "%{$request->search}%")
-                    ->orWhere('last_name', 'like', "%{$request->search}%");
-            });
-        }
-
-        if ($request->filled('department')) {
-            $query->whereHas('position.department', function ($q) use ($request) {
-                $q->where('id', $request->department);
-            });
-        }
-
-        if ($request->filled('position')) {
-            $query->where('job_position_id', $request->position);
-        }
-
-        $employees = $query->latest()->paginate(10);
+        $employees = $this->filteredEmployees($request)->latest()->paginate(10)->withQueryString();
 
         $departments = Department::all();
         $positions = JobPosition::all();
@@ -51,33 +28,45 @@ class EmployeeController extends Controller
         return view('users.hr.employees.index', compact('employees', 'departments', 'positions'));
     }
 
+    /**
+     * Printable / PDF report of the employees matching the current index filters.
+     */
+    public function printList(Request $request)
+    {
+        $employees = $this->filteredEmployees($request)->latest()->get();
+
+        $department = $request->filled('department') ? Department::find($request->department) : null;
+        $position = $request->filled('position') ? JobPosition::find($request->position) : null;
+
+        return view('users.hr.employees.print-list', compact('employees', 'department', 'position'));
+    }
+
+    /**
+     * Employee query with the HR list filters applied (name search, department, position).
+     * Shared by the employee list, the archive, and their printable reports so they always agree.
+     */
+    private function filteredEmployees(Request $request, bool $archived = false)
+    {
+        return EmployeeProfile::with(['user', 'position', 'position.department'])
+            ->when(
+                $archived,
+                fn($q) => $q->where('status', 'archived'),
+                fn($q) => $q->current()
+            )
+            ->when($request->filled('search'), fn($q) => $q->where(fn($name) =>
+                $name->where('first_name', 'like', "%{$request->search}%")
+                     ->orWhere('last_name', 'like', "%{$request->search}%")
+            ))
+            ->when($request->filled('department'), fn($q) =>
+                $q->whereHas('position.department', fn($dept) => $dept->where('id', $request->department))
+            )
+            ->when($request->filled('position'), fn($q) => $q->where('job_position_id', $request->position));
+    }
+
     // Archive Index - Show all archived employees
     public function archiveIndex(Request $request)
     {
-        $query = EmployeeProfile::with([
-            'user',
-            'position',
-            'position.department'
-        ])->where('status', 'archived');
-
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('first_name', 'like', "%{$request->search}%")
-                    ->orWhere('last_name', 'like', "%{$request->search}%");
-            });
-        }
-
-        if ($request->filled('department')) {
-            $query->whereHas('position.department', function ($q) use ($request) {
-                $q->where('id', $request->department);
-            });
-        }
-
-        if ($request->filled('position')) {
-            $query->where('job_position_id', $request->position);
-        }
-
-        $employees = $query->latest('updated_at')->paginate(10);
+        $employees = $this->filteredEmployees($request, archived: true)->latest('updated_at')->paginate(10)->withQueryString();
 
         $departments = Department::all();
         $positions = JobPosition::all();
@@ -87,25 +76,7 @@ class EmployeeController extends Controller
 
     public function printArchived(Request $request)
     {
-        $query = EmployeeProfile::with(['user', 'position', 'position.department'])
-            ->where('status', 'archived');
-
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('first_name', 'like', "%{$request->search}%")
-                  ->orWhere('last_name', 'like', "%{$request->search}%");
-            });
-        }
-
-        if ($request->filled('department')) {
-            $query->whereHas('position.department', fn($q) => $q->where('id', $request->department));
-        }
-
-        if ($request->filled('position')) {
-            $query->where('job_position_id', $request->position);
-        }
-
-        $employees = $query->latest('updated_at')->get();
+        $employees = $this->filteredEmployees($request, archived: true)->latest('updated_at')->get();
 
         return view('users.hr.archive.print', compact('employees'));
     }

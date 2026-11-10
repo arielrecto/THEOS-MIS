@@ -40,6 +40,13 @@
                     <i class="fi fi-rr-filter"></i>
                     Filter
                 </button>
+                <a href="{{ route('admin.users.students.print-list', request()->only(['search', 'grade_level'])) }}"
+                   target="_blank"
+                   class="btn btn-error btn-sm gap-2 text-white flex-1 sm:flex-none"
+                   title="Generate a PDF report of the students listed below">
+                    <i class="fi fi-rr-file-pdf"></i>
+                    PDF
+                </a>
                 @if(request()->hasAny(['search', 'grade_level']))
                     <a href="{{ route('admin.users.students.index') }}"
                        class="btn btn-ghost btn-sm gap-1">

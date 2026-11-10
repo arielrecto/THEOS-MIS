@@ -65,6 +65,12 @@
 
                     <div class="flex items-center gap-2">
                         <button type="submit" class="btn btn-sm">Apply</button>
+                        <a href="{{ route('hr.employees.print-list', request()->only(['search', 'department', 'position'])) }}"
+                           target="_blank"
+                           class="gap-2 text-white btn btn-error btn-sm"
+                           title="Generate a PDF report of the employees listed below">
+                            <i class="fi fi-rr-file-pdf"></i> PDF
+                        </a>
                     </div>
                 </form>
             </div>

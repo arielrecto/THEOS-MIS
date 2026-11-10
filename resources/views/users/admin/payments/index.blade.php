@@ -58,6 +58,54 @@
 
         <!-- Payments: desktop table + mobile stacked list -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <!-- Filters -->
+            <form method="GET" action="{{ route('admin.payments.index') }}"
+                  class="flex flex-wrap gap-3 items-end p-4 border-b">
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block mb-1 text-xs font-medium text-gray-600">Student</label>
+                    <input type="text" name="search" value="{{ request('search') }}"
+                           placeholder="Search name or email..."
+                           class="w-full input input-bordered input-sm" />
+                </div>
+                <div class="min-w-[140px]">
+                    <label class="block mb-1 text-xs font-medium text-gray-600">Status</label>
+                    <select name="status" class="w-full text-xs select select-bordered select-sm">
+                        <option value="">All Statuses</option>
+                        @foreach ($statuses as $status)
+                            <option value="{{ $status->value }}" @selected(request('status') === $status->value)>
+                                {{ $status->label() }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block mb-1 text-xs font-medium text-gray-600">From</label>
+                    <input type="date" name="date_from" value="{{ request('date_from') }}"
+                           class="input input-bordered input-sm" />
+                </div>
+                <div>
+                    <label class="block mb-1 text-xs font-medium text-gray-600">To</label>
+                    <input type="date" name="date_to" value="{{ request('date_to') }}"
+                           class="input input-bordered input-sm" />
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="gap-2 text-white btn btn-accent btn-sm">
+                        <i class="fi fi-rr-filter"></i> Filter
+                    </button>
+                    <a href="{{ route('admin.payments.print-list', request()->only(['search', 'status', 'date_from', 'date_to'])) }}"
+                       target="_blank"
+                       class="gap-2 text-white btn btn-error btn-sm"
+                       title="Generate a PDF report of the payments listed below">
+                        <i class="fi fi-rr-file-pdf"></i> PDF
+                    </a>
+                    @if (request()->hasAny(['search', 'status', 'date_from', 'date_to']))
+                        <a href="{{ route('admin.payments.index') }}" class="gap-1 btn btn-ghost btn-sm">
+                            <i class="fi fi-rr-cross-small"></i> Clear
+                        </a>
+                    @endif
+                </div>
+            </form>
+
             <!-- Mobile: stacked card list (visible on xs, hidden on sm+) -->
             <div class="block sm:hidden px-3 py-3 space-y-3">
                 @forelse($payments as $payment)
